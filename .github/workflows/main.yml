@@ -11,6 +11,11 @@ jobs:
     - uses: actions/setup-java@v1
       with:
         java-version: '12'
+
+    - name: Get yarn cache
+      id: yarn-cache
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+
     - uses: actions/cache@v1
       with:
         path: ${{ steps.yarn-cache.outputs.dir }}
@@ -19,7 +24,7 @@ jobs:
           ${{ runner.os }}-yarn-
     - uses: actions/cache@v1
       with:
-        path:
+        path: ~/.gradle/caches
         key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
         restore-keys: |
           ${{ runner.os }}-gradle-
