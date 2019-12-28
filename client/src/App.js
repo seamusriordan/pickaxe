@@ -11,6 +11,8 @@ function App() {
                     target="_blank"
                     rel="noopener noreferrer"
                 >Make a pick</a>
+
+                Also we have newly deployed
             </header>
         </div>
     );
