@@ -17,4 +17,4 @@ jobs:
     - name: Build server
       run: |
         cd server
-        ./gradlew build
+        gradle jar
