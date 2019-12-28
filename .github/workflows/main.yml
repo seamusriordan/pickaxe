@@ -18,9 +18,10 @@ jobs:
         cd client
         CI=true yarn test
 
-#    - name: Server test and build jar
-#      run: |
-#        cd server
+    - name: Server test and build jar
+      run: |
+        cd server
+        echo java -version
 #        gradle --info build
 
     - name: Create server jar
