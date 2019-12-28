@@ -73,7 +73,7 @@ jobs:
     - uses: actions/download-artifact@v1
       with:
         name: pickaxe_devel_image
-        path: ./pickaxe_devel.tar
+        path: .
 
     - name: Deploy to development server
       run: |
