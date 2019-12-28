@@ -3,8 +3,7 @@ name: CI
 on: [push]
 
 jobs:
-  build:
-
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
@@ -14,7 +13,25 @@ jobs:
         cd client
         yarn install
         yarn build
+    - name: Test client
+      run: |
+        - cd client
+        - CI=true yarn test
     - name: Build server
       run: |
         cd server
         gradle jar
+    - name: Test server
+      run: |
+        cd server
+        gradle test
+    - name: Build and start docker image
+      - run |
+        docker build . -t pickaxe
+        docker run -p 8080:8080 pickaxe
+    - name: Integration test
+      run: |
+        yarn install
+        yarn run cypress run
+
+
