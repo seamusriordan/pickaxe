@@ -75,11 +75,9 @@ jobs:
         name: pickaxe_devel_image
         path: pickaxe_devel.tar
 
-    - name: Load keys
+    - name: Deploy to development server
       run: |
         eval `ssh-agent -s`
         ssh-add - <<< "${{ secrets.DEVEL_HOST_PRIVATE_KEY }}"
-    - name: Copy to development host
-      run: scp -o StrictHostKeyChecking=no pickaxe_devel.tar ${{ secrets.DEVEL_USER }}@${{ secrets.DEVEL_HOST }}:~
-    - name: Deploy server
-      run: ssh -o StrictHostKeyChecking=no ${{ secrets.DEVEL_USER }}@${{ secrets.DEVEL_HOST }} ./deploy.sh
+        scp -o StrictHostKeyChecking=no pickaxe_devel.tar ${{ secrets.DEVEL_USER }}@${{ secrets.DEVEL_HOST }}:~
+        ssh -o StrictHostKeyChecking=no ${{ secrets.DEVEL_USER }}@${{ secrets.DEVEL_HOST }} ./deploy.sh
