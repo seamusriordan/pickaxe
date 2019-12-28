@@ -24,7 +24,7 @@ jobs:
     - name: Test server
       run: |
         cd server
-        gradle test
+        gradle --info test
     - name: Build and start docker image
       run: |
         docker build . -t pickaxe

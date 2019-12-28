@@ -5,6 +5,6 @@ internal class ServerTest {
 
     @Test
     fun iAmAPassingTest() {
-        assertEquals(0,0)
+        assertEquals(1,1)
     }
 }
