@@ -21,7 +21,8 @@ jobs:
     - name: Server test and build jar
       run: |
         cd server
-        echo java -version
+        java -version
+        gradle --version
 #        gradle --info build
 
     - name: Create server jar
