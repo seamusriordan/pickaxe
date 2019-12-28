@@ -50,7 +50,7 @@ jobs:
     - name: Build and start docker image
       run: |
         docker build . -t pickaxe:devel
-        docker run -d -p 8080:8080 pickaxe
+        docker run -d -p 8080:8080 pickaxe:devel
 
     - name: Integration tests
       run: |
