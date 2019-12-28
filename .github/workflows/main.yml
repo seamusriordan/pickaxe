@@ -18,14 +18,11 @@ jobs:
         cd client
         CI=true yarn test
 
-    - name: Build server
-      run: |
-        cd server
-        gradle build
-    - name: Test server
-      run: |
-        cd server
-        gradle --info test
+#    - name: Server test and build jar
+#      run: |
+#        cd server
+#        gradle --info build
+
     - name: Create server jar
       run: |
         cd server
