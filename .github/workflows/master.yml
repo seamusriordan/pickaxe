@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches:
-      - devel
+      - master
 
 jobs:
   build-and-test:
@@ -12,7 +12,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        ref: devel
+        ref: master
     - uses: actions/setup-java@v1
       with:
         java-version: '12'
@@ -49,37 +49,10 @@ jobs:
 
     - name: Build and start docker image
       run: |
-        docker build . -t pickaxe:devel
-        docker run -d -p 8080:8080 pickaxe:devel
+        docker build . -f Dockerfile.from_jar -t pickaxe:latest
+        docker run -d -p 8080:8080 pickaxe:latest
 
     - name: Integration tests
       run: |
         yarn install
         yarn run cypress run
-
-    - name: Save docker image
-      run: docker save pickaxe > pickaxe_devel.tar
-
-    - uses: actions/upload-artifact@v1
-      with:
-        name: pickaxe_devel_image
-        path: pickaxe_devel.tar
-
-  deploy:
-    needs: build-and-test
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/download-artifact@v1
-      with:
-        name: pickaxe_devel_image
-        path: pickaxe_devel.tar
-
-    - name: Load keys
-      run: |
-        eval `ssh-agent -s`
-        ssh-add - <<< "${{ secrets.DEVEL_HOST_PRIVATE_KEY }}"
-    - name: Copy to development host
-      run: scp -o StrictHostKeyChecking=no pickaxe_devel.tar ${{ secrets.DEVEL_USER }}@${{ secrets.DEVEL_HOST }}:~
-    - name: Deploy server
-      run: ssh -o StrictHostKeyChecking=no ${{ secrets.DEVEL_USER }}@${{ secrets.DEVEL_HOST }} ./deploy.sh
