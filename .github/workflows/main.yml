@@ -21,10 +21,10 @@ jobs:
       run: |
         cd server
         gradle jar
-    - name: Test server
-      run: |
-        cd server
-        gradle --info test
+ #   - name: Test server
+ #     run: |
+ #       cd server
+ #       gradle --info test
     - name: Build and start docker image
       run: |
         docker build . -t pickaxe
