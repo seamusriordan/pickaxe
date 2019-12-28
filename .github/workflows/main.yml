@@ -15,8 +15,8 @@ jobs:
         yarn build
     - name: Test client
       run: |
-        - cd client
-        - CI=true yarn test
+        cd client
+        CI=true yarn test
     - name: Build server
       run: |
         cd server
