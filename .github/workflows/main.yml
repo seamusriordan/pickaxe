@@ -1,7 +1,12 @@
 name: CI
 
-on: [push]
-
+on:
+  push:
+    branches:
+      - devel
+  pull_request:
+    branches:
+      - devel
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
@@ -60,4 +65,4 @@ jobs:
         eval `ssh-agent -s`
         ssh-add - <<< "${{ secrets.DEVEL_HOST_PRIVATE_KEY }}"
         scp -o StrictHostKeyChecking=no pickaxe_latest.tar ${{ secrets.DEVEL_USER }}@${{ secrets.DEVEL_HOST }}:~
-        ssh -o StrictHostKeyChecking=no ${{ secrets.DEVEL_USER }}@${{ secrets.DEVEL_HOST }} deploy.sh
+        ssh -o StrictHostKeyChecking=no ${{ secrets.DEVEL_USER }}@${{ secrets.DEVEL_HOST }} ./deploy.sh
