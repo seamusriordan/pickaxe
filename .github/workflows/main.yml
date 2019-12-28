@@ -63,7 +63,7 @@ jobs:
     - uses: actions/upload-artifact@v1
       with:
         name: pickaxe_devel_image
-        path: pickaxe_devel.tar
+        path: ./pickaxe_devel.tar
 
   deploy:
     needs: build-and-test
@@ -73,10 +73,12 @@ jobs:
     - uses: actions/download-artifact@v1
       with:
         name: pickaxe_devel_image
-        path: pickaxe_devel.tar
+        path: ./pickaxe_devel.tar
 
     - name: Deploy to development server
       run: |
+        ls -lahtr
+        ls -lahtr pickaxe_devel.tar
         eval `ssh-agent -s`
         ssh-add - <<< "${{ secrets.DEVEL_HOST_PRIVATE_KEY }}"
         scp -o StrictHostKeyChecking=no pickaxe_devel.tar ${{ secrets.DEVEL_USER }}@${{ secrets.DEVEL_HOST }}:~
