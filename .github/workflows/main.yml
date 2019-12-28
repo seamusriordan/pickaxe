@@ -8,6 +8,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+    - uses: actions/setup-java@v1
+      with:
+        java-version: '12'
+      -
     - name: Build client
       run: |
         cd client
@@ -21,9 +25,10 @@ jobs:
     - name: Server test and build jar
       run: |
         cd server
+        apt-get install openjdk-12-jdk
         java -version
         gradle --version
-#        gradle --info build
+        gradle --info build
 
     - name: Create server jar
       run: |
