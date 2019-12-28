@@ -25,7 +25,6 @@ jobs:
     - name: Server test and build jar
       run: |
         cd server
-        apt-get install openjdk-12-jdk
         java -version
         gradle --version
         gradle --info build
