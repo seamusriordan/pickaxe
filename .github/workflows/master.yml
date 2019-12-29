@@ -46,6 +46,10 @@ jobs:
       working-directory: ./server
       run: gradle build
 
+    - name: Copy server dependencies
+      working-directory: ./server
+      run: gradle copy_dependencies
+
     - name: Build and start docker image
       run: |
         docker build . -f Dockerfile.from_jar -t pickaxe:latest
