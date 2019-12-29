@@ -1,46 +1,62 @@
-task install(type:Exec){
+task install(type: Exec) {
     commandLine 'yarn', 'install'
 }
 
-task docker_build(type:Exec) {
+task docker_build(type: Exec) {
     dependsOn ':pickaxe-server:jar'
+    dependsOn ':pickaxe-server:copy_dependencies'
     dependsOn ':client:build'
     commandLine 'docker', 'build', '..', '-f', '../Dockerfile.from_jar', '-t', 'pickaxe:e2e'
 }
 
-task docker_start(type:Exec){
+task docker_start(type: Exec) {
     dependsOn 'docker_build'
     dependsOn ':client:build'
+    dependsOn 'docker_env_is_clean'
     commandLine 'docker', 'run', '-d', '-p', '8080:8080', '--name', 'pickaxe', 'pickaxe:e2e'
 }
 
-task docker_stop(type:Exec) {
+task docker_stop(type: Exec) {
     commandLine 'docker', 'stop', 'pickaxe'
 }
 
-task docker_rm(type:Exec) {
-    dependsOn 'stop_docker'
+task docker_rm(type: Exec) {
+    dependsOn 'docker_stop'
     commandLine 'docker', 'rm', 'pickaxe'
 }
 
-task build_full_docker(type:Exec) {
+task docker_is_not_running(type: Exec){
+    commandLine 'docker', 'stop', 'pickaxe'
+    ignoreExitValue true
+}
+
+task docker_env_is_clean(type: Exec){
+    dependsOn 'docker_is_not_running'
+    commandLine 'docker', 'rm', 'pickaxe'
+    ignoreExitValue true
+}
+
+task docker_build_full(type: Exec) {
+    dependsOn ':pickaxe-server:copy_dependencies'
     commandLine 'docker', 'build', '..', '-f', '../Dockerfile', '-t', 'pickaxe:full-build-e2e'
 }
 
-task docker_start_full(type:Exec){
-    dependsOn 'docker_build'
+task docker_start_full(type: Exec) {
+    dependsOn 'docker_build_full'
+    dependsOn ':client:build'
+    dependsOn 'docker_env_is_clean'
     commandLine 'docker', 'run', '-d', '-p', '8080:8080', '--name', 'pickaxe', 'pickaxe:full-build-e2e'
 }
 
-task test(type:Exec) {
+task test(type: Exec) {
     dependsOn 'install'
     dependsOn 'docker_start'
     commandLine 'yarn', 'run', 'cypress', 'run'
     finalizedBy 'docker_rm'
 }
 
-task full_build_test(type:Exec) {
-    dependsOn 'docker_full_start'
+task full_build_test(type: Exec) {
+    dependsOn 'docker_start_full'
     commandLine 'yarn', 'run', 'cypress', 'run'
     finalizedBy 'docker_rm'
 }

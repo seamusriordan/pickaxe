@@ -47,8 +47,12 @@ jobs:
       run: gradle build
 
     - name: Build and start docker image
-      run: gradle server_start
+      run: |
+        docker build . -f Dockerfile.from_jar -t pickaxe:latest
+        docker run -d -p 8080:8080 pickaxe:latest
 
     - name: Integration tests
       working-directory: ./e2e
-      run: gradle test
+      run: |
+        yarn install
+        yarn run cypress run
