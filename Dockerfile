@@ -4,7 +4,7 @@ COPY client/build/ /home/pickaxe/html/pickaxe
 
 WORKDIR /home/pickaxe/server/
 RUN ./gradlew build
-RUN cp build/libs/pickaxe-server-0.1.jar ../
+RUN cp build/libs/pickaxe-server.jar ../
 
 WORKDIR /home/pickaxe/
-CMD java -jar pickaxe-server-0.1.jar
+CMD java -jar pickaxe-server.jar
