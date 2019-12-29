@@ -1,6 +1,6 @@
 import React from 'react';
 import {create, act} from "react-test-renderer";
-import App, {graphqlServer, graphqlPort} from './App';
+import App, {graphqlServer, graphqlPort, graphqlProtocol} from './App';
 import PicksGrid from "./PicksGrid";
 import {MockedProvider} from "@apollo/react-testing";
 
@@ -42,6 +42,15 @@ describe('App', () => {
     test('graphqlPort returns port from environment variable', () => {
         process.env.REACT_APP_GRAPHQL_PORT = "7979";
         expect(graphqlPort()).toEqual("7979")
+    });
+
+    test('graphqlProtocol returns http when environment variable is not set', () => {
+        expect(graphqlProtocol()).toEqual("http")
+    });
+
+    test('graphqlProtocol returns port from environment variable', () => {
+        process.env.REACT_APP_GRAPHQL_SECUREHTTP = 1;
+        expect(graphqlProtocol()).toEqual("https")
     });
 
 

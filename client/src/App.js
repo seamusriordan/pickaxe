@@ -1,6 +1,6 @@
 import React from 'react';
 import PicksGrid from "./PicksGrid";
-import {ApolloProvider } from '@apollo/react-hooks'
+import {ApolloProvider} from '@apollo/react-hooks'
 import ApolloClient from "apollo-boost";
 
 
@@ -16,8 +16,16 @@ export function graphqlPort() {
         "8080";
 }
 
+export function graphqlProtocol() {
+    return process.env.REACT_APP_GRAPHQL_SECUREHTTP ?
+        "https" :
+        "http";
+}
+
 const client = new ApolloClient({
-    uri: 'https://' + graphqlServer() + ':'+ graphqlPort()+'/pickaxe/graphql',
+    uri: graphqlProtocol + '://' +
+        graphqlServer() + ':' + graphqlPort() +
+        '/pickaxe/graphql',
 });
 
 function App() {
