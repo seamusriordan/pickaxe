@@ -23,7 +23,7 @@ export function graphqlProtocol() {
 }
 
 const client = new ApolloClient({
-    uri: graphqlProtocol + '://' +
+    uri: graphqlProtocol() + '://' +
         graphqlServer() + ':' + graphqlPort() +
         '/pickaxe/graphql',
 });
