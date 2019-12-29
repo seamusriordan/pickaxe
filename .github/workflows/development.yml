@@ -90,10 +90,6 @@ jobs:
           REACT_APP_GRAPHQL_PORT: ${{secrets.REACT_APP_GRAPHQL_PORT}}
         run: gradle build
 
-      - name: Server test and build jar
-        working-directory: ./server
-        run: gradle jar
-
       - name: Build development docker image
         run: |
           docker build . -t pickaxe:devel
@@ -108,7 +104,9 @@ jobs:
           path: ./pickaxe_devel.tar
 
   deploy:
-    needs: build-image
+    needs: |
+    test
+    build-image
     runs-on: ubuntu-latest
 
     steps:
