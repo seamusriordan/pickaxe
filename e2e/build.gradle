@@ -1,3 +1,6 @@
+task install(type:Exec){
+      commandLine 'yarn', 'install'
+}
 
 task build_full_docker(type:Exec) {
    commandLine 'docker', 'build', '..', '-f', '../Dockerfile', '-t', 'pickaxe:full-build-e2e'
@@ -31,6 +34,7 @@ task rm_docker(type:Exec) {
 
 task test(type:Exec) {
       dependsOn 'start_docker'
+      dependsOn 'install'
       commandLine 'yarn', 'run', 'cypress', 'run'
       finalizedBy rm_docker
 }

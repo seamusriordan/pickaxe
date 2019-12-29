@@ -3,6 +3,11 @@ task test(type:Exec) {
       commandLine 'yarn', 'test'
 }
 
+task install(type:Exec){
+      commandLine 'yarn', 'install'
+}
+
 task build(type:Exec) {
+      dependsOn 'install'
       commandLine 'yarn', 'build'
 }
