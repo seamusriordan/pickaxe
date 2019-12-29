@@ -4,6 +4,7 @@ task install(type: Exec) {
 
 task docker_build(type: Exec) {
     dependsOn ':pickaxe-server:jar'
+    dependsOn ':pickaxe-server:copy_dependencies'
     dependsOn ':client:build'
     commandLine 'docker', 'build', '..', '-f', '../Dockerfile.from_jar', '-t', 'pickaxe:e2e'
 }
@@ -35,13 +36,15 @@ task docker_env_is_clean(type: Exec){
     ignoreExitValue true
 }
 
-task build_full_docker(type: Exec) {
+task docker_build_full(type: Exec) {
+    dependsOn ':pickaxe-server:copy_dependencies'
     commandLine 'docker', 'build', '..', '-f', '../Dockerfile', '-t', 'pickaxe:full-build-e2e'
 }
 
 task docker_start_full(type: Exec) {
-    dependsOn 'docker_build'
-    dependsOn 'docker_rm'
+    dependsOn 'docker_build_full'
+    dependsOn ':client:build'
+    dependsOn 'docker_env_is_clean'
     commandLine 'docker', 'run', '-d', '-p', '8080:8080', '--name', 'pickaxe', 'pickaxe:full-build-e2e'
 }
 
@@ -53,7 +56,7 @@ task test(type: Exec) {
 }
 
 task full_build_test(type: Exec) {
-    dependsOn 'docker_full_start'
+    dependsOn 'docker_start_full'
     commandLine 'yarn', 'run', 'cypress', 'run'
     finalizedBy 'docker_rm'
 }

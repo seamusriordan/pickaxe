@@ -1,7 +1,8 @@
 FROM openjdk:12-alpine
 
-COPY server/build/libs/pickaxe-server.jar /home/pickaxe/pickaxe-server.jar
+COPY server/build/libs/pickaxe-server.jar /home/pickaxe/
+COPY server/build/deps/* /home/pickaxe/
 COPY client/build/ /home/pickaxe/html/pickaxe
 
 WORKDIR /home/pickaxe/
-CMD java -jar pickaxe-server.jar
+CMD java -cp "*" ServerKt

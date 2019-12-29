@@ -29,16 +29,21 @@ test {
 }
 
 jar {
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+//    duplicatesStrategy = DuplicatesStrategy.INCLUDE
     manifest {
         attributes(
                 'Main-Class': 'ServerKt'
         )
 
     }
-    from {
-        configurations.compileClasspath.collect {
-            it.isDirectory() ? it : zipTree(it)
-        }
-    }
+//    from {
+//        configurations.compileClasspath.collect {
+//            it.isDirectory() ? it : zipTree(it)
+//        }
+//    }
+}
+
+task copy_dependencies(type: Copy) {
+    from configurations.default
+    into 'build/deps'
 }
