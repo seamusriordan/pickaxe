@@ -65,11 +65,11 @@ jobs:
         with:
           ref: devel
       - uses: actions/setup-java@v1
-          with:
+        with:
           java-version: '12'
       - name: Get yarn cache
-          id: yarn-cache
-          run: echo "::set-output name=dir::$(yarn cache dir)"
+        id: yarn-cache
+        run: echo "::set-output name=dir::$(yarn cache dir)"
       - uses: actions/cache@v1
         with:
           path: ${{ steps.yarn-cache.outputs.dir }}
