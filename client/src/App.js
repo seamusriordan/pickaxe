@@ -3,8 +3,21 @@ import PicksGrid from "./PicksGrid";
 import {ApolloProvider } from '@apollo/react-hooks'
 import ApolloClient from "apollo-boost";
 
+
+export function graphqlServer() {
+    return process.env.GRAPHQL_SERVER ?
+        process.env.GRAPHQL_SERVER :
+        "localhost";
+}
+
+export function graphqlPort() {
+    return process.env.GRAPHQL_PORT ?
+        process.env.GRAPHQL_PORT :
+        "8080";
+}
+
 const client = new ApolloClient({
-    uri: 'https://localhost:8080/graphql',
+    uri: 'https://' + graphqlServer() + ':'+ graphqlPort()+'/graphql',
 });
 
 function App() {
