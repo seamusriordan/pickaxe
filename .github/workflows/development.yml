@@ -108,7 +108,7 @@ jobs:
           path: ./pickaxe_devel.tar
 
   deploy:
-    needs: build-and-test
+    needs: build-image
     runs-on: ubuntu-latest
 
     steps:
