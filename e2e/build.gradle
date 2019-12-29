@@ -1,0 +1,42 @@
+
+task build_full_docker(type:Exec) {
+   commandLine 'docker', 'build', '..', '-f', '../Dockerfile', '-t', 'pickaxe:full-build-e2e'
+}
+
+task build_docker(type:Exec) {
+    dependsOn ':pickaxe-server:jar'
+    dependsOn ':client:build'
+   commandLine 'docker', 'build', '..', '-f', '../Dockerfile.from_jar', '-t', 'pickaxe:e2e'
+}
+
+task start_full_docker(type:Exec){
+    dependsOn 'build_docker'
+    commandLine 'docker', 'run', '-d', '-p', '8080:8080', '--name', 'pickaxe', 'pickaxe:full-build-e2e'
+}
+
+task start_docker(type:Exec){
+    dependsOn 'build_docker'
+        dependsOn ':client:build'
+    commandLine 'docker', 'run', '-d', '-p', '8080:8080', '--name', 'pickaxe', 'pickaxe:e2e'
+}
+
+task stop_docker(type:Exec) {
+     commandLine 'docker', 'stop', 'pickaxe'
+ }
+
+task rm_docker(type:Exec) {
+    dependsOn stop_docker
+        commandLine 'docker', 'rm', 'pickaxe'
+}
+
+task test(type:Exec) {
+      dependsOn 'start_docker'
+      commandLine 'yarn', 'run', 'cypress', 'run'
+      finalizedBy rm_docker
+}
+
+task full_build_test(type:Exec) {
+      dependsOn 'start_full_docker'
+      commandLine 'yarn', 'run', 'cypress', 'run'
+      finalizedBy rm_docker
+}

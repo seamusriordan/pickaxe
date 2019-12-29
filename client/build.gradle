@@ -1,0 +1,8 @@
+task test(type:Exec) {
+  environment "CI", "true"
+      commandLine 'yarn', 'test'
+}
+
+task build(type:Exec) {
+      commandLine 'yarn', 'build'
+}

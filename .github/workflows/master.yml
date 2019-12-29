@@ -54,5 +54,6 @@ jobs:
 
     - name: Integration tests
       run: |
+        working-directory: ./e2e
         yarn install
         yarn run cypress run
