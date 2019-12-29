@@ -5,14 +5,14 @@ import ApolloClient from "apollo-boost";
 
 
 export function graphqlServer() {
-    return process.env.GRAPHQL_SERVER ?
-        process.env.GRAPHQL_SERVER :
+    return process.env.REACT_APP_GRAPHQL_SERVER ?
+        process.env.REACT_APP_GRAPHQL_SERVER :
         "localhost";
 }
 
 export function graphqlPort() {
-    return process.env.GRAPHQL_PORT ?
-        process.env.GRAPHQL_PORT :
+    return process.env.REACT_APP_GRAPHQL_PORT ?
+        process.env.REACT_APP_GRAPHQL_PORT :
         "8080";
 }
 
