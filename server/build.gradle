@@ -13,6 +13,8 @@ dependencies {
     implementation "io.javalin:javalin:3.6.0"
     implementation "org.slf4j:slf4j-simple:1.8.0-beta4"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    implementation 'com.graphql-java:graphql-java:13.0'
+    implementation "com.fasterxml.jackson.core:jackson-databind:2.10.0"
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.5.2'
 }
@@ -29,18 +31,12 @@ test {
 }
 
 jar {
-//    duplicatesStrategy = DuplicatesStrategy.INCLUDE
     manifest {
         attributes(
                 'Main-Class': 'ServerKt'
         )
 
     }
-//    from {
-//        configurations.compileClasspath.collect {
-//            it.isDirectory() ? it : zipTree(it)
-//        }
-//    }
 }
 
 task copy_dependencies(type: Copy) {
