@@ -9,9 +9,15 @@ const USER_QUERY = gql`{
 }`;
 
 const PicksGrid = () => {
-    useQuery(USER_QUERY);
+    const {loading, error, data} = useQuery(USER_QUERY);
 
-    return <div/>
+    return <div>
+
+        {data.data.users.map((user, index) => {
+            return <div className="namecell" key={index}>{user.name}</div>
+        })}
+    </div>
+
 };
 
 export default PicksGrid
