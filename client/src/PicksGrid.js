@@ -12,7 +12,9 @@ const PicksGrid = () => {
     const {loading, error, data} = useQuery(USER_QUERY);
 
     return <div>
-        {data.data.users.map((user, index) => {
+        {loading ? "Loading" :
+            error ? "Error" :
+            data.data.users.map((user, index) => {
             return <div className="namecell" key={index}>{user.name}</div>
         })}
     </div>

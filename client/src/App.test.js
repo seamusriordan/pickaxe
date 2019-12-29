@@ -3,25 +3,10 @@ import {render} from '@testing-library/react';
 import {create} from "react-test-renderer";
 import App from './App';
 import PicksGrid from "./PicksGrid";
-import {useQuery} from "@apollo/react-hooks";
-
-export const mockUserData = {
-  data: {
-    "users": [
-      {"name": "Davebob"},
-      {"name": "Luuand"},
-      {"name": "Vegas"},
-    ]
-  }
-};
-
-jest.mock('@apollo/react-hooks');
-useQuery.mockReturnValue({loading: false, error: null, data: mockUserData});
-
-
+import {MockedProvider} from "@apollo/react-testing";
 
 test('renders learn react link', () => {
-  const { getByText } = render(<App />);
+  const { getByText } = render(<MockedProvider><App/></MockedProvider>);
   const linkElement = getByText("Make a pick");
   expect(linkElement).toBeInTheDocument();
 });

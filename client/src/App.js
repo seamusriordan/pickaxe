@@ -1,5 +1,11 @@
 import React from 'react';
 import PicksGrid from "./PicksGrid";
+import {ApolloProvider } from '@apollo/react-hooks'
+import ApolloClient from "apollo-boost";
+
+const client = new ApolloClient({
+    uri: 'https://localhost:8080/graphql',
+});
 
 function App() {
     return (
@@ -14,7 +20,7 @@ function App() {
 
                 Also we have newly deployed
             </header>
-            <div><PicksGrid/></div>
+            <ApolloProvider client={client}><PicksGrid/></ApolloProvider>
         </div>
     );
 }

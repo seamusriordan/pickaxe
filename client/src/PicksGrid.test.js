@@ -68,5 +68,19 @@ describe('PicksGrid', () => {
         expect(nameCells.length).toBe(twoMockUserData.data.users.length);
         expect(nameCells.map(cell => cell.props.children))
             .toEqual(twoMockUserData.data.users.map(user => user.name))
+    });
+
+    it('Renders loading when loading from query is true', () =>{
+        useQuery.mockReturnValue({loading: true, error: false, data: undefined});
+        const grid = create(<PicksGrid/>).root;
+
+        expect(grid.findAll(el => el.props.children==='Loading').length).toEqual(1);
+    })
+
+    it('Renders error when error from query is truthy', () =>{
+        useQuery.mockReturnValue({loading: false, error: true, data: undefined});
+        const grid = create(<PicksGrid/>).root;
+
+        expect(grid.findAll(el => el.props.children==='Error').length).toEqual(1);
     })
 });
