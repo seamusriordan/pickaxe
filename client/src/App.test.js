@@ -24,7 +24,7 @@ describe('App', () => {
   });
 
   test('graphqlServer returns host from environment variable', () => {
-    process.env.GRAPHQL_SERVER = 'someservername';
+    process.env.REACT_APP_GRAPHQL_SERVER = 'someservername';
     expect(graphqlServer()).toEqual('someservername')
   });
 
@@ -33,7 +33,7 @@ describe('App', () => {
   });
 
   test('graphqlPort returns port from environment variable', () => {
-    process.env.GRAPHQL_PORT = "7979";
+    process.env.REACT_APP_GRAPHQL_PORT = "7979";
     expect(graphqlPort()).toEqual("7979")
   });
 
