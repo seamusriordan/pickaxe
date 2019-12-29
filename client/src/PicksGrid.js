@@ -14,7 +14,8 @@ const PicksGrid = () => {
     return <div>
         {loading ? "Loading" :
             error ? "Error" :
-            data.data.users.map((user, index) => {
+                !data ? "derp" :
+            data.users.map((user, index) => {
             return <div className="namecell" key={index}>{user.name}</div>
         })}
     </div>
