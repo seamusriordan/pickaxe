@@ -17,7 +17,7 @@ export function graphqlPort() {
 }
 
 export function graphqlProtocol() {
-    return process.env.REACT_APP_GRAPHQL_SECUREHTTP ?
+    return process.env.REACT_APP_GRAPHQL_HTTPS ?
         "https" :
         "http";
 }

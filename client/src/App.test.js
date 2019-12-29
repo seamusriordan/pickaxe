@@ -49,7 +49,7 @@ describe('App', () => {
     });
 
     test('graphqlProtocol returns port from environment variable', () => {
-        process.env.REACT_APP_GRAPHQL_SECUREHTTP = 1;
+        process.env.REACT_APP_GRAPHQL_HTTPS = 1;
         expect(graphqlProtocol()).toEqual("https")
     });
 
