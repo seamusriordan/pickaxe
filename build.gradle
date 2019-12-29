@@ -1,1 +1,15 @@
+task build_full(type:Exec) {
+   commandLine 'docker', 'build', '.', '-t', 'pickaxe:production'
+}
 
+task build(type:Exec) {
+    dependsOn ':pickaxe-server:jar'
+    dependsOn ':client:build'
+   commandLine 'docker', 'build', '.', '-f', 'Dockerfile.from_jar', '-t', 'pickaxe:latest'
+}
+
+task test {
+    dependsOn 'client:test'
+    dependsOn 'pickaxe-server:test'
+    dependsOn 'e2e:test'
+}
