@@ -36,12 +36,11 @@ jobs:
 
     - name: Build client
       working-directory: ./client
-      run: |
-        yarn install
-        yarn build
+      run: gradle build
+
     - name: Test client
       working-directory: ./client
-      run: CI=true yarn test
+      run: gradle test
 
     - name: Server test and build jar
       working-directory: ./server

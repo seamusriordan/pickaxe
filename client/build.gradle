@@ -1,13 +1,13 @@
 task test(type:Exec) {
-  environment "CI", "true"
-      commandLine 'yarn', 'test'
+    environment "CI", "true"
+    commandLine 'yarn', 'test'
 }
 
 task install(type:Exec){
-      commandLine 'yarn', 'install'
+    commandLine 'yarn', 'install'
 }
 
 task build(type:Exec) {
-      dependsOn 'install'
-      commandLine 'yarn', 'build'
+    dependsOn 'install'
+    commandLine 'yarn', 'build'
 }

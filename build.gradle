@@ -13,3 +13,11 @@ task test {
     dependsOn 'pickaxe-server:test'
     dependsOn 'e2e:test'
 }
+
+task server_start(type:Exec){
+    dependsOn 'e2e:docker_start'
+}
+
+task server_stop(type:Exec){
+    dependsOn 'e2e:docker_stop'
+}

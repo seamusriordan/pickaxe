@@ -36,24 +36,19 @@ jobs:
 
     - name: Build client
       working-directory: ./client
-      run: |
-        yarn install
-        yarn build
+      run: gradle build
+
     - name: Test client
       working-directory: ./client
-      run: CI=true yarn test
+      run: gradle test
 
     - name: Server test and build jar
       working-directory: ./server
       run: gradle build
 
     - name: Build and start docker image
-      run: |
-        docker build . -f Dockerfile.from_jar -t pickaxe:latest
-        docker run -d -p 8080:8080 pickaxe:latest
+      run: gradle server_start
 
     - name: Integration tests
       working-directory: ./e2e
-      run: |
-        yarn install
-        yarn run cypress run
+      run: gradle test
