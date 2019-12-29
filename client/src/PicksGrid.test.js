@@ -5,9 +5,7 @@ import {useQuery} from '@apollo/react-hooks';
 
 import gql from 'graphql-tag';
 
-jest.mock('@apollo/react-hooks');
-
-const mockUserData = {
+export const mockUserData = {
     data: {
         "users": [
             {"name": "Davebob"},
@@ -17,6 +15,8 @@ const mockUserData = {
     }
 };
 
+jest.mock('@apollo/react-hooks');
+useQuery.mockReturnValue({loading: false, error: null, data: mockUserData});
 
 function findByClassName(grid, className) {
     return grid.findAll(

@@ -1,4 +1,5 @@
 import React from 'react';
+import PicksGrid from "./PicksGrid";
 
 function App() {
     return (
@@ -13,6 +14,7 @@ function App() {
 
                 Also we have newly deployed
             </header>
+            <div><PicksGrid/></div>
         </div>
     );
 }
