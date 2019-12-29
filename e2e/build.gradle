@@ -1,46 +1,46 @@
 task install(type:Exec){
-      commandLine 'yarn', 'install'
+    commandLine 'yarn', 'install'
 }
 
-task build_full_docker(type:Exec) {
-   commandLine 'docker', 'build', '..', '-f', '../Dockerfile', '-t', 'pickaxe:full-build-e2e'
-}
-
-task build_docker(type:Exec) {
+task docker_build(type:Exec) {
     dependsOn ':pickaxe-server:jar'
     dependsOn ':client:build'
-   commandLine 'docker', 'build', '..', '-f', '../Dockerfile.from_jar', '-t', 'pickaxe:e2e'
+    commandLine 'docker', 'build', '..', '-f', '../Dockerfile.from_jar', '-t', 'pickaxe:e2e'
 }
 
-task start_full_docker(type:Exec){
-    dependsOn 'build_docker'
-    commandLine 'docker', 'run', '-d', '-p', '8080:8080', '--name', 'pickaxe', 'pickaxe:full-build-e2e'
-}
-
-task start_docker(type:Exec){
-    dependsOn 'build_docker'
-        dependsOn ':client:build'
+task docker_start(type:Exec){
+    dependsOn 'docker_build'
+    dependsOn ':client:build'
     commandLine 'docker', 'run', '-d', '-p', '8080:8080', '--name', 'pickaxe', 'pickaxe:e2e'
 }
 
-task stop_docker(type:Exec) {
-     commandLine 'docker', 'stop', 'pickaxe'
- }
+task docker_stop(type:Exec) {
+    commandLine 'docker', 'stop', 'pickaxe'
+}
 
-task rm_docker(type:Exec) {
-    dependsOn stop_docker
-        commandLine 'docker', 'rm', 'pickaxe'
+task docker_rm(type:Exec) {
+    dependsOn 'stop_docker'
+    commandLine 'docker', 'rm', 'pickaxe'
+}
+
+task build_full_docker(type:Exec) {
+    commandLine 'docker', 'build', '..', '-f', '../Dockerfile', '-t', 'pickaxe:full-build-e2e'
+}
+
+task docker_start_full(type:Exec){
+    dependsOn 'docker_build'
+    commandLine 'docker', 'run', '-d', '-p', '8080:8080', '--name', 'pickaxe', 'pickaxe:full-build-e2e'
 }
 
 task test(type:Exec) {
-      dependsOn 'start_docker'
-      dependsOn 'install'
-      commandLine 'yarn', 'run', 'cypress', 'run'
-      finalizedBy rm_docker
+    dependsOn 'install'
+    dependsOn 'docker_start'
+    commandLine 'yarn', 'run', 'cypress', 'run'
+    finalizedBy 'docker_rm'
 }
 
 task full_build_test(type:Exec) {
-      dependsOn 'start_full_docker'
-      commandLine 'yarn', 'run', 'cypress', 'run'
-      finalizedBy rm_docker
+    dependsOn 'docker_full_start'
+    commandLine 'yarn', 'run', 'cypress', 'run'
+    finalizedBy 'docker_rm'
 }
