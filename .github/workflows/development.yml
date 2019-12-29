@@ -88,6 +88,7 @@ jobs:
         env:
           REACT_APP_GRAPHQL_SERVER: ${{secrets.REACT_APP_GRAPHQL_SERVER}}
           REACT_APP_GRAPHQL_PORT: ${{secrets.REACT_APP_GRAPHQL_PORT}}
+          REACT_APP_GRAPHQL_SECUREHTTP: ${{secrets.REACT_APP_SECUREHTTP}}
         run: gradle build
 
       - name: Build development docker image
