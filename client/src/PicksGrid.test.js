@@ -82,4 +82,5 @@ describe('PicksGrid', () => {
 
         expect(grid.findAll(el => el.props.children === 'derp').length).toEqual(1);
     })
+
 });

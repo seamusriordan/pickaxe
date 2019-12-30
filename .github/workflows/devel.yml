@@ -1,0 +1,62 @@
+name: development
+
+on:
+  push:
+    branches:
+      - devel
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: devel
+    - uses: actions/setup-java@v1
+      with:
+        java-version: '12'
+
+    - name: Get yarn cache
+      id: yarn-cache
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+
+    - uses: actions/cache@v1
+      with:
+        path: ${{ steps.yarn-cache.outputs.dir }}
+        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
+    - uses: actions/cache@v1
+      with:
+        path: ~/.gradle/caches
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+
+    - name: Build client
+      working-directory: ./client
+      run: gradle build
+
+    - name: Test client
+      working-directory: ./client
+      run: gradle test
+
+    - name: Server test and build jar
+      working-directory: ./server
+      run: gradle build
+
+    - name: Copy server dependencies
+      working-directory: ./server
+      run: gradle copy_dependencies
+
+    - name: Build and start docker image
+      run: |
+        docker build . -f Dockerfile.from_jar -t pickaxe:latest
+        docker run -d -p 8080:8080 pickaxe:latest
+
+    - name: Integration tests
+      working-directory: ./e2e
+      run: |
+        yarn install
+        yarn run cypress run

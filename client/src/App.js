@@ -24,12 +24,15 @@ export function graphqlProtocol() {
 }
 
 
+export function serverUri() {
+    return graphqlProtocol() + '://' +
+        graphqlServer() + ':' + graphqlPort() +
+        '/pickaxe/graphql';
+}
 
-const client = new ApolloClient({
+export const apolloClient = new ApolloClient({
     link: new HttpLink(
-        {uri: graphqlProtocol() + '://' +
-            graphqlServer() + ':' + graphqlPort() +
-            '/pickaxe/graphql'}),
+        {uri: serverUri()}),
     cache: new InMemoryCache(),
     connectToDevTools: true
 });
@@ -47,7 +50,7 @@ function App() {
 
                 Also we have newly deployed
             </header>
-            <ApolloProvider client={client}><PicksGrid/></ApolloProvider>
+            <ApolloProvider client={apolloClient}><PicksGrid/></ApolloProvider>
         </div>
     );
 }
