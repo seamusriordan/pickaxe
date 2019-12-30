@@ -33,11 +33,7 @@ describe('PicksGrid', () => {
     });
 
     it('calls useQuery with ', () => {
-        const userQuery = gql`{
-            users {
-                name
-            }
-        }`;
+        const userQuery = gql`query Query { users { name }}`;
         expect(useQuery.mock.calls[0][0]).toBe(userQuery)
     });
 

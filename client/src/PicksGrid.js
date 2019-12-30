@@ -2,11 +2,7 @@ import React from "react";
 import {useQuery} from "@apollo/react-hooks";
 import gql from "graphql-tag";
 
-const USER_QUERY = gql`{
-    users {
-        name
-    }
-}`;
+const USER_QUERY = gql`query Query { users { name }}`;
 
 const PicksGrid = () => {
     const {loading, error, data} = useQuery(USER_QUERY);

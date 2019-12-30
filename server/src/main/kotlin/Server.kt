@@ -1,3 +1,6 @@
+import com.fasterxml.jackson.databind.type.MapType
+import com.fasterxml.jackson.databind.type.TypeFactory
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import graphql.ExecutionInput
 import graphql.GraphQL
 import graphql.schema.StaticDataFetcher
@@ -12,12 +15,18 @@ fun main(args: Array<String>) {
     val app = Javalin.create().start(8080)
     app.config.addStaticFiles("html", Location.EXTERNAL)
 
+    app.options("/pickaxe/graphql/") { ctx ->
+        ctx.header("Access-Control-Allow-Origin", "*")
+        ctx.header("Access-Control-Allow-Methods", "OPTIONS, POST, GET")
+        ctx.header("Access-Control-Allow-Headers", "*")
+        ctx.header("Access-Control-Max-Age", "86400")
+    }
+
     val schema: String =
         """type Query {
 |              user: User
 |              users: [User]
 |          }
-|          
 |          type User {
                 name: String
 |          }
@@ -43,17 +52,20 @@ fun main(args: Array<String>) {
 
     val build = GraphQL.newGraphQL(graphqlSchema).build()
 
-    val executionResult = build.execute("{users {name}}")
-    println("Query result")
-    println(executionResult)
-    var goodResults = executionResult.toSpecification()
-    println(executionResult.getData<String>())
+    val mapTypeReference: MapType = TypeFactory.defaultInstance().constructMapType(HashMap::class.java, String::class.java, Any::class.java)
 
     app.post("/pickaxe/graphql/") { ctx ->
-        var executionInput = ExecutionInput.newExecutionInput().query(ctx.body()).build()
+        var mapper = jacksonObjectMapper();
+        var query = mapper.readValue<HashMap<String, Any>>(ctx.body(), mapTypeReference)
+
+        var executionInput = ExecutionInput.newExecutionInput()
+            .query( query["query"] as String).build()
+
         println(executionInput)
         var executionResult = build.execute(executionInput)
         println(executionResult.getData<String>())
-        ctx.result(toJson(goodResults))
+
+        ctx.header("Access-Control-Allow-Origin", "*")
+        ctx.result(toJson(executionResult.toSpecification()))
     }
 }

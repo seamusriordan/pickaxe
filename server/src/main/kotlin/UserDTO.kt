@@ -1,1 +1,2 @@
-class UserDTO(var name: String)
+class UserDTO(public var name: String) {
+}
