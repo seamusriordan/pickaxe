@@ -30,7 +30,7 @@ export function serverUri() {
         '/pickaxe/graphql';
 }
 
-const client = new ApolloClient({
+export const apolloClient = new ApolloClient({
     link: new HttpLink(
         {uri: serverUri()}),
     cache: new InMemoryCache(),
@@ -50,7 +50,7 @@ function App() {
 
                 Also we have newly deployed
             </header>
-            <ApolloProvider client={client}><PicksGrid/></ApolloProvider>
+            <ApolloProvider client={apolloClient}><PicksGrid/></ApolloProvider>
         </div>
     );
 }
