@@ -1,25 +1,21 @@
-import com.nhaarman.mockitokotlin2.whenever
 import graphql.GraphQL
 import graphql.schema.DataFetcher
 import graphql.schema.StaticDataFetcher
 import graphql.schema.idl.RuntimeWiring
 import io.javalin.Javalin
 import io.javalin.core.JavalinConfig
-import io.javalin.http.Context
 import io.javalin.http.staticfiles.Location
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito
 import org.mockito.Mockito.*
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
 
 internal class ServerTest {
-    val mockedServer = mock(Javalin::class.java);
+    private val mockedServer = mock(Javalin::class.java);
 
-    lateinit var sampleWiringMap: HashMap<String, HashMap<String, DataFetcher<Any>>>;
-    val sampleSchema = "type Query {user: User, id: Int} type User { name: String }";
+    private lateinit var sampleWiringMap: HashMap<String, HashMap<String, DataFetcher<Any>>>;
+    private val sampleSchema = "type Query {user: User, id: Int} type User { name: String }";
 
 
     @BeforeEach
@@ -161,7 +157,7 @@ internal class ServerTest {
     fun handlesPostMethod() {
         val serverSpy = spy(Javalin.create())
 
-        addGraphQLPostServe(serverSpy);
+        addGraphQLPostServe(serverSpy, {});
 
         verify(serverSpy).post(eq("/pickaxe/graphql/"), any())
     }

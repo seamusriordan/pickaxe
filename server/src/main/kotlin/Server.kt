@@ -4,7 +4,6 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import graphql.ExecutionInput
 import graphql.GraphQL
 import graphql.schema.DataFetcher
-import graphql.schema.GraphQLSchema
 import graphql.schema.StaticDataFetcher
 import graphql.schema.idl.RuntimeWiring
 import graphql.schema.idl.SchemaGenerator
@@ -13,7 +12,6 @@ import graphql.schema.idl.TypeDefinitionRegistry
 import io.javalin.Javalin
 import io.javalin.http.staticfiles.Location
 import io.javalin.plugin.json.JavalinJson.toJson
-import javax.naming.Context
 
 
 fun addStaticFileServing(server: Javalin, path: String) {
@@ -21,8 +19,9 @@ fun addStaticFileServing(server: Javalin, path: String) {
     return
 }
 
-fun addGraphQLPostServe(server: Javalin) {
+fun addGraphQLPostServe(server: Javalin, handler: (io.javalin.http.Context) -> Unit) {
     server.post("/pickaxe/graphql/") {
+        handler(it)
     }
     return
 }
@@ -63,7 +62,7 @@ fun generateGraphQL(registry: TypeDefinitionRegistry, wiring: RuntimeWiring): Gr
     return GraphQL.newGraphQL(graphqlSchema).build()
 }
 
-fun extractExecutionInput(body : String ): ExecutionInput {
+fun extractExecutionInput(body: String): ExecutionInput {
     val mapTypeReference: MapType =
         TypeFactory.defaultInstance().constructMapType(HashMap::class.java, String::class.java, Any::class.java)
 
@@ -77,16 +76,13 @@ fun main(args: Array<String>) {
     val server = Javalin.create()
 
     addStaticFileServing(server, "html")
-    addGraphQLPostServe(server)
     addGraphQLOptionServe(server)
 
     server.start(8080)
 
-    return
 
     val schema: String =
         """type Query {
-|              user: User
 |              users: [User]
 |          }
 |          type User {
@@ -101,12 +97,12 @@ fun main(args: Array<String>) {
 
 
     val usersList = ArrayList<UserDTO>()
-    usersList.add(UserDTO("Stebe jorbs"))
-    usersList.add(UserDTO("Stebe Stebe"))
-    usersList.add(UserDTO("Dave Steve"))
+    usersList.add(UserDTO("Seamus"))
+    usersList.add(UserDTO("Sereres"))
+    usersList.add(UserDTO("RNG"))
+    usersList.add(UserDTO("Vegas"))
 
     var queryFields: HashMap<String, DataFetcher<Any>> = HashMap();
-    queryFields["user"] = StaticDataFetcher(UserDTO("Bob"));
     queryFields["users"] = StaticDataFetcher(usersList);
 
     wiringMap["Query"] = queryFields
@@ -115,10 +111,8 @@ fun main(args: Array<String>) {
 
     val build = generateGraphQL(typeDefinitionRegistry, runtimeWiring);
 
-    return
 
-
-    server.post("/pickaxe/graphql/") { ctx ->
+    addGraphQLPostServe(server) { ctx ->
         var executionInput = extractExecutionInput(ctx.body())
         var executionResult = build.execute(executionInput)
 
