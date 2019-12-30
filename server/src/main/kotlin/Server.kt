@@ -3,21 +3,23 @@ import com.fasterxml.jackson.databind.type.TypeFactory
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import graphql.ExecutionInput
 import graphql.GraphQL
+import graphql.schema.DataFetcher
 import graphql.schema.StaticDataFetcher
 import graphql.schema.idl.RuntimeWiring
 import graphql.schema.idl.SchemaGenerator
 import graphql.schema.idl.SchemaParser
+import graphql.schema.idl.TypeDefinitionRegistry
 import io.javalin.Javalin
 import io.javalin.http.staticfiles.Location
 import io.javalin.plugin.json.JavalinJson.toJson
 
 
-fun addStaticFileServing(server: Javalin, path: String ){
+fun addStaticFileServing(server: Javalin, path: String) {
     server.config.addStaticFiles(path, Location.EXTERNAL);
     return
 }
 
-fun addGraphQLOptionServe(server:Javalin){
+fun addGraphQLOptionServe(server: Javalin) {
     server.options("/pickaxe/graphql/") { ctx ->
         ctx.header("Access-Control-Allow-Origin", "*")
         ctx.header("Access-Control-Allow-Methods", "OPTIONS, POST, GET")
@@ -26,6 +28,26 @@ fun addGraphQLOptionServe(server:Javalin){
     }
     return
 }
+
+fun generateTypeDefinitionRegistry(schema: String): TypeDefinitionRegistry {
+    val schemaParser = SchemaParser()
+    return schemaParser.parse(schema)
+}
+
+fun generateRuntimeWiring(wiringMap: Map<String, Map<String, DataFetcher<Any>>>): RuntimeWiring {
+    val wiring = RuntimeWiring.newRuntimeWiring();
+
+    wiringMap.map { (typeName, fieldMap) ->
+        fieldMap.map { (field, fetcher) ->
+            wiring.type(typeName) {
+                it.dataFetcher(field, fetcher)
+            }
+        }
+    }
+
+    return wiring.build()
+}
+
 
 fun main(args: Array<String>) {
     val server = Javalin.create()
@@ -35,14 +57,7 @@ fun main(args: Array<String>) {
 
     server.start(8080)
 
-    return;
-
-    server.options("/pickaxe/graphql/") { ctx ->
-        ctx.header("Access-Control-Allow-Origin", "*")
-        ctx.header("Access-Control-Allow-Methods", "OPTIONS, POST, GET")
-        ctx.header("Access-Control-Allow-Headers", "*")
-        ctx.header("Access-Control-Max-Age", "86400")
-    }
+    return
 
     val schema: String =
         """type Query {
@@ -53,24 +68,31 @@ fun main(args: Array<String>) {
                 name: String
 |          }
 |          """.trimMargin()
-    val schemaParser = SchemaParser()
-    val typeDefinitionRegistry = schemaParser.parse(schema)
+
+    val typeDefinitionRegistry = generateTypeDefinitionRegistry(schema)
+
+    var wiringMap: HashMap<String, HashMap<String, DataFetcher<Any>>> =
+        HashMap();
+
 
     val usersList = ArrayList<UserDTO>()
     usersList.add(UserDTO("Stebe jorbs"))
     usersList.add(UserDTO("Stebe Stebe"))
     usersList.add(UserDTO("Dave Steve"))
 
+    var queryFields: HashMap<String, DataFetcher<Any>> = HashMap();
+    queryFields["user"] = StaticDataFetcher(UserDTO("Bob"));
+    queryFields["users"] = StaticDataFetcher(usersList);
 
-    val runtimeWiring = RuntimeWiring.newRuntimeWiring()
-        .type("Query") {
-            it.dataFetcher("user", StaticDataFetcher(UserDTO("Bob")))
-            it.dataFetcher("users", StaticDataFetcher(usersList))
-        }.build()
+    wiringMap["Query"] = queryFields
+
+    return
+
+
 
     val schemaGenerator = SchemaGenerator()
 
-    val graphqlSchema = schemaGenerator.makeExecutableSchema(typeDefinitionRegistry, runtimeWiring)
+    val graphqlSchema = schemaGenerator.makeExecutableSchema(TypeDefinitionRegistry(), runtimeWiring)
 
     val build = GraphQL.newGraphQL(graphqlSchema).build()
 
