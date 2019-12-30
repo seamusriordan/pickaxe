@@ -13,10 +13,17 @@ import graphql.schema.idl.TypeDefinitionRegistry
 import io.javalin.Javalin
 import io.javalin.http.staticfiles.Location
 import io.javalin.plugin.json.JavalinJson.toJson
+import javax.naming.Context
 
 
 fun addStaticFileServing(server: Javalin, path: String) {
     server.config.addStaticFiles(path, Location.EXTERNAL);
+    return
+}
+
+fun addGraphQLPostServe(server: Javalin) {
+    server.post("/pickaxe/graphql/") {
+    }
     return
 }
 
@@ -50,17 +57,27 @@ fun generateRuntimeWiring(wiringMap: Map<String, Map<String, DataFetcher<Any>>>)
 }
 
 fun generateGraphQL(registry: TypeDefinitionRegistry, wiring: RuntimeWiring): GraphQL {
-     val schemaGenerator = SchemaGenerator()
-
+    val schemaGenerator = SchemaGenerator()
     val graphqlSchema = schemaGenerator.makeExecutableSchema(registry, wiring)
 
-   return GraphQL.newGraphQL(graphqlSchema).build()
+    return GraphQL.newGraphQL(graphqlSchema).build()
+}
+
+fun extractExecutionInput(body : String ): ExecutionInput {
+    val mapTypeReference: MapType =
+        TypeFactory.defaultInstance().constructMapType(HashMap::class.java, String::class.java, Any::class.java)
+
+    var mapper = jacksonObjectMapper();
+    var query = mapper.readValue<HashMap<String, Any>>(body, mapTypeReference)
+
+    return ExecutionInput.newExecutionInput().query(query["query"] as String).build()
 }
 
 fun main(args: Array<String>) {
     val server = Javalin.create()
 
     addStaticFileServing(server, "html")
+    addGraphQLPostServe(server)
     addGraphQLOptionServe(server)
 
     server.start(8080)
@@ -100,19 +117,10 @@ fun main(args: Array<String>) {
 
     return
 
-    val mapTypeReference: MapType =
-        TypeFactory.defaultInstance().constructMapType(HashMap::class.java, String::class.java, Any::class.java)
 
     server.post("/pickaxe/graphql/") { ctx ->
-        var mapper = jacksonObjectMapper();
-        var query = mapper.readValue<HashMap<String, Any>>(ctx.body(), mapTypeReference)
-
-        var executionInput = ExecutionInput.newExecutionInput()
-            .query(query["query"] as String).build()
-
-        println(executionInput)
+        var executionInput = extractExecutionInput(ctx.body())
         var executionResult = build.execute(executionInput)
-        println(executionResult.getData<String>())
 
         ctx.header("Access-Control-Allow-Origin", "*")
         ctx.result(toJson(executionResult.toSpecification()))

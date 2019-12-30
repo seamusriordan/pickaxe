@@ -1,14 +1,19 @@
+import com.nhaarman.mockitokotlin2.whenever
 import graphql.GraphQL
 import graphql.schema.DataFetcher
 import graphql.schema.StaticDataFetcher
 import graphql.schema.idl.RuntimeWiring
 import io.javalin.Javalin
 import io.javalin.core.JavalinConfig
+import io.javalin.http.Context
 import io.javalin.http.staticfiles.Location
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.mockito.Mockito
 import org.mockito.Mockito.*
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
 
 internal class ServerTest {
     val mockedServer = mock(Javalin::class.java);
@@ -89,14 +94,14 @@ internal class ServerTest {
 
     @Test
     fun generateRuntimeWiringFromWiringMapWithOneField() {
-        var wiringMap: HashMap<String, HashMap<String, DataFetcher<Any>>> = HashMap();
+        val wiringMap: HashMap<String, HashMap<String, DataFetcher<Any>>> = HashMap();
 
-        var field: HashMap<String, DataFetcher<Any>> = HashMap();
+        val field: HashMap<String, DataFetcher<Any>> = HashMap();
         field["aFieldName1"] = DataFetcher<Any> { };
 
         wiringMap["aType"] = field;
 
-        var wiring: RuntimeWiring = generateRuntimeWiring(wiringMap)
+        val wiring: RuntimeWiring = generateRuntimeWiring(wiringMap)
 
         val wiringFieldFetcher = wiring.dataFetchers["aType"]?.get("aFieldName1")
 
@@ -115,7 +120,7 @@ internal class ServerTest {
     fun makeGraphQLEngineFromTypeDefinitionRegistryAndRuntimeWiring() {
         val registry = generateTypeDefinitionRegistry(sampleSchema);
         val wiring = generateRuntimeWiring(sampleWiringMap);
-        var engine: GraphQL = generateGraphQL(registry, wiring);
+        val engine: GraphQL = generateGraphQL(registry, wiring);
 
         val result = engine.execute("query Query {id}")
 
@@ -130,11 +135,34 @@ internal class ServerTest {
         newWiringMap["Query"]?.put("id", StaticDataFetcher(-23902));
 
         val wiring = generateRuntimeWiring(sampleWiringMap);
-        var engine: GraphQL = generateGraphQL(registry, wiring);
+        val engine: GraphQL = generateGraphQL(registry, wiring);
 
         val result = engine.execute("query Query {id}")
 
         assertEquals(-23902, result.getData<Map<String, Any>>()["id"]);
     }
 
+    @Test
+    fun extractExecutionInputFromPostBodyForSimpleQuery() {
+        var body = "{\"operationName\":\"Query\",\"variables\":{},\"query\":\"query Query {\\n  id\\n}\\n\"}"
+        var expectedResult = 44
+        val registry = generateTypeDefinitionRegistry(sampleSchema);
+        val wiring = generateRuntimeWiring(sampleWiringMap);
+
+        val engine: GraphQL = generateGraphQL(registry, wiring);
+        var input = extractExecutionInput(body)
+        val result = engine.execute(input);
+
+        assertEquals(expectedResult, result.getData<Map<String, Int>>()["id"])
+    }
+
+
+    @Test
+    fun handlesPostMethod() {
+        val serverSpy = spy(Javalin.create())
+
+        addGraphQLPostServe(serverSpy);
+
+        verify(serverSpy).post(eq("/pickaxe/graphql/"), any())
+    }
 }
