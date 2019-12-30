@@ -1,6 +1,6 @@
 import React from 'react';
 import {create, act} from "react-test-renderer";
-import App, {graphqlServer, graphqlPort, graphqlProtocol, serverUri} from './App';
+import App, {graphqlServer, graphqlPort, graphqlProtocol, serverUri, apolloClient} from './App';
 import PicksGrid from "./PicksGrid";
 import {MockedProvider} from "@apollo/react-testing";
 
