@@ -4,6 +4,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import graphql.ExecutionInput
 import graphql.GraphQL
 import graphql.schema.DataFetcher
+import graphql.schema.GraphQLSchema
 import graphql.schema.StaticDataFetcher
 import graphql.schema.idl.RuntimeWiring
 import graphql.schema.idl.SchemaGenerator
@@ -48,6 +49,13 @@ fun generateRuntimeWiring(wiringMap: Map<String, Map<String, DataFetcher<Any>>>)
     return wiring.build()
 }
 
+fun generateGraphQL(registry: TypeDefinitionRegistry, wiring: RuntimeWiring): GraphQL {
+     val schemaGenerator = SchemaGenerator()
+
+    val graphqlSchema = schemaGenerator.makeExecutableSchema(registry, wiring)
+
+   return GraphQL.newGraphQL(graphqlSchema).build()
+}
 
 fun main(args: Array<String>) {
     val server = Javalin.create()
@@ -86,15 +94,11 @@ fun main(args: Array<String>) {
 
     wiringMap["Query"] = queryFields
 
+    val runtimeWiring = generateRuntimeWiring(wiringMap)
+
+    val build = generateGraphQL(typeDefinitionRegistry, runtimeWiring);
+
     return
-
-
-
-    val schemaGenerator = SchemaGenerator()
-
-    val graphqlSchema = schemaGenerator.makeExecutableSchema(TypeDefinitionRegistry(), runtimeWiring)
-
-    val build = GraphQL.newGraphQL(graphqlSchema).build()
 
     val mapTypeReference: MapType =
         TypeFactory.defaultInstance().constructMapType(HashMap::class.java, String::class.java, Any::class.java)
