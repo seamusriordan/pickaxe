@@ -1,8 +1,9 @@
 import React from 'react';
 import PicksGrid from "./PicksGrid";
 import {ApolloProvider} from '@apollo/react-hooks'
-import ApolloClient from "apollo-boost";
-
+import ApolloClient from "apollo-client";
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import { HttpLink } from 'apollo-link-http';
 
 export function graphqlServer() {
     return process.env.REACT_APP_GRAPHQL_SERVER ?
@@ -22,10 +23,15 @@ export function graphqlProtocol() {
         "http";
 }
 
+
+
 const client = new ApolloClient({
-    uri: graphqlProtocol() + '://' +
-        graphqlServer() + ':' + graphqlPort() +
-        '/pickaxe/graphql',
+    link: new HttpLink(
+        {uri: graphqlProtocol() + '://' +
+            graphqlServer() + ':' + graphqlPort() +
+            '/pickaxe/graphql'}),
+    cache: new InMemoryCache(),
+    connectToDevTools: true
 });
 
 function App() {
