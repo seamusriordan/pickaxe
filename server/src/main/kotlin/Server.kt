@@ -15,7 +15,7 @@ import io.javalin.plugin.json.JavalinJson.toJson
 
 
 fun addStaticFileServing(server: Javalin, path: String) {
-    server.config.addStaticFiles(path, Location.EXTERNAL);
+    server.config.addStaticFiles(path, Location.EXTERNAL)
     return
 }
 
@@ -42,7 +42,7 @@ fun generateTypeDefinitionRegistry(schema: String): TypeDefinitionRegistry {
 }
 
 fun generateRuntimeWiring(wiringMap: Map<String, Map<String, DataFetcher<Any>>>): RuntimeWiring {
-    val wiring = RuntimeWiring.newRuntimeWiring();
+    val wiring = RuntimeWiring.newRuntimeWiring()
 
     wiringMap.map { (typeName, fieldMap) ->
         fieldMap.map { (field, fetcher) ->
@@ -66,8 +66,8 @@ fun extractExecutionInput(body: String): ExecutionInput {
     val mapTypeReference: MapType =
         TypeFactory.defaultInstance().constructMapType(HashMap::class.java, String::class.java, Any::class.java)
 
-    var mapper = jacksonObjectMapper();
-    var query = mapper.readValue<HashMap<String, Any>>(body, mapTypeReference)
+    val mapper = jacksonObjectMapper()
+    val query = mapper.readValue<HashMap<String, Any>>(body, mapTypeReference)
 
     return ExecutionInput.newExecutionInput().query(query["query"] as String).build()
 }
@@ -92,8 +92,8 @@ fun main(args: Array<String>) {
 
     val typeDefinitionRegistry = generateTypeDefinitionRegistry(schema)
 
-    var wiringMap: HashMap<String, HashMap<String, DataFetcher<Any>>> =
-        HashMap();
+    val wiringMap: HashMap<String, HashMap<String, DataFetcher<Any>>> =
+        HashMap()
 
 
     val usersList = ArrayList<UserDTO>()
@@ -102,19 +102,19 @@ fun main(args: Array<String>) {
     usersList.add(UserDTO("RNG"))
     usersList.add(UserDTO("Vegas"))
 
-    var queryFields: HashMap<String, DataFetcher<Any>> = HashMap();
-    queryFields["users"] = StaticDataFetcher(usersList);
+    val queryFields: HashMap<String, DataFetcher<Any>> = HashMap()
+    queryFields["users"] = StaticDataFetcher(usersList)
 
     wiringMap["Query"] = queryFields
 
     val runtimeWiring = generateRuntimeWiring(wiringMap)
 
-    val build = generateGraphQL(typeDefinitionRegistry, runtimeWiring);
+    val build = generateGraphQL(typeDefinitionRegistry, runtimeWiring)
 
 
     addGraphQLPostServe(server) { ctx ->
-        var executionInput = extractExecutionInput(ctx.body())
-        var executionResult = build.execute(executionInput)
+        val executionInput = extractExecutionInput(ctx.body())
+        val executionResult = build.execute(executionInput)
 
         ctx.header("Access-Control-Allow-Origin", "*")
         ctx.result(toJson(executionResult.toSpecification()))

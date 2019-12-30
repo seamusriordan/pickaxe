@@ -12,61 +12,61 @@ import org.junit.jupiter.api.Test
 import org.mockito.Mockito.*
 
 internal class ServerTest {
-    private val mockedServer = mock(Javalin::class.java);
+    private val mockedServer = mock(Javalin::class.java)
 
-    private lateinit var sampleWiringMap: HashMap<String, HashMap<String, DataFetcher<Any>>>;
-    private val sampleSchema = "type Query {user: User, id: Int} type User { name: String }";
+    private lateinit var sampleWiringMap: HashMap<String, HashMap<String, DataFetcher<Any>>>
+    private val sampleSchema = "type Query {user: User, id: Int} type User { name: String }"
 
 
     @BeforeEach
     fun beforeEach() {
         reset(mockedServer)
 
-        sampleWiringMap = HashMap();
+        sampleWiringMap = HashMap()
 
-        val field: HashMap<String, DataFetcher<Any>> = HashMap();
-        val field2: HashMap<String, DataFetcher<Any>> = HashMap();
+        val field: HashMap<String, DataFetcher<Any>> = HashMap()
+        val field2: HashMap<String, DataFetcher<Any>> = HashMap()
 
-        field["user"] = DataFetcher<Any> { null };
-        field["id"] = DataFetcher<Any> { 44 };
-        field2["name"] = DataFetcher<Any> { "Jefphffgh" };
+        field["user"] = DataFetcher<Any> { null }
+        field["id"] = DataFetcher<Any> { 44 }
+        field2["name"] = DataFetcher<Any> { "Jefphffgh" }
 
-        sampleWiringMap["Query"] = field;
-        sampleWiringMap["User"] = field2;
+        sampleWiringMap["Query"] = field
+        sampleWiringMap["User"] = field2
     }
 
     @Test
-    fun addsStaticFilesWithArbitraryPath() {;
-        mockedServer.config = mock(JavalinConfig::class.java);
+    fun addsStaticFilesWithArbitraryPath() {
+        mockedServer.config = mock(JavalinConfig::class.java)
         val path = "some_path"
 
-        addStaticFileServing(mockedServer, path);
+        addStaticFileServing(mockedServer, path)
 
-        verify(mockedServer.config).addStaticFiles(path, Location.EXTERNAL);
+        verify(mockedServer.config).addStaticFiles(path, Location.EXTERNAL)
     }
 
     @Test
-    fun addsStaticFilesWithPathHtml() {;
-        mockedServer.config = mock(JavalinConfig::class.java);
+    fun addsStaticFilesWithPathHtml() {
+        mockedServer.config = mock(JavalinConfig::class.java)
         val path = "html"
 
-        addStaticFileServing(mockedServer, path);
+        addStaticFileServing(mockedServer, path)
 
-        verify(mockedServer.config).addStaticFiles(path, Location.EXTERNAL);
+        verify(mockedServer.config).addStaticFiles(path, Location.EXTERNAL)
     }
 
     @Test
     fun handlesOptionsMethod() {
         val serverSpy = spy(Javalin.create())
 
-        addGraphQLOptionServe(serverSpy);
+        addGraphQLOptionServe(serverSpy)
 
         verify(serverSpy).options(eq("/pickaxe/graphql/"), any())
     }
 
     @Test
     fun generateTypeDefinitionFromRegistryForSimpleSchema() {
-        val simpleSchema = "type Query {username: String}";
+        val simpleSchema = "type Query {username: String}"
 
         val typeDefReg = generateTypeDefinitionRegistry(simpleSchema)
 
@@ -90,12 +90,12 @@ internal class ServerTest {
 
     @Test
     fun generateRuntimeWiringFromWiringMapWithOneField() {
-        val wiringMap: HashMap<String, HashMap<String, DataFetcher<Any>>> = HashMap();
+        val wiringMap: HashMap<String, HashMap<String, DataFetcher<Any>>> = HashMap()
 
-        val field: HashMap<String, DataFetcher<Any>> = HashMap();
-        field["aFieldName1"] = DataFetcher<Any> { };
+        val field: HashMap<String, DataFetcher<Any>> = HashMap()
+        field["aFieldName1"] = DataFetcher<Any> { }
 
-        wiringMap["aType"] = field;
+        wiringMap["aType"] = field
 
         val wiring: RuntimeWiring = generateRuntimeWiring(wiringMap)
 
@@ -114,40 +114,40 @@ internal class ServerTest {
 
     @Test
     fun makeGraphQLEngineFromTypeDefinitionRegistryAndRuntimeWiring() {
-        val registry = generateTypeDefinitionRegistry(sampleSchema);
-        val wiring = generateRuntimeWiring(sampleWiringMap);
-        val engine: GraphQL = generateGraphQL(registry, wiring);
+        val registry = generateTypeDefinitionRegistry(sampleSchema)
+        val wiring = generateRuntimeWiring(sampleWiringMap)
+        val engine: GraphQL = generateGraphQL(registry, wiring)
 
         val result = engine.execute("query Query {id}")
 
-        assertEquals(44, result.getData<Map<String, Any>>()["id"]);
+        assertEquals(44, result.getData<Map<String, Any>>()["id"])
     }
 
     @Test
     fun makeGraphQLEngineFromTypeDefinitionRegistryAndRuntimeWiringWithChangedIdResult() {
-        val registry = generateTypeDefinitionRegistry(sampleSchema);
+        val registry = generateTypeDefinitionRegistry(sampleSchema)
 
         val newWiringMap = HashMap(sampleWiringMap)
-        newWiringMap["Query"]?.put("id", StaticDataFetcher(-23902));
+        newWiringMap["Query"]?.put("id", StaticDataFetcher(-23902))
 
-        val wiring = generateRuntimeWiring(sampleWiringMap);
-        val engine: GraphQL = generateGraphQL(registry, wiring);
+        val wiring = generateRuntimeWiring(sampleWiringMap)
+        val engine: GraphQL = generateGraphQL(registry, wiring)
 
         val result = engine.execute("query Query {id}")
 
-        assertEquals(-23902, result.getData<Map<String, Any>>()["id"]);
+        assertEquals(-23902, result.getData<Map<String, Any>>()["id"])
     }
 
     @Test
     fun extractExecutionInputFromPostBodyForSimpleQuery() {
-        var body = "{\"operationName\":\"Query\",\"variables\":{},\"query\":\"query Query {\\n  id\\n}\\n\"}"
-        var expectedResult = 44
-        val registry = generateTypeDefinitionRegistry(sampleSchema);
-        val wiring = generateRuntimeWiring(sampleWiringMap);
+        val body = "{\"operationName\":\"Query\",\"variables\":{},\"query\":\"query Query {\\n  id\\n}\\n\"}"
+        val expectedResult = 44
+        val registry = generateTypeDefinitionRegistry(sampleSchema)
+        val wiring = generateRuntimeWiring(sampleWiringMap)
 
-        val engine: GraphQL = generateGraphQL(registry, wiring);
-        var input = extractExecutionInput(body)
-        val result = engine.execute(input);
+        val engine: GraphQL = generateGraphQL(registry, wiring)
+        val input = extractExecutionInput(body)
+        val result = engine.execute(input)
 
         assertEquals(expectedResult, result.getData<Map<String, Int>>()["id"])
     }
@@ -157,7 +157,7 @@ internal class ServerTest {
     fun handlesPostMethod() {
         val serverSpy = spy(Javalin.create())
 
-        addGraphQLPostServe(serverSpy, {});
+        addGraphQLPostServe(serverSpy, {})
 
         verify(serverSpy).post(eq("/pickaxe/graphql/"), any())
     }
