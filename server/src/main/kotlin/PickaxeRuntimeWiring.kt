@@ -6,6 +6,7 @@ fun wiringMap(): HashMap<String, HashMap<String, DataFetcher<Any>>> {
     val wiringMap: HashMap<String, HashMap<String, DataFetcher<Any>>> = HashMap()
     val queryFields: HashMap<String, DataFetcher<Any>> = HashMap()
 
+
     val usersList = ArrayList<UserDTO>()
     usersList.add(UserDTO("Seamus"))
     usersList.add(UserDTO("Sereres"))
@@ -13,6 +14,16 @@ fun wiringMap(): HashMap<String, HashMap<String, DataFetcher<Any>>> {
     usersList.add(UserDTO("Vegas"))
 
     queryFields["users"] = StaticDataFetcher(usersList)
+
+    val gamesList = ArrayList<GameDTO>()
+    gamesList.add(GameDTO("GB@CHI"))
+    gamesList.add(GameDTO("BUF@NE"))
+    gamesList.add(GameDTO("SEA@PHI"))
+
+    queryFields["games"] = StaticDataFetcher(gamesList)
+
+
+
     wiringMap["Query"] = queryFields
     return wiringMap
 }

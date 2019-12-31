@@ -11,7 +11,7 @@ class UserDTOTest {
     @Test
     fun hasPicksField() {
         val user = UserDTO("some name")
-        assertEquals(0, user.picks.size)
+        assertEquals(3, user.picks.size)
     }
 
     @Test
