@@ -139,7 +139,7 @@ internal class ServerTest {
     fun makeGraphQLEngineFromTypeDefinitionRegistryAndRuntimeWiring() {
         val registry = generateTypeDefinitionRegistry(sampleSchema)
         val wiring = generateRuntimeWiring(sampleWiringMap)
-        val engine: GraphQL = generateGraphQL(registry, wiring)
+        val engine: GraphQL = generateGraphQLFromRegistryAndWiring(registry, wiring)
 
         val result = engine.execute("query Query {id}")
 
@@ -154,7 +154,7 @@ internal class ServerTest {
         newWiringMap["Query"]?.put("id", StaticDataFetcher(-23902))
 
         val wiring = generateRuntimeWiring(sampleWiringMap)
-        val engine: GraphQL = generateGraphQL(registry, wiring)
+        val engine: GraphQL = generateGraphQLFromRegistryAndWiring(registry, wiring)
 
         val result = engine.execute("query Query {id}")
 
@@ -171,7 +171,7 @@ internal class ServerTest {
         val registry = generateTypeDefinitionRegistry(sampleSchema)
         val wiring = generateRuntimeWiring(sampleWiringMap)
 
-        val engine: GraphQL = generateGraphQL(registry, wiring)
+        val engine: GraphQL = generateGraphQLFromRegistryAndWiring(registry, wiring)
         val input = extractExecutionInput(mockContext)
         val result = engine.execute(input)
 
