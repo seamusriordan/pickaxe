@@ -18,7 +18,7 @@ fun wiringMap(): HashMap<String, HashMap<String, DataFetcher<Any>>> {
 }
 
 fun pickaxeRuntimeWiring(): RuntimeWiring {
-    val wiringMap = wiringMap();
+    val wiringMap = wiringMap()
     return generateRuntimeWiring(wiringMap)
 }
 

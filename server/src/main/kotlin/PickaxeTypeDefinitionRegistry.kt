@@ -2,15 +2,13 @@ import graphql.schema.idl.SchemaParser
 import graphql.schema.idl.TypeDefinitionRegistry
 
 private fun schema(): String {
-    val schema: String =
-        """type Query {
+    return """type Query {
 |              users: [User]
 |          }
 |          type User {
-                name: String
+            name: String
 |          }
 |          """.trimMargin()
-    return schema
 }
 
 fun pickaxeTypeDefinitionRegistry(): TypeDefinitionRegistry {
