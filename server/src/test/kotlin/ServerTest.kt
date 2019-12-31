@@ -4,32 +4,22 @@ import graphql.schema.idl.RuntimeWiring
 import io.javalin.Javalin
 import io.javalin.core.JavalinConfig
 import io.javalin.http.staticfiles.Location
-import io.mockk.mockkClass
-import io.mockk.mockkStatic
-import io.mockk.spyk
-import io.mockk.verify
+import io.mockk.*
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito.*
 
 
 internal class ServerTest {
-    private val mockedServer = mock(Javalin::class.java)
-
-    @BeforeEach
-    fun beforeEach() {
-        reset(mockedServer)
-    }
-
     @Test
     fun addsStaticFilesWithPathHtml() {
-        mockedServer.config = mock(JavalinConfig::class.java)
-        val path = "html"
+        val serverSpy = spyk(Javalin.create())
+        val configMock = mockkClass(JavalinConfig::class)
+        serverSpy.config = configMock
+        every {configMock.addStaticFiles(any(), any()) } returns configMock
 
-        addStaticFileServing(mockedServer)
+        addStaticFileServing(serverSpy)
 
-        verify(mockedServer.config).addStaticFiles(path, Location.EXTERNAL)
+        verify { configMock.addStaticFiles("html", Location.EXTERNAL) }
     }
 
     @Test
@@ -40,7 +30,7 @@ internal class ServerTest {
         addGraphQLOptionServe(serverSpy)
 
         verify { serverSpy.options("/pickaxe/graphql/", any()) }
-        verify(exactly=1) { optionsHandler() }
+        verify(exactly = 1) { optionsHandler() }
     }
 
     @Test
@@ -75,7 +65,7 @@ internal class ServerTest {
         addGraphQLPostServe(serverSpy, graphQLMock)
 
         verify { serverSpy.post("/pickaxe/graphql/", any()) }
-        verify(exactly=1) { postHandler(graphQLMock) }
+        verify(exactly = 1) { postHandler(graphQLMock) }
     }
 
     private fun generateModifiedWiringWithId(modifiedId: Int): RuntimeWiring {

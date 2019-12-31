@@ -8,7 +8,7 @@ import io.javalin.plugin.json.JavalinJson
 
 fun postHandler(graphQL: GraphQL): (Context) -> Unit {
     return { ctx ->
-        val executionInput = extractExecutionInput(ctx)
+        val executionInput = extractExecutionInputFromContext(ctx)
         val executionResult = graphQL.execute(executionInput)
 
         ctx.header("Access-Control-Allow-Origin", "*")
@@ -25,7 +25,7 @@ fun optionsHandler(): (Context) -> Unit {
     }
 }
 
-fun extractExecutionInput(ctx: Context): ExecutionInput {
+fun extractExecutionInputFromContext(ctx: Context): ExecutionInput {
     val mapTypeReference: MapType =
         TypeFactory.defaultInstance()
             .constructMapType(HashMap::class.java, String::class.java, Any::class.java)

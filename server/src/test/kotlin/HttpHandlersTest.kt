@@ -8,21 +8,36 @@ import io.mockk.verify
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
-class HandlersTest {
-    private val queryBody = "{\"operationName\":\"Query\",\"variables\":{},\"query\":\"query Query {\\n  id\\n}\\n\"}"
+class HttpHandlersTest {
+    private val idQueryBody = "{\"operationName\":\"Query\",\"variables\":{},\"query\":\"query Query {\\n  id\\n}\\n\"}"
+    private val userQueryBody = "{\"operationName\":\"Query\",\"variables\":{},\"query\":\"query Query {\\n  user {\\n\\n  name}\\n}\\n\"}"
 
     @Test
-    fun extractExecutionInputFromPostBodyForSimpleQuery() {
+    fun extractExecutionInputFromPostBodyForIdQuery() {
         val mockContext = mockkClass(Context::class)
-        every { mockContext.body() } returns queryBody
+        every { mockContext.body() } returns idQueryBody
         val engine: GraphQL = sampleGraphQL()
 
-        val input = extractExecutionInput(mockContext)
+        val input = extractExecutionInputFromContext(mockContext)
         val result = engine.execute(input)
 
         val expectedResult = 44
        assertEquals(expectedResult, result.getData<Map<String, Int>>()["id"])
     }
+
+    @Test
+    fun extractExecutionInputFromPostBodyForUserWithNameQuery() {
+        val mockContext = mockkClass(Context::class)
+        every { mockContext.body() } returns userQueryBody
+        val engine: GraphQL = sampleGraphQL()
+
+        val input = extractExecutionInputFromContext(mockContext)
+        val result = engine.execute(input)
+
+        val expectedResult = "JImm"
+       assertEquals(expectedResult, result.getData<Map<String, Map<String, String>>>()["user"]?.get("name"))
+    }
+
 
     @Test
     fun optionsHandlerSetsCorrectHeaders(){
@@ -50,7 +65,7 @@ class HandlersTest {
     @Test
     fun postHandlerServesQueryResponse() {
         val mockContext = mockkClass(Context::class)
-        every { mockContext.body() } returns queryBody
+        every { mockContext.body() } returns idQueryBody
         every { mockContext.header(any(), any()) } returns mockContext
         every { mockContext.result(any<String>()) } returns mockContext
         val resultSlot = slot<String>()

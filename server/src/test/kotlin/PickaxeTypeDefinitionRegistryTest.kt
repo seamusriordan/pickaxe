@@ -5,14 +5,7 @@ import org.junit.jupiter.api.Test
 
 private const val sampleSchema = "type Query {user: User, id: Int} type User { name: String }"
 
-fun sampleTypeDefinitionRegistry(): TypeDefinitionRegistry {
-    val schemaParser = SchemaParser()
-    return schemaParser.parse(sampleSchema)
-}
-
 class PickaxeTypeDefinitionRegistryTest {
-
-
     @Test
     fun generateTypeDefinitionFromRegistryForSimpleSchema() {
         val simpleSchema = "type Query {username: String}"
@@ -38,4 +31,9 @@ class PickaxeTypeDefinitionRegistryTest {
         )
     }
 
+}
+
+fun sampleTypeDefinitionRegistry(): TypeDefinitionRegistry {
+    val schemaParser = SchemaParser()
+    return schemaParser.parse(sampleSchema)
 }
