@@ -21,7 +21,7 @@ describe('PicksGrid basic behavior', () => {
     });
 
     it('calls useQuery with ', () => {
-        const userQuery = gql`query Query { users { name }}`;
+        const userQuery = gql`query Query { users { name picks { game pick } total } games { name spread result } }`;
         expect(useQuery.mock.calls[0][0]).toBe(userQuery)
     });
 

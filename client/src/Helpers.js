@@ -20,7 +20,9 @@ function assertUserPicksMatchCells(user, games, pickCells) {
 function assertUserPickForGameMatchesCellText(user, game, pickCells) {
     const pickCell = firstCellThatMatchesID(pickCells, pickCellID(user, game));
 
-    expect(pickByGame(user.picks, game.name)).toEqual(pickCell.props.children);
+    let inputElement = pickCell.findByType('div');
+
+    expect(pickByGame(user.picks, game.name)).toEqual(inputElement.children[0]);
 }
 
 function firstCellThatMatchesID(pickCells, pickCellID) {
