@@ -1,30 +1,32 @@
-
-
 export const mockQueryData = {
     "users": [
         {
-            "name": "Davebob", "total": "0", "picks": {
-                "CHI@GB": "CHI",
-                "HAR@NOR": "NOR",
-                "SFE@CRL": "SFE",
-                "ANN@COL": "ANN",
-            }
+            "name": "Davebob", "total": "0", "picks":
+                [
+                    {"game": "CHI@GB", "pick": "CHI"},
+                    {"game": "HAR@NOR", "pick": "NOR"},
+                    {"game": "SFE@CRL", "pick": "SFE"},
+                    {"game": "ANN@COL", "pick": "ANN"},
+                ],
         },
         {
-            "name": "Luuand", "total": "3", "picks": {
-                "CHI@GB": "GB",
-                "HAR@NOR": "NOR",
-                "SFE@CRL": "SF",
-                "ANN@COL": "C",
-            }
+            "name": "Luuand", "total": "3", "picks": [
+                {"game": "CHI@GB", "pick": "GB"},
+                {"game": "HAR@NOR", "pick": "NOR"},
+                {"game": "SFE@CRL", "pick": "SF"},
+                {"game": "ANN@COL", "pick": "C"},
+            ],
+
+
         },
         {
-            "name": "Vegas", "total": "1", "picks": {
-                "CHI@GB": "B",
-                "HAR@NOR": "TH",
-                "SFE@CRL": "CRL",
-                "ANN@COL": "A",
-            }
+            "name": "Vegas", "total": "1", "picks":
+                [
+                    {"game": "CHI@GB", "pick": "B"},
+                    {"game": "HAR@NOR", "pick": "TH"},
+                    {"game": "SFE@CRL", "pick": "CRL"},
+                    {"game": "ANN@COL", "pick": "A"},
+                ],
         },
     ],
 

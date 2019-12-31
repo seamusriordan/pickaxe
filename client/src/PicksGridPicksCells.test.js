@@ -1,6 +1,6 @@
 import {useQuery} from "@apollo/react-hooks";
 import {create} from "react-test-renderer";
-import PicksGrid from "./PicksGrid";
+import PicksGrid, {getPickByGame} from "./PicksGrid";
 import React from "react";
 import {mockQueryData} from "./MockQueryData";
 import {findByClassName, assertAllUserPicksMatchCellText} from "./Helpers";
@@ -27,6 +27,17 @@ describe('PicksGrid pick cell rendering', () => {
         assertAllUserPicksMatchCellText(mockQueryData, pickCells);
     });
 
+    it('can choose specific game from pick list for first mock user', () => {
+        let picks = mockQueryData["users"][0].picks;
+
+        expect(getPickByGame(picks, "CHI@GB")).toBe("CHI")
+    })
+
+    it('can choose specific game from pick list for second mock user', () => {
+        let picks = mockQueryData["users"][1].picks;
+
+        expect(getPickByGame(picks, "ANN@COL")).toBe("C")
+    })
 
 
 });

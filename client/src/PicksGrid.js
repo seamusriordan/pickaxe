@@ -43,9 +43,13 @@ function pickCells(data) {
     return (!data.users || !data.games)? undefined :
        data.users.map((user, index1) => {
            return data.games.map((game, index2) => {
-               return <div className="pick-cell" id={user.name + '-' + game.name} key={index1+'-'+index2}>{user.picks[game.name]}</div>
+               return <div className="pick-cell" id={user.name + '-' + game.name} key={index1+'-'+index2}>{getPickByGame(user.picks, game.name)}</div>
            });
        });
+}
+
+export function getPickByGame(picks, game){
+    return picks.filter(pick => pick["game"] === game)[0]["pick"]
 }
 
 const PicksGrid = () => {
