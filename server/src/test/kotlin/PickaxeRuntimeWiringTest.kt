@@ -7,16 +7,13 @@ class PickaxeRuntimeWiringTest {
     @Test
     fun generateRuntimeWiringFromWiringMapWithOneField() {
         val wiringMap: HashMap<String, HashMap<String, DataFetcher<Any>>> = HashMap()
-
         val field: HashMap<String, DataFetcher<Any>> = HashMap()
         field["aFieldName1"] = DataFetcher<Any> { }
-
         wiringMap["aType"] = field
 
         val wiring: RuntimeWiring = generateRuntimeWiring(wiringMap)
 
         val wiringFieldFetcher = wiring.dataFetchers["aType"]?.get("aFieldName1")
-
         Assertions.assertSame(wiringFieldFetcher, field["aFieldName1"])
     }
 
