@@ -1,10 +1,18 @@
+import graphql.ExecutionInput
+import graphql.ExecutionResult
 import graphql.GraphQL
 import graphql.schema.DataFetcher
 import graphql.schema.StaticDataFetcher
 import graphql.schema.idl.RuntimeWiring
 import io.javalin.Javalin
 import io.javalin.core.JavalinConfig
+import io.javalin.http.Handler
 import io.javalin.http.staticfiles.Location
+import io.javalin.plugin.json.JavalinJackson.toJson
+import io.mockk.every
+import io.mockk.mockkClass
+import io.mockk.slot
+import io.mockk.spyk
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.BeforeEach
@@ -16,6 +24,7 @@ internal class ServerTest {
 
     private lateinit var sampleWiringMap: HashMap<String, HashMap<String, DataFetcher<Any>>>
     private val sampleSchema = "type Query {user: User, id: Int} type User { name: String }"
+    private val queryBody = "{\"operationName\":\"Query\",\"variables\":{},\"query\":\"query Query {\\n  id\\n}\\n\"}"
 
 
     @BeforeEach
@@ -57,11 +66,25 @@ internal class ServerTest {
 
     @Test
     fun handlesOptionsMethod() {
-        val serverSpy = spy(Javalin.create())
+        val serverSpy = spyk(Javalin.create())
+
+        var contextHandler = slot<Handler>();
 
         addGraphQLOptionServe(serverSpy)
 
-        verify(serverSpy).options(eq("/pickaxe/graphql/"), any())
+
+        io.mockk.verify { serverSpy.options("/pickaxe/graphql/", capture(contextHandler)) };
+
+        val mockContext = mockkClass(io.javalin.http.Context::class)
+
+        every { mockContext.header(any(), any()) } returns mockContext
+
+        contextHandler.captured.handle(mockContext)
+
+        io.mockk.verify { mockContext.header("Access-Control-Allow-Origin", "*") }
+        io.mockk.verify { mockContext.header("Access-Control-Allow-Methods", "OPTIONS, POST, GET") }
+        io.mockk.verify { mockContext.header("Access-Control-Allow-Headers", "*") }
+        io.mockk.verify { mockContext.header("Access-Control-Max-Age", "86400") }
     }
 
     @Test
@@ -140,13 +163,16 @@ internal class ServerTest {
 
     @Test
     fun extractExecutionInputFromPostBodyForSimpleQuery() {
-        val body = "{\"operationName\":\"Query\",\"variables\":{},\"query\":\"query Query {\\n  id\\n}\\n\"}"
+        val mockContext = mockkClass(io.javalin.http.Context::class)
+
+        every { mockContext.body() } returns queryBody;
+
         val expectedResult = 44
         val registry = generateTypeDefinitionRegistry(sampleSchema)
         val wiring = generateRuntimeWiring(sampleWiringMap)
 
         val engine: GraphQL = generateGraphQL(registry, wiring)
-        val input = extractExecutionInput(body)
+        val input = extractExecutionInput(mockContext)
         val result = engine.execute(input)
 
         assertEquals(expectedResult, result.getData<Map<String, Int>>()["id"])
@@ -155,10 +181,42 @@ internal class ServerTest {
 
     @Test
     fun handlesPostMethod() {
-        val serverSpy = spy(Javalin.create())
+        val specificationMap = HashMap<String, String>();
 
-        addGraphQLPostServe(serverSpy, {})
+        specificationMap["Derp derp"] = "A derpty do"
 
-        verify(serverSpy).post(eq("/pickaxe/graphql/"), any())
+        val serverSpy = spyk(Javalin.create())
+        val mockExecutionResult = mockkClass(ExecutionResult::class)
+        every {mockExecutionResult.toSpecification()} returns specificationMap as Map<String, Any>?;
+
+        val graphqlMock = mockkClass(GraphQL::class)
+        every {graphqlMock.execute(any<ExecutionInput>())} returns mockExecutionResult
+
+        val mockContext = mockkClass(io.javalin.http.Context::class)
+        every { mockContext.body() } returns queryBody
+        every { mockContext.header(any(), any()) } returns mockContext
+        every { mockContext.result(any<String>()) } returns mockContext
+
+        var contextHandler = slot<Handler>();
+
+
+        addGraphQLPostServe(serverSpy, graphqlMock)
+
+        io.mockk.verify { serverSpy.post("/pickaxe/graphql/", capture(contextHandler)) };
+
+        contextHandler.captured.handle(mockContext)
+
+        val expectedInput = extractExecutionInput(mockContext);
+        val capturedInput = slot<ExecutionInput>();
+
+        io.mockk.verify { mockContext.body() }
+        io.mockk.verify { graphqlMock.execute(capture(capturedInput)) }
+
+
+        assertEquals(expectedInput.query, capturedInput.captured.query)
+        assertEquals(expectedInput.operationName, capturedInput.captured.operationName)
+
+        io.mockk.verify { mockContext.header("Access-Control-Allow-Origin", "*") }
+        io.mockk.verify { mockContext.result(toJson(specificationMap)) }
     }
 }

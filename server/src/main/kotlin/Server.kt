@@ -10,6 +10,7 @@ import graphql.schema.idl.SchemaGenerator
 import graphql.schema.idl.SchemaParser
 import graphql.schema.idl.TypeDefinitionRegistry
 import io.javalin.Javalin
+import io.javalin.http.Context
 import io.javalin.http.staticfiles.Location
 import io.javalin.plugin.json.JavalinJson.toJson
 
@@ -19,9 +20,13 @@ fun addStaticFileServing(server: Javalin, path: String) {
     return
 }
 
-fun addGraphQLPostServe(server: Javalin, handler: (io.javalin.http.Context) -> Unit) {
-    server.post("/pickaxe/graphql/") {
-        handler(it)
+fun addGraphQLPostServe(server: Javalin, graphQL: GraphQL) {
+    server.post("/pickaxe/graphql/") { ctx ->
+        val executionInput = extractExecutionInput(ctx)
+        val executionResult = graphQL.execute(executionInput)
+
+        ctx.header("Access-Control-Allow-Origin", "*")
+        ctx.result(toJson(executionResult.toSpecification()))
     }
     return
 }
@@ -62,25 +67,17 @@ fun generateGraphQL(registry: TypeDefinitionRegistry, wiring: RuntimeWiring): Gr
     return GraphQL.newGraphQL(graphqlSchema).build()
 }
 
-fun extractExecutionInput(body: String): ExecutionInput {
+fun extractExecutionInput(ctx: Context): ExecutionInput {
     val mapTypeReference: MapType =
         TypeFactory.defaultInstance().constructMapType(HashMap::class.java, String::class.java, Any::class.java)
 
     val mapper = jacksonObjectMapper()
-    val query = mapper.readValue<HashMap<String, Any>>(body, mapTypeReference)
+    val query = mapper.readValue<HashMap<String, Any>>(ctx.body(), mapTypeReference)
 
     return ExecutionInput.newExecutionInput().query(query["query"] as String).build()
 }
 
 fun main(args: Array<String>) {
-    val server = Javalin.create()
-
-    addStaticFileServing(server, "html")
-    addGraphQLOptionServe(server)
-
-    server.start(8080)
-
-
     val schema: String =
         """type Query {
 |              users: [User]
@@ -92,9 +89,8 @@ fun main(args: Array<String>) {
 
     val typeDefinitionRegistry = generateTypeDefinitionRegistry(schema)
 
-    val wiringMap: HashMap<String, HashMap<String, DataFetcher<Any>>> =
-        HashMap()
-
+    val wiringMap: HashMap<String, HashMap<String, DataFetcher<Any>>> = HashMap()
+    val queryFields: HashMap<String, DataFetcher<Any>> = HashMap()
 
     val usersList = ArrayList<UserDTO>()
     usersList.add(UserDTO("Seamus"))
@@ -102,21 +98,26 @@ fun main(args: Array<String>) {
     usersList.add(UserDTO("RNG"))
     usersList.add(UserDTO("Vegas"))
 
-    val queryFields: HashMap<String, DataFetcher<Any>> = HashMap()
     queryFields["users"] = StaticDataFetcher(usersList)
-
     wiringMap["Query"] = queryFields
 
+    val graphQL = generateGraphQLFromSchemaAndWiringMap(typeDefinitionRegistry, wiringMap)
+
+    val server = Javalin.create()
+    addStaticFileServing(server, "html")
+    addGraphQLPostServe(server, graphQL)
+    addGraphQLOptionServe(server)
+
+    server.start(8080)
+}
+
+private fun generateGraphQLFromSchemaAndWiringMap(
+        typeDefinitionRegistry: TypeDefinitionRegistry,
+        wiringMap: HashMap<String, HashMap<String, DataFetcher<Any>>>
+    ): GraphQL {
+
+
     val runtimeWiring = generateRuntimeWiring(wiringMap)
-
-    val build = generateGraphQL(typeDefinitionRegistry, runtimeWiring)
-
-
-    addGraphQLPostServe(server) { ctx ->
-        val executionInput = extractExecutionInput(ctx.body())
-        val executionResult = build.execute(executionInput)
-
-        ctx.header("Access-Control-Allow-Origin", "*")
-        ctx.result(toJson(executionResult.toSpecification()))
-    }
+    val graphQL = generateGraphQL(typeDefinitionRegistry, runtimeWiring)
+    return graphQL
 }
