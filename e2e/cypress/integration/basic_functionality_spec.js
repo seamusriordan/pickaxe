@@ -1,5 +1,5 @@
 
-describe('Basic server functionality', () => {
+describe('server endpoint is up', () => {
 
     it('can visit our page', () => {
         cy.visit('localhost:8080/pickaxe');
@@ -8,7 +8,7 @@ describe('Basic server functionality', () => {
 
 });
 
-describe('GraphQL responses', () => {
+describe('GraphQL server responds', () => {
 
     it('can query to our graphql endpoint', () => {
         const graphqlRequestBody = "{\"operationName\":\"Query\",\"variables\":{},"+
