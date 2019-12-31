@@ -3,12 +3,27 @@ import graphql.schema.idl.TypeDefinitionRegistry
 
 private fun schema(): String {
     return """type Query {
-|              users: [User]
-|          }
-|          type User {
+              users: [User]
+              games: [Game]
+          }
+
+          type User {
             name: String
-|          }
-|          """.trimMargin()
+            picks: [Pick]
+            total: Int
+          }
+          
+          type Game {
+            name: String
+            result: String
+            spread: String
+          }  
+                  
+          type Pick {
+            game: String
+            pick: String
+          }
+          """.trimMargin()
 }
 
 fun pickaxeTypeDefinitionRegistry(): TypeDefinitionRegistry {
