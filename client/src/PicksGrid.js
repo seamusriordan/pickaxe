@@ -11,6 +11,13 @@ function userCells(data) {
     });
 }
 
+function totalCells(data) {
+    return !data.users? undefined :
+    data.users.map((user, index) => {
+        return <div className="total-cell" key={index}>{user.total}</div>
+    });
+}
+
 function gameCells(data) {
     return !data.games? undefined :
     data.games.map((game, index) => {
@@ -18,12 +25,42 @@ function gameCells(data) {
     });
 }
 
+function spreadCells(data) {
+    return !data.games? undefined :
+    data.games.map((game, index) => {
+        return <div className="spread-cell" key={index}>{game.spread}</div>
+    });
+}
+
+function resultCells(data) {
+    return !data.games? undefined :
+    data.games.map((game, index) => {
+        return <div className="result-cell" key={index}>{game.result}</div>
+    });
+}
+
+function pickCells(data) {
+    return (!data.users || !data.games)? undefined :
+       data.users.map((user, index1) => {
+           return data.games.map((game, index2) => {
+               return <div className="pick-cell" id={user.name + '-' + game.name} key={index1+'-'+index2}>{user.picks[game.name]}</div>
+           });
+       });
+}
+
 const PicksGrid = () => {
     const {loading, error, data} = useQuery(USER_QUERY);
 
     return <div>
         {loading ? "Loading" : error ? "Error" : !data ? "derp" :
-            [userCells(data), gameCells(data)]
+            [
+                userCells(data),
+                gameCells(data),
+                spreadCells(data),
+                pickCells(data),
+                resultCells(data),
+                totalCells(data)
+            ]
         }
     </div>
 
