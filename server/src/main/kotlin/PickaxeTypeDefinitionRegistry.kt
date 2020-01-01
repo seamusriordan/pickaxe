@@ -29,8 +29,8 @@ type Mutation {
 }
 
 input UpdatedPick {
-    name: String
     game: String
+    pick: String
 }
 """.trimMargin()
 }
