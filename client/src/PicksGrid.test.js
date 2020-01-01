@@ -55,8 +55,9 @@ describe('PicksGrid basic behavior', () => {
         act(() => {grid = create(<PicksGrid/>)});
 
         const updatingQuery =
-        gql`mutation Mutation($name: String, $pick: UpdatedPick)
-        { updatePick(name: $name, pick: $pick)}`;
+        gql`mutation Mutation($name: String, $week: Int, $game: String, $pick: String)
+        { updatePick(name: $name, userPick: { week: $week, game: $game, pick: $pick })
+        }`;
 
         expect(useMutation.mock.calls[0][0]).toBe(updatingQuery);
     });
@@ -79,7 +80,7 @@ describe('PicksGrid basic behavior', () => {
 
         expect(sendDataSpyCalled).toBeTruthy();
 
-        expect(calledData).toEqual({variables: {name: "Vegas", pick: {game: "HAR@NOR", pick: "THHH"}}})
+        expect(calledData).toEqual({variables: {name: "Vegas", userPick: {week: 0, game: "HAR@NOR", pick: "THHH"}}})
     });
 
     it('PickCell send', () => {
@@ -99,7 +100,7 @@ describe('PicksGrid basic behavior', () => {
         });
         expect(sendDataSpyCalled).toBeTruthy();
 
-        expect(calledData).toEqual({variables: {name: "Davebob", pick: {game: "CHI@GB", pick: "GUB"}}})
+        expect(calledData).toEqual({variables: {name: "Davebob", userPick: {week: 0, game: "CHI@GB", pick: "GUB"}}})
     });
 
     it('On blur event, sends data with cell InnerHTML', () => {
@@ -114,7 +115,7 @@ describe('PicksGrid basic behavior', () => {
             fireEvent.blur(cell, {target: {textContent: "CHI"}});
         });
 
-        expect(calledData.variables.pick.pick).toBe("CHI")
+        expect(calledData.variables.userPick.pick).toBe("CHI")
     });
 
     it('On blur event, do not send data when no change', () => {
@@ -144,7 +145,7 @@ describe('PicksGrid basic behavior', () => {
             fireEvent.blur(cell, {target: {textContent: "CHI\nall this other data"}});
         });
 
-        expect(calledData.variables.pick.pick).toBe("CHI")
+        expect(calledData.variables.userPick.pick).toBe("CHI")
     });
 
     it('On blur event, innerHTML from textContent with newlines only have up to first newline', () => {

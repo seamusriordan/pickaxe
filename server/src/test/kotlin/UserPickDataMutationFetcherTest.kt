@@ -1,5 +1,5 @@
 import graphql.schema.DataFetchingEnvironmentImpl
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -27,15 +27,16 @@ class UserPickDataMutationFetcherTest {
 
         var passedVariables: HashMap<String, Any> = HashMap<String, Any>();
         passedVariables["name"] = "Person"
-        passedVariables["pick"] = UpdatedPickDTO(0, "GB@CHI", "Different");
+        passedVariables["userPick"] = UpdatedPickDTO(0, "GB@CHI", "Different");
 
         envBuilder.variables(passedVariables)
 
         var env = envBuilder.build()
 
-        userPickDataMutationFetcher.get(env)
+        val result = userPickDataMutationFetcher.get(env)
 
         assertEquals("Different", pickByWeekUserGameIndex(0, 0, 0).pick);
+        assertEquals(true, result);
     }
 
     private fun pickByWeekUserGameIndex(week: Int, user: Int, game: Int) = dataStore[week][user].picks[game]
@@ -46,15 +47,16 @@ class UserPickDataMutationFetcherTest {
 
         var passedVariables: HashMap<String, Any> = HashMap<String, Any>();
         passedVariables["name"] = "Person"
-        passedVariables["pick"] = UpdatedPickDTO(0, "BUF@NE", "Very Different");
+        passedVariables["userPick"] = UpdatedPickDTO(0, "BUF@NE", "Very Different");
 
         envBuilder.variables(passedVariables)
 
         var env = envBuilder.build()
 
-        userPickDataMutationFetcher.get(env)
+        val result = userPickDataMutationFetcher.get(env)
 
         assertEquals("Very Different", pickByWeekUserGameIndex(0, 0, 1).pick);
+        assertEquals(true, result);
     }
 
     @Test
@@ -63,7 +65,7 @@ class UserPickDataMutationFetcherTest {
 
         var passedVariables: HashMap<String, Any> = HashMap<String, Any>();
         passedVariables["name"] = "Person2"
-        passedVariables["pick"] = UpdatedPickDTO(0, "SEA@PHI", "PHI");
+        passedVariables["userPick"] = UpdatedPickDTO(0, "SEA@PHI", "PHI");
 
         envBuilder.variables(passedVariables)
 

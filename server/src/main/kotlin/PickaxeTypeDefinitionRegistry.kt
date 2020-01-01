@@ -31,7 +31,7 @@ type Pick {
 }  
           
 type Mutation {
-    updatePick(name: String, pick: UpdatedPick) : String
+    updatePick(name: String, userPick: UpdatedPick): Boolean
 }
 
 input UpdatedPick {

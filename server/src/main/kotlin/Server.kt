@@ -5,10 +5,17 @@ import graphql.schema.idl.TypeDefinitionRegistry
 import io.javalin.Javalin
 import io.javalin.http.staticfiles.Location
 
+
 const val graphqlURI = "/pickaxe/graphql/"
 const val staticFilesPath = "html"
 
 fun main(args: Array<String>) {
+    val log = org.slf4j.LoggerFactory.getLogger(GraphQL::class.java) as org.slf4j.simple.SimpleLogger
+
+    println("ROOT LOGGER")
+    println(log)
+
+
     val typeDefinitionRegistry = pickaxeTypeDefinitionRegistry()
     val wiring = pickaxeRuntimeWiring()
 

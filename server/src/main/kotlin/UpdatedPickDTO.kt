@@ -1,3 +1,1 @@
-class UpdatedPickDTO(var week: Int, var game: String, var pick: String) {
-
-}
+public class UpdatedPickDTO(public var week: Int, public var game: String, public var pick: String)

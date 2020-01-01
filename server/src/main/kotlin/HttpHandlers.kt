@@ -3,6 +3,7 @@ import com.fasterxml.jackson.databind.type.TypeFactory
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import graphql.ExecutionInput
 import graphql.GraphQL
+import graphql.execution.ExecutionId
 import io.javalin.http.Context
 import io.javalin.plugin.json.JavalinJson
 
@@ -32,9 +33,21 @@ fun extractExecutionInputFromContext(ctx: Context): ExecutionInput {
 
     val mapper = jacksonObjectMapper()
     val query = mapper.readValue<HashMap<String, Any>>(ctx.body(), mapTypeReference)
+    println("FULL QUERY")
+    println(query)
 
-    return ExecutionInput.newExecutionInput()
+    println("executionInput extraction: ")
+    println(query["variables"])
+
+    var executionInput = ExecutionInput.newExecutionInput()
         .query(query["query"] as String)
-        .variables(query["variables"] as Map<String, Any>)
-        .operationName(query["operationName"] as String).build()
+
+
+    if (query["operationName"] != null ) executionInput.operationName(query["operationName"] as String)
+    if (query["variables"] != null ) executionInput.variables(query["variables"] as Map<String, Any>)
+    if (query["context"] != null ) executionInput.context(query["context"] as Map<String, Any>)
+    if (query["root"] != null ) executionInput.root(query["root"] )
+    if (query["executionId"] != null ) executionInput.executionId(query["executionId"] as ExecutionId)
+
+    return executionInput.build()
 }
