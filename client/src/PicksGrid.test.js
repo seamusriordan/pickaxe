@@ -1,14 +1,13 @@
 import PicksGrid from "./PicksGrid";
-import {create} from "react-test-renderer";
+import {create, act} from "react-test-renderer";
 import React from "react";
-import {useQuery} from '@apollo/react-hooks';
+import {useQuery, useMutation} from '@apollo/react-hooks';
 import {mockQueryData} from "./MockQueryData";
 
 import gql from 'graphql-tag';
 
 
 jest.mock('@apollo/react-hooks');
-useQuery.mockReturnValue({loading: false, error: null, data: mockQueryData});
 
 
 describe('PicksGrid basic behavior', () => {
@@ -17,6 +16,8 @@ describe('PicksGrid basic behavior', () => {
     beforeEach(() => {
         jest.resetAllMocks();
         useQuery.mockReturnValue({loading: false, error: null, data: mockQueryData});
+        useMutation.mockReturnValue([() => {
+        }]);
         grid = create(<PicksGrid/>).root;
     });
 
@@ -45,8 +46,41 @@ describe('PicksGrid basic behavior', () => {
         const grid = create(<PicksGrid/>).root;
 
         expect(grid.findAll(el => el.props.children === 'derp').length).toEqual(1);
-    })
+    });
 
+    it('useMutation is called with pick updating query', () => {
+        let grid;
+        act(() => {grid = create(<PicksGrid/>)});
+
+        const updatingQuery =
+        gql`mutation Pick($name: String, $pick: Pick)
+        { updatePick(name: $name, pick: $pick) {
+            user {
+                pick
+            }
+        }}`;
+
+        expect(useMutation.mock.calls[0][0]).toBe(updatingQuery);
+    });
+
+    it('PickCell sendData callback executes send with update on onBlur', () => {
+        let sendDataSpyCalled = false;
+        let calledData;
+        let grid;
+
+        useMutation.mockReturnValue([(data) => {
+            calledData = data;
+            sendDataSpyCalled = true;
+        }]);
+        act(() => {grid = create(<PicksGrid/>)});
+        let cell = grid.root.find(el => el.props.id === "Vegas-HAR@NOR");
+
+        cell.children[0].props.onBlur({type: "onblur"});
+
+        expect(sendDataSpyCalled).toBeTruthy();
+
+        expect(calledData).toEqual({name: "Vegas", pick: {game: "HAR@NOR", pick: "TH"}})
+    })
 
 });
 

@@ -1,4 +1,4 @@
-import {useQuery} from "@apollo/react-hooks";
+import {useMutation, useQuery} from "@apollo/react-hooks";
 import {create} from "react-test-renderer";
 import PicksGrid from "./PicksGrid";
 import React from "react";
@@ -6,7 +6,6 @@ import {mockQueryData} from "./MockQueryData";
 import {findByClassName} from "./Helpers";
 
 jest.mock('@apollo/react-hooks');
-useQuery.mockReturnValue({loading: false, error: null, data: mockQueryData});
 
 describe('PicksGrid data row/column rendering', () => {
     let grid;
@@ -14,6 +13,7 @@ describe('PicksGrid data row/column rendering', () => {
     beforeEach(() => {
         jest.resetAllMocks();
         useQuery.mockReturnValue({loading: false, error: null, data: mockQueryData});
+        useMutation.mockReturnValue([() => {}]);
         grid = create(<PicksGrid/>).root;
     });
 

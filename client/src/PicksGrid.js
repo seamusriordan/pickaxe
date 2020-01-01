@@ -1,9 +1,16 @@
 import React from "react";
-import {useQuery} from "@apollo/react-hooks";
+import {useMutation, useQuery} from "@apollo/react-hooks";
 import gql from "graphql-tag";
 import PickCell from "./PickCell";
 
-const USER_QUERY = gql`query Query { users { name picks { game pick } total } games { name spread result } }`;
+const PICKS_QUERY = gql`query Query { users { name picks { game pick } total } games { name spread result } }`;
+const UPDATE_PICKS_MUTATION =
+gql`mutation Pick($name: String, $pick: Pick) 
+    { updatePick(name: $name, pick: $pick) {
+        user {
+            pick
+        }
+    }}`;
 
 function userCells(data) {
     return !data.users ? undefined :
@@ -40,10 +47,14 @@ function resultCells(data) {
         });
 }
 
-function pickCells(data) {
+function pickCells(data, sendData) {
     return (!data.users || !data.games) ? undefined :
         data.users.map((user, index1) => {
             return data.games.map((game, index2) => {
+                const sendDataCallback = (event) => {
+                    sendData({name: "Vegas", pick: {game: "HAR@NOR", pick: "TH"}});
+                };
+
                 return <PickCell
                     className="pick-cell"
                     id={user.name + '-' + game.name}
@@ -51,7 +62,7 @@ function pickCells(data) {
                     game={game.name}
                     pick={getPickByGame(user.picks, game.name)}
                     user={user.name}
-                    sendData={()=>{console.log("Going to send data!")}}
+                    sendData={sendDataCallback}
                 />
             });
         });
@@ -65,7 +76,9 @@ export function getPickByGame(passedPicks, gameName) {
 }
 
 const PicksGrid = () => {
-    const {loading, error, data} = useQuery(USER_QUERY);
+    const {loading, error, data} = useQuery(PICKS_QUERY);
+    const [sendData] = useMutation(UPDATE_PICKS_MUTATION);
+
 
     return <div>
         {loading ? "Loading" : error ? "Error" : !data ? "derp" :
@@ -73,7 +86,7 @@ const PicksGrid = () => {
                 userCells(data),
                 gameCells(data),
                 spreadCells(data),
-                pickCells(data),
+                pickCells(data, sendData),
                 resultCells(data),
                 totalCells(data)
             ]
