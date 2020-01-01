@@ -4,17 +4,23 @@ import graphql.schema.idl.TypeDefinitionRegistry
 private fun schema(): String {
     return """type Query {
     users: [User]
-    games: [Game]
+    userPicks(week: Int): [UserPicks]
+    games(week: Int): [Game]
 }
 
 type User {
     name: String
+}
+
+type UserPicks {
+    user: User
     picks: [Pick]
     total: Int
 }
           
 type Game {
     name: String
+    week: Int
     result: String
     spread: String
 }  
@@ -29,6 +35,7 @@ type Mutation {
 }
 
 input UpdatedPick {
+    week: Int
     game: String
     pick: String
 }

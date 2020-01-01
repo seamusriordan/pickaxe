@@ -23,6 +23,16 @@ fun wiringMap(): HashMap<String, HashMap<String, DataFetcher<Any>>> {
 
     queryFields["games"] = StaticDataFetcher(gamesList)
 
+    val userPicksList = ArrayList<UserPicksDTO>()
+    userPicksList.add(UserPicksDTO(UserDTO("Seamus")))
+    userPicksList.add(UserPicksDTO(UserDTO("Sereres")))
+    userPicksList.add(UserPicksDTO(UserDTO("RNG")))
+    userPicksList.add(UserPicksDTO(UserDTO("Vegas")))
+
+    queryFields["userPicks"] = StaticDataFetcher(userPicksList)
+
+
+
     wiringMap["Query"] = queryFields
 
     mutationFields["updatePick"] = UpdatePickDataFetcher() as DataFetcher<Any>;
