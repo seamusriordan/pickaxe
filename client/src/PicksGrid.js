@@ -43,19 +43,20 @@ function resultCells(data) {
         });
 }
 
+
 function pickCells(data, sendData) {
     return (!data.users || !data.games) ? undefined :
         data.users.map((user, index1) => {
             return data.games.map((game, index2) => {
-                const thisPick = getPickByGame(user.picks, game.name);
+                let thisPick = getPickByGame(user.picks, game.name);
 
-                const sendDataCallback = (event) => {
+                const sendDataCallback = (event, updatedPick) => {
                     sendData({ variables:
                     {
                         name: user.name,
                         pick: {
                             game: game.name,
-                            pick: thisPick
+                            pick: updatedPick
                         }
                     }});
                 };
