@@ -3,7 +3,7 @@ import {useMutation, useQuery} from "@apollo/react-hooks";
 import gql from "graphql-tag";
 import PickCell from "./PickCell";
 
-const PICKS_QUERY = gql`query Query { users { name picks { game pick } total } games { name spread result } }`;
+const PICKS_QUERY = gql`query Query($week: Int) { users { name } userPicks(week: $week) { user { name } picks { game pick } total } games(week: $week) { week name spread result } }`;
 const UPDATE_PICKS_MUTATION =
 gql`mutation Mutation($name: String, $pick: UpdatedPick)
 { updatePick(name: $name, pick: $pick)}`;
@@ -48,7 +48,8 @@ function pickCells(data, sendData) {
     return (!data.users || !data.games) ? undefined :
         data.users.map((user, index1) => {
             return data.games.map((game, index2) => {
-                let thisPick = getPickByGame(user.picks, game.name);
+                let pickSet = getPicksForUser(data.userPicks, user.name);
+                let thisPick = getPickByGame(pickSet, game.name);
 
                 const sendDataCallback = (event, updatedPick) => {
                     sendData({ variables:
@@ -81,8 +82,15 @@ export function getPickByGame(passedPicks, gameName) {
     return firstMatchingPick ? firstMatchingPick["pick"] : null
 }
 
+export function getPicksForUser(passedPicks, userName) {
+    if (!passedPicks || passedPicks.size === 0) return null;
+    const firstMatchingPick = passedPicks.filter(pickSet => pickSet.user.name === userName)[0];
+
+    return firstMatchingPick ? firstMatchingPick.picks : null
+}
+
 const PicksGrid = () => {
-    const {loading, error, data} = useQuery(PICKS_QUERY);
+    const {loading, error, data} = useQuery(PICKS_QUERY, {variables: {week: 0}});
     const [sendData] = useMutation(UPDATE_PICKS_MUTATION);
 
 

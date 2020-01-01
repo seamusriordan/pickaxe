@@ -1,7 +1,12 @@
 export const mockQueryData = {
     "users": [
+       { "name": "Davebob"},
+        {"name": "Luuand"},
+        {"name": "Vegas"}
+    ],
+    "userPicks": [
         {
-            "name": "Davebob", "total": "0", "picks":
+            "user": {"name": "Davebob"}, "total": "0", "picks":
                 [
                     {"game": "CHI@GB", "pick": "CHI"},
                     {"game": "HAR@NOR", "pick": "NOR"},
@@ -10,7 +15,7 @@ export const mockQueryData = {
                 ],
         },
         {
-            "name": "Luuand", "total": "3", "picks": [
+            "user": {"name": "Luuand"}, "total": "3", "picks": [
                 {"game": "CHI@GB", "pick": "GB"},
                 {"game": "HAR@NOR", "pick": "NOR"},
                 {"game": "SFE@CRL", "pick": "SF"},
@@ -20,7 +25,7 @@ export const mockQueryData = {
 
         },
         {
-            "name": "Vegas", "total": "1", "picks":
+            "user": {"name": "Vegas"}, "total": "1", "picks":
                 [
                     {"game": "CHI@GB", "pick": "B"},
                     {"game": "HAR@NOR", "pick": "TH"},
@@ -31,9 +36,9 @@ export const mockQueryData = {
     ],
 
     "games": [
-        {"name": "CHI@GB", "spread": "400", "result": "CHI"},
-        {"name": "HAR@NOR", "spread": "-22", "result": ""},
-        {"name": "SFE@CRL", "spread": "7", "result": "CRL"},
-        {"name": "ANN@COL", "spread": "0", "result": "CHI"},
+        {"name": "CHI@GB", "week": 0, "spread": "400", "result": "CHI"},
+        {"name": "HAR@NOR", "week": 0, "spread": "-22", "result": ""},
+        {"name": "SFE@CRL", "week": 0, "spread": "7", "result": "CRL"},
+        {"name": "ANN@COL", "week": 0, "spread": "0", "result": "CHI"},
     ]
 };

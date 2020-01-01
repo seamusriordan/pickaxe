@@ -7,22 +7,22 @@ export function findByClassName(grid, className) {
 
 export function assertAllUserPicksMatchCellText(queryResult, pickCells) {
     queryResult.users.map(user =>
-        assertUserPicksMatchCells(user, queryResult.games, pickCells)
+        assertUserPicksMatchCells(queryResult.userPicks, user, queryResult.games, pickCells)
     );
 }
 
-function assertUserPicksMatchCells(user, games, pickCells) {
+function assertUserPicksMatchCells(userPicks, user, games, pickCells) {
     games.map(
-        game => assertUserPickForGameMatchesCellText(user, game, pickCells)
+        game => assertUserPickForGameMatchesCellText(userPicks, user, game, pickCells)
     )
 }
 
-function assertUserPickForGameMatchesCellText(user, game, pickCells) {
+function assertUserPickForGameMatchesCellText(userPicks, user, game, pickCells) {
     const pickCell = firstCellThatMatchesID(pickCells, pickCellID(user, game));
 
     let inputElement = pickCell.findByType('div');
 
-    expect(pickByGame(user.picks, game.name)).toEqual(inputElement.children[0]);
+    expect(pickByGame(userPicks, user.name, game.name)).toEqual(inputElement.children[0]);
 }
 
 function firstCellThatMatchesID(pickCells, pickCellID) {
@@ -36,6 +36,11 @@ function pickCellID(user, game) {
     return user.name + '-' + game.name;
 }
 
-function pickByGame(picks, game) {
-    return picks.filter(pick => pick["game"] === game)[0]["pick"]
+function pickByGame(userPicks, user, game) {
+    return picksForUser(userPicks, user)
+        .filter(pick => pick["game"] === game)[0]["pick"]
+}
+
+function picksForUser(userPicks, userName) {
+    return userPicks.filter(pickSet => pickSet.user.name === userName)[0].picks;
 }

@@ -35,13 +35,13 @@ describe('PicksGrid pick cell rendering', () => {
     });
 
     it('can choose specific game from pick list for first mock user', () => {
-        let picks = mockQueryData["users"][0].picks;
+        let picks = mockQueryData["userPicks"][0].picks;
 
         expect(getPickByGame(picks, "CHI@GB")).toBe("CHI")
     })
 
     it('can choose specific game from pick list for second mock user', () => {
-        let picks = mockQueryData["users"][1].picks;
+        let picks = mockQueryData["userPicks"][1].picks;
 
         expect(getPickByGame(picks, "ANN@COL")).toBe("C")
     })
