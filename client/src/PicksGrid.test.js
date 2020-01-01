@@ -82,6 +82,25 @@ describe('PicksGrid basic behavior', () => {
         expect(calledData).toEqual({name: "Vegas", pick: {game: "HAR@NOR", pick: "TH"}})
     })
 
+    it('PickCell endData callback executes send with update on onKeypress enter', () => {
+        let sendDataSpyCalled = false;
+        let calledData;
+        let grid;
+
+        useMutation.mockReturnValue([(data) => {
+            calledData = data;
+            sendDataSpyCalled = true;
+        }]);
+        act(() => {grid = create(<PicksGrid/>)});
+        let cell = grid.root.find(el => el.props.id === "Davebob-CHI@GB");
+
+        cell.children[0].props.onBlur({type: "onkeypress", "keyCode": 13});
+
+        expect(sendDataSpyCalled).toBeTruthy();
+
+        expect(calledData).toEqual({name: "Davebob", pick: {game: "CHI@GB", pick: "CHI"}})
+    })
+
 });
 
 
