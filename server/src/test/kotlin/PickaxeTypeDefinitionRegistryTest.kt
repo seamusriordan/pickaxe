@@ -3,7 +3,7 @@ import graphql.schema.idl.TypeDefinitionRegistry
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
-private const val sampleSchema = "type Query {user: User, id: Int} type User { name: String }"
+private const val sampleSchema = "type Query {user: User, id: Int} type User { name: String } type Mutation {mutate(id: Int): String}"
 
 class PickaxeTypeDefinitionRegistryTest {
     @Test

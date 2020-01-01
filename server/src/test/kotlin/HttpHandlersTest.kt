@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test
 class HttpHandlersTest {
     private val idQueryBody = "{\"operationName\":\"Query\",\"variables\":{},\"query\":\"query Query {\\n  id\\n}\\n\"}"
     private val userQueryBody = "{\"operationName\":\"Query\",\"variables\":{},\"query\":\"query Query {\\n  user {\\n\\n  name}\\n}\\n\"}"
+    private val mutationQueryBody7 = "{\"operationName\":\"Mutation\",\"variables\":{ \"id\": 7 },\"query\":\"mutation Mutation {\\n  mutate(\$id: Int) }\\n\"}"
+    private val mutationQueryBody0 = "{\"operationName\":\"Mutation\",\"variables\":{ \"id\": 0 },\"query\":\"mutation Mutation {\\n  mutate(\$id: Int) }\\n\"}"
 
     @Test
     fun extractExecutionInputFromPostBodyForIdQuery() {
@@ -36,6 +38,39 @@ class HttpHandlersTest {
 
         val expectedResult = "JImm"
        assertEquals(expectedResult, result.getData<Map<String, Map<String, String>>>()["user"]?.get("name"))
+    }
+
+    @Test
+    fun extractExecutionInputVariablesFromMutationBodyForId7() {
+        val mockContext = mockkClass(Context::class)
+        every { mockContext.body() } returns mutationQueryBody7
+        sampleGraphQL()
+
+        val input = extractExecutionInputFromContext(mockContext)
+
+       assertEquals("{id=7}", input.variables.toString())
+    }
+
+    @Test
+    fun extractExecutionInputVariablesFromMutationBodyForId0() {
+        val mockContext = mockkClass(Context::class)
+        every { mockContext.body() } returns mutationQueryBody0
+        sampleGraphQL()
+
+        val input = extractExecutionInputFromContext(mockContext)
+
+       assertEquals("{id=0}", input.variables.toString())
+    }
+
+    @Test
+    fun extractExecutionInputOperationFromMutationQuery() {
+        val mockContext = mockkClass(Context::class)
+        every { mockContext.body() } returns mutationQueryBody7
+        sampleGraphQL()
+
+        val input = extractExecutionInputFromContext(mockContext)
+
+       assertEquals("Mutation", input.operationName)
     }
 
 

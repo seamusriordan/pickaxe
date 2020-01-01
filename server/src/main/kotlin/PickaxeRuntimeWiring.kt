@@ -5,6 +5,7 @@ import graphql.schema.idl.RuntimeWiring
 fun wiringMap(): HashMap<String, HashMap<String, DataFetcher<Any>>> {
     val wiringMap: HashMap<String, HashMap<String, DataFetcher<Any>>> = HashMap()
     val queryFields: HashMap<String, DataFetcher<Any>> = HashMap()
+    val mutationFields: HashMap<String, DataFetcher<Any>> = HashMap()
 
 
     val usersList = ArrayList<UserDTO>()
@@ -22,9 +23,11 @@ fun wiringMap(): HashMap<String, HashMap<String, DataFetcher<Any>>> {
 
     queryFields["games"] = StaticDataFetcher(gamesList)
 
-
-
     wiringMap["Query"] = queryFields
+
+    mutationFields["updatePick"] = UpdatePickDataFetcher() as DataFetcher<Any>;
+
+    wiringMap["Mutation"] = mutationFields
     return wiringMap
 }
 

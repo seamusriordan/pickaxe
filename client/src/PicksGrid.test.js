@@ -53,12 +53,8 @@ describe('PicksGrid basic behavior', () => {
         act(() => {grid = create(<PicksGrid/>)});
 
         const updatingQuery =
-        gql`mutation Pick($name: String, $pick: Pick)
-        { updatePick(name: $name, pick: $pick) {
-            user {
-                pick
-            }
-        }}`;
+        gql`mutation Mutation($name: String, $pick: UpdatedPick)
+        { updatePick(name: $name, pick: $pick)}`;
 
         expect(useMutation.mock.calls[0][0]).toBe(updatingQuery);
     });
@@ -79,7 +75,7 @@ describe('PicksGrid basic behavior', () => {
 
         expect(sendDataSpyCalled).toBeTruthy();
 
-        expect(calledData).toEqual({name: "Vegas", pick: {game: "HAR@NOR", pick: "TH"}})
+        expect(calledData).toEqual({variables: {name: "Vegas", pick: {game: "HAR@NOR", pick: "TH"}}})
     })
 
     it('PickCell endData callback executes send with update on onKeypress enter', () => {
@@ -98,7 +94,7 @@ describe('PicksGrid basic behavior', () => {
 
         expect(sendDataSpyCalled).toBeTruthy();
 
-        expect(calledData).toEqual({name: "Davebob", pick: {game: "CHI@GB", pick: "CHI"}})
+        expect(calledData).toEqual({variables: {name: "Davebob", pick: {game: "CHI@GB", pick: "CHI"}}})
     })
 
 });
