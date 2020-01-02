@@ -22,10 +22,13 @@ describe('PicksGrid basic behavior', () => {
         grid = create(<PicksGrid/>).root;
     });
 
-    it('calls useQuery with ', () => {
-        const userQuery = gql`query Query($week: Int) { users { name } userPicks(week: $week) { user { name } picks { game pick } total } games(week: $week) { week name spread result } }`;
-        expect(useQuery.mock.calls[0][0]).toBe(userQuery);
-        expect(useQuery.mock.calls[0][1]).toEqual({variables: {week: 0}});
+    it('calls useQuery ', () => {
+        expect(useQuery).toBeCalled()
+    });
+
+    it('calls useMutation ', () => {
+        expect(useMutation).toBeCalled()
+
     });
 
 

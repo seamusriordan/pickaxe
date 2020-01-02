@@ -20,6 +20,7 @@ export default function PickCell(props){
     };
 
     return <div contentEditable={true}
+                spellCheck={false}
                 onBlur={callbackWrapper}
                 suppressContentEditableWarning="true"
                 id={props.id}
