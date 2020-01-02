@@ -1,86 +1,172 @@
 import PicksGrid from "./PicksGrid";
-import {create} from "react-test-renderer";
+import {create, act} from "react-test-renderer";
 import React from "react";
-import {useQuery} from '@apollo/react-hooks';
+import {useQuery, useMutation} from '@apollo/react-hooks';
+import {mockQueryData} from "./MockQueryData";
 
 import gql from 'graphql-tag';
+import {fireEvent, render} from "@testing-library/react";
 
-export const mockUserData = {
-    "users": [
-        {"name": "Davebob"},
-        {"name": "Luuand"},
-        {"name": "Vegas"},
-    ]
-};
 
 jest.mock('@apollo/react-hooks');
-useQuery.mockReturnValue({loading: false, error: null, data: mockUserData});
 
-function findByClassName(grid, className) {
-    return grid.findAll(
-        el => {
-            return el.props.className === className
-        });
-}
 
-describe('PicksGrid', () => {
+describe('PicksGrid basic behavior', () => {
     let grid;
 
     beforeEach(() => {
         jest.resetAllMocks();
-        useQuery.mockReturnValue({loading: false, error: null, data: mockUserData});
+        useQuery.mockReturnValue({loading: false, error: null, data: mockQueryData});
+        useMutation.mockReturnValue([() => {
+        }]);
         grid = create(<PicksGrid/>).root;
     });
 
     it('calls useQuery with ', () => {
-        const userQuery = gql`query Query { users { name }}`;
-        expect(useQuery.mock.calls[0][0]).toBe(userQuery)
+        const userQuery = gql`query Query($week: Int) { users { name } userPicks(week: $week) { user { name } picks { game pick } total } games(week: $week) { week name spread result } }`;
+        expect(useQuery.mock.calls[0][0]).toBe(userQuery);
+        expect(useQuery.mock.calls[0][1]).toEqual({variables: {week: 0}});
     });
 
-    it('Renders three id cells when there are three users in data response', () => {
-        const nameCells = findByClassName(grid, 'namecell');
-
-        expect(nameCells.length).toBe(mockUserData.users.length);
-        expect(nameCells.map(cell => cell.props.children))
-            .toEqual(mockUserData.users.map(user => user.name))
-    });
-
-    it('Renders two id cells when there are two users in data response', () => {
-        const twoMockUserData = {
-            "users": [
-                {"name": "Someone"},
-                {"name": "Derp"},
-            ]
-        };
-        useQuery.mockReturnValue({loading: false, error: null, data: twoMockUserData});
-
-        const grid = create(<PicksGrid/>).root;
-        const nameCells = findByClassName(grid, 'namecell');
-
-        expect(nameCells.length).toBe(twoMockUserData.users.length);
-        expect(nameCells.map(cell => cell.props.children))
-            .toEqual(twoMockUserData.users.map(user => user.name))
-    });
 
     it('Renders loading when loading from query is true', () => {
         useQuery.mockReturnValue({loading: true, error: false, data: undefined});
         const grid = create(<PicksGrid/>).root;
 
         expect(grid.findAll(el => el.props.children === 'Loading').length).toEqual(1);
-    })
+    });
 
     it('Renders error when error from query is truthy', () => {
         useQuery.mockReturnValue({loading: false, error: true, data: undefined});
         const grid = create(<PicksGrid/>).root;
 
         expect(grid.findAll(el => el.props.children === 'Error').length).toEqual(1);
-    })
+    });
 
     it('Renders derp when data from query is undefined', () => {
         useQuery.mockReturnValue({loading: false, error: undefined, data: undefined});
         const grid = create(<PicksGrid/>).root;
 
         expect(grid.findAll(el => el.props.children === 'derp').length).toEqual(1);
+    });
+
+    it('useMutation is called with pick updating query', () => {
+        let grid;
+        act(() => {grid = create(<PicksGrid/>)});
+
+        const updatingQuery =
+        gql`mutation Mutation($name: String!, $week: Int!, $game: String!, $pick: String!)
+        { updatePick(name: $name, userPick: { week: $week, game: $game, pick: $pick })
+        }`;
+
+        expect(useMutation.mock.calls[0][0]).toBe(updatingQuery);
+    });
+
+    it('PickCell sendData callback executes send with update on onBlur', () => {
+        let sendDataSpyCalled = false;
+        let calledData = null;
+        let grid = null;
+
+        useMutation.mockReturnValue([(data) => {
+            calledData = data;
+            sendDataSpyCalled = true;
+        }]);
+        act(() => {grid = create(<PicksGrid/>)});
+        let cell = grid.root.find(el => el.props.id === "Vegas-HAR@NOR");
+
+        act(() => {
+            cell.children[0].props.onBlur({type: "onblur", target: {textContent: "THHH"}});
+        });
+
+        expect(sendDataSpyCalled).toBeTruthy();
+
+        expect(calledData).toEqual({variables: {name: "Vegas", week: 0, game: "HAR@NOR", pick: "THHH"}})
+    });
+
+    it('PickCell send', () => {
+        let sendDataSpyCalled = false;
+        let calledData = null;
+        let grid = null;
+
+        useMutation.mockReturnValue([(data) => {
+            calledData = data;
+            sendDataSpyCalled = true;
+        }]);
+        act(() => {grid = create(<PicksGrid/>)});
+        let cell = grid.root.find(el => el.props.id === "Davebob-CHI@GB");
+
+        act(() => {
+            cell.children[0].props.onBlur({type: "onkeypress", "keyCode": 13, target: {textContent: "GUB"}});
+        });
+        expect(sendDataSpyCalled).toBeTruthy();
+
+        expect(calledData).toEqual({variables: {name: "Davebob", week: 0, game: "CHI@GB", pick: "GUB"}})
+    });
+
+    it('On blur event, sends data with cell InnerHTML', () => {
+        let calledData = null;
+        useMutation.mockReturnValue([(data) => {
+            calledData = data;
+        }]);
+        let {container} = render(<PicksGrid/>);
+        let cell = container.querySelector('#Vegas-CHI\\@GB');
+
+        act(()=> {
+            fireEvent.blur(cell, {target: {textContent: "CHI"}});
+        });
+
+        expect(calledData.variables.pick).toBe("CHI")
+    });
+
+    it('On blur event, do not send data when no change', () => {
+        let spyCalled = false;
+        useMutation.mockReturnValue([() => {
+            spyCalled = true;
+        }]);
+        let {container} = render(<PicksGrid/>);
+        let cell = container.querySelector('#Vegas-CHI\\@GB');
+
+        act(() => {
+            fireEvent.blur(cell, {target: {textContent: "B"}});
+        });
+
+        expect(spyCalled).toBeFalsy();
+    });
+
+    it('On blur event, textContent with newlines only sends up to first newline', () => {
+        let calledData = null;
+        useMutation.mockReturnValue([(data) => {
+            calledData = data;
+        }]);
+        let {container} = render(<PicksGrid/>);
+        let cell = container.querySelector('#Vegas-CHI\\@GB');
+
+        act(()=>{
+            fireEvent.blur(cell, {target: {textContent: "CHI\nall this other data"}});
+        });
+
+        expect(calledData.variables.pick).toBe("CHI")
+    });
+
+    it('On blur event, innerHTML from textContent with newlines only have up to first newline', () => {
+        let calledData;
+        useMutation.mockReturnValue([(data) => {
+            calledData = data;
+        }]);
+        let {container} = render(<PicksGrid/>);
+        let cell = container.querySelector('#Vegas-CHI\\@GB');
+
+        act(() => {
+            fireEvent.blur(cell, {target: {textContent: "CHI\nall this other data"}});
+        });
+
+        cell = container.querySelector('#Vegas-CHI\\@GB');
+
+        expect(cell.textContent).toBe("CHI")
     })
 
+
 });
+
+
+

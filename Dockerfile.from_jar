@@ -5,4 +5,5 @@ COPY server/build/deps/* /home/pickaxe/
 COPY client/build/ /home/pickaxe/html/pickaxe
 
 WORKDIR /home/pickaxe/
+#CMD java -Dorg.slf4j.simpleLogger.defaultLogLevel=debug -cp "*" ServerKt
 CMD java -cp "*" ServerKt

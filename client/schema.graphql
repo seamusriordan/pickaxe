@@ -2,13 +2,43 @@
 
 schema {
     query: Query
+    mutation: Mutation
+}
+
+type Game {
+    name: String
+    result: String
+    spread: String
+    week: Int
+}
+
+type Mutation {
+    updatePick(name: String, userPick: UpdatedPick): Boolean
+}
+
+type Pick {
+    game: String
+    pick: String
 }
 
 type Query {
-    user: User
+    games(week: Int): [Game]
+    userPicks(week: Int): [UserPicks]
     users: [User]
 }
 
 type User {
     name: String
+}
+
+type UserPicks {
+    picks: [Pick]
+    total: Int
+    user: User
+}
+
+input UpdatedPick {
+    game: String
+    pick: String
+    week: Int
 }
