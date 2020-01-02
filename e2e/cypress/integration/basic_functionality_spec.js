@@ -33,7 +33,7 @@ describe('GraphQL server responds', () => {
     });
 
     it('mutation query response has no errors', () => {
-        const graphqlRequestBody = "{\"operationName\":\"Mutation\",\"variables\":{\"name\":\"Seamus\",\"pick\":{\"game\":\"SEA@PHI\",\"pick\":\"SEA\"}},\"query\":\"mutation Mutation($name: String, $pick: UpdatedPick) {\\n  updatePick(name: $name, pick: $pick)\\n}\\n\"}";
+        const graphqlRequestBody = "{\"operationName\":\"Mutation\",\"variables\":{\"name\":\"Seamus\",\"week\":0,\"game\":\"SEA@PHI\",\"pick\":\"SEA\"},\"query\":\"mutation Mutation($name: String, $week: Int, $game: String, $pick: String) {\\n  updatePick(name: $name, userPick: {week: $week, game: $game, pick: $pick})\\n}\\n\"}";
 
         cy.request('POST', 'localhost:8080/pickaxe/graphql', graphqlRequestBody).then(
             (response) => {

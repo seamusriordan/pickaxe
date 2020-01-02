@@ -27,9 +27,14 @@ class UserPickDataMutationFetcherTest {
 
         var passedVariables: HashMap<String, Any> = HashMap<String, Any>();
         passedVariables["name"] = "Person"
-        passedVariables["userPick"] = UpdatedPickDTO(0, "GB@CHI", "Different");
+        var userPick = HashMap<String, Any>();
+        userPick["week"] = 0
+        userPick["game"] = "GB@CHI"
+        userPick["pick"] = "Different"
 
+        passedVariables["userPick"] = userPick
         envBuilder.variables(passedVariables)
+        envBuilder.arguments(passedVariables)
 
         var env = envBuilder.build()
 
@@ -47,9 +52,18 @@ class UserPickDataMutationFetcherTest {
 
         var passedVariables: HashMap<String, Any> = HashMap<String, Any>();
         passedVariables["name"] = "Person"
-        passedVariables["userPick"] = UpdatedPickDTO(0, "BUF@NE", "Very Different");
+        var userPick = HashMap<String, Any>();
+        userPick["week"] = 0
+        userPick["game"] = "BUF@NE"
+        userPick["pick"] = "Very Different"
+
+        passedVariables["userPick"] = userPick
 
         envBuilder.variables(passedVariables)
+        envBuilder.arguments(passedVariables)
+
+
+        envBuilder.arguments(passedVariables)
 
         var env = envBuilder.build()
 
@@ -65,9 +79,15 @@ class UserPickDataMutationFetcherTest {
 
         var passedVariables: HashMap<String, Any> = HashMap<String, Any>();
         passedVariables["name"] = "Person2"
-        passedVariables["userPick"] = UpdatedPickDTO(0, "SEA@PHI", "PHI");
+        var userPick = HashMap<String, Any>();
+        userPick["week"] = 0
+        userPick["game"] = "SEA@PHI"
+        userPick["pick"] = "PHI"
+
+        passedVariables["userPick"] = userPick
 
         envBuilder.variables(passedVariables)
+        envBuilder.arguments(passedVariables)
 
         var env = envBuilder.build()
 

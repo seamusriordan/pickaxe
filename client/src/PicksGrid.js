@@ -5,7 +5,7 @@ import PickCell from "./PickCell";
 
 const PICKS_QUERY = gql`query Query($week: Int) { users { name } userPicks(week: $week) { user { name } picks { game pick } total } games(week: $week) { week name spread result } }`;
 const UPDATE_PICKS_MUTATION =
-gql`mutation Mutation($name: String, $week: Int, $game: String, $pick: String)
+gql`mutation Mutation($name: String!, $week: Int!, $game: String!, $pick: String!)
 { updatePick(name: $name, userPick: { week: $week, game: $game, pick: $pick })
 }`;
 
@@ -53,15 +53,15 @@ function pickCells(data, sendData) {
                 let thisPick = getPickByGame(pickSet, game.name);
 
                 const sendDataCallback = (event, updatedPick) => {
-                    sendData({ variables:
-                    {
-                        name: user.name,
-                        userPick: {
-                            week: 0,
-                            game: game.name,
-                            pick: updatedPick,
-                        }
-                    }});
+                    sendData({
+                        variables:
+                            {
+                                name: user.name,
+                                week: 0,
+                                game: game.name,
+                                pick: updatedPick,
+                            }
+                    });
                 };
 
                 return <PickCell
