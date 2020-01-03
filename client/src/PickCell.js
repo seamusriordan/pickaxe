@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useLayoutEffect, useState} from "react";
 
 
 function stripAfterNewline(text) {
@@ -7,6 +7,10 @@ function stripAfterNewline(text) {
 
 export default function PickCell(props){
     const [innerText, setInnerText] = useState(props.pick);
+
+    useEffect(() => {
+        setInnerText(props.pick)
+    }, [props.pick]);
 
     const callbackWrapper = (event) => {
         if(event.target.textContent === innerText){

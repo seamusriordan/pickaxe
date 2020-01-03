@@ -1,9 +1,7 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {create, act} from "react-test-renderer";
 import { render, fireEvent } from '@testing-library/react'
 import PickCell from "./PickCell";
-import userEvent from "@testing-library/user-event";
-
 
 describe('PickCell', () => {
     it('takes user, game, and pick props and has pick as text', () => {
@@ -33,9 +31,22 @@ describe('PickCell', () => {
         });
 
         let inputElement = cellRenderer.root.findByType('div');
-
         expect(inputElement.children[0]).toBe("GB")
-    })
+    });
+
+    it('pick with updated props shows up as text on rerender', () => {
+        let cellRenderer;
+        act(() => {
+            cellRenderer = create(<PickCell user="Some user" game="GB@CHI" pick="GB"/>)
+        });
+
+        act(() => {
+            cellRenderer.update(<PickCell user="Some user" game="GB@CHI" pick="CHI"/>)
+        });
+
+        let inputElement = cellRenderer.root.findByType('div');
+        expect(inputElement.children[0]).toBe("CHI")
+    });
 
 
     it('calls sendData callback on blur', () => {

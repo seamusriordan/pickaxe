@@ -22,15 +22,14 @@ describe('PicksGrid basic behavior', () => {
         grid = create(<PicksGrid/>).root;
     });
 
-    it('calls useQuery ', () => {
-        expect(useQuery).toBeCalled()
+    it('calls useQuery with some kind of poll interval', () => {
+        expect(useQuery).toBeCalled();
+        expect(useQuery.mock.calls[0][1].pollInterval).toBeGreaterThan(0)
     });
 
     it('calls useMutation ', () => {
         expect(useMutation).toBeCalled()
-
     });
-
 
     it('Renders loading when loading from query is true', () => {
         useQuery.mockReturnValue({loading: true, error: false, data: undefined});
