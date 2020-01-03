@@ -92,9 +92,8 @@ export function getPicksForUser(passedPicks, userName) {
 }
 
 const PicksGrid = () => {
-    const {loading, error, data} = useQuery(PICKS_QUERY, {variables: {week: 0}});
+    const {loading, error, data} = useQuery(PICKS_QUERY, {variables: {week: 0}, pollInterval: 5000});
     const [sendData] = useMutation(UPDATE_PICKS_MUTATION);
-
 
     return <div>
         {loading ? "Loading" : error ? "Error" : !data ? "derp" :
@@ -104,7 +103,7 @@ const PicksGrid = () => {
                 spreadCells(data),
                 pickCells(data, sendData),
                 resultCells(data),
-                totalCells(data)
+                totalCells(data),
             ]
         }
     </div>

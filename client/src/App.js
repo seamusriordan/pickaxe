@@ -34,6 +34,7 @@ export const apolloClient = new ApolloClient({
     link: new HttpLink(
         {uri: serverUri()}),
     cache: new InMemoryCache(),
+    // defaultOptions: {query: {fetchPolicy: 'no-cache'}, watchQuery: {fetchPolicy: 'no-cache'}},
     connectToDevTools: true
 });
 
