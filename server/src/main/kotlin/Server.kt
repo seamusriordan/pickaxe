@@ -38,7 +38,7 @@ fun addStaticFileServing(server: Javalin) {
 }
 
 fun addGraphQLPostServe(server: Javalin, graphQL: GraphQL, wsContexts: List<WsContext>) {
-    server.post(graphqlURI, postHandler(graphQL, ArrayList<WsContext>(0)))
+    server.post(graphqlURI, postHandler(graphQL, wsContexts))
     return
 }
 

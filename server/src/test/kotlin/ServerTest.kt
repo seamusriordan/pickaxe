@@ -5,13 +5,9 @@ import io.javalin.Javalin
 import io.javalin.core.JavalinConfig
 import io.javalin.http.staticfiles.Location
 import io.javalin.websocket.*
-import io.mockk.every
-import io.mockk.mockkClass
-import io.mockk.spyk
-import io.mockk.verify
-import io.mockk.mockkStatic
-import io.mockk.slot
+import io.mockk.*
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import java.util.function.Consumer
 
@@ -38,6 +34,8 @@ internal class ServerTest {
 
         verify { serverSpy.options("/pickaxe/graphql/", any()) }
         verify(exactly = 1) { optionsHandler() }
+
+        unmockkAll();
     }
 
     @Test
@@ -65,13 +63,17 @@ internal class ServerTest {
 
     @Test
     fun handlesPostMethod() {
+        mockkStatic("HttpHandlersKt")
+
         val serverSpy = spyk(Javalin.create())
         val graphQLMock = mockkClass(GraphQL::class)
 
         addGraphQLPostServe(serverSpy, graphQLMock, ArrayList(0))
 
         verify { serverSpy.post("/pickaxe/graphql/", any()) }
-        verify(exactly = 1) { postHandler(graphQLMock, ArrayList<WsContext>(0)) }
+        verify(exactly = 1) { postHandler(graphQLMock, ArrayList(0)) }
+
+        unmockkAll()
     }
 
     @Test
@@ -164,5 +166,22 @@ internal class ServerTest {
         val modifiedWiringMap = HashMap(sampleRuntimeWiringMap())
         modifiedWiringMap["Query"]?.put("id", StaticDataFetcher(modifiedId))
         return generateRuntimeWiringForTest(modifiedWiringMap)
+    }
+
+    @Test
+    fun addGraphQLPostServePassesWsContextToHandler() {
+        mockkStatic("HttpHandlersKt")
+        val serverSpy = spyk(Javalin.create())
+        val graphQLMock = mockkClass(GraphQL::class)
+
+        val listWithContext = ArrayList<WsContext>(0)
+        listWithContext.add(mockkClass(WsContext::class))
+
+        addGraphQLPostServe(serverSpy, graphQLMock, listWithContext)
+
+        verify { serverSpy.post("/pickaxe/graphql/", any()) }
+        verify(exactly = 1) { postHandler(graphQLMock, listWithContext) }
+
+        unmockkAll();
     }
 }
