@@ -123,7 +123,7 @@ const PicksGrid = () => {
 
 
     useEffect(() => {
-        let webSocket = new WebSocket('ws://localhost:8080/pickaxe/updateNotification');
+        let webSocket = new WebSocket(websocketUri());
         webSocket.onmessage = () => {
             refetch()
         };
