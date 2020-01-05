@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {useMutation, useQuery} from "@apollo/react-hooks";
 import gql from "graphql-tag";
 import PickCell from "./PickCell";
@@ -8,6 +8,32 @@ const UPDATE_PICKS_MUTATION =
 gql`mutation Mutation($name: String!, $week: Int!, $game: String!, $pick: String!)
 { updatePick(name: $name, userPick: { week: $week, game: $game, pick: $pick })
 }`;
+
+export function websocketServer() {
+    return process.env.REACT_APP_GRAPHQL_SERVER ?
+        process.env.REACT_APP_GRAPHQL_SERVER :
+        "localhost";
+}
+
+export function websocketPort() {
+    return process.env.REACT_APP_GRAPHQL_PORT ?
+        process.env.REACT_APP_GRAPHQL_PORT :
+        "8080";
+}
+
+export function websocketProtocol() {
+    return process.env.REACT_APP_GRAPHQL_HTTPS ?
+        "wss" :
+        "ws";
+}
+
+
+export function websocketUri() {
+    return websocketProtocol() + '://' +
+        websocketServer() + ':' + websocketPort() +
+        '/pickaxe/updateNotification';
+}
+
 
 function userCells(data) {
     return !data.users ? undefined :
@@ -92,8 +118,19 @@ export function getPicksForUser(passedPicks, userName) {
 }
 
 const PicksGrid = () => {
-    const {loading, error, data} = useQuery(PICKS_QUERY, {variables: {week: 0}, pollInterval: 5000});
+    const {loading, error, data, refetch} = useQuery(PICKS_QUERY, {variables: {week: 0}, pollInterval: 600000});
     const [sendData] = useMutation(UPDATE_PICKS_MUTATION);
+
+
+    useEffect(() => {
+        let webSocket = new WebSocket('ws://localhost:8080/pickaxe/updateNotification');
+        webSocket.onmessage = () => {
+            refetch()
+        };
+        return () => {
+            webSocket.close()
+        }
+    });
 
     return <div>
         {loading ? "Loading" : error ? "Error" : !data ? "derp" :

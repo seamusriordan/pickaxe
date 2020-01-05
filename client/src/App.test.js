@@ -55,7 +55,7 @@ describe('App', () => {
         expect(graphqlProtocol()).toEqual("http")
     });
 
-    test('graphqlProtocol returns port from environment variable', () => {
+    test('graphqlProtocol returns https from environment variable', () => {
         process.env.REACT_APP_GRAPHQL_HTTPS = 1;
         expect(graphqlProtocol()).toEqual("https");
         expect(serverUri()).toEqual('https://localhost:8080/pickaxe/graphql')
