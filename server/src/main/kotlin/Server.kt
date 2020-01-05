@@ -18,9 +18,10 @@ fun main(args: Array<String>) {
 
     val server = Javalin.create()
     addStaticFileServing(server)
-    addGraphQLPostServe(server, graphQL, ArrayList(0))
+    val wsContexts = ArrayList<WsContext>(0)
+    addGraphQLPostServe(server, graphQL, wsContexts)
     addGraphQLOptionServe(server)
-    addNotificationWebSocket(server, ArrayList(0))
+    addNotificationWebSocket(server, wsContexts)
 
     server.start(8080)
 }
@@ -37,7 +38,7 @@ fun addStaticFileServing(server: Javalin) {
     return
 }
 
-fun addGraphQLPostServe(server: Javalin, graphQL: GraphQL, wsContexts: List<WsContext>) {
+fun addGraphQLPostServe(server: Javalin, graphQL: GraphQL, wsContexts: ArrayList<WsContext>) {
     server.post(graphqlURI, postHandler(graphQL, wsContexts))
     return
 }
