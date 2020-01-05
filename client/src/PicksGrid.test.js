@@ -1,4 +1,4 @@
-import PicksGrid from "./PicksGrid";
+import PicksGrid, {websocketPort, websocketProtocol, websocketServer, websocketUri} from "./PicksGrid";
 import {create, act} from "react-test-renderer";
 import React from "react";
 import {useQuery, useMutation} from '@apollo/react-hooks';
@@ -16,7 +16,10 @@ describe('PicksGrid basic behavior', () => {
 
     beforeEach(() => {
         jest.resetAllMocks();
-        useQuery.mockReturnValue({loading: false, error: null, data: mockQueryData});
+        useQuery.mockReturnValue({
+            loading: false, error: null, data: mockQueryData, refetch: () => {
+            }
+        });
         useMutation.mockReturnValue([() => {
         }]);
         grid = create(<PicksGrid/>).root;
@@ -32,21 +35,30 @@ describe('PicksGrid basic behavior', () => {
     });
 
     it('Renders loading when loading from query is true', () => {
-        useQuery.mockReturnValue({loading: true, error: false, data: undefined});
+        useQuery.mockReturnValue({
+            loading: true, error: false, data: undefined, refetch: () => {
+            }
+        });
         const grid = create(<PicksGrid/>).root;
 
         expect(grid.findAll(el => el.props.children === 'Loading').length).toEqual(1);
     });
 
     it('Renders error when error from query is truthy', () => {
-        useQuery.mockReturnValue({loading: false, error: true, data: undefined});
+        useQuery.mockReturnValue({
+            loading: false, error: true, data: undefined, refetch: () => {
+            }
+        });
         const grid = create(<PicksGrid/>).root;
 
         expect(grid.findAll(el => el.props.children === 'Error').length).toEqual(1);
     });
 
     it('Renders derp when data from query is undefined', () => {
-        useQuery.mockReturnValue({loading: false, error: undefined, data: undefined});
+        useQuery.mockReturnValue({
+            loading: false, error: undefined, data: undefined, refetch: () => {
+            }
+        });
         const grid = create(<PicksGrid/>).root;
 
         expect(grid.findAll(el => el.props.children === 'derp').length).toEqual(1);
@@ -54,7 +66,9 @@ describe('PicksGrid basic behavior', () => {
 
     it('useMutation is called with pick updating query', () => {
         let grid;
-        act(() => {grid = create(<PicksGrid/>)});
+        act(() => {
+            grid = create(<PicksGrid/>)
+        });
 
         const updatingQuery =
         gql`mutation Mutation($name: String!, $week: Int!, $game: String!, $pick: String!)
@@ -73,7 +87,9 @@ describe('PicksGrid basic behavior', () => {
             calledData = data;
             sendDataSpyCalled = true;
         }]);
-        act(() => {grid = create(<PicksGrid/>)});
+        act(() => {
+            grid = create(<PicksGrid/>)
+        });
         let cell = grid.root.find(el => el.props.id === "Vegas-HAR@NOR");
 
         act(() => {
@@ -94,7 +110,9 @@ describe('PicksGrid basic behavior', () => {
             calledData = data;
             sendDataSpyCalled = true;
         }]);
-        act(() => {grid = create(<PicksGrid/>)});
+        act(() => {
+            grid = create(<PicksGrid/>)
+        });
         let cell = grid.root.find(el => el.props.id === "Davebob-CHI@GB");
 
         act(() => {
@@ -113,7 +131,7 @@ describe('PicksGrid basic behavior', () => {
         let {container} = render(<PicksGrid/>);
         let cell = container.querySelector('#Vegas-CHI\\@GB');
 
-        act(()=> {
+        act(() => {
             fireEvent.blur(cell, {target: {textContent: "CHI"}});
         });
 
@@ -143,7 +161,7 @@ describe('PicksGrid basic behavior', () => {
         let {container} = render(<PicksGrid/>);
         let cell = container.querySelector('#Vegas-CHI\\@GB');
 
-        act(()=>{
+        act(() => {
             fireEvent.blur(cell, {target: {textContent: "CHI\nall this other data"}});
         });
 
@@ -165,10 +183,114 @@ describe('PicksGrid basic behavior', () => {
         cell = container.querySelector('#Vegas-CHI\\@GB');
 
         expect(cell.textContent).toBe("CHI")
-    })
+    });
 
 
 });
 
+import WS from "jest-websocket-mock";
+import {graphqlPort, graphqlProtocol, graphqlServer, serverUri} from "./App";
 
+describe('Websocket behavior', () => {
+    const defaultEnv = process.env;
 
+    beforeEach(() => {
+        useQuery.mockReturnValue({
+            loading: false, error: null, data: mockQueryData, refetch: () => {
+            }
+        });
+        useMutation.mockReturnValue([() => {
+        }]);
+        process.env = {...defaultEnv};
+    });
+
+    it('Opens a websocket', async () => {
+        useQuery.mockReturnValue({
+            loading: false, error: true, data: undefined, refetch: () => {
+            }
+        });
+        let grid = null;
+        const server = new WS("ws://localhost:8080/pickaxe/updateNotification");
+
+        act(() => {
+            grid = create(<PicksGrid/>)
+        });
+
+        await server.connected;
+        server.close()
+    });
+
+    it('On message calls refetch', async () => {
+        let refetched = false;
+        useQuery.mockReturnValue({
+            loading: false, error: true, data: undefined, refetch: () => {
+                refetched = true
+            }
+        });
+        let grid = null;
+        const server = new WS("ws://localhost:8080/pickaxe/updateNotification");
+        act(() => {
+            grid = create(<PicksGrid/>)
+        });
+
+        expect(refetched).toEqual(false);
+
+        await server.connected;
+        server.send("Hi");
+
+        expect(refetched).toEqual(true);
+        server.close();
+        WS.clean()
+    });
+
+    it('On unmount diconnects', async () => {
+        let grid = null;
+        const server = new WS("ws://localhost:8080/pickaxe/updateNotification");
+        act(() => {
+            grid = create(<PicksGrid/>)
+        });
+        await server.connected;
+
+        act(() => {
+            grid.unmount()
+        });
+
+        expect(server.server.clients()[0].readyState).toBe(WebSocket.CLOSING);
+        await server.closed;
+        expect(server.server.clients().length).toBe(0);
+
+        server.close();
+        WS.clean()
+    });
+
+    test('websocketServer returns localhost when environment variable is not set', () => {
+        expect(websocketServer()).toEqual('localhost');
+        expect(websocketUri()).toEqual('ws://localhost:8080/pickaxe/updateNotification')
+    });
+
+    test('websocketServer returns host from environment variable', () => {
+        process.env.REACT_APP_GRAPHQL_SERVER = 'someservername';
+        expect(websocketServer()).toEqual('someservername');
+        expect(websocketUri()).toEqual('ws://someservername:8080/pickaxe/updateNotification')
+    });
+
+    test('websocketPort returns 8080 when environment variable is not set', () => {
+        expect(websocketPort()).toEqual("8080")
+    });
+
+    test('websocketPort returns port from environment variable', () => {
+        process.env.REACT_APP_GRAPHQL_PORT = "7979";
+        expect(websocketPort()).toEqual("7979");
+        expect(websocketUri()).toEqual('ws://localhost:7979/pickaxe/updateNotification');
+    });
+
+    test('websocketProtocol returns ws when environment variable is not set', () => {
+        expect(websocketProtocol()).toEqual("ws")
+    });
+
+    test('websocketProtocol returns wss from environment variable', () => {
+        process.env.REACT_APP_GRAPHQL_HTTPS = 1;
+        expect(websocketProtocol()).toEqual("wss");
+        expect(websocketUri()).toEqual('wss://localhost:8080/pickaxe/updateNotification')
+    });
+});
