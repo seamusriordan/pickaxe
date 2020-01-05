@@ -4,10 +4,7 @@ import graphql.schema.idl.SchemaGenerator
 import graphql.schema.idl.TypeDefinitionRegistry
 import io.javalin.Javalin
 import io.javalin.http.staticfiles.Location
-import io.javalin.websocket.WsConnectContext
 import io.javalin.websocket.WsContext
-import org.eclipse.jetty.websocket.api.Session
-import org.eclipse.jetty.websocket.api.WebSocketListener
 
 
 const val graphqlURI = "/pickaxe/graphql/"
@@ -41,7 +38,7 @@ fun addStaticFileServing(server: Javalin) {
 }
 
 fun addGraphQLPostServe(server: Javalin, graphQL: GraphQL, wsContexts: List<WsContext>) {
-    server.post(graphqlURI, postHandler(graphQL))
+    server.post(graphqlURI, postHandler(graphQL, ArrayList<WsContext>(0)))
     return
 }
 
@@ -57,7 +54,7 @@ fun addNotificationWebSocket(server: Javalin, wsContexts: ArrayList<WsContext>) 
         }
 
         ws.onClose { ctx ->
-            wsContexts.clear()
+            wsContexts.remove(ctx)
         }
     }
 }

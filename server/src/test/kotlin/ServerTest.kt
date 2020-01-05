@@ -71,7 +71,7 @@ internal class ServerTest {
         addGraphQLPostServe(serverSpy, graphQLMock, ArrayList(0))
 
         verify { serverSpy.post("/pickaxe/graphql/", any()) }
-        verify(exactly = 1) { postHandler(graphQLMock) }
+        verify(exactly = 1) { postHandler(graphQLMock, ArrayList<WsContext>(0)) }
     }
 
     @Test
@@ -92,9 +92,7 @@ internal class ServerTest {
         val wsHandlerConsumer = slot<Consumer<WsHandler>>()
         verify { serverSpy.ws("/pickaxe/updateNotification", capture(wsHandlerConsumer)) }
 
-        val wsHandler = mockkClass(WsHandler::class)
-        every { wsHandler.onConnect(any()) } returns Unit
-        every { wsHandler.onClose(any()) } returns Unit
+        val wsHandler = stubWsHandler()
         wsHandlerConsumer.captured.accept(wsHandler)
 
         val connectHandler = slot<WsConnectHandler>()
@@ -118,9 +116,7 @@ internal class ServerTest {
         val wsHandlerConsumer = slot<Consumer<WsHandler>>()
         verify { serverSpy.ws("/pickaxe/updateNotification", capture(wsHandlerConsumer)) }
 
-        val wsHandler = mockkClass(WsHandler::class)
-        every { wsHandler.onConnect(any()) } returns Unit
-        every { wsHandler.onClose(any()) } returns Unit
+        val wsHandler = stubWsHandler()
         wsHandlerConsumer.captured.accept(wsHandler)
 
         val closeHandler = slot<WsCloseHandler>()
@@ -129,6 +125,39 @@ internal class ServerTest {
         closeHandler.captured.handleClose(mockContext)
 
         assertEquals(0, contextList.size)
+    }
+
+    @Test
+    fun websocketHandlerRemovesSpecificContextToPassedListOnClose() {
+        val serverSpy = spyk(Javalin.create())
+        val contextList = ArrayList<WsContext>(0)
+        val mockContext1 = mockkClass(WsCloseContext::class)
+        val mockContext2 = mockkClass(WsCloseContext::class)
+        contextList.add(mockContext1)
+        contextList.add(mockContext2)
+
+        addNotificationWebSocket(serverSpy, contextList)
+
+        val wsHandlerConsumer = slot<Consumer<WsHandler>>()
+        verify { serverSpy.ws("/pickaxe/updateNotification", capture(wsHandlerConsumer)) }
+
+        val wsHandler = stubWsHandler()
+        wsHandlerConsumer.captured.accept(wsHandler)
+
+        val closeHandler = slot<WsCloseHandler>()
+        verify {wsHandler.onClose(capture(closeHandler))}
+
+        closeHandler.captured.handleClose(mockContext1)
+
+        assertEquals(1, contextList.size)
+        assertEquals(mockContext2, contextList[0])
+    }
+
+    private fun stubWsHandler(): WsHandler {
+        val wsHandler = mockkClass(WsHandler::class)
+        every { wsHandler.onConnect(any()) } returns Unit
+        every { wsHandler.onClose(any()) } returns Unit
+        return wsHandler
     }
 
     private fun generateModifiedWiringWithId(modifiedId: Int): RuntimeWiring {

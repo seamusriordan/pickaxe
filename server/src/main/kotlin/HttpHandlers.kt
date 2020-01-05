@@ -6,14 +6,20 @@ import graphql.GraphQL
 import graphql.execution.ExecutionId
 import io.javalin.http.Context
 import io.javalin.plugin.json.JavalinJson
+import io.javalin.websocket.WsContext
 
-fun postHandler(graphQL: GraphQL): (Context) -> Unit {
+fun postHandler(graphQL: GraphQL, wsContexts: List<WsContext>): (Context) -> Unit {
     return { ctx ->
         val executionInput = extractExecutionInputFromContext(ctx)
         val executionResult = graphQL.execute(executionInput)
 
         ctx.header("Access-Control-Allow-Origin", "*")
         ctx.result(JavalinJson.toJson(executionResult.toSpecification()))
+
+        wsContexts.map {
+            if(it.session == null || it.session.isOpen)
+            it.send("Hi")
+        }
     }
 }
 
@@ -34,7 +40,7 @@ fun extractExecutionInputFromContext(ctx: Context): ExecutionInput {
     val mapper = jacksonObjectMapper()
     val query = mapper.readValue<HashMap<String, Any>>(ctx.body(), mapTypeReference)
 
-    var executionInput = ExecutionInput.newExecutionInput()
+    val executionInput = ExecutionInput.newExecutionInput()
         .query(query["query"] as String)
 
 
