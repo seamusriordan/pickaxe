@@ -8,7 +8,7 @@ import io.javalin.http.Context
 import io.javalin.plugin.json.JavalinJson
 import io.javalin.websocket.WsContext
 
-fun postHandler(graphQL: GraphQL, wsContexts: List<WsContext>): (Context) -> Unit {
+fun postHandler(graphQL: GraphQL, wsContexts: ArrayList<WsContext>): (Context) -> Unit {
     return { ctx ->
         val executionInput = extractExecutionInputFromContext(ctx)
         val executionResult = graphQL.execute(executionInput)
