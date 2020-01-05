@@ -33,11 +33,6 @@ fun extractExecutionInputFromContext(ctx: Context): ExecutionInput {
 
     val mapper = jacksonObjectMapper()
     val query = mapper.readValue<HashMap<String, Any>>(ctx.body(), mapTypeReference)
-    println("FULL QUERY")
-    println(query)
-
-    println("executionInput extraction: ")
-    println(query["variables"])
 
     var executionInput = ExecutionInput.newExecutionInput()
         .query(query["query"] as String)

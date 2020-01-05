@@ -4,9 +4,16 @@ import graphql.schema.idl.RuntimeWiring
 import io.javalin.Javalin
 import io.javalin.core.JavalinConfig
 import io.javalin.http.staticfiles.Location
-import io.mockk.*
+import io.javalin.websocket.*
+import io.mockk.every
+import io.mockk.mockkClass
+import io.mockk.spyk
+import io.mockk.verify
+import io.mockk.mockkStatic
+import io.mockk.slot
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import java.util.function.Consumer
 
 
 internal class ServerTest {
@@ -15,7 +22,7 @@ internal class ServerTest {
         val serverSpy = spyk(Javalin.create())
         val configMock = mockkClass(JavalinConfig::class)
         serverSpy.config = configMock
-        every {configMock.addStaticFiles(any(), any()) } returns configMock
+        every { configMock.addStaticFiles(any(), any()) } returns configMock
 
         addStaticFileServing(serverSpy)
 
@@ -60,12 +67,68 @@ internal class ServerTest {
     fun handlesPostMethod() {
         val serverSpy = spyk(Javalin.create())
         val graphQLMock = mockkClass(GraphQL::class)
-        mockkStatic("HttpHandlersKt")
 
-        addGraphQLPostServe(serverSpy, graphQLMock)
+        addGraphQLPostServe(serverSpy, graphQLMock, ArrayList(0))
 
         verify { serverSpy.post("/pickaxe/graphql/", any()) }
         verify(exactly = 1) { postHandler(graphQLMock) }
+    }
+
+    @Test
+    fun opensWebsocket() {
+        val serverSpy = spyk(Javalin.create())
+
+        addNotificationWebSocket(serverSpy, ArrayList(0))
+
+        verify { serverSpy.ws("/pickaxe/updateNotification", any()) }
+    }
+
+    @Test
+    fun websocketHandlerAddsContextToPassedListOnConnect() {
+        val serverSpy = spyk(Javalin.create())
+        val contextList = ArrayList<WsContext>(0)
+        addNotificationWebSocket(serverSpy, contextList)
+
+        val wsHandlerConsumer = slot<Consumer<WsHandler>>()
+        verify { serverSpy.ws("/pickaxe/updateNotification", capture(wsHandlerConsumer)) }
+
+        val wsHandler = mockkClass(WsHandler::class)
+        every { wsHandler.onConnect(any()) } returns Unit
+        every { wsHandler.onClose(any()) } returns Unit
+        wsHandlerConsumer.captured.accept(wsHandler)
+
+        val connectHandler = slot<WsConnectHandler>()
+        verify {wsHandler.onConnect(capture(connectHandler))}
+        val mockContext = mockkClass(WsConnectContext::class)
+
+        connectHandler.captured.handleConnect(mockContext)
+
+        assertEquals(mockContext, contextList[0])
+    }
+
+    @Test
+    fun websocketHandlerRemovesContextToPassedListOnClose() {
+        val serverSpy = spyk(Javalin.create())
+        val contextList = ArrayList<WsContext>(0)
+        val mockContext = mockkClass(WsCloseContext::class)
+        contextList.add(mockContext)
+
+        addNotificationWebSocket(serverSpy, contextList)
+
+        val wsHandlerConsumer = slot<Consumer<WsHandler>>()
+        verify { serverSpy.ws("/pickaxe/updateNotification", capture(wsHandlerConsumer)) }
+
+        val wsHandler = mockkClass(WsHandler::class)
+        every { wsHandler.onConnect(any()) } returns Unit
+        every { wsHandler.onClose(any()) } returns Unit
+        wsHandlerConsumer.captured.accept(wsHandler)
+
+        val closeHandler = slot<WsCloseHandler>()
+        verify {wsHandler.onClose(capture(closeHandler))}
+
+        closeHandler.captured.handleClose(mockContext)
+
+        assertEquals(0, contextList.size)
     }
 
     private fun generateModifiedWiringWithId(modifiedId: Int): RuntimeWiring {
