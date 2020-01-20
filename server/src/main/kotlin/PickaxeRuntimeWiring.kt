@@ -17,8 +17,10 @@ fun wiringMap(): HashMap<String, HashMap<String, DataFetcher<Any>>> {
 
     val userPickStore = defaultWeek0PickStore(userPicksList)
 
+    @Suppress("UNCHECKED_CAST")
     queryFields["userPicks"] = UserPickDataQueryFetcher(userPickStore) as DataFetcher<Any>
 
+    @Suppress("UNCHECKED_CAST")
     mutationFields["updatePick"] = UpdatePickMutator(userPickStore) as DataFetcher<Any>
 
     wiringMap["Query"] = queryFields
