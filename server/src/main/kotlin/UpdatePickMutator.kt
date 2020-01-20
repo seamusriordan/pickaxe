@@ -1,9 +1,9 @@
 import graphql.schema.DataFetcher
 import graphql.schema.DataFetchingEnvironment
 
-class UserPickDataMutationFetcher(private var store: List<List<UserPicksDTO>>) : DataFetcher<Boolean> {
+class UpdatePickMutator(private var store: List<List<UserPicksDTO>>) : DataFetcher<Boolean> {
     override fun get(environment: DataFetchingEnvironment): Boolean {
-        var envPickDTO = environment.getArgument<HashMap<String, Any>>("userPick")
+        val envPickDTO = environment.getArgument<HashMap<String, Any>>("userPick")
 
         val userPicksDTO = store[0].first {
             it.user.name == environment.variables["name"]

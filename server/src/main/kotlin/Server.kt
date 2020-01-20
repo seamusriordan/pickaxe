@@ -1,10 +1,12 @@
 import graphql.GraphQL
 import graphql.schema.idl.RuntimeWiring
 import graphql.schema.idl.SchemaGenerator
+import graphql.schema.idl.SchemaParser
 import graphql.schema.idl.TypeDefinitionRegistry
 import io.javalin.Javalin
 import io.javalin.http.staticfiles.Location
 import io.javalin.websocket.WsContext
+import java.io.File
 
 
 const val graphqlURI = "/pickaxe/graphql/"
@@ -61,3 +63,8 @@ fun addNotificationWebSocket(server: Javalin, wsContexts: ArrayList<WsContext>) 
     }
 }
 
+fun pickaxeTypeDefinitionRegistry(schemaFilePath: String): TypeDefinitionRegistry {
+    val schemaParser = SchemaParser()
+    val schemaFile = File(schemaFilePath)
+    return schemaParser.parse(schemaFile)
+}

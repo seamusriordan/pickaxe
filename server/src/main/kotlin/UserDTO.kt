@@ -1,5 +1,1 @@
-class UserDTO(var name: String) {
-
-
-
-}
+class UserDTO(var name: String)

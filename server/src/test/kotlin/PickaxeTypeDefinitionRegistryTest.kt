@@ -4,8 +4,6 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import java.io.File
 
-private const val sampleSchema = ""
-
 class PickaxeTypeDefinitionRegistryTest {
     @Test
     fun generateTypeDefinitionFromRegistryForSimpleSchema() {

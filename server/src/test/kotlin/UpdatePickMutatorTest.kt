@@ -3,31 +3,31 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-class UserPickDataMutationFetcherTest {
-    private lateinit var userPickDataMutationFetcher: UserPickDataMutationFetcher;
+class UpdatePickMutatorTest {
+    private lateinit var updatePickMutator: UpdatePickMutator
 
-    private lateinit var dataStore: ArrayList<ArrayList<UserPicksDTO>>;
+    private lateinit var dataStore: ArrayList<ArrayList<UserPicksDTO>>
 
     @BeforeEach
     fun setup() {
-        dataStore = ArrayList(0);
-        var weekOfPicks: ArrayList<UserPicksDTO> = ArrayList();
+        dataStore = ArrayList(0)
+        val weekOfPicks: ArrayList<UserPicksDTO> = ArrayList()
 
         weekOfPicks.add(UserPicksDTO(UserDTO("Person")))
         weekOfPicks.add(UserPicksDTO(UserDTO("Person2")))
 
         dataStore.add(weekOfPicks)
 
-        userPickDataMutationFetcher = UserPickDataMutationFetcher(dataStore)
+        updatePickMutator = UpdatePickMutator(dataStore)
     }
 
     @Test
     fun pickForFirstGameCanBeSetByFetchingEnvironment() {
-        val envBuilder = DataFetchingEnvironmentImpl.newDataFetchingEnvironment();
+        val envBuilder = DataFetchingEnvironmentImpl.newDataFetchingEnvironment()
 
-        var passedVariables: HashMap<String, Any> = HashMap<String, Any>();
+        val passedVariables: HashMap<String, Any> = HashMap()
         passedVariables["name"] = "Person"
-        var userPick = HashMap<String, Any>();
+        val userPick = HashMap<String, Any>()
         userPick["week"] = 0
         userPick["game"] = "GB@CHI"
         userPick["pick"] = "Different"
@@ -36,23 +36,23 @@ class UserPickDataMutationFetcherTest {
         envBuilder.variables(passedVariables)
         envBuilder.arguments(passedVariables)
 
-        var env = envBuilder.build()
+        val env = envBuilder.build()
 
-        val result = userPickDataMutationFetcher.get(env)
+        val result = updatePickMutator.get(env)
 
-        assertEquals("Different", pickByWeekUserGameIndex(0, 0, 0).pick);
-        assertEquals(true, result);
+        assertEquals("Different", pickByWeekUserGameIndex(0, 0, 0).pick)
+        assertEquals(true, result)
     }
 
     private fun pickByWeekUserGameIndex(week: Int, user: Int, game: Int) = dataStore[week][user].picks[game]
 
     @Test
     fun pickForSecondGameCanBeSetByFetchingEnvironment() {
-        val envBuilder = DataFetchingEnvironmentImpl.newDataFetchingEnvironment();
+        val envBuilder = DataFetchingEnvironmentImpl.newDataFetchingEnvironment()
 
-        var passedVariables: HashMap<String, Any> = HashMap<String, Any>();
+        val passedVariables: HashMap<String, Any> = HashMap()
         passedVariables["name"] = "Person"
-        var userPick = HashMap<String, Any>();
+        val userPick = HashMap<String, Any>()
         userPick["week"] = 0
         userPick["game"] = "BUF@NE"
         userPick["pick"] = "Very Different"
@@ -65,21 +65,21 @@ class UserPickDataMutationFetcherTest {
 
         envBuilder.arguments(passedVariables)
 
-        var env = envBuilder.build()
+        val env = envBuilder.build()
 
-        val result = userPickDataMutationFetcher.get(env)
+        val result = updatePickMutator.get(env)
 
-        assertEquals("Very Different", pickByWeekUserGameIndex(0, 0, 1).pick);
-        assertEquals(true, result);
+        assertEquals("Very Different", pickByWeekUserGameIndex(0, 0, 1).pick)
+        assertEquals(true, result)
     }
 
     @Test
     fun pickForThirdGameWithSecondUserCanBeSetByFetchingEnvironment() {
-        val envBuilder = DataFetchingEnvironmentImpl.newDataFetchingEnvironment();
+        val envBuilder = DataFetchingEnvironmentImpl.newDataFetchingEnvironment()
 
-        var passedVariables: HashMap<String, Any> = HashMap<String, Any>();
+        val passedVariables: HashMap<String, Any> = HashMap()
         passedVariables["name"] = "Person2"
-        var userPick = HashMap<String, Any>();
+        val userPick = HashMap<String, Any>()
         userPick["week"] = 0
         userPick["game"] = "SEA@PHI"
         userPick["pick"] = "PHI"
@@ -89,10 +89,10 @@ class UserPickDataMutationFetcherTest {
         envBuilder.variables(passedVariables)
         envBuilder.arguments(passedVariables)
 
-        var env = envBuilder.build()
+        val env = envBuilder.build()
 
-        userPickDataMutationFetcher.get(env)
+        updatePickMutator.get(env)
 
-        assertEquals("PHI", pickByWeekUserGameIndex(0, 1, 2).pick);
+        assertEquals("PHI", pickByWeekUserGameIndex(0, 1, 2).pick)
     }
 }

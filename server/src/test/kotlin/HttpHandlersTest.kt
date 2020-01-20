@@ -1,19 +1,14 @@
 import graphql.GraphQL
 import graphql.schema.idl.SchemaGenerator
 import io.javalin.http.Context
-import io.javalin.websocket.WsCloseContext
-import io.javalin.websocket.WsConnectContext
 import io.javalin.websocket.WsContext
-import io.javalin.websocket.WsErrorContext
-import io.mockk.*
-import org.eclipse.jetty.websocket.api.RemoteEndpoint
-import org.eclipse.jetty.websocket.api.Session
-import org.eclipse.jetty.websocket.api.UpgradeRequest
-import org.eclipse.jetty.websocket.servlet.ServletUpgradeRequest
+import io.mockk.every
+import io.mockk.mockkClass
+import io.mockk.slot
+import io.mockk.verify
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.util.concurrent.Future
-import java.util.concurrent.TimeUnit
 
 class HttpHandlersTest {
     private val idQueryBody = "{\"operationName\":\"Query\",\"variables\":{},\"query\":\"query Query {\\n  id\\n}\\n\"}"
@@ -112,7 +107,7 @@ class HttpHandlersTest {
         val mockContext = createMockContext()
         val resultSlot = slot<String>()
 
-        postHandler(sampleGraphQL(), ArrayList<WsContext>(0))(mockContext)
+        postHandler(sampleGraphQL(), ArrayList(0))(mockContext)
 
         verify { mockContext.header("Access-Control-Allow-Origin", "*") }
         verify { mockContext.result(capture(resultSlot)) }
@@ -159,7 +154,7 @@ class HttpHandlersTest {
         verify { openWsContext2.send(any<String>()) }
     }
 
-    interface FutureVoid : Future<Void> {}
+    interface FutureVoid : Future<Void>
 
     private fun createWsContext(): WsContext {
         val openWsContext = mockkClass(WsContext::class)
