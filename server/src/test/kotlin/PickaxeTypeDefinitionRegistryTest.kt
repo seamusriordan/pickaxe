@@ -2,15 +2,14 @@ import graphql.schema.idl.SchemaParser
 import graphql.schema.idl.TypeDefinitionRegistry
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
+import java.io.File
 
-private const val sampleSchema = "type Query {user: User, id: Int} type User { name: String } type Mutation {mutate(id: Int): String}"
+private const val sampleSchema = ""
 
 class PickaxeTypeDefinitionRegistryTest {
     @Test
     fun generateTypeDefinitionFromRegistryForSimpleSchema() {
-        val simpleSchema = "type Query {username: String}"
-
-        val typeDefReg = generateTypeDefinitionRegistry(simpleSchema)
+        val typeDefReg = pickaxeTypeDefinitionRegistry("src/test/resources/simple.graphql")
 
         Assertions.assertEquals("Query", typeDefReg.types()["Query"]?.name)
         Assertions.assertEquals(
@@ -22,7 +21,7 @@ class PickaxeTypeDefinitionRegistryTest {
 
     @Test
     fun generateTypeDefinitionFromRegistryForTwoTypeSchema() {
-        val typeDefReg = generateTypeDefinitionRegistry(sampleSchema)
+        val typeDefReg = pickaxeTypeDefinitionRegistry("src/test/resources/sample.graphql")
 
         Assertions.assertEquals("Query", typeDefReg.types()["Query"]?.name)
         Assertions.assertEquals(
@@ -35,5 +34,6 @@ class PickaxeTypeDefinitionRegistryTest {
 
 fun sampleTypeDefinitionRegistry(): TypeDefinitionRegistry {
     val schemaParser = SchemaParser()
-    return schemaParser.parse(sampleSchema)
+    val schemaFile = File("src/test/resources/sample.graphql")
+    return schemaParser.parse(schemaFile)
 }

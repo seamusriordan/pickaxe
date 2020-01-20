@@ -9,9 +9,10 @@ import io.javalin.websocket.WsContext
 
 const val graphqlURI = "/pickaxe/graphql/"
 const val staticFilesPath = "html"
+const val schemaPath = "src/main/resources/schema.graphql"
 
 fun main(args: Array<String>) {
-    val typeDefinitionRegistry = pickaxeTypeDefinitionRegistry()
+    val typeDefinitionRegistry = pickaxeTypeDefinitionRegistry(schemaPath)
     val wiring = pickaxeRuntimeWiring()
 
     val graphQL = generateGraphQLFromRegistryAndWiring(typeDefinitionRegistry, wiring)
