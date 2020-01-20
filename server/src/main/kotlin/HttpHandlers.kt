@@ -17,6 +17,7 @@ fun postHandler(graphQL: GraphQL, wsContexts: ArrayList<WsContext>): (Context) -
         ctx.result(JavalinJson.toJson(executionResult.toSpecification()))
 
         wsContexts.map {
+            @Suppress("SENSELESS_COMPARISON")
             if(it.session == null || it.session.isOpen)
             it.send("Hi")
         }
@@ -45,7 +46,9 @@ fun extractExecutionInputFromContext(ctx: Context): ExecutionInput {
 
 
     if (query["operationName"] != null ) executionInput.operationName(query["operationName"] as String)
+    @Suppress("UNCHECKED_CAST")
     if (query["variables"] != null ) executionInput.variables(query["variables"] as Map<String, Any>)
+    @Suppress("UNCHECKED_CAST")
     if (query["context"] != null ) executionInput.context(query["context"] as Map<String, Any>)
     if (query["root"] != null ) executionInput.root(query["root"] )
     if (query["executionId"] != null ) executionInput.executionId(query["executionId"] as ExecutionId)

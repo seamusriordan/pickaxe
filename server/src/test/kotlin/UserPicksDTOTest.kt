@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test
 class UserPicksDTOTest {
     @Test
     fun hasUserAndPickListAndTotal() {
-        var userPicks = UserPicksDTO(UserDTO("Some dude"));
+        val userPicks = UserPicksDTO(UserDTO("Some dude"))
 
         val picks: List<PickDTO> = userPicks.picks
 

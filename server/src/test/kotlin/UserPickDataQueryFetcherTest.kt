@@ -4,14 +4,14 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class UserPickDataQueryFetcherTest {
-    private lateinit var userPickDataQueryFetcher: UserPickDataQueryFetcher;
+    private lateinit var userPickDataQueryFetcher: UserPickDataQueryFetcher
 
-    private lateinit var dataStore: ArrayList<ArrayList<UserPicksDTO>>;
+    private lateinit var dataStore: ArrayList<ArrayList<UserPicksDTO>>
 
     @BeforeEach
     fun setup() {
-        dataStore = ArrayList(0);
-        var weekOfPicks: ArrayList<UserPicksDTO> = ArrayList();
+        dataStore = ArrayList(0)
+        val weekOfPicks: ArrayList<UserPicksDTO> = ArrayList()
 
         weekOfPicks.add(UserPicksDTO(UserDTO("Person")))
 
@@ -22,9 +22,9 @@ class UserPickDataQueryFetcherTest {
 
     @Test
     fun implementsGetWhichReturnsFirstElementInStore() {
-        val env = DataFetchingEnvironmentImpl.newDataFetchingEnvironment().build();
-        var listForWeek = userPickDataQueryFetcher.get(env)
+        val env = DataFetchingEnvironmentImpl.newDataFetchingEnvironment().build()
+        val listForWeek = userPickDataQueryFetcher.get(env)
 
-        assertEquals(dataStore[0], listForWeek);
+        assertEquals(dataStore[0], listForWeek)
     }
 }

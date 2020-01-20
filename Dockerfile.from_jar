@@ -1,6 +1,7 @@
 FROM openjdk:12-alpine
 
 COPY server/build/libs/pickaxe-server.jar /home/pickaxe/
+COPY server/src/main/resources/schema.graphql /home/pickaxe/src/main/resources/schema.graphql
 COPY server/build/deps/* /home/pickaxe/
 COPY client/build/ /home/pickaxe/html/pickaxe
 

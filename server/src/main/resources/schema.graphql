@@ -1,0 +1,37 @@
+type Query {
+    users: [User]
+    games(week: Int): [Game]
+    userPicks(week: Int): [UserPicks]
+}
+
+type User {
+    name: String
+}
+
+type Game {
+    name: String
+    week: Int
+    result: String
+    spread: String
+}
+
+type UserPicks {
+    user: User
+    picks: [Pick]
+    total: Int
+}
+
+type Pick {
+    game: String
+    pick: String
+}
+
+type Mutation {
+    updatePick(name: String, userPick: UpdatedPick): Boolean
+}
+
+input UpdatedPick {
+    week: Int
+    game: String
+    pick: String
+}

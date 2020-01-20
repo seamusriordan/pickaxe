@@ -7,39 +7,23 @@ fun wiringMap(): HashMap<String, HashMap<String, DataFetcher<Any>>> {
     val queryFields: HashMap<String, DataFetcher<Any>> = HashMap()
     val mutationFields: HashMap<String, DataFetcher<Any>> = HashMap()
 
-
-    val usersList = ArrayList<UserDTO>()
-    usersList.add(UserDTO("Seamus"))
-    usersList.add(UserDTO("Sereres"))
-    usersList.add(UserDTO("RNG"))
-    usersList.add(UserDTO("Vegas"))
-
+    val usersList = defaultUserList()
     queryFields["users"] = StaticDataFetcher(usersList)
 
-    val gamesList = ArrayList<GameDTO>()
-    gamesList.add(GameDTO("GB@CHI"))
-    gamesList.add(GameDTO("BUF@NE"))
-    gamesList.add(GameDTO("SEA@PHI"))
-
+    val gamesList = defaultGamesList()
     queryFields["games"] = StaticDataFetcher(gamesList)
 
-    val userPicksList = ArrayList<UserPicksDTO>()
+    val userPicksList = defaultPicksForUsers(usersList)
 
-    usersList.map {
-        userDTO -> userPicksList.add(UserPicksDTO(userDTO))
-    }
+    val userPickStore = defaultWeek0PickStore(userPicksList)
 
-    val userPickStore: ArrayList<ArrayList<UserPicksDTO>> = ArrayList(0);
-    userPickStore.add(userPicksList)
-
+    @Suppress("UNCHECKED_CAST")
     queryFields["userPicks"] = UserPickDataQueryFetcher(userPickStore) as DataFetcher<Any>
-    mutationFields["updatePick"] = UserPickDataMutationFetcher(userPickStore) as DataFetcher<Any>
 
-
+    @Suppress("UNCHECKED_CAST")
+    mutationFields["updatePick"] = UpdatePickMutator(userPickStore) as DataFetcher<Any>
 
     wiringMap["Query"] = queryFields
-
-
     wiringMap["Mutation"] = mutationFields
     return wiringMap
 }
@@ -50,15 +34,23 @@ fun pickaxeRuntimeWiring(): RuntimeWiring {
 }
 
 fun generateRuntimeWiring(wiringMap: HashMap<String, HashMap<String, DataFetcher<Any>>>): RuntimeWiring {
-    val wiring = RuntimeWiring.newRuntimeWiring()
+    val runtimeBuilder = RuntimeWiring.newRuntimeWiring()
 
-    wiringMap.map { (typeName, fieldMap) ->
-        fieldMap.map { (field, fetcher) ->
-            wiring.type(typeName) {
-                it.dataFetcher(field, fetcher)
-            }
-        }
+    wiringMap.map { (rootName, fieldMap) ->
+        generateWiringForFields(runtimeBuilder, rootName, fieldMap)
     }
 
-    return wiring.build()
+    return runtimeBuilder.build()
+}
+
+private fun generateWiringForFields(
+    runtimeBuilder: RuntimeWiring.Builder,
+    rootName: String,
+    fieldMap: java.util.HashMap<String, DataFetcher<Any>>
+) {
+    fieldMap.map { (field, fetcher) ->
+        runtimeBuilder.type(rootName) {
+            it.dataFetcher(field, fetcher)
+        }
+    }
 }

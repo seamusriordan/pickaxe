@@ -7,7 +7,6 @@ import io.javalin.http.staticfiles.Location
 import io.javalin.websocket.*
 import io.mockk.*
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import java.util.function.Consumer
 
@@ -35,7 +34,7 @@ internal class ServerTest {
         verify { serverSpy.options("/pickaxe/graphql/", any()) }
         verify(exactly = 1) { optionsHandler() }
 
-        unmockkAll();
+        unmockkAll()
     }
 
     @Test
@@ -182,6 +181,6 @@ internal class ServerTest {
         verify { serverSpy.post("/pickaxe/graphql/", any()) }
         verify(exactly = 1) { postHandler(graphQLMock, listWithContext) }
 
-        unmockkAll();
+        unmockkAll()
     }
 }

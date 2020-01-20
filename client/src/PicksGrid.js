@@ -3,37 +3,34 @@ import {useMutation, useQuery} from "@apollo/react-hooks";
 import gql from "graphql-tag";
 import PickCell from "./PickCell";
 
-const PICKS_QUERY = gql`query Query($week: Int) { users { name } userPicks(week: $week) { user { name } picks { game pick } total } games(week: $week) { week name spread result } }`;
+const PICKS_QUERY = gql`
+    query Query($week: Int) {
+        users {
+            name
+        }
+
+        userPicks(week: $week) {
+            user { name }
+            picks {
+                game
+                pick
+            }
+            total
+        }
+
+        games(week: $week) {
+            week
+            name
+            spread
+            result
+        }
+    }`;
+
 const UPDATE_PICKS_MUTATION =
-gql`mutation Mutation($name: String!, $week: Int!, $game: String!, $pick: String!)
-{ updatePick(name: $name, userPick: { week: $week, game: $game, pick: $pick })
-}`;
-
-export function websocketServer() {
-    return process.env.REACT_APP_GRAPHQL_SERVER ?
-        process.env.REACT_APP_GRAPHQL_SERVER :
-        "localhost";
-}
-
-export function websocketPort() {
-    return process.env.REACT_APP_GRAPHQL_PORT ?
-        process.env.REACT_APP_GRAPHQL_PORT :
-        "8080";
-}
-
-export function websocketProtocol() {
-    return process.env.REACT_APP_GRAPHQL_HTTPS ?
-        "wss" :
-        "ws";
-}
-
-
-export function websocketUri() {
-    return websocketProtocol() + '://' +
-        websocketServer() + ':' + websocketPort() +
-        '/pickaxe/updateNotification';
-}
-
+gql`
+    mutation Mutation($name: String!, $week: Int!, $game: String!, $pick: String!) {
+        updatePick(name: $name, userPick: { week: $week, game: $game, pick: $pick })
+    }`;
 
 function userCells(data) {
     return !data.users ? undefined :
@@ -80,13 +77,12 @@ function pickCells(data, sendData) {
 
                 const sendDataCallback = (event, updatedPick) => {
                     sendData({
-                        variables:
-                            {
-                                name: user.name,
-                                week: 0,
-                                game: game.name,
-                                pick: updatedPick,
-                            }
+                        variables: {
+                            name: user.name,
+                            week: 0,
+                            game: game.name,
+                            pick: updatedPick,
+                        }
                     });
                 };
 
@@ -146,5 +142,30 @@ const PicksGrid = () => {
     </div>
 
 };
+
+export function websocketServer() {
+    return process.env.REACT_APP_GRAPHQL_SERVER ?
+        process.env.REACT_APP_GRAPHQL_SERVER :
+        "localhost";
+}
+
+export function websocketPort() {
+    return process.env.REACT_APP_GRAPHQL_PORT ?
+        process.env.REACT_APP_GRAPHQL_PORT :
+        "8080";
+}
+
+export function websocketProtocol() {
+    return process.env.REACT_APP_GRAPHQL_HTTPS ?
+        "wss" :
+        "ws";
+}
+
+
+export function websocketUri() {
+    return websocketProtocol() + '://' +
+        websocketServer() + ':' + websocketPort() +
+        '/pickaxe/updateNotification';
+}
 
 export default PicksGrid

@@ -1,2 +1,1 @@
-class PickDTO(var game: String, var pick: String) {
-}
+class PickDTO(var game: String, var pick: String)
