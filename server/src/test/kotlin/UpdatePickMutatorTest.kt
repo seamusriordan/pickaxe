@@ -25,16 +25,15 @@ class UpdatePickMutatorTest {
     fun pickForFirstGameCanBeSetByFetchingEnvironment() {
         val envBuilder = DataFetchingEnvironmentImpl.newDataFetchingEnvironment()
 
-        val passedVariables: HashMap<String, Any> = HashMap()
-        passedVariables["name"] = "Person"
+        val passedArguments: HashMap<String, Any> = HashMap()
+        passedArguments["name"] = "Person"
         val userPick = HashMap<String, Any>()
         userPick["week"] = 0
         userPick["game"] = "GB@CHI"
         userPick["pick"] = "Different"
 
-        passedVariables["userPick"] = userPick
-        envBuilder.variables(passedVariables)
-        envBuilder.arguments(passedVariables)
+        passedArguments["userPick"] = userPick
+        envBuilder.arguments(passedArguments)
 
         val env = envBuilder.build()
 
@@ -50,20 +49,19 @@ class UpdatePickMutatorTest {
     fun pickForSecondGameCanBeSetByFetchingEnvironment() {
         val envBuilder = DataFetchingEnvironmentImpl.newDataFetchingEnvironment()
 
-        val passedVariables: HashMap<String, Any> = HashMap()
-        passedVariables["name"] = "Person"
+        val passedArguments: HashMap<String, Any> = HashMap()
+        passedArguments["name"] = "Person"
         val userPick = HashMap<String, Any>()
         userPick["week"] = 0
         userPick["game"] = "BUF@NE"
         userPick["pick"] = "Very Different"
 
-        passedVariables["userPick"] = userPick
+        passedArguments["userPick"] = userPick
 
-        envBuilder.variables(passedVariables)
-        envBuilder.arguments(passedVariables)
+        envBuilder.arguments(passedArguments)
 
 
-        envBuilder.arguments(passedVariables)
+        envBuilder.arguments(passedArguments)
 
         val env = envBuilder.build()
 
@@ -77,17 +75,16 @@ class UpdatePickMutatorTest {
     fun pickForThirdGameWithSecondUserCanBeSetByFetchingEnvironment() {
         val envBuilder = DataFetchingEnvironmentImpl.newDataFetchingEnvironment()
 
-        val passedVariables: HashMap<String, Any> = HashMap()
-        passedVariables["name"] = "Person2"
+        val passedArguments: HashMap<String, Any> = HashMap()
+        passedArguments["name"] = "Person2"
         val userPick = HashMap<String, Any>()
         userPick["week"] = 0
         userPick["game"] = "SEA@PHI"
         userPick["pick"] = "PHI"
 
-        passedVariables["userPick"] = userPick
+        passedArguments["userPick"] = userPick
 
-        envBuilder.variables(passedVariables)
-        envBuilder.arguments(passedVariables)
+        envBuilder.arguments(passedArguments)
 
         val env = envBuilder.build()
 

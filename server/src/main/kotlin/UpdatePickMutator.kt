@@ -3,19 +3,37 @@ import graphql.schema.DataFetchingEnvironment
 
 class UpdatePickMutator(private var store: List<List<UserPicksDTO>>) : DataFetcher<Boolean> {
     override fun get(environment: DataFetchingEnvironment): Boolean {
-        val envPickDTO = environment.getArgument<HashMap<String, Any>>("userPick")
+        val storedPick = getStoredPickToUpdate(environment)
+        val passedUserPick = environment.arguments["userPick"] as HashMap<String, Any>
 
-        val userPicksDTO = store[0].first {
-            it.user.name == environment.variables["name"]
-        }
-
-        val pickDTO = userPicksDTO.picks.first {
-            it.game == envPickDTO["game"]
-        }
-
-        pickDTO.pick = envPickDTO["pick"] as String
+        storedPick.pick = passedUserPick["pick"] as String
 
         return true
     }
 
+    private fun getStoredPickToUpdate(environment: DataFetchingEnvironment): PickDTO {
+        val userName = environment.arguments["name"] as String
+        val passedUserPick = environment.arguments["userPick"] as HashMap<String, Any>
+        val gameName = passedUserPick["game"] as String
+
+        return getPickForUserAndGame(userName, gameName)
+    }
+
+    private fun getPickForUserAndGame(userName: String, gameName: String): PickDTO {
+        val storedUserPicks = getPicksForUserWithName(userName)
+        return getPickForGame(storedUserPicks, gameName)
+    }
+
+    private fun getPicksForUserWithName(userName: String): UserPicksDTO {
+        val defaultWeek = 0
+        return store[defaultWeek].first {
+            it.user.name == userName
+        }
+    }
+
+    private fun getPickForGame(userPicks: UserPicksDTO, gameName: String): PickDTO {
+        return userPicks.picks.first {
+            it.game == gameName
+        }
+    }
 }
