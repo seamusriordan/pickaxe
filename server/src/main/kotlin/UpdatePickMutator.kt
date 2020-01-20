@@ -4,7 +4,7 @@ import graphql.schema.DataFetchingEnvironment
 class UpdatePickMutator(private var store: List<List<UserPicksDTO>>) : DataFetcher<Boolean> {
     override fun get(environment: DataFetchingEnvironment): Boolean {
         val storedPick = getStoredPickToUpdate(environment)
-        val passedUserPick = environment.arguments["userPick"] as HashMap<String, Any>
+        val passedUserPick = environment.arguments["userPick"] as HashMap<*, *>
 
         storedPick.pick = passedUserPick["pick"] as String
 
@@ -13,7 +13,7 @@ class UpdatePickMutator(private var store: List<List<UserPicksDTO>>) : DataFetch
 
     private fun getStoredPickToUpdate(environment: DataFetchingEnvironment): PickDTO {
         val userName = environment.arguments["name"] as String
-        val passedUserPick = environment.arguments["userPick"] as HashMap<String, Any>
+        val passedUserPick = environment.arguments["userPick"] as HashMap<*, *>
         val gameName = passedUserPick["game"] as String
 
         return getPickForUserAndGame(userName, gameName)
