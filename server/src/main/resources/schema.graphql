@@ -1,4 +1,5 @@
 type Query {
+    "I am a description"
     users: [User]
     games(week: Int): [Game]
     userPicks(week: Int): [UserPicks]
@@ -6,6 +7,8 @@ type Query {
 
 type User {
     name: String
+    @deprecated
+    deprecatedData: Int
 }
 
 type Game {
