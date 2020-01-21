@@ -1,1 +1,3 @@
-class UserDTO(var name: String)
+class UserDTO(var name: String) {
+    public val deprecatedData: Int = 0;
+}
