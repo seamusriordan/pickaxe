@@ -9,6 +9,7 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "acorn": "5.7.4",
     "apollo": "^2.21.2",
     "apollo-boost": "^0.4.7",
     "apollo-cache-inmemory": "latest",
