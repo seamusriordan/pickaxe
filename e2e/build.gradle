@@ -1,5 +1,7 @@
+import org.apache.tools.ant.taskdefs.condition.Os
+
 task install(type: Exec) {
-    commandLine 'yarn', 'install'
+    commandLine getYarnCmdForOs(), 'install'
 }
 
 task docker_build(type: Exec) {
@@ -51,12 +53,20 @@ task docker_start_full(type: Exec) {
 task test(type: Exec) {
     dependsOn 'install'
     dependsOn 'docker_start'
-    commandLine 'yarn', 'run', 'cypress', 'run'
+    commandLine getYarnCmdForOs(), 'run', 'cypress', 'run'
     finalizedBy 'docker_rm'
 }
 
 task full_build_test(type: Exec) {
     dependsOn 'docker_start_full'
-    commandLine 'yarn', 'run', 'cypress', 'run'
+    commandLine getYarnCmdForOs(), 'run', 'cypress', 'run'
     finalizedBy 'docker_rm'
+}
+
+private static String getYarnCmdForOs() {
+    String yarn = 'yarn'
+    if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+        yarn = 'yarn.cmd'
+    }
+    yarn
 }

@@ -1,13 +1,23 @@
+import org.apache.tools.ant.taskdefs.condition.Os
+
 task test(type:Exec) {
     environment "CI", "true"
-    commandLine 'yarn', 'test'
+    commandLine getYarnCmdForOs(), 'test'
 }
 
 task install(type:Exec){
-    commandLine 'yarn', 'install'
+    commandLine getYarnCmdForOs(), 'install'
 }
 
 task build(type:Exec) {
     dependsOn 'install'
-    commandLine 'yarn', 'build'
+    commandLine getYarnCmdForOs(), 'build'
+}
+
+private static String getYarnCmdForOs() {
+    String yarn = 'yarn'
+    if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+        yarn = 'yarn.cmd'
+    }
+    yarn
 }
