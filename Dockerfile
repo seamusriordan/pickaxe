@@ -1,4 +1,4 @@
-FROM openjdk:11-alpine
+FROM openjdk:11
 COPY server /home/pickaxe/server
 COPY server/src/main/resources/schema.graphql /home/pickaxe/src/main/resources/schema.graphql
 COPY client/build/ /home/pickaxe/html/pickaxe
