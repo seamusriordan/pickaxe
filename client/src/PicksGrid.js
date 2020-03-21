@@ -124,7 +124,13 @@ const PicksGrid = () => {
             refetch()
         };
         return () => {
-            webSocket.close()
+            if (webSocket.readyState === WebSocket.OPEN) {
+                webSocket.close()
+            } else {
+                webSocket.onopen = () => {
+                    webSocket.close()
+                }
+            }
         }
     });
 
