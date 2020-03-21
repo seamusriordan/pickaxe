@@ -1,4 +1,5 @@
-import PicksGrid, {websocketPort, websocketProtocol, websocketServer, websocketUri} from "./PicksGrid";
+import PicksGrid from "./PicksGrid";
+
 import {create, act} from "react-test-renderer";
 import React from "react";
 import {useQuery, useMutation} from '@apollo/react-hooks';
@@ -12,8 +13,6 @@ jest.mock('@apollo/react-hooks');
 
 
 describe('PicksGrid basic behavior', () => {
-    let grid;
-
     beforeEach(() => {
         jest.resetAllMocks();
         useQuery.mockReturnValue({
@@ -22,7 +21,8 @@ describe('PicksGrid basic behavior', () => {
         });
         useMutation.mockReturnValue([() => {
         }]);
-        grid = create(<PicksGrid/>).root;
+        // eslint-disable-next-line no-unused-vars,no-unused-expressions
+        create(<PicksGrid/>).root;
     });
 
     it('calls useQuery with some kind of poll interval', () => {
@@ -65,9 +65,9 @@ describe('PicksGrid basic behavior', () => {
     });
 
     it('useMutation is called with pick updating query', () => {
-        let grid;
         act(() => {
-            grid = create(<PicksGrid/>)
+            // eslint-disable-next-line no-unused-vars
+            create(<PicksGrid/>);
         });
 
         const updatingQuery =
@@ -169,10 +169,6 @@ describe('PicksGrid basic behavior', () => {
     });
 
     it('On blur event, innerHTML from textContent with newlines only have up to first newline', () => {
-        let calledData;
-        useMutation.mockReturnValue([(data) => {
-            calledData = data;
-        }]);
         let {container} = render(<PicksGrid/>);
         let cell = container.querySelector('#Vegas-CHI\\@GB');
 
@@ -183,114 +179,5 @@ describe('PicksGrid basic behavior', () => {
         cell = container.querySelector('#Vegas-CHI\\@GB');
 
         expect(cell.textContent).toBe("CHI")
-    });
-
-
-});
-
-import WS from "jest-websocket-mock";
-import {graphqlPort, graphqlProtocol, graphqlServer, serverUri} from "./App";
-
-describe('Websocket behavior', () => {
-    const defaultEnv = process.env;
-
-    beforeEach(() => {
-        useQuery.mockReturnValue({
-            loading: false, error: null, data: mockQueryData, refetch: () => {
-            }
-        });
-        useMutation.mockReturnValue([() => {
-        }]);
-        process.env = {...defaultEnv};
-    });
-
-    it('Opens a websocket', async () => {
-        useQuery.mockReturnValue({
-            loading: false, error: true, data: undefined, refetch: () => {
-            }
-        });
-        let grid = null;
-        const server = new WS("ws://localhost:8080/pickaxe/updateNotification");
-
-        act(() => {
-            grid = create(<PicksGrid/>)
-        });
-
-        await server.connected;
-        server.close()
-    });
-
-    it('On message calls refetch', async () => {
-        let refetched = false;
-        useQuery.mockReturnValue({
-            loading: false, error: true, data: undefined, refetch: () => {
-                refetched = true
-            }
-        });
-        let grid = null;
-        const server = new WS("ws://localhost:8080/pickaxe/updateNotification");
-        act(() => {
-            grid = create(<PicksGrid/>)
-        });
-
-        expect(refetched).toEqual(false);
-
-        await server.connected;
-        server.send("Hi");
-
-        expect(refetched).toEqual(true);
-        server.close();
-        WS.clean()
-    });
-
-    it('On unmount diconnects', async () => {
-        let grid = null;
-        const server = new WS("ws://localhost:8080/pickaxe/updateNotification");
-        act(() => {
-            grid = create(<PicksGrid/>)
-        });
-        await server.connected;
-
-        act(() => {
-            grid.unmount()
-        });
-
-        expect(server.server.clients()[0].readyState).toBe(WebSocket.CLOSING);
-        await server.closed;
-        expect(server.server.clients().length).toBe(0);
-
-        server.close();
-        WS.clean()
-    });
-
-    test('websocketServer returns localhost when environment variable is not set', () => {
-        expect(websocketServer()).toEqual('localhost');
-        expect(websocketUri()).toEqual('ws://localhost:8080/pickaxe/updateNotification')
-    });
-
-    test('websocketServer returns host from environment variable', () => {
-        process.env.REACT_APP_GRAPHQL_SERVER = 'someservername';
-        expect(websocketServer()).toEqual('someservername');
-        expect(websocketUri()).toEqual('ws://someservername:8080/pickaxe/updateNotification')
-    });
-
-    test('websocketPort returns 8080 when environment variable is not set', () => {
-        expect(websocketPort()).toEqual("8080")
-    });
-
-    test('websocketPort returns port from environment variable', () => {
-        process.env.REACT_APP_GRAPHQL_PORT = "7979";
-        expect(websocketPort()).toEqual("7979");
-        expect(websocketUri()).toEqual('ws://localhost:7979/pickaxe/updateNotification');
-    });
-
-    test('websocketProtocol returns ws when environment variable is not set', () => {
-        expect(websocketProtocol()).toEqual("ws")
-    });
-
-    test('websocketProtocol returns wss from environment variable', () => {
-        process.env.REACT_APP_GRAPHQL_HTTPS = 1;
-        expect(websocketProtocol()).toEqual("wss");
-        expect(websocketUri()).toEqual('wss://localhost:8080/pickaxe/updateNotification')
     });
 });
