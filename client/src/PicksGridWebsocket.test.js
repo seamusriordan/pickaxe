@@ -1,4 +1,3 @@
-
 import WS from "jest-websocket-mock";
 import PicksGrid, {websocketPort, websocketProtocol, websocketServer, websocketUri} from "./PicksGrid";
 
@@ -12,122 +11,109 @@ jest.mock('@apollo/react-hooks');
 describe('Websocket behavior', () => {
     const defaultEnv = process.env;
 
-    beforeEach(() => {
-        useQuery.mockReturnValue({
-            loading: false, error: null, data: mockQueryData, refetch: () => {
-            }
-        });
-        useMutation.mockReturnValue([() => {
-        }]);
-        process.env = {...defaultEnv};
-    });
+    describe('connection behavior', () => {
+        let server;
+        let refetched;
+        let grid;
 
-    it('Opens a websocket', async () => {
-        useQuery.mockReturnValue({
-            loading: false, error: true, data: undefined, refetch: () => {
-            }
-        });
-        const server = new WS("ws://localhost:8080/pickaxe/updateNotification");
+        beforeEach(() => {
+            server = new WS("ws://localhost:8080/pickaxe/updateNotification");
 
-        act(() => {
-            // eslint-disable-next-line no-unused-vars
-            create(<PicksGrid/>);
-        });
+            refetched = false;
+            useQuery.mockReturnValue({
+                loading: false, error: true, data: mockQueryData, refetch: () => {
+                    refetched = true
+                }
+            });
+            useMutation.mockReturnValue([() => {}]);
 
-        await server.connected;
-        server.close()
-    });
-
-    it('On message calls refetch', async () => {
-        let refetched = false;
-        useQuery.mockReturnValue({
-            loading: false, error: true, data: undefined, refetch: () => {
-                refetched = true
-            }
-        });
-        const server = new WS("ws://localhost:8080/pickaxe/updateNotification");
-        act(() => {
-            // eslint-disable-next-line no-unused-vars
-            create(<PicksGrid/>);
+            act(() => {
+                // eslint-disable-next-line no-unused-vars
+                grid = create(<PicksGrid/>);
+            });
         });
 
-        expect(refetched).toEqual(false);
-
-        await server.connected;
-        server.send("Hi");
-
-        expect(refetched).toEqual(true);
-        server.close();
-        WS.clean()
-    });
-
-    it('On unmount disconnects if connection is open', async () => {
-        let grid = null;
-        const server = new WS("ws://localhost:8080/pickaxe/updateNotification");
-        act(() => {
-            grid = create(<PicksGrid/>)
-        });
-        await server.connected;
-
-        act(() => {
-            grid.unmount()
+        afterEach(() => {
+            server.close();
+            WS.clean()
         });
 
-        expect(server.server.clients()[0].readyState).toBe(WebSocket.CLOSING);
-        await server.closed;
-        expect(server.server.clients().length).toBe(0);
-
-        server.close();
-        WS.clean()
-    });
-
-    it('On unmount eventually closes if connection has not completed', async () => {
-        let grid = null;
-        const server = new WS("ws://localhost:8080/pickaxe/updateNotification");
-        act(() => {
-            grid = create(<PicksGrid/>)
+        it('Opens a websocket', async () => {
+            await server.connected;
+            server.close()
         });
 
-        act(() => {
-            grid.unmount()
+        it('On open calls refetch', async () => {
+            await server.connected;
+            expect(refetched).toEqual(true);
         });
 
-        expect(server.server.clients()[0].readyState).toBe(WebSocket.CONNECTING);
-        await server.closed;
-        expect(server.server.clients().length).toBe(0);
+        it('On message calls refetch', async () => {
+            expect(refetched).toEqual(false);
 
-        server.close();
-        WS.clean()
+            await server.connected;
+            server.send("Hi");
+
+            expect(refetched).toEqual(true);
+        });
+
+        it('On unmount disconnects if connection is open', async () => {
+            await server.connected;
+
+            act(() => {
+                grid.unmount()
+            });
+
+            expect(server.server.clients()[0].readyState).toBe(WebSocket.CLOSING);
+            await server.closed;
+            expect(server.server.clients().length).toBe(0);
+        });
+
+        it('On unmount eventually closes if connection has not completed', async () => {
+            act(() => {
+                grid.unmount()
+            });
+
+            expect(server.server.clients()[0].readyState).toBe(WebSocket.CONNECTING);
+            await server.closed;
+            expect(server.server.clients().length).toBe(0);
+        });
     });
 
-    test('websocketServer returns localhost when environment variable is not set', () => {
-        expect(websocketServer()).toEqual('localhost');
-        expect(websocketUri()).toEqual('ws://localhost:8080/pickaxe/updateNotification')
-    });
+    describe('uri from environment variables', () => {
+        beforeEach(() => {
+            process.env = {...defaultEnv};
+        });
 
-    test('websocketServer returns host from environment variable', () => {
-        process.env.REACT_APP_GRAPHQL_SERVER = 'someservername';
-        expect(websocketServer()).toEqual('someservername');
-        expect(websocketUri()).toEqual('ws://someservername:8080/pickaxe/updateNotification')
-    });
+        it('websocketServer returns localhost when environment variable is not set', () => {
+            expect(websocketServer()).toEqual('localhost');
+            expect(websocketUri()).toEqual('ws://localhost:8080/pickaxe/updateNotification')
+        });
 
-    test('websocketPort returns 8080 when environment variable is not set', () => {
-        expect(websocketPort()).toEqual("8080")
-    });
+        it('websocketServer returns host from environment variable', () => {
+            process.env.REACT_APP_GRAPHQL_SERVER = 'someservername';
+            expect(websocketServer()).toEqual('someservername');
+            expect(websocketUri()).toEqual('ws://someservername:8080/pickaxe/updateNotification')
+        });
 
-    test('websocketPort returns port from environment variable', () => {
-        process.env.REACT_APP_GRAPHQL_PORT = "7979";
-        expect(websocketPort()).toEqual("7979");
-        expect(websocketUri()).toEqual('ws://localhost:7979/pickaxe/updateNotification');
-    });
+        it('websocketPort returns 8080 when environment variable is not set', () => {
+            expect(websocketPort()).toEqual("8080")
+        });
 
-    test('websocketProtocol returns ws when environment variable is not set', () => {
-        expect(websocketProtocol()).toEqual("ws")
-    });
+        it('websocketPort returns port from environment variable', () => {
+            process.env.REACT_APP_GRAPHQL_PORT = "7979";
+            expect(websocketPort()).toEqual("7979");
+            expect(websocketUri()).toEqual('ws://localhost:7979/pickaxe/updateNotification');
+        });
 
-    test('websocketProtocol returns wss from environment variable', () => {
-        process.env.REACT_APP_GRAPHQL_HTTPS = 1;
-        expect(websocketProtocol()).toEqual("wss");
-        expect(websocketUri()).toEqual('wss://localhost:8080/pickaxe/updateNotification')
+        it('websocketProtocol returns ws when environment variable is not set', () => {
+            expect(websocketProtocol()).toEqual("ws")
+        });
+
+        it('websocketProtocol returns wss from environment variable', () => {
+            process.env.REACT_APP_GRAPHQL_HTTPS = 1;
+            expect(websocketProtocol()).toEqual("wss");
+            expect(websocketUri()).toEqual('wss://localhost:8080/pickaxe/updateNotification')
+        });
     });
 });
