@@ -2,8 +2,8 @@ import {useMutation, useQuery} from "@apollo/react-hooks";
 import {create} from "react-test-renderer";
 import PicksGrid, {getPickByGame} from "./PicksGrid";
 import React from "react";
-import {mockQueryData} from "./MockQueryData";
-import {findByClassName, assertAllUserPicksMatchCellText} from "./Helpers";
+import {mockQueryData} from "../testUtilities/MockQueryData";
+import {findByClassName, assertAllUserPicksMatchCellText} from "../testUtilities/Helpers";
 import PickCell from "./PickCell";
 
 jest.mock('@apollo/react-hooks');
@@ -38,13 +38,13 @@ describe('PicksGrid pick cell rendering', () => {
         let picks = mockQueryData["userPicks"][0].picks;
 
         expect(getPickByGame(picks, "CHI@GB")).toBe("CHI")
-    })
+    });
 
     it('can choose specific game from pick list for second mock user', () => {
         let picks = mockQueryData["userPicks"][1].picks;
 
         expect(getPickByGame(picks, "ANN@COL")).toBe("C")
-    })
+    });
 
     it('empty list of picks returns null', () => {
         let emptyPicks = [];

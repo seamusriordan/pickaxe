@@ -4,7 +4,7 @@ import PicksGrid, {websocketPort, websocketProtocol, websocketServer, websocketU
 import {create, act} from "react-test-renderer";
 import React from "react";
 import {useQuery, useMutation} from '@apollo/react-hooks';
-import {mockQueryData} from "./MockQueryData";
+import {mockQueryData} from "../testUtilities/MockQueryData";
 
 jest.mock('@apollo/react-hooks');
 
