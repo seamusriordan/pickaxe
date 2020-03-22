@@ -5,7 +5,7 @@ function stripAfterNewline(text) {
     return /^.*/.exec(text)[0]
 }
 
-export default function PickCell(props){
+export default function PickCell(props) {
     const [innerText, setInnerText] = useState(props.pick);
 
     useEffect(() => {
@@ -13,7 +13,7 @@ export default function PickCell(props){
     }, [props.pick]);
 
     const callbackWrapper = (event) => {
-        if(event.target.textContent === innerText){
+        if (event.target.textContent === innerText) {
             return;
         }
 
