@@ -6,12 +6,6 @@ describe('Mutation response update', () => {
         cy.visit('localhost:8080/pickaxe');
     });
 
-    afterEach(() => {
-        cy.request('POST', 'localhost:8080/pickaxe/graphql', graphqlRevertBody)
-            .get('#Seamus-SEA\\@PHI')
-            .contains("SEA",  {timeout: 10000});
-    });
-
     it('mutation query causes update', () => {
             cy.get('#Seamus-SEA\\@PHI')
             .contains("SEA");
@@ -19,6 +13,10 @@ describe('Mutation response update', () => {
         cy.request('POST', 'localhost:8080/pickaxe/graphql', graphqlMutateBody)
             .get('#Seamus-SEA\\@PHI')
             .contains("DERP",  {timeout: 10000});
+
+        cy.request('POST', 'localhost:8080/pickaxe/graphql', graphqlRevertBody)
+            .get('#Seamus-SEA\\@PHI')
+            .contains("SEA",  {timeout: 10000});
     });
 
     it('does not overwrite text in updated cells while typing', () => {
@@ -36,5 +34,9 @@ describe('Mutation response update', () => {
             .click()
             .type("{backspace}{backspace}{backspace}{backspace}{backspace}PHI")
             .invoke('blur');
+
+        cy.request('POST', 'localhost:8080/pickaxe/graphql', graphqlRevertBody)
+            .get('#Seamus-SEA\\@PHI')
+            .contains("SEA",  {timeout: 10000});
     });
 });
