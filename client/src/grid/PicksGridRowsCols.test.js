@@ -2,8 +2,8 @@ import {useMutation, useQuery} from "@apollo/react-hooks";
 import {create} from "react-test-renderer";
 import PicksGrid from "./PicksGrid";
 import React from "react";
-import {mockQueryData} from "./MockQueryData";
-import {findByClassName} from "./Helpers";
+import {mockQueryData} from "../testUtilities/MockQueryData";
+import {findByClassName} from "../testUtilities/Helpers";
 
 jest.mock('@apollo/react-hooks');
 

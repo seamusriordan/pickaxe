@@ -1,5 +1,5 @@
 import React from 'react';
-import PicksGrid from "./PicksGrid";
+import PicksGrid from "./grid/PicksGrid";
 import {ApolloProvider} from '@apollo/react-hooks'
 import ApolloClient from "apollo-client";
 import { InMemoryCache } from 'apollo-cache-inmemory';

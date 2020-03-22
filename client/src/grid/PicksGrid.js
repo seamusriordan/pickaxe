@@ -120,6 +120,10 @@ const PicksGrid = () => {
 
     useEffect(() => {
         let webSocket = new WebSocket(websocketUri());
+        webSocket.onopen = () => {
+            refetch()
+        };
+
         webSocket.onmessage = () => {
             refetch()
         };

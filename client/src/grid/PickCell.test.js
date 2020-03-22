@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React from "react";
 import {create, act} from "react-test-renderer";
 import { render, fireEvent } from '@testing-library/react'
 import PickCell from "./PickCell";
@@ -7,7 +7,7 @@ import PickCell from "./PickCell";
 
 describe('PickCell', () => {
     it('takes user, game, and pick props and has pick as text', () => {
-        let cellRenderer;
+        let cellRenderer = null;
         act(() => {
             cellRenderer = create(<PickCell user="Some user" game="GB@CHI" pick="CHI"/>)
         });
@@ -17,7 +17,7 @@ describe('PickCell', () => {
     });
 
     it('wrapper type is editable', () => {
-        let cellRenderer;
+        let cellRenderer = null;
         act(() => {
             cellRenderer = create(<PickCell user="Some user" game="GB@CHI" pick="CHI"/>)
         });
@@ -27,7 +27,7 @@ describe('PickCell', () => {
     });
 
     it('pick for GB shows up as text as text', () => {
-        let cellRenderer;
+        let cellRenderer = null;
         act(() => {
             cellRenderer = create(<PickCell user="Some user" game="GB@CHI" pick="GB"/>)
         });
@@ -37,7 +37,7 @@ describe('PickCell', () => {
     });
 
     it('pick with updated props shows up as text on rerender', () => {
-        let cellRenderer;
+        let cellRenderer = null;
         act(() => {
             cellRenderer = create(<PickCell user="Some user" game="GB@CHI" pick="GB"/>)
         });

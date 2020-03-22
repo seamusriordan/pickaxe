@@ -2,7 +2,7 @@
   "name": "client",
   "version": "0.1.0",
   "homepage": "/pickaxe",
-  "license": "derp",
+  "license": "MIT",
   "private": true,
   "dependencies": {
     "@apollo/react-hooks": "^3.1.3",
