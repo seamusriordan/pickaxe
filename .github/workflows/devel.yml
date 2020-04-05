@@ -57,7 +57,7 @@ jobs:
     - name: Build and start docker image
       run: |
         docker build . -f e2e/Dockerfile -t pickaxe:latest
-        docker run -d -p 8080:8080 -a STDOUT pickaxe:latest
+        docker run -p 8080:8080 -a STDOUT pickaxe:latest
 
     - name: Integration tests
       working-directory: ./e2e
