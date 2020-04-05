@@ -19,7 +19,7 @@ fun wiringMap(): HashMap<String, HashMap<String, DataFetcher<*>>> {
 
     val userPickStore = defaultWeek0PickStore(userPicksList)
 
-    queryFields["userPicks"] = UserPickDataQueryFetcher(userPickStore)
+    queryFields["userPicks"] = UserPickDataQueryFetcher(connection)
 
     mutationFields["updatePick"] = UpdatePickMutator(userPickStore)
 

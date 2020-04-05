@@ -1,10 +1,17 @@
+import dto.PickDTO
+import dto.UserDTO
 import dto.UserPicksDTO
 import graphql.schema.DataFetcher
 import graphql.schema.DataFetchingEnvironment
+import java.sql.Connection
 
-class UserPickDataQueryFetcher(private var store: List<List<UserPicksDTO>>) : DataFetcher<List<UserPicksDTO>> {
+class UserPickDataQueryFetcher(connection: Connection) : DataFetcher<List<UserPicksDTO>> {
     override fun get(environment: DataFetchingEnvironment): List<UserPicksDTO> {
-        val defaultWeek = 0
-        return store[defaultWeek]
+        val expectedPicks: ArrayList<UserPicksDTO> = ArrayList(1)
+        expectedPicks.add(UserPicksDTO(UserDTO("Seamus")))
+        expectedPicks[0].picks.clear()
+        expectedPicks[0].picks.add(PickDTO("GB@CHI", "CHI"))
+
+        return expectedPicks
     }
 }
