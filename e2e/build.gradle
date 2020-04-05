@@ -17,7 +17,7 @@ task docker_start(type: Exec) {
     dependsOn ':client:build'
     dependsOn 'docker_env_is_clean'
     dependsOn 'auxilary_servers'
-    commandLine 'docker', 'run', '-d', '-p', '8080:8080', '--name', 'pickaxe', 'pickaxe:e2e'
+    commandLine 'docker', 'run', '-d', '-p', '8080:8080', '--net', "pickaxe_default", '--name', 'pickaxe', 'pickaxe:e2e'
 }
 
 task docker_stop(type: Exec) {
@@ -42,7 +42,8 @@ task docker_env_is_clean(type: Exec){
 
 task docker_build_full(type: Exec) {
     dependsOn ':pickaxe-server:copy_dependencies'
-    commandLine 'docker', 'build', '..', '-f', '../Dockerfile', '-t', 'pickaxe:full-build-e2e'
+    workingDir '..'
+    commandLine 'docker', 'build', '.', '-f', 'e2e/Dockerfile', '-t', 'pickaxe:full-build-e2e'
 }
 
 task docker_start_full(type: Exec) {

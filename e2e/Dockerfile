@@ -7,7 +7,7 @@ COPY server/src/main/resources/schema.graphql /home/pickaxe/src/main/resources/s
 COPY server/build/deps/* /home/pickaxe/
 COPY client/build /home/pickaxe/html/pickaxe
 
-ENV POSTGRES_HOST=host.docker.internal
+ENV POSTGRES_HOST=postgres
 
 WORKDIR /home/pickaxe/
 #CMD java -Dorg.slf4j.simpleLogger.defaultLogLevel=debug -cp "*" ServerKt

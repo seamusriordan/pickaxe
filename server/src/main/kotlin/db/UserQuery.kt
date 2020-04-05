@@ -14,17 +14,12 @@ class UserQuery {
 
         var port = System.getenv("POSTGRES_PORT")
         if (port == null) {
-            port = "54320"
+            port = "5432"
         }
 
-        var host = "localhost";
-
-        if (System.getenv("HOSTNAME") != null) {
-            host = System.getenv("HOSTNAME");
-        }
-
+        var host = "postgres"
         if (System.getenv("POSTGRES_HOST") != null) {
-            host = System.getenv("POSTGRES_HOST");
+            host = System.getenv("POSTGRES_HOST")
         }
 
         val connect = DriverManager.getConnection("jdbc:postgresql://$host:$port/pickaxe_dev", properties)
