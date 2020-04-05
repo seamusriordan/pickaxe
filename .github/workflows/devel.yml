@@ -60,7 +60,7 @@ jobs:
     - name: Build and start docker image
       run: |
         docker build . -f e2e/Dockerfile -t pickaxe:latest
-        docker run -d -p 8080:8080  --name pickaxe_1 pickaxe:latest
+        docker run -d -p 8080:8080 --add-host host.docker.internal:host-gateway --name pickaxe_1 pickaxe:latest
         docker ps
         sleep 5
         docker logs pickaxe_1
