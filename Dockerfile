@@ -10,7 +10,5 @@ RUN cp build/libs/pickaxe-server.jar ../
 RUN cp build/deps/* ../
 RUN cp build/lib/* ../
 
-ENV POSTGRES_HOST=host.docker.internal
-
 WORKDIR /home/pickaxe/
 CMD java -cp "*" ServerKt
