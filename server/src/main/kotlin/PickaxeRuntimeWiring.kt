@@ -1,4 +1,5 @@
 import db.PickaxeDB
+import db.UserPickDataQueryFetcher
 import db.UserQuery
 import graphql.schema.DataFetcher
 import graphql.schema.StaticDataFetcher

@@ -8,8 +8,8 @@ class UserPicksDTO(var user: UserDTO) {
     var picks: ArrayList<PickDTO> = ArrayList(3)
 
     init {
-        picks.add(PickDTO("GB@CHI", "CHI"))
-        picks.add(PickDTO("BUF@NE", "BUF"))
-        picks.add(PickDTO("SEA@PHI", "SEA"))
+//        picks.add(PickDTO("GB@CHI", "CHI"))
+//        picks.add(PickDTO("BUF@NE", "BUF"))
+//        picks.add(PickDTO("SEA@PHI", "SEA"))
     }
 }

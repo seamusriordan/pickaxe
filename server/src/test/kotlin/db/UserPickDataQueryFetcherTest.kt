@@ -1,3 +1,5 @@
+package db
+
 import dto.PickDTO
 import dto.UserDTO
 import dto.UserPicksDTO
@@ -37,25 +39,18 @@ class UserPickDataQueryFetcherTest {
     fun getReturnsUserPicksWithOneUserAndOnePickForWeekWithWeek0() {
         val expectedPicks: ArrayList<UserPicksDTO> = ArrayList(1)
         expectedPicks.add(UserPicksDTO(UserDTO("Seamus")))
-        expectedPicks[0].picks.clear()
         expectedPicks[0].picks.add(PickDTO("GB@CHI", "CHI"))
-
-        val arguments = HashMap<String, Any>()
-        arguments["week"] = 0
-
-        val localEnv = DataFetchingEnvironmentImpl
-            .newDataFetchingEnvironment()
-            .arguments(arguments)
-            .build()
 
         val mockResultSet = mockkClass(ResultSet::class)
         every { mockResultSet.next() } returns true andThen false
-        every { mockResultSet.getString("name") } returns expectedPicks[0].user.name
-        every { mockResultSet.getString("game") } returns expectedPicks[0].picks[0].game
-        every { mockResultSet.getString("pick") } returns expectedPicks[0].picks[0].pick
-        every { mockStatement.executeQuery("SELECT name, game, pick FROM userpicks WHERE week = 0") } returns mockResultSet
+        setupResultMockForOneUserOnePick(mockResultSet, expectedPicks)
+        setupMockForQueryWithWeek(mockResultSet, 0)
+        val arguments = HashMap<String, Any>().apply {
+            set("week", 0)
+        }
+        val env = setupEnvForArguments(arguments)
 
-        val results = UserPickDataQueryFetcher(mockConnection).get(localEnv)
+        val results = UserPickDataQueryFetcher(mockConnection).get(env)
 
         assertEquals(expectedPicks.map { x -> x.user.name }, results.map { x -> x.user.name })
         assertEquals(expectedPicks[0].picks.map { x -> x.game }, results[0].picks.map { x -> x.game })
@@ -66,28 +61,20 @@ class UserPickDataQueryFetcherTest {
     fun getReturnsUserPicksWithTwoUsersAndOnePickForWeekWithWeek0() {
         val expectedPicks: ArrayList<UserPicksDTO> = ArrayList(1)
         expectedPicks.add(UserPicksDTO(UserDTO("Seamus")))
-        expectedPicks[0].picks.clear()
         expectedPicks[0].picks.add(PickDTO("GB@CHI", "CHI"))
         expectedPicks.add(UserPicksDTO(UserDTO("Sereres")))
-        expectedPicks[1].picks.clear()
         expectedPicks[1].picks.add(PickDTO("SEA@PHI", "PHI"))
 
-        val arguments = HashMap<String, Any>()
-        arguments["week"] = 0
-
-        val localEnv = DataFetchingEnvironmentImpl
-            .newDataFetchingEnvironment()
-            .arguments(arguments)
-            .build()
-
         val mockResultSet = mockkClass(ResultSet::class)
-        every { mockResultSet.next() } returns true andThen true andThen false
-        every { mockResultSet.getString("name") } returns expectedPicks[0].user.name andThen expectedPicks[1].user.name
-        every { mockResultSet.getString("game") } returns expectedPicks[0].picks[0].game andThen expectedPicks[1].picks[0].game
-        every { mockResultSet.getString("pick") } returns expectedPicks[0].picks[0].pick andThen expectedPicks[1].picks[0].pick
-        every { mockStatement.executeQuery("SELECT name, game, pick FROM userpicks WHERE week = 0") } returns mockResultSet
+        setMockResultsForTwoUsersOnePick(mockResultSet, expectedPicks)
+        setupMockForQueryWithWeek(mockResultSet, 0)
+        val arguments = HashMap<String, Any>().apply {
+            set("week", 0)
+        }
+        val env = setupEnvForArguments(arguments)
 
-        val results = UserPickDataQueryFetcher(mockConnection).get(localEnv)
+
+        val results = UserPickDataQueryFetcher(mockConnection).get(env)
 
         assertEquals(expectedPicks.map { x -> x.user.name }, results.map { x -> x.user.name })
         assertEquals(expectedPicks[0].picks.map { x -> x.game }, results[0].picks.map { x -> x.game })
@@ -96,62 +83,93 @@ class UserPickDataQueryFetcherTest {
         assertEquals(expectedPicks[1].picks.map { x -> x.pick }, results[1].picks.map { x -> x.pick })
     }
 
+
     @Test
     fun getReturnsUserPicksWithOneUserAndTwoPicksForWeekWithWeek0() {
         val expectedPicks: ArrayList<UserPicksDTO> = ArrayList(1)
         expectedPicks.add(UserPicksDTO(UserDTO("Seamus")))
-        expectedPicks[0].picks.clear()
         expectedPicks[0].picks.add(PickDTO("GB@CHI", "CHI"))
         expectedPicks[0].picks.add(PickDTO("SEA@PHI", "PHI"))
 
-        val arguments = HashMap<String, Any>()
-        arguments["week"] = 0
-
-        val localEnv = DataFetchingEnvironmentImpl
-            .newDataFetchingEnvironment()
-            .arguments(arguments)
-            .build()
-
         val mockResultSet = mockkClass(ResultSet::class)
-        every { mockResultSet.next() } returns true andThen true andThen false
-        every { mockResultSet.getString("name") } returns expectedPicks[0].user.name
-        every { mockResultSet.getString("game") } returns expectedPicks[0].picks[0].game andThen expectedPicks[0].picks[1].game
-        every { mockResultSet.getString("pick") } returns expectedPicks[0].picks[0].pick andThen expectedPicks[0].picks[1].pick
-        every { mockStatement.executeQuery("SELECT name, game, pick FROM userpicks WHERE week = 0") } returns mockResultSet
+        setMockResultsForOneUserTwoPicks(mockResultSet, expectedPicks)
+        setupMockForQueryWithWeek(mockResultSet, 0)
+        val arguments = HashMap<String, Any>().apply {
+            set("week", 0)
+        }
+        val env = setupEnvForArguments(arguments)
 
-        val results = UserPickDataQueryFetcher(mockConnection).get(localEnv)
+
+        val results = UserPickDataQueryFetcher(mockConnection).get(env)
 
         assertEquals(expectedPicks.map { x -> x.user.name }, results.map { x -> x.user.name })
         assertEquals(expectedPicks[0].picks.map { x -> x.game }, results[0].picks.map { x -> x.game })
         assertEquals(expectedPicks[0].picks.map { x -> x.pick }, results[0].picks.map { x -> x.pick })
     }
+
+    private fun setupMockForQueryWithWeek(mockResultSet: ResultSet, week: Int) {
+        every { mockStatement.executeQuery("SELECT name, game, pick FROM userpicks WHERE week = $week") } returns mockResultSet
+    }
+
 
     @Test
     fun getReturnsUserPicksWithOneUserAndOnePickForWeekWithWeek7() {
         val expectedPicks: ArrayList<UserPicksDTO> = ArrayList(1)
         expectedPicks.add(UserPicksDTO(UserDTO("Seamus")))
-        expectedPicks[0].picks.clear()
         expectedPicks[0].picks.add(PickDTO("GB@CHI", "CHI"))
-
-        val arguments = HashMap<String, Any>()
-        arguments["week"] = 7
-
-        val localEnv = DataFetchingEnvironmentImpl
-            .newDataFetchingEnvironment()
-            .arguments(arguments)
-            .build()
 
         val mockResultSet = mockkClass(ResultSet::class)
         every { mockResultSet.next() } returns true andThen false
-        every { mockResultSet.getString("name") } returns expectedPicks[0].user.name
-        every { mockResultSet.getString("game") } returns expectedPicks[0].picks[0].game
-        every { mockResultSet.getString("pick") } returns expectedPicks[0].picks[0].pick
-        every { mockStatement.executeQuery("SELECT name, game, pick FROM userpicks WHERE week = 7") } returns mockResultSet
+        setupResultMockForOneUserOnePick(mockResultSet, expectedPicks)
+        setupMockForQueryWithWeek(mockResultSet, 7)
+        val arguments = HashMap<String, Any>().apply {
+            set("week", 7)
+        }
+        val env = setupEnvForArguments(arguments)
 
-        val results = UserPickDataQueryFetcher(mockConnection).get(localEnv)
+        val results = UserPickDataQueryFetcher(mockConnection).get(env)
 
         assertEquals(expectedPicks.map { x -> x.user.name }, results.map { x -> x.user.name })
         assertEquals(expectedPicks[0].picks.map { x -> x.game }, results[0].picks.map { x -> x.game })
         assertEquals(expectedPicks[0].picks.map { x -> x.pick }, results[0].picks.map { x -> x.pick })
     }
+
+    private fun setupEnvForArguments(arguments: HashMap<String, Any>): DataFetchingEnvironment {
+        return DataFetchingEnvironmentImpl
+            .newDataFetchingEnvironment()
+            .arguments(arguments)
+            .build()
+    }
+
+    private fun setupResultMockForOneUserOnePick(
+        mockResultSet: ResultSet,
+        expectedPicks: ArrayList<UserPicksDTO>
+    ) {
+        every { mockResultSet.getString("name") } returns expectedPicks[0].user.name
+        every { mockResultSet.getString("game") } returns expectedPicks[0].picks[0].game
+        every { mockResultSet.getString("pick") } returns expectedPicks[0].picks[0].pick
+    }
+
+    private fun setMockResultsForTwoUsersOnePick(
+        mockResultSet: ResultSet,
+        expectedPicks: ArrayList<UserPicksDTO>
+    ) {
+        every { mockResultSet.next() } returns true andThen true andThen false
+        every { mockResultSet.getString("name") } returns expectedPicks[0].user.name andThen expectedPicks[1].user.name
+        every { mockResultSet.getString("game") } returns expectedPicks[0].picks[0].game andThen expectedPicks[1].picks[0].game
+        every { mockResultSet.getString("pick") } returns expectedPicks[0].picks[0].pick andThen expectedPicks[1].picks[0].pick
+    }
+
+
+    private fun setMockResultsForOneUserTwoPicks(
+        mockResultSet: ResultSet,
+        expectedPicks: ArrayList<UserPicksDTO>
+    ) {
+        every { mockResultSet.next() } returns true andThen true andThen false
+        every { mockResultSet.getString("name") } returns expectedPicks[0].user.name
+        every { mockResultSet.getString("game") } returns expectedPicks[0].picks[0].game andThen expectedPicks[0].picks[1].game
+        every { mockResultSet.getString("pick") } returns expectedPicks[0].picks[0].pick andThen expectedPicks[0].picks[1].pick
+    }
 }
+
+
