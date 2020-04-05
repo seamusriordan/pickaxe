@@ -1,30 +1,12 @@
 package db
 
 import UserDTO
-import java.sql.DriverManager
-import java.util.*
+import java.sql.Connection
 import kotlin.collections.ArrayList
 
-class UserQuery {
+class UserQuery(private val connection: Connection) {
     fun getActiveUsers(): ArrayList<UserDTO> {
-        val properties = Properties().apply {
-            put("user", "postgres")
-            put("password", "pword")
-        }
-
-        var port = System.getenv("POSTGRES_PORT")
-        if (port == null) {
-            port = "5432"
-        }
-
-        var host = "postgres"
-        if (System.getenv("POSTGRES_HOST") != null) {
-            host = System.getenv("POSTGRES_HOST")
-        }
-
-        val connect = DriverManager.getConnection("jdbc:postgresql://$host:$port/pickaxe_dev", properties)
-
-        val statement = connect.createStatement()
+        val statement = connection.createStatement()
 
         val resultSet = statement.executeQuery("SELECT name FROM users WHERE active = TRUE")
 
@@ -36,4 +18,6 @@ class UserQuery {
 
         return results
     }
+
+
 }

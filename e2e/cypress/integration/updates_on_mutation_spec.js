@@ -11,10 +11,12 @@ describe('Mutation response update', () => {
             .contains("SEA");
 
         cy.request('POST', 'localhost:8080/pickaxe/graphql', graphqlMutateBody)
+            .visit('localhost:8080/pickaxe')
             .get('#Seamus-SEA\\@PHI')
             .contains("DERP",  {timeout: 10000});
 
         cy.request('POST', 'localhost:8080/pickaxe/graphql', graphqlRevertBody)
+            .visit('localhost:8080/pickaxe')
             .get('#Seamus-SEA\\@PHI')
             .contains("SEA",  {timeout: 10000});
     });

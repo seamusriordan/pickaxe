@@ -1,3 +1,4 @@
+import db.PickaxeDB
 import db.UserQuery
 import graphql.schema.DataFetcher
 import graphql.schema.StaticDataFetcher
@@ -8,7 +9,7 @@ fun wiringMap(): HashMap<String, HashMap<String, DataFetcher<Any>>> {
     val queryFields: HashMap<String, DataFetcher<Any>> = HashMap()
     val mutationFields: HashMap<String, DataFetcher<Any>> = HashMap()
 
-    val usersList = UserQuery().getActiveUsers()
+    val usersList = UserQuery(PickaxeDB().getDBConnection()).getActiveUsers()
     queryFields["users"] = StaticDataFetcher(usersList)
 
     val gamesList = defaultGamesList()
