@@ -42,6 +42,13 @@ jobs:
       working-directory: ./client
       run: gradle test
 
+    - name: Start auxiliary servers
+      working-directory: ./
+      run: |
+        docker-compose up --build -d
+        sleep 5
+        docker logs pickaxe_postgres_1
+
     - name: Server test and build jar
       working-directory: ./server
       run: gradle build
@@ -52,8 +59,11 @@ jobs:
 
     - name: Build and start docker image
       run: |
-        docker build . -f Dockerfile.from_jar -t pickaxe:latest
-        docker run -d -p 8080:8080 pickaxe:latest
+        docker build . -f e2e/Dockerfile -t pickaxe:latest
+        docker run -d -p 8080:8080 --net=pickaxe_default --name pickaxe_1 pickaxe:latest
+        docker ps
+        sleep 5
+        docker logs pickaxe_1
 
     - name: Integration tests
       working-directory: ./e2e

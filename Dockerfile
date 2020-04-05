@@ -8,6 +8,9 @@ RUN ./gradlew build
 RUN ./gradlew copy_dependencies
 RUN cp build/libs/pickaxe-server.jar ../
 RUN cp build/deps/* ../
+RUN cp build/lib/* ../
+
+ENV POSTGRES_HOST=postgres
 
 WORKDIR /home/pickaxe/
 CMD java -cp "*" ServerKt
