@@ -1,8 +1,5 @@
 package dto
 
-import dto.PickDTO
-import dto.UserDTO
-import dto.UserPicksDTO
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
@@ -11,10 +8,7 @@ class UserPicksDTOTest {
     fun hasUserAndPickListAndTotal() {
         val userPicks = UserPicksDTO(UserDTO("Some dude"))
 
-        val picks: List<PickDTO> = userPicks.picks
-
         assertEquals(userPicks.user.name, "Some dude")
-        assertEquals(3, picks.size)
         assertEquals(0, userPicks.total)
     }
 }

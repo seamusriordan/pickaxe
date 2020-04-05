@@ -24,7 +24,6 @@ class UserPickDataQueryFetcherTest {
 
     @BeforeEach
     fun setup() {
-
         mockkStatic("java.sql.DriverManager")
         mockConnection = mockkClass(Connection::class)
         mockStatement = mockkClass(Statement::class)

@@ -16,13 +16,9 @@ fun wiringMap(): HashMap<String, HashMap<String, DataFetcher<*>>> {
     val gamesList = defaultGamesList()
     queryFields["games"] = StaticDataFetcher(gamesList)
 
-    val userPicksList = defaultPicksForUsers(defaultUserList())
-
-    val userPickStore = defaultWeek0PickStore(userPicksList)
-
     queryFields["userPicks"] = UserPickDataQueryFetcher(connection)
 
-    mutationFields["updatePick"] = UpdatePickMutator(userPickStore)
+    mutationFields["updatePick"] = UpdatePickMutator(connection)
 
     wiringMap["Query"] = queryFields
     wiringMap["Mutation"] = mutationFields
