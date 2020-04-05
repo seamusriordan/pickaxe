@@ -5,13 +5,28 @@ import graphql.schema.DataFetcher
 import graphql.schema.DataFetchingEnvironment
 import java.sql.Connection
 
-class UserPickDataQueryFetcher(connection: Connection) : DataFetcher<List<UserPicksDTO>> {
+class UserPickDataQueryFetcher(private val connection: Connection) : DataFetcher<List<UserPicksDTO>> {
     override fun get(environment: DataFetchingEnvironment): List<UserPicksDTO> {
-        val expectedPicks: ArrayList<UserPicksDTO> = ArrayList(1)
-        expectedPicks.add(UserPicksDTO(UserDTO("Seamus")))
-        expectedPicks[0].picks.clear()
-        expectedPicks[0].picks.add(PickDTO("GB@CHI", "CHI"))
+        val statement = connection.createStatement()
+        val week = environment.arguments["week"]
 
-        return expectedPicks
+        val resultSet = statement.executeQuery("SELECT name, game, pick FROM userpicks WHERE week = $week")
+
+        val results = ArrayList<UserPicksDTO>(0)
+
+        while (resultSet.next()) {
+            val name = resultSet.getString("name")
+            var result = results.find {
+                it.user.name.contains(name)
+            }
+            if( result == null ) {
+                result = UserPicksDTO(UserDTO(name))
+                result.picks.clear()
+                results.add(result)
+            }
+            result.picks.add(PickDTO(resultSet.getString("game"), resultSet.getString("pick")))
+        }
+
+        return results
     }
 }
