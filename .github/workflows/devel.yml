@@ -46,6 +46,7 @@ jobs:
       working-directory: ./
       run: |
         docker-compose up --build -d
+        sleep 5
         docker logs pickaxe_postgres_1
 
     - name: Server test and build jar
@@ -59,7 +60,7 @@ jobs:
     - name: Build and start docker image
       run: |
         docker build . -f e2e/Dockerfile -t pickaxe:latest
-        docker run -d -p 8080:8080 pickaxe:latest --name pickaxe_1
+        docker run -d -p 8080:8080  --name pickaxe_1 pickaxe:latest
         docker logs pickaxe_1
 
     - name: Integration tests
