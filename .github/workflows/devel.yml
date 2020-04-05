@@ -42,6 +42,10 @@ jobs:
       working-directory: ./client
       run: gradle test
 
+    - name: Start auxiliary servers
+      working-directory: ./
+      run: docker-compose up --build
+
     - name: Server test and build jar
       working-directory: ./server
       run: gradle build
