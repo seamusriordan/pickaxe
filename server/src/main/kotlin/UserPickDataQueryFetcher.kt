@@ -1,3 +1,4 @@
+import dto.UserPicksDTO
 import graphql.schema.DataFetcher
 import graphql.schema.DataFetchingEnvironment
 

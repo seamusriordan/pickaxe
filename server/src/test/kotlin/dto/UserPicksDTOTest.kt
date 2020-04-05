@@ -1,3 +1,8 @@
+package dto
+
+import dto.PickDTO
+import dto.UserDTO
+import dto.UserPicksDTO
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 

@@ -1,3 +1,5 @@
+import dto.UserDTO
+import dto.UserPicksDTO
 import graphql.schema.DataFetchingEnvironmentImpl
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach

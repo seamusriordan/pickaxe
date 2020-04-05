@@ -1,3 +1,6 @@
+package dto
+
+import dto.PickDTO
 import org.junit.jupiter.api.Test
 
 class PickDTOTest {

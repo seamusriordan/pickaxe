@@ -1,3 +1,6 @@
+package dto
+
+import dto.GameDTO
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 

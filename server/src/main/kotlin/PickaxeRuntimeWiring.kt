@@ -4,26 +4,24 @@ import graphql.schema.DataFetcher
 import graphql.schema.StaticDataFetcher
 import graphql.schema.idl.RuntimeWiring
 
-fun wiringMap(): HashMap<String, HashMap<String, DataFetcher<Any>>> {
-    val wiringMap: HashMap<String, HashMap<String, DataFetcher<Any>>> = HashMap()
-    val queryFields: HashMap<String, DataFetcher<Any>> = HashMap()
-    val mutationFields: HashMap<String, DataFetcher<Any>> = HashMap()
+fun wiringMap(): HashMap<String, HashMap<String, DataFetcher<*>>> {
+    val wiringMap: HashMap<String, HashMap<String, DataFetcher<*>>> = HashMap()
+    val queryFields: HashMap<String, DataFetcher<*>> = HashMap()
+    val mutationFields: HashMap<String, DataFetcher<*>> = HashMap()
 
-    val usersList = UserQuery(PickaxeDB().getDBConnection()).getActiveUsers()
-    queryFields["users"] = StaticDataFetcher(usersList)
+    val connection = PickaxeDB().getDBConnection()
+    queryFields["users"] = UserQuery(connection)
 
     val gamesList = defaultGamesList()
     queryFields["games"] = StaticDataFetcher(gamesList)
 
-    val userPicksList = defaultPicksForUsers(usersList)
+    val userPicksList = defaultPicksForUsers(defaultUserList())
 
     val userPickStore = defaultWeek0PickStore(userPicksList)
 
-    @Suppress("UNCHECKED_CAST")
-    queryFields["userPicks"] = UserPickDataQueryFetcher(userPickStore) as DataFetcher<Any>
+    queryFields["userPicks"] = UserPickDataQueryFetcher(userPickStore)
 
-    @Suppress("UNCHECKED_CAST")
-    mutationFields["updatePick"] = UpdatePickMutator(userPickStore) as DataFetcher<Any>
+    mutationFields["updatePick"] = UpdatePickMutator(userPickStore)
 
     wiringMap["Query"] = queryFields
     wiringMap["Mutation"] = mutationFields
@@ -35,7 +33,7 @@ fun pickaxeRuntimeWiring(): RuntimeWiring {
     return generateRuntimeWiring(wiringMap)
 }
 
-fun generateRuntimeWiring(wiringMap: HashMap<String, HashMap<String, DataFetcher<Any>>>): RuntimeWiring {
+fun generateRuntimeWiring(wiringMap: HashMap<String, HashMap<String, DataFetcher<*>>>): RuntimeWiring {
     val runtimeBuilder = RuntimeWiring.newRuntimeWiring()
 
     wiringMap.map { (rootName, fieldMap) ->
@@ -48,7 +46,7 @@ fun generateRuntimeWiring(wiringMap: HashMap<String, HashMap<String, DataFetcher
 private fun generateWiringForFields(
     runtimeBuilder: RuntimeWiring.Builder,
     rootName: String,
-    fieldMap: java.util.HashMap<String, DataFetcher<Any>>
+    fieldMap: java.util.HashMap<String, DataFetcher<*>>
 ) {
     fieldMap.map { (field, fetcher) ->
         runtimeBuilder.type(rootName) {
