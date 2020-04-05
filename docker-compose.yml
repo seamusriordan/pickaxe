@@ -1,0 +1,13 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:latest
+    volumes:
+      - postgres-dev-data:/var/lib/postgresql/data
+    ports:
+      - 54320:5432
+    environment:
+      - POSTGRES_PASSWORD=pword
+
+volumes:
+  postgres-dev-data:

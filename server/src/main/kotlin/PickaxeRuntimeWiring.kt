@@ -1,3 +1,4 @@
+import db.UserQuery
 import graphql.schema.DataFetcher
 import graphql.schema.StaticDataFetcher
 import graphql.schema.idl.RuntimeWiring
@@ -7,7 +8,7 @@ fun wiringMap(): HashMap<String, HashMap<String, DataFetcher<Any>>> {
     val queryFields: HashMap<String, DataFetcher<Any>> = HashMap()
     val mutationFields: HashMap<String, DataFetcher<Any>> = HashMap()
 
-    val usersList = defaultUserList()
+    val usersList = UserQuery().getActiveUsers()
     queryFields["users"] = StaticDataFetcher(usersList)
 
     val gamesList = defaultGamesList()
