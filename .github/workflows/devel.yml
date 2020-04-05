@@ -52,7 +52,7 @@ jobs:
 
     - name: Build and start docker image
       run: |
-        docker build . -f Dockerfile.from_jar -t pickaxe:latest
+        docker build . -f e2e/Dockerfile -t pickaxe:latest
         docker run -d -p 8080:8080 pickaxe:latest
 
     - name: Integration tests

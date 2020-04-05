@@ -8,11 +8,21 @@ import kotlin.collections.ArrayList
 class UserQuery {
     fun getActiveUsers(): ArrayList<UserDTO> {
         val properties = Properties().apply {
-            put("user", "pickaxe")
-            put("password", "a_password")
+            put("user", "postgres")
+            put("password", "pword")
         }
 
-        val connect = DriverManager.getConnection("jdbc:postgresql://localhost:54320/pickaxe_dev", properties)
+        var port = System.getenv("POSTGRES_PORT")
+        if( port == null ) {
+            port = "54320"
+        }
+
+        var host = System.getenv("POSTGRES_HOST")
+        if( host == null ) {
+            host = "localhost"
+        }
+
+        val connect = DriverManager.getConnection("jdbc:postgresql://$host:$port/pickaxe_dev", properties)
 
         val statement = connect.createStatement()
 

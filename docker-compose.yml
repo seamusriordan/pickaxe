@@ -1,7 +1,8 @@
 version: '3'
 services:
   postgres:
-    image: postgres:latest
+    build:
+      context: test_servers/postgres/
     volumes:
       - postgres-dev-data:/var/lib/postgresql/data
     ports:
