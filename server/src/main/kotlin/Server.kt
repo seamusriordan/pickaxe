@@ -26,7 +26,11 @@ fun main(args: Array<String>) {
     addGraphQLOptionServe(server)
     addNotificationWebSocket(server, wsContexts)
 
-    server.start(8080)
+    var port = System.getenv("PICKAXE_PORT")
+    if(port == null) {
+        port = "8080"
+    }
+    server.start(port.toInt())
 }
 
 fun generateGraphQLFromRegistryAndWiring(registry: TypeDefinitionRegistry, wiring: RuntimeWiring): GraphQL {
