@@ -5,6 +5,7 @@ import dto.UserDTO
 import dto.UserPicksDTO
 import graphql.schema.DataFetchingEnvironment
 import graphql.schema.DataFetchingEnvironmentImpl
+import io.mockk.MockKAdditionalAnswerScope
 import io.mockk.every
 import io.mockk.mockkClass
 import io.mockk.mockkStatic
@@ -37,18 +38,30 @@ class UserPickDataQueryFetcherTest {
 
     @Test
     fun getReturnsUserPicksWithOneUserAndOnePickForWeekWithWeek0() {
+        val week = 0
         val expectedPicks: ArrayList<UserPicksDTO> = ArrayList(1)
         expectedPicks.add(UserPicksDTO(UserDTO("Seamus")))
         expectedPicks[0].picks.add(PickDTO("GB@CHI", "CHI"))
 
-        val mockResultSet = mockkClass(ResultSet::class)
-        every { mockResultSet.next() } returns true andThen false
-        setupResultMockForOneUserOnePick(mockResultSet, expectedPicks)
-        setupMockForQueryWithWeek(mockResultSet, 0)
-        val arguments = HashMap<String, Any>().apply {
-            set("week", 0)
-        }
-        val env = setupEnvForArguments(arguments)
+        setupMocksForPicks(expectedPicks, setupResultMockForOneUserOnePick, week)
+        val env = getEnvForWeek(week)
+
+        val results = UserPickDataQueryFetcher(mockConnection).get(env)
+
+        assertEquals(expectedPicks.map { x -> x.user.name }, results.map { x -> x.user.name })
+        assertEquals(expectedPicks[0].picks.map { x -> x.game }, results[0].picks.map { x -> x.game })
+        assertEquals(expectedPicks[0].picks.map { x -> x.pick }, results[0].picks.map { x -> x.pick })
+    }
+
+    @Test
+    fun getReturnsUserPicksWithOneUserAndOnePickForWeekWithWeek7() {
+        val week = 7
+        val expectedPicks: ArrayList<UserPicksDTO> = ArrayList(1)
+        expectedPicks.add(UserPicksDTO(UserDTO("Seamus")))
+        expectedPicks[0].picks.add(PickDTO("GB@CHI", "CHI"))
+
+        setupMocksForPicks(expectedPicks, setupResultMockForOneUserOnePick, week)
+        val env = getEnvForWeek(week)
 
         val results = UserPickDataQueryFetcher(mockConnection).get(env)
 
@@ -59,20 +72,15 @@ class UserPickDataQueryFetcherTest {
 
     @Test
     fun getReturnsUserPicksWithTwoUsersAndOnePickForWeekWithWeek0() {
+        val week = 0
         val expectedPicks: ArrayList<UserPicksDTO> = ArrayList(1)
         expectedPicks.add(UserPicksDTO(UserDTO("Seamus")))
         expectedPicks[0].picks.add(PickDTO("GB@CHI", "CHI"))
         expectedPicks.add(UserPicksDTO(UserDTO("Sereres")))
         expectedPicks[1].picks.add(PickDTO("SEA@PHI", "PHI"))
 
-        val mockResultSet = mockkClass(ResultSet::class)
-        setMockResultsForTwoUsersOnePick(mockResultSet, expectedPicks)
-        setupMockForQueryWithWeek(mockResultSet, 0)
-        val arguments = HashMap<String, Any>().apply {
-            set("week", 0)
-        }
-        val env = setupEnvForArguments(arguments)
-
+        setupMocksForPicks(expectedPicks, setMockResultsForTwoUsersOnePick, week)
+        val env = getEnvForWeek(week)
 
         val results = UserPickDataQueryFetcher(mockConnection).get(env)
 
@@ -86,25 +94,28 @@ class UserPickDataQueryFetcherTest {
 
     @Test
     fun getReturnsUserPicksWithOneUserAndTwoPicksForWeekWithWeek0() {
+        val week = 0
         val expectedPicks: ArrayList<UserPicksDTO> = ArrayList(1)
         expectedPicks.add(UserPicksDTO(UserDTO("Seamus")))
         expectedPicks[0].picks.add(PickDTO("GB@CHI", "CHI"))
         expectedPicks[0].picks.add(PickDTO("SEA@PHI", "PHI"))
 
-        val mockResultSet = mockkClass(ResultSet::class)
-        setMockResultsForOneUserTwoPicks(mockResultSet, expectedPicks)
-        setupMockForQueryWithWeek(mockResultSet, 0)
-        val arguments = HashMap<String, Any>().apply {
-            set("week", 0)
-        }
-        val env = setupEnvForArguments(arguments)
-
+        setupMocksForPicks(expectedPicks, setMockResultsForOneUserTwoPicks, week)
+        val env = getEnvForWeek(week)
 
         val results = UserPickDataQueryFetcher(mockConnection).get(env)
 
         assertEquals(expectedPicks.map { x -> x.user.name }, results.map { x -> x.user.name })
         assertEquals(expectedPicks[0].picks.map { x -> x.game }, results[0].picks.map { x -> x.game })
         assertEquals(expectedPicks[0].picks.map { x -> x.pick }, results[0].picks.map { x -> x.pick })
+    }
+
+    private fun getEnvForWeek(week: Int): DataFetchingEnvironment {
+        val arguments = HashMap<String, Any>().apply {
+            set("week", week)
+        }
+        val env = setupEnvForArguments(arguments)
+        return env
     }
 
     private fun setupMockForQueryWithWeek(mockResultSet: ResultSet, week: Int) {
@@ -112,26 +123,15 @@ class UserPickDataQueryFetcherTest {
     }
 
 
-    @Test
-    fun getReturnsUserPicksWithOneUserAndOnePickForWeekWithWeek7() {
-        val expectedPicks: ArrayList<UserPicksDTO> = ArrayList(1)
-        expectedPicks.add(UserPicksDTO(UserDTO("Seamus")))
-        expectedPicks[0].picks.add(PickDTO("GB@CHI", "CHI"))
-
+    private fun setupMocksForPicks(
+        expectedPicks: ArrayList<UserPicksDTO>,
+        mockSetter: (ResultSet, ArrayList<UserPicksDTO>) -> MockKAdditionalAnswerScope<String, String>,
+        week: Int
+    ) {
         val mockResultSet = mockkClass(ResultSet::class)
         every { mockResultSet.next() } returns true andThen false
-        setupResultMockForOneUserOnePick(mockResultSet, expectedPicks)
-        setupMockForQueryWithWeek(mockResultSet, 7)
-        val arguments = HashMap<String, Any>().apply {
-            set("week", 7)
-        }
-        val env = setupEnvForArguments(arguments)
-
-        val results = UserPickDataQueryFetcher(mockConnection).get(env)
-
-        assertEquals(expectedPicks.map { x -> x.user.name }, results.map { x -> x.user.name })
-        assertEquals(expectedPicks[0].picks.map { x -> x.game }, results[0].picks.map { x -> x.game })
-        assertEquals(expectedPicks[0].picks.map { x -> x.pick }, results[0].picks.map { x -> x.pick })
+        mockSetter(mockResultSet, expectedPicks)
+        setupMockForQueryWithWeek(mockResultSet, week)
     }
 
     private fun setupEnvForArguments(arguments: HashMap<String, Any>): DataFetchingEnvironment {
@@ -141,30 +141,26 @@ class UserPickDataQueryFetcherTest {
             .build()
     }
 
-    private fun setupResultMockForOneUserOnePick(
-        mockResultSet: ResultSet,
-        expectedPicks: ArrayList<UserPicksDTO>
-    ) {
+    private val setupResultMockForOneUserOnePick = { mockResultSet: ResultSet,
+                                                     expectedPicks: ArrayList<UserPicksDTO>
+        ->
         every { mockResultSet.getString("name") } returns expectedPicks[0].user.name
         every { mockResultSet.getString("game") } returns expectedPicks[0].picks[0].game
         every { mockResultSet.getString("pick") } returns expectedPicks[0].picks[0].pick
     }
 
-    private fun setMockResultsForTwoUsersOnePick(
-        mockResultSet: ResultSet,
-        expectedPicks: ArrayList<UserPicksDTO>
-    ) {
+    private var setMockResultsForTwoUsersOnePick = { mockResultSet: ResultSet,
+                                                     expectedPicks: ArrayList<UserPicksDTO>
+        ->
         every { mockResultSet.next() } returns true andThen true andThen false
         every { mockResultSet.getString("name") } returns expectedPicks[0].user.name andThen expectedPicks[1].user.name
         every { mockResultSet.getString("game") } returns expectedPicks[0].picks[0].game andThen expectedPicks[1].picks[0].game
         every { mockResultSet.getString("pick") } returns expectedPicks[0].picks[0].pick andThen expectedPicks[1].picks[0].pick
     }
 
-
-    private fun setMockResultsForOneUserTwoPicks(
-        mockResultSet: ResultSet,
-        expectedPicks: ArrayList<UserPicksDTO>
-    ) {
+    private var setMockResultsForOneUserTwoPicks = { mockResultSet: ResultSet,
+                                                     expectedPicks: ArrayList<UserPicksDTO>
+        ->
         every { mockResultSet.next() } returns true andThen true andThen false
         every { mockResultSet.getString("name") } returns expectedPicks[0].user.name
         every { mockResultSet.getString("game") } returns expectedPicks[0].picks[0].game andThen expectedPicks[0].picks[1].game
