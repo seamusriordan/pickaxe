@@ -1,10 +1,11 @@
 import WS from "jest-websocket-mock";
-import PicksGrid, {websocketPort, websocketProtocol, websocketServer, websocketUri} from "./PicksGrid";
+import PicksGrid from "./PicksGrid";
 
 import {create, act} from "react-test-renderer";
 import React from "react";
 import {useQuery, useMutation} from '@apollo/react-hooks';
 import {mockQueryData} from "../testUtilities/MockQueryData";
+import {buildWebsocketUri, getWebsocketHostname, getWebsocketPort, getWebsocketProtocol} from "../helpers";
 
 jest.mock('@apollo/react-hooks');
 
@@ -86,34 +87,34 @@ describe('Websocket behavior', () => {
         });
 
         it('websocketServer returns localhost when environment variable is not set', () => {
-            expect(websocketServer()).toEqual('localhost');
-            expect(websocketUri()).toEqual('ws://localhost:8080/pickaxe/updateNotification')
+            expect(getWebsocketHostname()).toEqual('localhost');
+            expect(buildWebsocketUri()).toEqual('ws://localhost:8080/pickaxe/updateNotification')
         });
 
         it('websocketServer returns host from environment variable', () => {
             process.env.REACT_APP_GRAPHQL_SERVER = 'someservername';
-            expect(websocketServer()).toEqual('someservername');
-            expect(websocketUri()).toEqual('ws://someservername:8080/pickaxe/updateNotification')
+            expect(getWebsocketHostname()).toEqual('someservername');
+            expect(buildWebsocketUri()).toEqual('ws://someservername:8080/pickaxe/updateNotification')
         });
 
         it('websocketPort returns 8080 when environment variable is not set', () => {
-            expect(websocketPort()).toEqual("8080")
+            expect(getWebsocketPort()).toEqual("8080")
         });
 
         it('websocketPort returns port from environment variable', () => {
             process.env.REACT_APP_GRAPHQL_PORT = "7979";
-            expect(websocketPort()).toEqual("7979");
-            expect(websocketUri()).toEqual('ws://localhost:7979/pickaxe/updateNotification');
+            expect(getWebsocketPort()).toEqual("7979");
+            expect(buildWebsocketUri()).toEqual('ws://localhost:7979/pickaxe/updateNotification');
         });
 
         it('websocketProtocol returns ws when environment variable is not set', () => {
-            expect(websocketProtocol()).toEqual("ws")
+            expect(getWebsocketProtocol()).toEqual("ws")
         });
 
         it('websocketProtocol returns wss from environment variable', () => {
             process.env.REACT_APP_GRAPHQL_HTTPS = 1;
-            expect(websocketProtocol()).toEqual("wss");
-            expect(websocketUri()).toEqual('wss://localhost:8080/pickaxe/updateNotification')
+            expect(getWebsocketProtocol()).toEqual("wss");
+            expect(buildWebsocketUri()).toEqual('wss://localhost:8080/pickaxe/updateNotification')
         });
     });
 });
