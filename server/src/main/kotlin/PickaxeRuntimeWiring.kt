@@ -1,7 +1,4 @@
-import db.PickaxeDB
-import db.UpdatePickMutator
-import db.UserPickDataQueryFetcher
-import db.UserQuery
+import db.*
 import graphql.schema.DataFetcher
 import graphql.schema.StaticDataFetcher
 import graphql.schema.idl.RuntimeWiring
@@ -14,8 +11,7 @@ fun wiringMap(): HashMap<String, HashMap<String, DataFetcher<*>>> {
     val connection = PickaxeDB().getDBConnection()
     queryFields["users"] = UserQuery(connection)
 
-    val gamesList = defaultGamesList()
-    queryFields["games"] = StaticDataFetcher(gamesList)
+    queryFields["games"] = GamesQuery(connection)
 
     queryFields["userPicks"] = UserPickDataQueryFetcher(connection)
 
