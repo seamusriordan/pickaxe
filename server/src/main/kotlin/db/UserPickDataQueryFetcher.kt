@@ -11,9 +11,9 @@ import java.sql.ResultSet
 class UserPickDataQueryFetcher(private val connection: Connection) : DataFetcher<List<UserPicksDTO>> {
     override fun get(environment: DataFetchingEnvironment): List<UserPicksDTO> {
         val statement = connection.createStatement()
-        val week = environment.arguments["week"]
+        val week = environment.arguments["week"] as String
 
-        val queryString = "SELECT name, game, pick FROM userpicks WHERE week = $week"
+        val queryString = "SELECT name, game, pick FROM userpicks WHERE week = \'$week\'"
         val queryResult = statement.executeQuery(queryString)
 
         return buildUserPicksForQueryResult(queryResult)

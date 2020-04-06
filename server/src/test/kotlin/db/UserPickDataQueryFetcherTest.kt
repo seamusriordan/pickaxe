@@ -113,8 +113,7 @@ class UserPickDataQueryFetcherTest {
         val arguments = HashMap<String, Any>().apply {
             set("week", week)
         }
-        val env = setupEnvForArguments(arguments)
-        return env
+        return setupEnvForArguments(arguments)
     }
 
     private fun setupMockForQueryWithWeek(mockResultSet: ResultSet, week: String) {
