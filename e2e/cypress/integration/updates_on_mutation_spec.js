@@ -6,7 +6,7 @@ describe('Mutation response update', () => {
         cy.visit('localhost:8080/pickaxe');
     });
 
-    xit('mutation query causes update', () => {
+    it('mutation query causes update', () => {
             cy.get('#Seamus-SEA\\@PHI')
             .contains("SEA");
 

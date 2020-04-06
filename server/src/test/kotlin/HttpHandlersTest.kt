@@ -104,7 +104,7 @@ class HttpHandlersTest {
 
     @Test
     fun postHandlerServesQueryResponse() {
-        val mockContext = createMockContext()
+        val mockContext = createMockQueryContext()
         val resultSlot = slot<String>()
 
         postHandler(sampleGraphQL(), ArrayList(0))(mockContext)
@@ -119,7 +119,7 @@ class HttpHandlersTest {
 
     @Test
     fun postHandlerWithOneOpenContextSendsMessage() {
-        val mockContext = createMockContext()
+        val mockContext = createMockMutationContext()
 
         val wsContexts = ArrayList<WsContext>(0)
         val openWsContext = createWsContext()
@@ -130,7 +130,7 @@ class HttpHandlersTest {
         verify { openWsContext.send(any<String>()) }
     }
 
-    private fun createMockContext(): Context {
+    private fun createMockQueryContext(): Context {
         val mockContext = mockkClass(Context::class)
         every { mockContext.body() } returns idQueryBody
         every { mockContext.header(any(), any()) } returns mockContext
@@ -138,9 +138,17 @@ class HttpHandlersTest {
         return mockContext
     }
 
+    private fun createMockMutationContext(): Context {
+        val mockContext = mockkClass(Context::class)
+        every { mockContext.body() } returns mutationQueryBody0
+        every { mockContext.header(any(), any()) } returns mockContext
+        every { mockContext.result(any<String>()) } returns mockContext
+        return mockContext
+    }
+
     @Test
-    fun postHandlerWithTwoOpenContextSendsMessageToEach() {
-        val mockContext = createMockContext()
+    fun postHandlerForMutationWithTwoOpenContextSendsMessageToEach() {
+        val mockContext = createMockMutationContext()
 
         val wsContexts = ArrayList<WsContext>(0)
         val openWsContext1 = createWsContext()
@@ -152,6 +160,22 @@ class HttpHandlersTest {
 
         verify { openWsContext1.send(any<String>()) }
         verify { openWsContext2.send(any<String>()) }
+    }
+
+    @Test
+    fun postHandlerForQueryWithTwoOpenContextSendsNoMessage() {
+        val mockContext = createMockQueryContext()
+
+        val wsContexts = ArrayList<WsContext>(0)
+        val openWsContext1 = createWsContext()
+        val openWsContext2 = createWsContext()
+        wsContexts.add(openWsContext1)
+        wsContexts.add(openWsContext2)
+
+        postHandler(sampleGraphQL(), wsContexts)(mockContext)
+
+        verify(exactly = 0) { openWsContext1.send(any<String>()) }
+        verify(exactly = 0) { openWsContext2.send(any<String>()) }
     }
 
     interface FutureVoid : Future<Void>

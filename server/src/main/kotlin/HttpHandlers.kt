@@ -16,10 +16,12 @@ fun postHandler(graphQL: GraphQL, wsContexts: ArrayList<WsContext>): (Context) -
         ctx.header("Access-Control-Allow-Origin", "*")
         ctx.result(JavalinJson.toJson(executionResult.toSpecification()))
 
-        wsContexts.toMutableList().map {
-            @Suppress("SENSELESS_COMPARISON")
-            if(it.session == null || it.session.isOpen)
-            it.send("Hi")
+        if(executionInput.operationName!!.contentEquals("Mutation")){
+            wsContexts.toMutableList().map {
+                @Suppress("SENSELESS_COMPARISON")
+                if (it.session == null || it.session.isOpen)
+                    it.send("Hi")
+            }
         }
     }
 }
