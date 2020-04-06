@@ -117,7 +117,8 @@ class UserPickDataQueryFetcherTest {
     }
 
     private fun setupMockForQueryWithWeek(mockResultSet: ResultSet, week: String) {
-        every { mockStatement.executeQuery("SELECT name, game, pick FROM userpicks WHERE week = $week") } returns mockResultSet
+        val queryString = "SELECT name, game, pick FROM userpicks WHERE week = '$week'"
+        every { mockStatement.executeQuery(queryString) } returns mockResultSet
     }
 
 
@@ -127,7 +128,6 @@ class UserPickDataQueryFetcherTest {
         week: String
     ) {
         val mockResultSet = mockkClass(ResultSet::class)
-        every { mockResultSet.next() } returns true andThen false
         mockSetter(mockResultSet, expectedPicks)
         setupMockForQueryWithWeek(mockResultSet, week)
     }
@@ -142,6 +142,7 @@ class UserPickDataQueryFetcherTest {
     private val setupResultMockForOneUserOnePick = { mockResultSet: ResultSet,
                                                      expectedPicks: ArrayList<UserPicksDTO>
         ->
+        every { mockResultSet.next() } returns true andThen false
         every { mockResultSet.getString("name") } returns expectedPicks[0].user.name
         every { mockResultSet.getString("game") } returns expectedPicks[0].picks[0].game
         every { mockResultSet.getString("pick") } returns expectedPicks[0].picks[0].pick
