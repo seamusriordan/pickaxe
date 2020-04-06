@@ -45,7 +45,7 @@ class GamesQueryTest {
         every { mockResultSet.getString("result")
         } returns expectedGames[0].result
         every { mockResultSet.getFloat("spread")
-        } returns expectedGames[0].spread.toFloat()
+        } returns expectedGames[0].spread?.toFloat()!!
         every { mockResultSet.getString("week")
         } returns expectedGames[0].week
         every { mockStatement.executeQuery("SELECT game, week, result, spread FROM games WHERE week = '0'") } returns mockResultSet
@@ -54,7 +54,7 @@ class GamesQueryTest {
 
         Assertions.assertEquals(expectedGames.map { x -> x.name }, results.map { x -> x.name })
         Assertions.assertEquals(expectedGames.map { x -> x.result }, results.map { x -> x.result })
-        Assertions.assertEquals(expectedGames.map { x -> x.spread.toFloat() }, results.map { x -> x.spread })
+        Assertions.assertEquals(expectedGames.map { x -> x.spread?.toFloat() }, results.map { x -> x.spread })
         Assertions.assertEquals(expectedGames.map { x -> x.week }, results.map { x -> x.week })
     }
 
@@ -71,7 +71,7 @@ class GamesQueryTest {
         every { mockResultSet.getString("result")
         } returns expectedGames[0].result andThen expectedGames[1].result
         every { mockResultSet.getFloat("spread")
-        } returns expectedGames[0].spread.toFloat() andThen expectedGames[1].spread.toFloat()
+        } returns expectedGames[0].spread?.toFloat()!! andThen expectedGames[1].spread?.toFloat()!!
         every { mockResultSet.getString("week")
         } returns expectedGames[0].week andThen expectedGames[1].week
         every { mockStatement.executeQuery("SELECT game, week, result, spread FROM games WHERE week = '0'") } returns mockResultSet
@@ -80,7 +80,7 @@ class GamesQueryTest {
 
         Assertions.assertEquals(expectedGames.map { x -> x.name }, results.map { x -> x.name })
         Assertions.assertEquals(expectedGames.map { x -> x.result }, results.map { x -> x.result })
-        Assertions.assertEquals(expectedGames.map { x -> x.spread.toFloat() }, results.map { x -> x.spread })
+        Assertions.assertEquals(expectedGames.map { x -> x.spread?.toFloat() }, results.map { x -> x.spread })
         Assertions.assertEquals(expectedGames.map { x -> x.week }, results.map { x -> x.week })
     }
 
