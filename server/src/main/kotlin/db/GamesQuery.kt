@@ -16,7 +16,13 @@ class GamesQuery(private val connection: Connection): DataFetcher<List<GameDTO>>
         while (resultSet.next()) {
             val game = GameDTO(resultSet.getString("game"), resultSet.getString("week"))
             game.result = resultSet.getString("result")
-            game.spread = resultSet.getFloat("spread")
+            if(resultSet.wasNull()){
+                game.result = null
+            }
+            game.spread = resultSet.getDouble("spread")
+            if(resultSet.wasNull()){
+                game.spread = null
+            }
             results.add(game)
         }
 

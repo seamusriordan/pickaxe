@@ -44,18 +44,65 @@ class GamesQueryTest {
         } returns expectedGames[0].name
         every { mockResultSet.getString("result")
         } returns expectedGames[0].result
-        every { mockResultSet.getFloat("spread")
-        } returns expectedGames[0].spread?.toFloat()!!
+        every { mockResultSet.getDouble("spread")
+        } returns expectedGames[0].spread?.toDouble()!!
         every { mockResultSet.getString("week")
         } returns expectedGames[0].week
+        every { mockResultSet.wasNull() } returns false
         every { mockStatement.executeQuery("SELECT game, week, result, spread FROM games WHERE week = '0'") } returns mockResultSet
 
         val results = GamesQuery(mockConnection).get(env)
 
         Assertions.assertEquals(expectedGames.map { x -> x.name }, results.map { x -> x.name })
         Assertions.assertEquals(expectedGames.map { x -> x.result }, results.map { x -> x.result })
-        Assertions.assertEquals(expectedGames.map { x -> x.spread?.toFloat() }, results.map { x -> x.spread })
+        Assertions.assertEquals(expectedGames.map { x -> x.spread?.toDouble() }, results.map { x -> x.spread })
         Assertions.assertEquals(expectedGames.map { x -> x.week }, results.map { x -> x.week })
+    }
+    
+    @Test
+    fun nullSpreadInDbIsNullInResult() {
+        val expectedGames: ArrayList<GameDTO> = ArrayList(1)
+        expectedGames.add(generateGame("GB@CHI", "CHI", null, "0"))
+        val mockResultSet = mockkClass(ResultSet::class)
+        every { mockResultSet.next()
+        } returns true andThen false
+        every { mockResultSet.getString("game")
+        } returns expectedGames[0].name
+        every { mockResultSet.getString("result")
+        } returns expectedGames[0].result
+        every { mockResultSet.getDouble("spread")
+        } returns 0.0
+        every { mockResultSet.wasNull() } returns false andThen true
+        every { mockResultSet.getString("week")
+        } returns expectedGames[0].week
+        every { mockStatement.executeQuery("SELECT game, week, result, spread FROM games WHERE week = '0'") } returns mockResultSet
+
+        val results = GamesQuery(mockConnection).get(env)
+
+        Assertions.assertNull(results[0].spread)
+    }
+
+    @Test
+    fun nullResultInDbIsNullInResult() {
+        val expectedGames: ArrayList<GameDTO> = ArrayList(1)
+        expectedGames.add(generateGame("GB@CHI", null, -10.0, "0"))
+        val mockResultSet = mockkClass(ResultSet::class)
+        every { mockResultSet.next()
+        } returns true andThen false
+        every { mockResultSet.getString("game")
+        } returns expectedGames[0].name
+        every { mockResultSet.getString("result")
+        } returns null
+        every { mockResultSet.getDouble("spread")
+        } returns expectedGames[0].spread?.toDouble()!!
+        every { mockResultSet.wasNull() } returns true andThen false
+        every { mockResultSet.getString("week")
+        } returns expectedGames[0].week
+        every { mockStatement.executeQuery("SELECT game, week, result, spread FROM games WHERE week = '0'") } returns mockResultSet
+
+        val results = GamesQuery(mockConnection).get(env)
+
+        Assertions.assertNull(results[0].result)
     }
 
     @Test
@@ -70,21 +117,22 @@ class GamesQueryTest {
         } returns expectedGames[0].name andThen expectedGames[1].name
         every { mockResultSet.getString("result")
         } returns expectedGames[0].result andThen expectedGames[1].result
-        every { mockResultSet.getFloat("spread")
-        } returns expectedGames[0].spread?.toFloat()!! andThen expectedGames[1].spread?.toFloat()!!
+        every { mockResultSet.getDouble("spread")
+        } returns expectedGames[0].spread?.toDouble()!! andThen expectedGames[1].spread?.toDouble()!!
         every { mockResultSet.getString("week")
         } returns expectedGames[0].week andThen expectedGames[1].week
+        every { mockResultSet.wasNull() } returns false
         every { mockStatement.executeQuery("SELECT game, week, result, spread FROM games WHERE week = '0'") } returns mockResultSet
 
         val results = GamesQuery(mockConnection).get(env)
 
         Assertions.assertEquals(expectedGames.map { x -> x.name }, results.map { x -> x.name })
         Assertions.assertEquals(expectedGames.map { x -> x.result }, results.map { x -> x.result })
-        Assertions.assertEquals(expectedGames.map { x -> x.spread?.toFloat() }, results.map { x -> x.spread })
+        Assertions.assertEquals(expectedGames.map { x -> x.spread?.toDouble() }, results.map { x -> x.spread })
         Assertions.assertEquals(expectedGames.map { x -> x.week }, results.map { x -> x.week })
     }
 
-    private fun generateGame(name: String, result: String, spread: Double, week: String): GameDTO {
+    private fun generateGame(name: String, result: String?, spread: Double?, week: String): GameDTO {
         val game = GameDTO(name, week)
         game.result = result
         game.spread = spread
