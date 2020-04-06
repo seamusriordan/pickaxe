@@ -1,5 +1,8 @@
 @file:Suppress("UNCHECKED_CAST")
 
+package db
+
+import db.UpdatePickMutator
 import dto.UserDTO
 import dto.UserPicksDTO
 import graphql.schema.DataFetchingEnvironment
@@ -37,7 +40,7 @@ class UpdatePickMutatorTest {
         mockkStatic("java.sql.DriverManager")
         mockConnection = mockkClass(Connection::class)
         mockStatement = mockkClass(Statement::class)
-        every { mockStatement.executeQuery(any()) } returns null
+        every { mockStatement.executeUpdate(any()) } returns 1
 
 
         every { DriverManager.getConnection(any()) } returns null
@@ -54,11 +57,11 @@ class UpdatePickMutatorTest {
         val userPick = passedArguments["userPick"] as HashMap<String, String>
         val env = buildEnvForArguments(passedArguments)
         val expectedQuery =
-            "UPDATE userpicks SET name = " + passedArguments["name"] + ", week = " + userPick["week"] + ", game = " + userPick["game"] + ", pick = " + userPick["pick"]
+            "UPDATE userpicks SET name = '" + passedArguments["name"] + "', week = '" + userPick["week"] + "', game = '" + userPick["game"] + "', pick = '" + userPick["pick"] +"'"
 
         val result = updatePickMutator.get(env)
 
-        verify { mockStatement.executeQuery(expectedQuery) }
+        verify { mockStatement.executeUpdate(expectedQuery) }
         assertTrue(result)
     }
 
@@ -69,11 +72,11 @@ class UpdatePickMutatorTest {
         val userPick = passedArguments["userPick"] as HashMap<String, String>
         val env = buildEnvForArguments(passedArguments)
         val expectedQuery =
-            "UPDATE userpicks SET name = " + passedArguments["name"] + ", week = " + userPick["week"] + ", game = " + userPick["game"] + ", pick = " + userPick["pick"]
+            "UPDATE userpicks SET name = '" + passedArguments["name"] + "', week = '" + userPick["week"] + "', game = '" + userPick["game"] + "', pick = '" + userPick["pick"] +"'"
 
         val result = updatePickMutator.get(env)
 
-        verify { mockStatement.executeQuery(expectedQuery) }
+        verify { mockStatement.executeUpdate(expectedQuery) }
         assertTrue(result)
     }
 
@@ -84,10 +87,10 @@ class UpdatePickMutatorTest {
         val userPick = passedArguments["userPick"] as HashMap<String, String>
         val env = buildEnvForArguments(passedArguments)
         val expectedQuery =
-            "UPDATE userpicks SET name = " + passedArguments["name"] + ", week = " + userPick["week"] + ", game = " + userPick["game"] + ", pick = " + userPick["pick"]
+            "UPDATE userpicks SET name = '" + passedArguments["name"] + "', week = '" + userPick["week"] + "', game = '" + userPick["game"] + "', pick = '" + userPick["pick"] +"'"
         val result = updatePickMutator.get(env)
 
-        verify { mockStatement.executeQuery(expectedQuery) }
+        verify { mockStatement.executeUpdate(expectedQuery) }
         assertTrue(result)
     }
 

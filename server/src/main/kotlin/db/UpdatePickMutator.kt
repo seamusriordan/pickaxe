@@ -1,5 +1,5 @@
-import dto.PickDTO
-import dto.UserPicksDTO
+package db
+
 import graphql.schema.DataFetcher
 import graphql.schema.DataFetchingEnvironment
 import java.sql.Connection
@@ -13,9 +13,9 @@ class UpdatePickMutator(private var connection: Connection) : DataFetcher<Boolea
         val pick = passedUserPick["pick"]
 
         val statement = connection.createStatement()
-        val expectedQuery = "UPDATE userpicks SET name = $name, week = $week, game = $game, pick = $pick"
+        val update = "UPDATE userpicks SET name = '$name', week = '$week', game = '$game', pick = '$pick'"
 
-        statement.executeQuery(expectedQuery)
+        statement.executeUpdate(update)
         return true
     }
 }
