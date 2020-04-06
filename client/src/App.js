@@ -2,37 +2,14 @@ import React from 'react';
 import PicksGrid from "./grid/PicksGrid";
 import {ApolloProvider} from '@apollo/react-hooks'
 import ApolloClient from "apollo-client";
-import { InMemoryCache } from 'apollo-cache-inmemory';
-import { HttpLink } from 'apollo-link-http';
+import {InMemoryCache} from 'apollo-cache-inmemory';
+import {HttpLink} from 'apollo-link-http';
+import {buildGraphqlUri} from "./helpers";
 
-export function graphqlServer() {
-    return process.env.REACT_APP_GRAPHQL_SERVER ?
-        process.env.REACT_APP_GRAPHQL_SERVER :
-        "localhost";
-}
-
-export function graphqlPort() {
-    return process.env.REACT_APP_GRAPHQL_PORT ?
-        process.env.REACT_APP_GRAPHQL_PORT :
-        "8080";
-}
-
-export function graphqlProtocol() {
-    return process.env.REACT_APP_GRAPHQL_HTTPS ?
-        "https" :
-        "http";
-}
-
-
-export function serverUri() {
-    return graphqlProtocol() + '://' +
-        graphqlServer() + ':' + graphqlPort() +
-        '/pickaxe/graphql';
-}
 
 export const apolloClient = new ApolloClient({
     link: new HttpLink(
-        {uri: serverUri()}),
+        {uri: buildGraphqlUri()}),
     cache: new InMemoryCache(),
     // defaultOptions: {query: {fetchPolicy: 'no-cache'}, watchQuery: {fetchPolicy: 'no-cache'}},
     connectToDevTools: true

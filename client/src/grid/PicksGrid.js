@@ -1,36 +1,8 @@
 import React, {useEffect} from "react";
 import {useMutation, useQuery} from "@apollo/react-hooks";
-import gql from "graphql-tag";
 import PickCell from "./PickCell";
-
-const PICKS_QUERY = gql`
-    query Query($week: String) {
-        users {
-            name
-        }
-
-        userPicks(week: $week) {
-            user { name }
-            picks {
-                game
-                pick
-            }
-            total
-        }
-
-        games(week: $week) {
-            week
-            name
-            spread
-            result
-        }
-    }`;
-
-const UPDATE_PICKS_MUTATION =
-gql`
-    mutation Mutation($name: String!, $week: String!, $game: String!, $pick: String!) {
-        updatePick(name: $name, userPick: { week: $week, game: $game, pick: $pick })
-    }`;
+import {buildWebsocketUri} from "../helpers";
+import {PICKS_QUERY, UPDATE_PICKS_MUTATION} from "../graphqlQueries";
 
 function userCells(data) {
     return !data.users ? undefined :
@@ -119,7 +91,7 @@ const PicksGrid = () => {
 
 
     useEffect(() => {
-        let webSocket = new WebSocket(websocketUri());
+        let webSocket = new WebSocket(buildWebsocketUri());
         webSocket.onopen = () => {
             refetch()
         };
@@ -153,29 +125,5 @@ const PicksGrid = () => {
 
 };
 
-export function websocketServer() {
-    return process.env.REACT_APP_GRAPHQL_SERVER ?
-        process.env.REACT_APP_GRAPHQL_SERVER :
-        "localhost";
-}
-
-export function websocketPort() {
-    return process.env.REACT_APP_GRAPHQL_PORT ?
-        process.env.REACT_APP_GRAPHQL_PORT :
-        "8080";
-}
-
-export function websocketProtocol() {
-    return process.env.REACT_APP_GRAPHQL_HTTPS ?
-        "wss" :
-        "ws";
-}
-
-
-export function websocketUri() {
-    return websocketProtocol() + '://' +
-        websocketServer() + ':' + websocketPort() +
-        '/pickaxe/updateNotification';
-}
 
 export default PicksGrid
