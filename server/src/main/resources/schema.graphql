@@ -15,7 +15,7 @@ type Game {
     name: String
     week: String
     result: String
-    spread: Double
+    spread: Float
 }
 
 type UserPicks {
