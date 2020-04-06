@@ -2,7 +2,9 @@
 
 package db
 
-import UserDTO
+import dto.UserDTO
+import graphql.schema.DataFetchingEnvironment
+import graphql.schema.DataFetchingEnvironmentImpl
 import io.mockk.every
 import io.mockk.mockkClass
 import io.mockk.mockkStatic
@@ -17,6 +19,7 @@ import java.sql.Statement
 class UserQueryTest {
     private lateinit var mockStatement: Statement
     private lateinit var mockConnection: Connection
+    private lateinit var env: DataFetchingEnvironment;
 
     @BeforeEach
     fun beforeEach() {
@@ -27,10 +30,13 @@ class UserQueryTest {
         every { DriverManager.getConnection(any()) } returns null
         every { DriverManager.getConnection(any(), any()) } returns mockConnection
         every { mockConnection.createStatement() } returns mockStatement
+
+        env = DataFetchingEnvironmentImpl.newDataFetchingEnvironment().build()
+
     }
 
     @Test
-    fun getActiveUsersReturnsUsersFromDatabaseWhenSingleUser() {
+    fun getReturnsActiveUsersFromDatabaseWhenSingleUser() {
         val expectedUsers: ArrayList<UserDTO> = ArrayList(1)
         expectedUsers.add(UserDTO("Seamus"))
         val mockResultSet = mockkClass(ResultSet::class)
@@ -40,13 +46,13 @@ class UserQueryTest {
         } returns expectedUsers[0].name
         every { mockStatement.executeQuery("SELECT name FROM users WHERE active = TRUE") } returns mockResultSet
 
-        val results = UserQuery(mockConnection).getActiveUsers()
+        val results = UserQuery(mockConnection).get(env)
 
         assertEquals(expectedUsers.map { x -> x.name }, results.map { x -> x.name })
     }
 
     @Test
-    fun getActiveUsersReturnsUsersFromDatabaseWhenTwoUsers() {
+    fun getReturnsActiveUsersFromDatabaseWhenTwoUsers() {
         val expectedUsers: ArrayList<UserDTO> = ArrayList(2)
         expectedUsers.add(UserDTO("Stebe"))
         expectedUsers.add(UserDTO("Dave"))
@@ -57,7 +63,7 @@ class UserQueryTest {
         } returns expectedUsers[0].name andThen expectedUsers[1].name
         every { mockStatement.executeQuery("SELECT name FROM users WHERE active = TRUE") } returns mockResultSet
 
-        val results = UserQuery(mockConnection).getActiveUsers()
+        val results = UserQuery(mockConnection).get(env)
 
         assertEquals(expectedUsers.map { x -> x.name }, results.map { x -> x.name })
     }

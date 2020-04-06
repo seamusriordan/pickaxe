@@ -1,3 +1,4 @@
+import dto.UserDTO
 import graphql.schema.DataFetcher
 import graphql.schema.idl.RuntimeWiring
 import org.junit.jupiter.api.Assertions
@@ -6,8 +7,8 @@ import org.junit.jupiter.api.Test
 class PickaxeRuntimeWiringTest {
     @Test
     fun generateRuntimeWiringFromWiringMapWithOneField() {
-        val wiringMap: HashMap<String, HashMap<String, DataFetcher<Any>>> = HashMap()
-        val field: HashMap<String, DataFetcher<Any>> = HashMap()
+        val wiringMap: HashMap<String, HashMap<String, DataFetcher<*>>> = HashMap()
+        val field: HashMap<String, DataFetcher<*>> = HashMap()
         field["aFieldName1"] = DataFetcher<Any> { }
         wiringMap["aType"] = field
 
@@ -30,10 +31,10 @@ fun sampleRuntimeWiring() : RuntimeWiring {
     return generateRuntimeWiring(sampleRuntimeWiringMap())
 }
 
-fun sampleRuntimeWiringMap() : HashMap<String, HashMap<String, DataFetcher<Any>>> {
-    val sampleWiringMap = HashMap<String, HashMap<String, DataFetcher<Any>>>()
+fun sampleRuntimeWiringMap() : HashMap<String, HashMap<String, DataFetcher<*>>> {
+    val sampleWiringMap = HashMap<String, HashMap<String, DataFetcher<*>>>()
 
-    val field: HashMap<String, DataFetcher<Any>> = HashMap()
+    val field: HashMap<String, DataFetcher<*>> = HashMap()
 
     field["user"] = DataFetcher<Any> { UserDTO("JImm") }
     field["id"] = DataFetcher<Any> { 44 }
@@ -43,7 +44,7 @@ fun sampleRuntimeWiringMap() : HashMap<String, HashMap<String, DataFetcher<Any>>
     return sampleWiringMap
 }
 
-fun generateRuntimeWiringForTest(wiringMap: HashMap<String, HashMap<String, DataFetcher<Any>>>): RuntimeWiring {
+fun generateRuntimeWiringForTest(wiringMap: HashMap<String, HashMap<String, DataFetcher<*>>>): RuntimeWiring {
     val wiring = RuntimeWiring.newRuntimeWiring()
 
     wiringMap.map { (typeName, fieldMap) ->

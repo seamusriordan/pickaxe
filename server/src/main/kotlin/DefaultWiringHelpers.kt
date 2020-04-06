@@ -1,3 +1,7 @@
+import dto.GameDTO
+import dto.UserDTO
+import dto.UserPicksDTO
+
 fun defaultUserList(): ArrayList<UserDTO> {
     val usersList = ArrayList<UserDTO>()
     usersList.add(UserDTO("Seamus"))

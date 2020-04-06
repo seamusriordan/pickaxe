@@ -2,6 +2,7 @@
   <dictionary name="seamus">
     <words>
       <w>pickaxe</w>
+      <w>userpicks</w>
     </words>
   </dictionary>
 </component>

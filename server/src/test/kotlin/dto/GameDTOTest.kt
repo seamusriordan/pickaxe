@@ -1,3 +1,6 @@
+package dto
+
+import dto.GameDTO
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
@@ -17,6 +20,6 @@ class GameDTOTest {
     @Test
     fun hasSpread() {
         val game = GameDTO("AWY@HOM")
-        Assertions.assertEquals("", game.spread)
+        Assertions.assertEquals(0.0, game.spread)
     }
 }
