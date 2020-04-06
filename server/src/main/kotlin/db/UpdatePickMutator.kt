@@ -13,7 +13,8 @@ class UpdatePickMutator(private var connection: Connection) : DataFetcher<Boolea
         val pick = passedUserPick["pick"]
 
         val statement = connection.createStatement()
-        val update = "UPDATE userpicks SET name = '$name', week = '$week', game = '$game', pick = '$pick'"
+        val update = "INSERT INTO userpicks VALUES ('$name', '$week', '$game', '$pick') " +
+                "ON CONFLICT (name, week, game) DO UPDATE SET pick = '$pick'"
 
         statement.executeUpdate(update)
         return true

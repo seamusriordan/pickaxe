@@ -2,7 +2,6 @@
 
 package db
 
-import db.UpdatePickMutator
 import dto.UserDTO
 import dto.UserPicksDTO
 import graphql.schema.DataFetchingEnvironment
@@ -52,12 +51,11 @@ class UpdatePickMutatorTest {
 
     @Test
     fun pickForFirstGameCanBeSetByFetchingEnvironment() {
-        val passedArguments
-                = generatePickArguments("Person", "0", "GB@CHI", "Different")
+        val passedArguments = generatePickArguments("Person", "0", "GB@CHI", "Different")
         val userPick = passedArguments["userPick"] as HashMap<String, String>
         val env = buildEnvForArguments(passedArguments)
         val expectedQuery =
-            "UPDATE userpicks SET name = '" + passedArguments["name"] + "', week = '" + userPick["week"] + "', game = '" + userPick["game"] + "', pick = '" + userPick["pick"] +"'"
+            buildInsertString(passedArguments, userPick)
 
         val result = updatePickMutator.get(env)
 
@@ -67,12 +65,11 @@ class UpdatePickMutatorTest {
 
     @Test
     fun pickForSecondGameCanBeSetByFetchingEnvironment() {
-        val passedArguments
-                = generatePickArguments("Person", "0", "BUF@NE", "Very Different")
+        val passedArguments = generatePickArguments("Person", "0", "BUF@NE", "Very Different")
         val userPick = passedArguments["userPick"] as HashMap<String, String>
         val env = buildEnvForArguments(passedArguments)
         val expectedQuery =
-            "UPDATE userpicks SET name = '" + passedArguments["name"] + "', week = '" + userPick["week"] + "', game = '" + userPick["game"] + "', pick = '" + userPick["pick"] +"'"
+            buildInsertString(passedArguments, userPick)
 
         val result = updatePickMutator.get(env)
 
@@ -82,16 +79,27 @@ class UpdatePickMutatorTest {
 
     @Test
     fun pickForThirdGameWithSecondUserCanBeSetByFetchingEnvironment() {
-        val passedArguments
-                = generatePickArguments("Person2", "4",  "SEA@PHI", "PHI")
+        val passedArguments = generatePickArguments("Person2", "4", "SEA@PHI", "PHI")
         val userPick = passedArguments["userPick"] as HashMap<String, String>
         val env = buildEnvForArguments(passedArguments)
         val expectedQuery =
-            "UPDATE userpicks SET name = '" + passedArguments["name"] + "', week = '" + userPick["week"] + "', game = '" + userPick["game"] + "', pick = '" + userPick["pick"] +"'"
+            buildInsertString(passedArguments, userPick)
         val result = updatePickMutator.get(env)
 
         verify { mockStatement.executeUpdate(expectedQuery) }
         assertTrue(result)
+    }
+
+    private fun buildInsertString(
+        passedArguments: HashMap<String, Any>,
+        userPick: HashMap<String, String>
+    ): String {
+        val name = passedArguments["name"]
+        val week = userPick["week"]
+        val game = userPick["game"]
+        val pick = userPick["pick"]
+        return "INSERT INTO userpicks VALUES ('$name', '$week', '$game', '$pick') " +
+                "ON CONFLICT (name, week, game) DO UPDATE SET pick = '$pick'"
     }
 
     private fun generatePickArguments(name: String, week: String, game: String, pick: String): HashMap<String, Any> {
