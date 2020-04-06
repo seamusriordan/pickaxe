@@ -1,7 +1,6 @@
 package db
 
 import dto.GameDTO
-import dto.UserDTO
 import graphql.schema.DataFetcher
 import graphql.schema.DataFetchingEnvironment
 import java.sql.Connection
