@@ -85,10 +85,9 @@ class GamesQueryTest {
     }
 
     private fun generateGame(name: String, result: String, spread: Double, week: String): GameDTO {
-        val game = GameDTO(name)
+        val game = GameDTO(name, week)
         game.result = result
         game.spread = spread
-        game.week = week
         return game
     }
 
