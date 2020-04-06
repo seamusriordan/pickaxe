@@ -1,3 +1,5 @@
+@file:Suppress("UNCHECKED_CAST")
+
 import dto.UserDTO
 import dto.UserPicksDTO
 import graphql.schema.DataFetchingEnvironment
@@ -48,10 +50,11 @@ class UpdatePickMutatorTest {
     @Test
     fun pickForFirstGameCanBeSetByFetchingEnvironment() {
         val passedArguments
-                = generatePickArguments("Person", 0, "GB@CHI", "Different")
+                = generatePickArguments("Person", "0", "GB@CHI", "Different")
+        val userPick = passedArguments["userPick"] as HashMap<String, String>
         val env = buildEnvForArguments(passedArguments)
         val expectedQuery =
-            "UPDATE userpicks SET name = " + passedArguments["name"] + ", week = " + generatePick(0, "GB@CHI", "Different")["week"] + ", game = " + generatePick(0, "GB@CHI", "Different")["game"] + ", pick = " + generatePick(0, "GB@CHI", "Different")["pick"]
+            "UPDATE userpicks SET name = " + passedArguments["name"] + ", week = " + userPick["week"] + ", game = " + userPick["game"] + ", pick = " + userPick["pick"]
 
         val result = updatePickMutator.get(env)
 
@@ -59,31 +62,14 @@ class UpdatePickMutatorTest {
         assertTrue(result)
     }
 
-    private fun generatePickArguments(name: String, week: Int, game: String, pick: String): HashMap<String, Any> {
-        val passedArguments: HashMap<String, Any> = HashMap()
-        passedArguments["name"] = name
-        passedArguments["userPick"] = generatePick(week, game, pick)
-        return passedArguments
-    }
-
-    private fun generatePick(week: Int, game: String, pick: String): HashMap<String, Any> {
-        val userPick = HashMap<String, Any>()
-        userPick["week"] = week
-        userPick["game"] = game
-        userPick["pick"] = pick
-        return userPick
-    }
-
-    private fun pickByWeekUserGameIndex(week: Int, user: Int, game: Int) = dataStore[week][user].picks[game]
-
     @Test
     fun pickForSecondGameCanBeSetByFetchingEnvironment() {
         val passedArguments
-                = generatePickArguments("Person", 0, "BUF@NE", "Very Different")
+                = generatePickArguments("Person", "0", "BUF@NE", "Very Different")
+        val userPick = passedArguments["userPick"] as HashMap<String, String>
         val env = buildEnvForArguments(passedArguments)
         val expectedQuery =
-            "UPDATE userpicks SET name = " + passedArguments["name"] + ", week = " + generatePick(0, "BUF@NE", "Very Different")["week"] + ", game = " + generatePick(0, "BUF@NE", "Very Different")["game"] + ", pick = " + generatePick(0, "BUF@NE", "Very Different")["pick"]
-
+            "UPDATE userpicks SET name = " + passedArguments["name"] + ", week = " + userPick["week"] + ", game = " + userPick["game"] + ", pick = " + userPick["pick"]
 
         val result = updatePickMutator.get(env)
 
@@ -94,16 +80,32 @@ class UpdatePickMutatorTest {
     @Test
     fun pickForThirdGameWithSecondUserCanBeSetByFetchingEnvironment() {
         val passedArguments
-                = generatePickArguments("Person2", 4,  "SEA@PHI", "PHI")
+                = generatePickArguments("Person2", "4",  "SEA@PHI", "PHI")
+        val userPick = passedArguments["userPick"] as HashMap<String, String>
         val env = buildEnvForArguments(passedArguments)
         val expectedQuery =
-            "UPDATE userpicks SET name = " + passedArguments["name"] + ", week = " + generatePick(4,  "SEA@PHI", "PHI")["week"] + ", game = " + generatePick(4,  "SEA@PHI", "PHI")["game"] + ", pick = " + generatePick(4,  "SEA@PHI", "PHI")["pick"]
-
+            "UPDATE userpicks SET name = " + passedArguments["name"] + ", week = " + userPick["week"] + ", game = " + userPick["game"] + ", pick = " + userPick["pick"]
         val result = updatePickMutator.get(env)
 
         verify { mockStatement.executeQuery(expectedQuery) }
         assertTrue(result)
     }
+
+    private fun generatePickArguments(name: String, week: String, game: String, pick: String): HashMap<String, Any> {
+        val passedArguments: HashMap<String, Any> = HashMap()
+        passedArguments["name"] = name
+        passedArguments["userPick"] = generatePick(week, game, pick)
+        return passedArguments
+    }
+
+    private fun generatePick(week: String, game: String, pick: String): HashMap<String, Any> {
+        val userPick = HashMap<String, Any>()
+        userPick["week"] = week
+        userPick["game"] = game
+        userPick["pick"] = pick
+        return userPick
+    }
+
 
     private fun buildEnvForArguments(passedArguments: HashMap<String, Any>): DataFetchingEnvironment {
         return DataFetchingEnvironmentImpl

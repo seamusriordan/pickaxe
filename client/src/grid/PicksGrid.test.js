@@ -71,7 +71,7 @@ describe('PicksGrid basic behavior', () => {
         });
 
         const updatingQuery =
-        gql`mutation Mutation($name: String!, $week: Int!, $game: String!, $pick: String!)
+        gql`mutation Mutation($name: String!, $week: String!, $game: String!, $pick: String!)
         { updatePick(name: $name, userPick: { week: $week, game: $game, pick: $pick })
         }`;
 

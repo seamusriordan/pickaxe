@@ -2,20 +2,18 @@ type Query {
     "I am a description of users"
     users: [User]
     "I am a description of games"
-    games(week: Int): [Game]
+    games(week: String): [Game]
     "I am a description of user picks"
-    userPicks(week: Int): [UserPicks]
+    userPicks(week: String): [UserPicks]
 }
 
 type User {
     name: String
-    deprecatedData: Int
-    @deprecated(reason: "Just in here for an example")
 }
 
 type Game {
     name: String
-    week: Int
+    week: String
     result: String
     spread: String
 }
@@ -36,7 +34,7 @@ type Mutation {
 }
 
 input UpdatedPick {
-    week: Int
+    week: String
     game: String
     pick: String
 }

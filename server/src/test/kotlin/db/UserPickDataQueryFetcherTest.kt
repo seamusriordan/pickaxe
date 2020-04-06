@@ -37,7 +37,7 @@ class UserPickDataQueryFetcherTest {
 
     @Test
     fun getReturnsUserPicksWithOneUserAndOnePickForWeekWithWeek0() {
-        val week = 0
+        val week = "0"
         val expectedPicks: ArrayList<UserPicksDTO> = ArrayList(1)
         expectedPicks.add(UserPicksDTO(UserDTO("Seamus")))
         expectedPicks[0].picks.add(PickDTO("GB@CHI", "CHI"))
@@ -54,7 +54,7 @@ class UserPickDataQueryFetcherTest {
 
     @Test
     fun getReturnsUserPicksWithOneUserAndOnePickForWeekWithWeek7() {
-        val week = 7
+        val week = "7"
         val expectedPicks: ArrayList<UserPicksDTO> = ArrayList(1)
         expectedPicks.add(UserPicksDTO(UserDTO("Seamus")))
         expectedPicks[0].picks.add(PickDTO("GB@CHI", "CHI"))
@@ -71,7 +71,7 @@ class UserPickDataQueryFetcherTest {
 
     @Test
     fun getReturnsUserPicksWithTwoUsersAndOnePickForWeekWithWeek0() {
-        val week = 0
+        val week = "0"
         val expectedPicks: ArrayList<UserPicksDTO> = ArrayList(1)
         expectedPicks.add(UserPicksDTO(UserDTO("Seamus")))
         expectedPicks[0].picks.add(PickDTO("GB@CHI", "CHI"))
@@ -93,7 +93,7 @@ class UserPickDataQueryFetcherTest {
 
     @Test
     fun getReturnsUserPicksWithOneUserAndTwoPicksForWeekWithWeek0() {
-        val week = 0
+        val week = "0"
         val expectedPicks: ArrayList<UserPicksDTO> = ArrayList(1)
         expectedPicks.add(UserPicksDTO(UserDTO("Seamus")))
         expectedPicks[0].picks.add(PickDTO("GB@CHI", "CHI"))
@@ -109,7 +109,7 @@ class UserPickDataQueryFetcherTest {
         assertEquals(expectedPicks[0].picks.map { x -> x.pick }, results[0].picks.map { x -> x.pick })
     }
 
-    private fun getEnvForWeek(week: Int): DataFetchingEnvironment {
+    private fun getEnvForWeek(week: String): DataFetchingEnvironment {
         val arguments = HashMap<String, Any>().apply {
             set("week", week)
         }
@@ -117,7 +117,7 @@ class UserPickDataQueryFetcherTest {
         return env
     }
 
-    private fun setupMockForQueryWithWeek(mockResultSet: ResultSet, week: Int) {
+    private fun setupMockForQueryWithWeek(mockResultSet: ResultSet, week: String) {
         every { mockStatement.executeQuery("SELECT name, game, pick FROM userpicks WHERE week = $week") } returns mockResultSet
     }
 
@@ -125,7 +125,7 @@ class UserPickDataQueryFetcherTest {
     private fun setupMocksForPicks(
         expectedPicks: ArrayList<UserPicksDTO>,
         mockSetter: (ResultSet, ArrayList<UserPicksDTO>) -> MockKAdditionalAnswerScope<String, String>,
-        week: Int
+        week: String
     ) {
         val mockResultSet = mockkClass(ResultSet::class)
         every { mockResultSet.next() } returns true andThen false

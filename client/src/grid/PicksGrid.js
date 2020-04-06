@@ -4,7 +4,7 @@ import gql from "graphql-tag";
 import PickCell from "./PickCell";
 
 const PICKS_QUERY = gql`
-    query Query($week: Int) {
+    query Query($week: String) {
         users {
             name
         }
@@ -28,7 +28,7 @@ const PICKS_QUERY = gql`
 
 const UPDATE_PICKS_MUTATION =
 gql`
-    mutation Mutation($name: String!, $week: Int!, $game: String!, $pick: String!) {
+    mutation Mutation($name: String!, $week: String!, $game: String!, $pick: String!) {
         updatePick(name: $name, userPick: { week: $week, game: $game, pick: $pick })
     }`;
 
