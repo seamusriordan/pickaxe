@@ -26,19 +26,19 @@ describe('GraphQL server responds', () => {
 
         cy.request('POST', 'localhost:8080/pickaxe/graphql', graphqlRequestBody).then(
             (response) => {
-                expect(response.body).to.equal("{\"data\":{\"users\":[{\"name\":\"Seamus\",\"__typename\":\"User\"},{\"name\":\"Sereres\",\"__typename\":\"User\"},{\"name\":\"RNG\",\"__typename\":\"User\"},{\"name\":\"Vegas\",\"__typename\":\"User\"}]}}")
-                expect(JSON.parse(response.body).errors).undefined
+                expect(response.body).to.equal("{\"data\":{\"users\":[{\"name\":\"Seamus\",\"__typename\":\"User\"},{\"name\":\"Sereres\",\"__typename\":\"User\"},{\"name\":\"RNG\",\"__typename\":\"User\"},{\"name\":\"Vegas\",\"__typename\":\"User\"}]}}");
+                expect(JSON.parse(response.body)["errors"]).undefined
             }
         )
     });
 
     it('mutation query response has no errors', () => {
-        const graphqlRequestBody = "{\"operationName\":\"Mutation\",\"variables\":{\"name\":\"Seamus\",\"week\":0,\"game\":\"SEA@PHI\",\"pick\":\"SEA\"},\"query\":\"mutation Mutation($name: String, $week: Int, $game: String, $pick: String) {\\n  updatePick(name: $name, userPick: {week: $week, game: $game, pick: $pick})\\n}\\n\"}";
+        const graphqlRequestBody = "{\"operationName\":\"Mutation\",\"variables\":{\"name\":\"Seamus\",\"week\":0,\"game\":\"SEA@PHI\",\"pick\":\"SEA\"},\"query\":\"mutation Mutation($name: String, $week: String, $game: String, $pick: String) {\\n  updatePick(name: $name, userPick: {week: $week, game: $game, pick: $pick})\\n}\\n\"}";
 
         cy.request('POST', 'localhost:8080/pickaxe/graphql', graphqlRequestBody).then(
             (response) => {
-                expect(response.status).to.equal(200)
-                expect(JSON.parse(response.body).errors).undefined
+                expect(response.status).to.equal(200);
+                expect(JSON.parse(response.body)["errors"]).undefined
             }
         )
     });

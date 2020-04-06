@@ -98,7 +98,7 @@ describe('PicksGrid basic behavior', () => {
 
         expect(sendDataSpyCalled).toBeTruthy();
 
-        expect(calledData).toEqual({variables: {name: "Vegas", week: 0, game: "HAR@NOR", pick: "THHH"}})
+        expect(calledData).toEqual({variables: {name: "Vegas", week: "0", game: "HAR@NOR", pick: "THHH"}})
     });
 
     it('PickCell send', () => {
@@ -120,7 +120,7 @@ describe('PicksGrid basic behavior', () => {
         });
         expect(sendDataSpyCalled).toBeTruthy();
 
-        expect(calledData).toEqual({variables: {name: "Davebob", week: 0, game: "CHI@GB", pick: "GUB"}})
+        expect(calledData).toEqual({variables: {name: "Davebob", week: "0", game: "CHI@GB", pick: "GUB"}})
     });
 
     it('On blur event, sends data with cell InnerHTML', () => {

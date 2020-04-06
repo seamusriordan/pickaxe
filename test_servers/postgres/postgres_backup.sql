@@ -44,6 +44,36 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
+-- Name: games; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.games (
+    game character varying NOT NULL,
+    week character varying NOT NULL,
+    gametime date,
+    final boolean DEFAULT false NOT NULL,
+    result character varying,
+    spread numeric
+);
+
+
+ALTER TABLE public.games OWNER TO postgres;
+
+--
+-- Name: userpicks; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.userpicks (
+    name character varying NOT NULL,
+    week character varying NOT NULL,
+    game character varying NOT NULL,
+    pick character varying
+);
+
+
+ALTER TABLE public.userpicks OWNER TO postgres;
+
+--
 -- Name: users; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -54,6 +84,37 @@ CREATE TABLE public.users (
 
 
 ALTER TABLE public.users OWNER TO postgres;
+
+--
+-- Data for Name: games; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.games (game, week, gametime, final, result, spread) FROM stdin;
+GB@CHI	0	\N	f	\N	\N
+BUF@NE	0	\N	f	\N	\N
+SEA@PHI	0	\N	f	\N	\N
+\.
+
+
+--
+-- Data for Name: userpicks; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.userpicks (name, week, game, pick) FROM stdin;
+Sereres	0	SEA@PHI	SEA
+Sereres	0	GB@CHI	CHI
+Vegas	0	GB@CHI	CHI
+Vegas	0	SEA@PHI	SEA
+RNG	0	GB@CHI	CHI
+RNG	0	SEA@PHI	SEA
+Seamus	0	GB@CHI	CHI
+Seamus	0	SEA@PHI	SEA
+RNG	0	BUF@NE	BUF
+Vegas	0	BUF@NE	BUF
+Seamus	0	BUF@NE	BUF
+Sereres	0	BUF@NE	BUF
+\.
+
 
 --
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
@@ -68,6 +129,22 @@ Vegas	t
 
 
 --
+-- Name: games games_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.games
+    ADD CONSTRAINT games_pk PRIMARY KEY (game);
+
+
+--
+-- Name: userpicks userpicks_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.userpicks
+    ADD CONSTRAINT userpicks_pk PRIMARY KEY (name, week, game);
+
+
+--
 -- Name: users users_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -76,10 +153,33 @@ ALTER TABLE ONLY public.users
 
 
 --
+-- Name: games_game_uindex; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE UNIQUE INDEX games_game_uindex ON public.games USING btree (game);
+
+
+--
 -- Name: users_name_uindex; Type: INDEX; Schema: public; Owner: postgres
 --
 
 CREATE UNIQUE INDEX users_name_uindex ON public.users USING btree (name);
+
+
+--
+-- Name: userpicks userpicks_games_game_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.userpicks
+    ADD CONSTRAINT userpicks_games_game_fk FOREIGN KEY (game) REFERENCES public.games(game);
+
+
+--
+-- Name: userpicks userpicks_users_name_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.userpicks
+    ADD CONSTRAINT userpicks_users_name_fk FOREIGN KEY (name) REFERENCES public.users(name);
 
 
 --
