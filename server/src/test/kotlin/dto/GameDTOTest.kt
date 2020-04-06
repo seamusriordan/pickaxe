@@ -6,20 +6,21 @@ import org.junit.jupiter.api.Test
 
 class GameDTOTest {
     @Test
-    fun hasNameFromInstantiation() {
-        val game = GameDTO("AWY@HOM")
+    fun hasNameAndWeekFromInstantiation() {
+        val game = GameDTO("AWY@HOM", "0")
         Assertions.assertEquals("AWY@HOM", game.name)
+        Assertions.assertEquals("0", game.week)
     }
 
     @Test
-    fun hasResult() {
-        val game = GameDTO("AWY@HOM")
-        Assertions.assertEquals("", game.result)
+    fun hasDefaultResultNull() {
+        val game = GameDTO("AWY@HOM", "0")
+        Assertions.assertEquals(null, game.result)
     }
 
     @Test
-    fun hasSpread() {
-        val game = GameDTO("AWY@HOM")
-        Assertions.assertEquals(0.0, game.spread)
+    fun hasDefaultSpreadNull() {
+        val game = GameDTO("AWY@HOM", "0")
+        Assertions.assertEquals(null, game.spread)
     }
 }

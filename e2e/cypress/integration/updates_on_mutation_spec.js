@@ -6,7 +6,7 @@ describe('Mutation response update', () => {
         cy.visit('localhost:8080/pickaxe');
     });
 
-    it('mutation query causes update', () => {
+    xit('mutation query causes update', () => {
             cy.get('#Seamus-SEA\\@PHI')
             .contains("SEA");
 
@@ -19,7 +19,7 @@ describe('Mutation response update', () => {
             .contains("SEA",  {timeout: 10000});
     });
 
-    xit('does not overwrite text in updated cells while typing', () => {
+    it('does not overwrite text in updated cells while typing', () => {
         cy.get('#Sereres-SEA\\@PHI')
             .click()
             .type("{backspace}{backspace}{backspace}thing");
