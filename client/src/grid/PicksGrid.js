@@ -49,17 +49,17 @@ const PicksGrid = () => {
         }
     });
 
-    const user = destructureUserData(data?.users);
-    const game = destructureGameData(data?.games);
+    const users = destructureUserData(data?.users);
+    const games = destructureGameData(data?.games);
     return <div>
         {loading ? "Loading" : error ? "Error" : !data ? "derp" :
             [
-                <RowOrColumnCells key="name-cells" items={user.names} name="name"/>,
-                <RowOrColumnCells key="game-cells" items={game.names} name="game"/>,
-                <RowOrColumnCells key="spread-cells" items={game.spreads} name="spread"/>,
+                <RowOrColumnCells key="name-cells" items={users.names} name="name"/>,
+                <RowOrColumnCells key="game-cells" items={games.names} name="game"/>,
+                <RowOrColumnCells key="spread-cells" items={games.spreads} name="spread"/>,
                 <PickCells key="pick-cells" data={data} sendData={sendData}/>,
-                <RowOrColumnCells key="result-cells" items={game.results} name="result"/>,
-                <RowOrColumnCells key="total-cells" items={user.totals} name="total"/>
+                <RowOrColumnCells key="result-cells" items={games.results} name="result"/>,
+                <RowOrColumnCells key="total-cells" items={users.totals} name="total"/>
             ]
         }
     </div>
