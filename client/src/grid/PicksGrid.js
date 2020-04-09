@@ -93,11 +93,15 @@ const PicksGrid = () => {
     useEffect(() => {
         let webSocket = new WebSocket(buildWebsocketUri());
         webSocket.onopen = () => {
-            refetch()
+            refetch().catch(err => {
+                console.warn(`Refetch failed ${err}`)
+            })
         };
 
         webSocket.onmessage = () => {
-            refetch()
+            refetch().catch(err => {
+                console.warn(`Refetch failed ${err}`)
+            })
         };
         return () => {
             if (webSocket.readyState === WebSocket.OPEN) {
