@@ -1,7 +1,8 @@
 import PickCell from "./PickCell";
 import React from "react";
 
-export function PickCells(data, sendData) {
+const PickCells = props => {
+    const {data, sendData} = props;
     return (!data.users || !data.games) ? undefined :
         data.users.map((user, index1) => {
             return data.games.map((game, index2) => {
@@ -32,6 +33,8 @@ export function PickCells(data, sendData) {
         });
 }
 
+export default PickCells
+
 export function getPickByGame(passedPicks, gameName) {
     if (!passedPicks || passedPicks.size === 0) return null;
     const firstMatchingPick = passedPicks.filter(pick => pick["game"] === gameName)[0];
@@ -45,3 +48,4 @@ export function getPicksForUser(passedPicks, userName) {
 
     return firstMatchingPick ? firstMatchingPick.picks : null
 }
+
