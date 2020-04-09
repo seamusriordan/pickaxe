@@ -14,7 +14,7 @@ import java.sql.DriverManager
 import java.sql.ResultSet
 import java.sql.Statement
 
-class CurrentWeekQueryTest {
+class WeeksQueryTest {
     private lateinit var mockStatement: Statement
     private lateinit var mockConnection: Connection
     private lateinit var env: DataFetchingEnvironment
@@ -33,50 +33,42 @@ class CurrentWeekQueryTest {
     }
 
     @Test
-    fun getReturnsCurrentWeek0WhenOnlyWeekIs0() {
-        val expectedWeek = WeekDTO("0")
+    fun getReturnsWeeksWhenOnlyWeekIs0() {
+        val expectedWeeks = ArrayList<WeekDTO>(1)
+        expectedWeeks.add(WeekDTO("0"))
 
         val mockResultSet = mockkClass(ResultSet::class)
-        every { mockResultSet.next()
+        every {
+            mockResultSet.next()
         } returns true andThen false
-        every { mockResultSet.getString("week")
-        } returns expectedWeek.week
+        every {
+            mockResultSet.getString("week")
+        } returns expectedWeeks[0].week
         every { mockStatement.executeQuery("SELECT week FROM weeks") } returns mockResultSet
 
-        val results = CurrentWeekQuery(mockConnection).get(env)
+        val results = WeeksQuery(mockConnection).get(env)
 
-        Assertions.assertEquals(expectedWeek.week, results.week)
+        Assertions.assertEquals(expectedWeeks[0].week, results[0].week)
     }
 
     @Test
-    fun getReturnsCurrentWeek1WhenOnlyWeekIs1() {
-        val expectedWeek = WeekDTO("1")
+    fun getReturnsWeeksWhenThreeWeeks() {
+        val expectedWeeks = ArrayList<WeekDTO>(1)
+        expectedWeeks.add(WeekDTO("0"))
+        expectedWeeks.add(WeekDTO("4"))
+        expectedWeeks.add(WeekDTO("19"))
 
         val mockResultSet = mockkClass(ResultSet::class)
-        every { mockResultSet.next()
-        } returns true andThen false
-        every { mockResultSet.getString("week")
-        } returns expectedWeek.week
+        every {
+            mockResultSet.next()
+        } returns true andThen true andThen true andThen false
+        every {
+            mockResultSet.getString("week")
+        } returns expectedWeeks[0].week andThen expectedWeeks[1].week andThen expectedWeeks[2].week
         every { mockStatement.executeQuery("SELECT week FROM weeks") } returns mockResultSet
 
-        val results = CurrentWeekQuery(mockConnection).get(env)
+        val results = WeeksQuery(mockConnection).get(env)
 
-        Assertions.assertEquals(expectedWeek.week, results.week)
-    }
-
-    @Test
-    fun getReturnsCurrentWeek3WhenFirstWeekIs3() {
-        val expectedWeek = WeekDTO("3")
-
-        val mockResultSet = mockkClass(ResultSet::class)
-        every { mockResultSet.next()
-        } returns true andThen true andThen false
-        every { mockResultSet.getString("week")
-        } returns expectedWeek.week andThen "7"
-        every { mockStatement.executeQuery("SELECT week FROM weeks") } returns mockResultSet
-
-        val results = CurrentWeekQuery(mockConnection).get(env)
-
-        Assertions.assertEquals(expectedWeek.week, results.week)
+        Assertions.assertEquals(expectedWeeks.map { week -> week.week }, results.map { week -> week.week })
     }
 }
