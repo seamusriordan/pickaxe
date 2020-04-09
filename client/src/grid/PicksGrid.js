@@ -57,7 +57,7 @@ const PicksGrid = () => {
                 <RowOrColumnCells key="name-cells" items={users.names} name="name"/>,
                 <RowOrColumnCells key="game-cells" items={games.names} name="game"/>,
                 <RowOrColumnCells key="spread-cells" items={games.spreads} name="spread"/>,
-                <PickCells key="pick-cells" data={data} sendData={sendData}/>,
+                <PickCells key="pick-cells" id="pick-cells"  data={data} sendData={sendData}/>,
                 <RowOrColumnCells key="result-cells" items={games.results} name="result"/>,
                 <RowOrColumnCells key="total-cells" items={users.totals} name="total"/>
             ]
