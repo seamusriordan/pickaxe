@@ -4,37 +4,37 @@ import PickCell from "./PickCell";
 import {buildWebsocketUri} from "../helpers";
 import {PICKS_QUERY, UPDATE_PICKS_MUTATION} from "../graphqlQueries";
 
-function userCells(data) {
-    return !data.users ? undefined :
-        data.users.map((user, index) => {
+function userCells(users) {
+    return !users ? undefined :
+        users.map((user, index) => {
             return <div className="name-cell" key={index}>{user.name}</div>
         });
 }
 
-function totalCells(data) {
-    return !data.users ? undefined :
-        data.users.map((user, index) => {
+function totalCells(users) {
+    return !users ? undefined :
+        users.map((user, index) => {
             return <div className="total-cell" key={index}>{user.total}</div>
         });
 }
 
-function gameCells(data) {
-    return !data.games ? undefined :
-        data.games.map((game, index) => {
+function gameCells(games) {
+    return !games ? undefined :
+        games.map((game, index) => {
             return <div className="game-cell" key={index}>{game.name}</div>
         });
 }
 
-function spreadCells(data) {
-    return !data.games ? undefined :
-        data.games.map((game, index) => {
+function spreadCells(games) {
+    return !games ? undefined :
+        games.map((game, index) => {
             return <div className="spread-cell" key={index}>{game.spread}</div>
         });
 }
 
-function resultCells(data) {
-    return !data.games ? undefined :
-        data.games.map((game, index) => {
+function resultCells(games) {
+    return !games ? undefined :
+        games.map((game, index) => {
             return <div className="result-cell" key={index}>{game.result}</div>
         });
 }
@@ -117,12 +117,12 @@ const PicksGrid = () => {
     return <div>
         {loading ? "Loading" : error ? "Error" : !data ? "derp" :
             [
-                userCells(data),
-                gameCells(data),
-                spreadCells(data),
+                userCells(data.users),
+                gameCells(data.games),
+                spreadCells(data.games),
                 pickCells(data, sendData),
-                resultCells(data),
-                totalCells(data),
+                resultCells(data.games),
+                totalCells(data.users),
             ]
         }
     </div>

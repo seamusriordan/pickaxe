@@ -23,7 +23,8 @@ describe('Websocket behavior', () => {
             refetched = false;
             useQuery.mockReturnValue({
                 loading: false, error: true, data: mockQueryData, refetch: () => {
-                    refetched = true
+                    refetched = true;
+                    return Promise.resolve(mockQueryData);
                 }
             });
             useMutation.mockReturnValue([() => {}]);
