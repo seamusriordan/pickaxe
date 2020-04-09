@@ -3,9 +3,7 @@ import {useMutation, useQuery} from "@apollo/react-hooks";
 import {buildWebsocketUri} from "../helpers";
 import {PICKS_QUERY, UPDATE_PICKS_MUTATION} from "../graphqlQueries";
 import {PickCells} from "./PickCells";
-import {RowOrColumnCells} from "./RowOrColumnCells";
-
-
+import RowOrColumnCells from "./RowOrColumnCells"
 
 const PicksGrid = () => {
     const {loading, error, data, refetch} = useQuery(PICKS_QUERY, {variables: {week: "0"}, pollInterval: 600000});
@@ -39,12 +37,12 @@ const PicksGrid = () => {
     return <div>
         {loading ? "Loading" : error ? "Error" : !data ? "derp" :
             [
-                RowOrColumnCells(data.users?.map(user => user.name), "name"),
-                RowOrColumnCells(data.games?.map(game => game.name), "game"),
-                RowOrColumnCells(data.games?.map(game => game.spread), "spread"),
+                <RowOrColumnCells key="name-cells" items={data.users?.map(user => user.name)} name="name"/>,
+                <RowOrColumnCells key="game-cells" items={data.games?.map(game => game.name)} name="game"/>,
+                <RowOrColumnCells key="spread-cells" items={data.games?.map(game => game.spread)} name="spread"/>,
                 PickCells(data, sendData),
-                RowOrColumnCells(data.games?.map(game => game.result), "result"),
-                RowOrColumnCells(data.users?.map(user => user.total), "total"),
+                <RowOrColumnCells key="result-cells" items={data.games?.map(game => game.result)} name="result"/>,
+                <RowOrColumnCells key="total-cells" items={data.users?.map(user => user.total)} name="total"/>
             ]
         }
     </div>

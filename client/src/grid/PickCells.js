@@ -21,8 +21,8 @@ export function PickCells(data, sendData) {
 
                 return <PickCell
                     className="pick-cell"
-                    id={user.name + '-' + game.name}
-                    key={index1 + '-' + index2}
+                    id={`${user.name}-${game.name}`}
+                    key={`${index1}-${index2}`}
                     game={game.name}
                     pick={thisPick}
                     user={user.name}

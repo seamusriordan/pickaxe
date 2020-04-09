@@ -12,8 +12,11 @@ describe('PicksGrid data row/column rendering', () => {
 
     beforeEach(() => {
         jest.resetAllMocks();
-        useQuery.mockReturnValue({loading: false, error: null, data: mockQueryData});
-        useMutation.mockReturnValue([() => {}]);
+        useQuery.mockReturnValue({
+            loading: false, error: null, data: mockQueryData
+        });
+        useMutation.mockReturnValue([() => {
+        }]);
         grid = create(<PicksGrid/>).root;
     });
 
@@ -31,7 +34,8 @@ describe('PicksGrid data row/column rendering', () => {
             "users": [
                 {"name": "Someone"},
                 {"name": "Derp"},
-            ]
+            ],
+            "games": []
         };
         useQuery.mockReturnValue({loading: false, error: null, data: twoMockUserData});
 
@@ -56,7 +60,8 @@ describe('PicksGrid data row/column rendering', () => {
             "users": [
                 {"name": "Someone"},
                 {"name": "Derp"},
-            ]
+            ],
+            "games": []
         };
         useQuery.mockReturnValue({loading: false, error: null, data: twoMockUserData});
 
@@ -79,6 +84,7 @@ describe('PicksGrid data row/column rendering', () => {
 
     it('Renders one game cell when there is one game in data response', () => {
         const oneMockGameData = {
+            "users": [],
             "games": [
                 {"name": "TLH@PCL"},
             ]
@@ -103,6 +109,7 @@ describe('PicksGrid data row/column rendering', () => {
 
     it('Renders one spread cell when there is one game in data response', () => {
         const oneMockGameData = {
+            "users": [],
             "games": [
                 {"name": "TLH@PCL", "spread": "-20"},
             ]
@@ -127,6 +134,7 @@ describe('PicksGrid data row/column rendering', () => {
 
     it('Renders one result cell when there is one game in data response', () => {
         const oneMockGameData = {
+            "users": [],
             "games": [
                 {"name": "TLH@PCL", "spread": "-20", "result": "PCL"},
             ]

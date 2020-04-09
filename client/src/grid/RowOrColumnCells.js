@@ -1,9 +1,11 @@
 import React from "react";
 
-export function RowOrColumnCells(items, name) {
-    const className = `${name}-cell`
+const RowOrColumnCells = props => {
+    const {items, name} = props;
     return !items ? undefined :
         items.map((item, index) => {
-            return <div className={className} key={index}>{item}</div>
+            return <div className={`${name}-cell`} key={`${name}-${index}`}>{item}</div>
         });
 }
+
+export default RowOrColumnCells
