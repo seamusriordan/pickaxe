@@ -4,10 +4,11 @@ import PickCell from "./PickCell";
 import {buildWebsocketUri} from "../helpers";
 import {PICKS_QUERY, UPDATE_PICKS_MUTATION} from "../graphqlQueries";
 
-function userCells(users) {
-    return !users ? undefined :
-        users.map((user, index) => {
-            return <div className="name-cell" key={index}>{user.name}</div>
+function cells(items, name) {
+    const className = `${name}-cell`
+    return !items ? undefined :
+        items.map((item, index) => {
+            return <div className={className} key={index}>{item}</div>
         });
 }
 
@@ -117,7 +118,7 @@ const PicksGrid = () => {
     return <div>
         {loading ? "Loading" : error ? "Error" : !data ? "derp" :
             [
-                userCells(data.users),
+                cells(data.users?.map(user => user.name), "name"),
                 gameCells(data.games),
                 spreadCells(data.games),
                 pickCells(data, sendData),
