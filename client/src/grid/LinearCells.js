@@ -1,6 +1,6 @@
 import React from "react";
 
-const RowOrColumnCells = props => {
+const LinearCells = props => {
     const {items, name} = props;
     return !items ? undefined :
         items.map((item, index) => {
@@ -8,4 +8,4 @@ const RowOrColumnCells = props => {
         });
 }
 
-export default RowOrColumnCells
+export default LinearCells

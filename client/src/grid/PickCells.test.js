@@ -54,7 +54,7 @@ describe('PickCells', () => {
         })
     });
 
-    describe('on blur event', () => {
+    describe('on fired blur event', () => {
         let container;
         beforeEach(() => {
             const renderResult = render(<PickCells data={mockQueryData} sendData={sendDataSpy}/>);

@@ -88,12 +88,4 @@ describe('PicksGrid basic behavior', () => {
         const cell = grid.root.find(el => el.props.id === "pick-cells");
         expect(cell.props.sendData).toBe(callback);
     });
-
-
-
-
-
-
-
-
 });

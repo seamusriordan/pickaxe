@@ -3,7 +3,7 @@ import {useMutation, useQuery} from "@apollo/react-hooks";
 import {buildWebsocketUri} from "../helpers";
 import {PICKS_QUERY, UPDATE_PICKS_MUTATION} from "../graphqlQueries";
 import PickCells from "./PickCells";
-import RowOrColumnCells from "./RowOrColumnCells"
+import LinearCells from "./LinearCells"
 
 function destructureUserData(users) {
     return {
@@ -54,12 +54,12 @@ const PicksGrid = () => {
     return <div>
         {loading ? "Loading" : error ? "Error" : !data ? "derp" :
             [
-                <RowOrColumnCells key="name-cells" items={users.names} name="name"/>,
-                <RowOrColumnCells key="game-cells" items={games.names} name="game"/>,
-                <RowOrColumnCells key="spread-cells" items={games.spreads} name="spread"/>,
+                <LinearCells key="name-cells" items={users.names} name="name"/>,
+                <LinearCells key="game-cells" items={games.names} name="game"/>,
+                <LinearCells key="spread-cells" items={games.spreads} name="spread"/>,
                 <PickCells key="pick-cells" id="pick-cells"  data={data} sendData={sendData}/>,
-                <RowOrColumnCells key="result-cells" items={games.results} name="result"/>,
-                <RowOrColumnCells key="total-cells" items={users.totals} name="total"/>
+                <LinearCells key="result-cells" items={games.results} name="result"/>,
+                <LinearCells key="total-cells" items={users.totals} name="total"/>
             ]
         }
     </div>
