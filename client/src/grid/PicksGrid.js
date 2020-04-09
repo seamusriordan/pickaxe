@@ -12,35 +12,6 @@ function cells(items, name) {
         });
 }
 
-function totalCells(users) {
-    return !users ? undefined :
-        users.map((user, index) => {
-            return <div className="total-cell" key={index}>{user.total}</div>
-        });
-}
-
-function gameCells(games) {
-    return !games ? undefined :
-        games.map((game, index) => {
-            return <div className="game-cell" key={index}>{game.name}</div>
-        });
-}
-
-function spreadCells(games) {
-    return !games ? undefined :
-        games.map((game, index) => {
-            return <div className="spread-cell" key={index}>{game.spread}</div>
-        });
-}
-
-function resultCells(games) {
-    return !games ? undefined :
-        games.map((game, index) => {
-            return <div className="result-cell" key={index}>{game.result}</div>
-        });
-}
-
-
 function pickCells(data, sendData) {
     return (!data.users || !data.games) ? undefined :
         data.users.map((user, index1) => {
@@ -119,11 +90,11 @@ const PicksGrid = () => {
         {loading ? "Loading" : error ? "Error" : !data ? "derp" :
             [
                 cells(data.users?.map(user => user.name), "name"),
-                gameCells(data.games),
-                spreadCells(data.games),
+                cells(data.games?.map(game => game.name), "game"),
+                cells(data.games?.map(game => game.spread), "spread"),
                 pickCells(data, sendData),
-                resultCells(data.games),
-                totalCells(data.users),
+                cells(data.games?.map(game => game.result), "result"),
+                cells(data.users?.map(user => user.total), "total"),
             ]
         }
     </div>
