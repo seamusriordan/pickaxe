@@ -21,12 +21,27 @@ describe('PicksGrid basic behavior', () => {
         useMutation.mockReturnValue([() => {
         }]);
         // eslint-disable-next-line no-unused-vars,no-unused-expressions
-        create(<PicksGrid/>).root;
+        create(<PicksGrid defaultWeek="0"/>).root;
     });
 
     it('calls useQuery with some poll interval', () => {
         expect(useQuery).toBeCalled();
         expect(useQuery.mock.calls[0][1].pollInterval).toBeGreaterThan(0)
+    });
+
+    it('calls useQuery with default week of 1', () => {
+        const defaultWeek = "1";
+        jest.resetAllMocks();
+        useQuery.mockReturnValue({
+            loading: false, error: null, data: mockQueryData, refetch: () => {
+            }
+        });
+        useMutation.mockReturnValue([() => {
+        }]);
+
+        // eslint-disable-next-line no-unused-expressions
+        create(<PicksGrid defaultWeek={defaultWeek}/>).root;
+        expect(useQuery.mock.calls[0][1].variables.week).toEqual(defaultWeek)
     });
 
     it('calls useMutation ', () => {

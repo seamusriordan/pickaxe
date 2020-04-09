@@ -20,8 +20,9 @@ function destructureGameData(games) {
     };
 }
 
-const PicksGrid = () => {
-    const {loading, error, data, refetch} = useQuery(PICKS_QUERY, {variables: {week: "0"}, pollInterval: 600000});
+const PicksGrid = props => {
+    const {defaultWeek} = props;
+    const {loading, error, data, refetch} = useQuery(PICKS_QUERY, {variables: {week: defaultWeek}, pollInterval: 600000});
     const [sendData] = useMutation(UPDATE_PICKS_MUTATION);
 
 
