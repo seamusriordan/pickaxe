@@ -1,61 +1,11 @@
 import React, {useEffect} from "react";
 import {useMutation, useQuery} from "@apollo/react-hooks";
-import PickCell from "./PickCell";
 import {buildWebsocketUri} from "../helpers";
 import {PICKS_QUERY, UPDATE_PICKS_MUTATION} from "../graphqlQueries";
+import {PickCells} from "./PickCells";
+import {RowOrColumnCells} from "./RowOrColumnCells";
 
-function cells(items, name) {
-    const className = `${name}-cell`
-    return !items ? undefined :
-        items.map((item, index) => {
-            return <div className={className} key={index}>{item}</div>
-        });
-}
 
-function pickCells(data, sendData) {
-    return (!data.users || !data.games) ? undefined :
-        data.users.map((user, index1) => {
-            return data.games.map((game, index2) => {
-                let pickSet = getPicksForUser(data.userPicks, user.name);
-                let thisPick = getPickByGame(pickSet, game.name);
-
-                const sendDataCallback = (event, updatedPick) => {
-                    sendData({
-                        variables: {
-                            name: user.name,
-                            week: "0",
-                            game: game.name,
-                            pick: updatedPick,
-                        }
-                    });
-                };
-
-                return <PickCell
-                    className="pick-cell"
-                    id={user.name + '-' + game.name}
-                    key={index1 + '-' + index2}
-                    game={game.name}
-                    pick={thisPick}
-                    user={user.name}
-                    sendData={sendDataCallback}
-                />
-            });
-        });
-}
-
-export function getPickByGame(passedPicks, gameName) {
-    if (!passedPicks || passedPicks.size === 0) return null;
-    const firstMatchingPick = passedPicks.filter(pick => pick["game"] === gameName)[0];
-
-    return firstMatchingPick ? firstMatchingPick["pick"] : null
-}
-
-export function getPicksForUser(passedPicks, userName) {
-    if (!passedPicks || passedPicks.size === 0) return null;
-    const firstMatchingPick = passedPicks.filter(pickSet => pickSet.user.name === userName)[0];
-
-    return firstMatchingPick ? firstMatchingPick.picks : null
-}
 
 const PicksGrid = () => {
     const {loading, error, data, refetch} = useQuery(PICKS_QUERY, {variables: {week: "0"}, pollInterval: 600000});
@@ -89,12 +39,12 @@ const PicksGrid = () => {
     return <div>
         {loading ? "Loading" : error ? "Error" : !data ? "derp" :
             [
-                cells(data.users?.map(user => user.name), "name"),
-                cells(data.games?.map(game => game.name), "game"),
-                cells(data.games?.map(game => game.spread), "spread"),
-                pickCells(data, sendData),
-                cells(data.games?.map(game => game.result), "result"),
-                cells(data.users?.map(user => user.total), "total"),
+                RowOrColumnCells(data.users?.map(user => user.name), "name"),
+                RowOrColumnCells(data.games?.map(game => game.name), "game"),
+                RowOrColumnCells(data.games?.map(game => game.spread), "spread"),
+                PickCells(data, sendData),
+                RowOrColumnCells(data.games?.map(game => game.result), "result"),
+                RowOrColumnCells(data.users?.map(user => user.total), "total"),
             ]
         }
     </div>
