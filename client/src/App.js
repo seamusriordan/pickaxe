@@ -1,10 +1,10 @@
 import React from 'react';
-import PicksGrid from "./grid/PicksGrid";
 import {ApolloProvider} from '@apollo/react-hooks'
 import ApolloClient from "apollo-client";
 import {InMemoryCache} from 'apollo-cache-inmemory';
 import {HttpLink} from 'apollo-link-http';
 import {buildGraphqlUri} from "./helpers";
+import PicksLoader from "./PicksLoader";
 
 
 export const apolloClient = new ApolloClient({
@@ -28,7 +28,7 @@ function App() {
 
                 Also we have newly deployed
             </header>
-            <ApolloProvider client={apolloClient}><PicksGrid/></ApolloProvider>
+            <ApolloProvider client={apolloClient}><PicksLoader/></ApolloProvider>
         </div>
     );
 }

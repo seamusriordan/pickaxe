@@ -1,6 +1,5 @@
 import db.*
 import graphql.schema.DataFetcher
-import graphql.schema.StaticDataFetcher
 import graphql.schema.idl.RuntimeWiring
 
 fun wiringMap(): HashMap<String, HashMap<String, DataFetcher<*>>> {
@@ -9,11 +8,12 @@ fun wiringMap(): HashMap<String, HashMap<String, DataFetcher<*>>> {
     val mutationFields: HashMap<String, DataFetcher<*>> = HashMap()
 
     val connection = PickaxeDB().getDBConnection()
+    queryFields["currentWeek"] = CurrentWeekQuery(connection)
+    queryFields["weeks"] = WeeksQuery(connection)
     queryFields["users"] = UserQuery(connection)
-
     queryFields["games"] = GamesQuery(connection)
 
-    queryFields["userPicks"] = UserPickDataQueryFetcher(connection)
+    queryFields["userPicks"] = UserPickQuery(connection)
 
     mutationFields["updatePick"] = UpdatePickMutator(connection)
 

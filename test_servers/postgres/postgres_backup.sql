@@ -86,13 +86,24 @@ CREATE TABLE public.users (
 ALTER TABLE public.users OWNER TO postgres;
 
 --
+-- Name: weeks; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.weeks (
+    week character varying NOT NULL
+);
+
+
+ALTER TABLE public.weeks OWNER TO postgres;
+
+--
 -- Data for Name: games; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.games (game, week, gametime, final, result, spread) FROM stdin;
 GB@CHI	0	\N	f	\N	\N
-BUF@NE	0	\N	f	\N	\N
 SEA@PHI	0	\N	f	\N	\N
+BUF@NE	0	\N	f	\N	\N
 \.
 
 
@@ -101,18 +112,18 @@ SEA@PHI	0	\N	f	\N	\N
 --
 
 COPY public.userpicks (name, week, game, pick) FROM stdin;
-Sereres	0	SEA@PHI	SEA
+Vegas	0	BUF@NE	BUF
+Sereres	0	BUF@NE	BUF
 Sereres	0	GB@CHI	CHI
+Sereres	0	SEA@PHI	SEA
+RNG	0	BUF@NE	BUF
 Vegas	0	GB@CHI	CHI
-Vegas	0	SEA@PHI	SEA
+Seamus	0	GB@CHI	CHI
+Seamus	0	BUF@NE	BUF
 RNG	0	GB@CHI	CHI
 RNG	0	SEA@PHI	SEA
-Seamus	0	GB@CHI	CHI
+Vegas	0	SEA@PHI	SEA
 Seamus	0	SEA@PHI	SEA
-RNG	0	BUF@NE	BUF
-Vegas	0	BUF@NE	BUF
-Seamus	0	BUF@NE	BUF
-Sereres	0	BUF@NE	BUF
 \.
 
 
@@ -129,11 +140,20 @@ Vegas	t
 
 
 --
+-- Data for Name: weeks; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.weeks (week) FROM stdin;
+0
+\.
+
+
+--
 -- Name: games games_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.games
-    ADD CONSTRAINT games_pk PRIMARY KEY (game);
+    ADD CONSTRAINT games_pk PRIMARY KEY (game, week);
 
 
 --
@@ -153,6 +173,14 @@ ALTER TABLE ONLY public.users
 
 
 --
+-- Name: weeks weeks_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.weeks
+    ADD CONSTRAINT weeks_pk PRIMARY KEY (week);
+
+
+--
 -- Name: games_game_uindex; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -167,11 +195,26 @@ CREATE UNIQUE INDEX users_name_uindex ON public.users USING btree (name);
 
 
 --
--- Name: userpicks userpicks_games_game_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: weeks_week_uindex; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE UNIQUE INDEX weeks_week_uindex ON public.weeks USING btree (week);
+
+
+--
+-- Name: games games_weeks_week_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.games
+    ADD CONSTRAINT games_weeks_week_fk FOREIGN KEY (week) REFERENCES public.weeks(week) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: userpicks userpicks_games_game_week_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.userpicks
-    ADD CONSTRAINT userpicks_games_game_fk FOREIGN KEY (game) REFERENCES public.games(game);
+    ADD CONSTRAINT userpicks_games_game_week_fk FOREIGN KEY (game, week) REFERENCES public.games(game, week) ON UPDATE CASCADE ON DELETE RESTRICT;
 
 
 --
@@ -179,7 +222,7 @@ ALTER TABLE ONLY public.userpicks
 --
 
 ALTER TABLE ONLY public.userpicks
-    ADD CONSTRAINT userpicks_users_name_fk FOREIGN KEY (name) REFERENCES public.users(name);
+    ADD CONSTRAINT userpicks_users_name_fk FOREIGN KEY (name) REFERENCES public.users(name) ON UPDATE CASCADE ON DELETE RESTRICT;
 
 
 --

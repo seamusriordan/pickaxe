@@ -1,9 +1,9 @@
 import React from 'react';
 import {create, act} from "react-test-renderer";
 import App from './App';
-import PicksGrid from "./grid/PicksGrid";
 import {MockedProvider} from "@apollo/react-testing";
 import {buildGraphqlUri, getGraphqlPort, getGraphqlProtocol, getGraphqlServer} from "./helpers";
+import PicksLoader from "./PicksLoader";
 
 
 describe('App', () => {
@@ -23,12 +23,12 @@ describe('App', () => {
         expect(app.root.findAll(el => el.props.children === 'Make a pick')).toBeDefined();
     });
 
-    it('has PicksGrid element', () => {
+    it('has PicksLoader element', () => {
         let app = null;
         act(() => {
             app = create(<MockedProvider><App/></MockedProvider>);
         });
-        expect(app.root.findAll(el => el.type === PicksGrid).length).toEqual(1);
+        expect(app.root.findAll(el => el.type === PicksLoader).length).toEqual(1);
     });
 
     it('graphqlServer returns localhost when environment variable is not set', () => {

@@ -7,7 +7,7 @@ describe('Mutation response update', () => {
     });
 
     it('mutation query causes update', () => {
-            cy.get('#Seamus-SEA\\@PHI')
+        cy.get('#Seamus-SEA\\@PHI')
             .contains("SEA");
 
         cy.request('POST', 'localhost:8080/pickaxe/graphql', graphqlMutateBody)

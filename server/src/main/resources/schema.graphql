@@ -1,10 +1,14 @@
 type Query {
-    "I am a description of users"
+    "Users"
     users: [User]
-    "I am a description of games"
+    "Games with spreads and results"
     games(week: String): [Game]
-    "I am a description of user picks"
+    "Picks for users"
     userPicks(week: String): [UserPicks]
+    "Game Weeks"
+    weeks: [Week]
+    "Current game week"
+    currentWeek: Week
 }
 
 type User {
@@ -27,6 +31,10 @@ type UserPicks {
 type Pick {
     game: String
     pick: String
+}
+
+type Week {
+    week: String
 }
 
 type Mutation {

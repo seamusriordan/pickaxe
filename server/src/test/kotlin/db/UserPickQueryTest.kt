@@ -1,3 +1,5 @@
+@file:Suppress("SqlResolve")
+
 package db
 
 import dto.PickDTO
@@ -17,8 +19,8 @@ import java.sql.DriverManager
 import java.sql.ResultSet
 import java.sql.Statement
 
-class UserPickDataQueryFetcherTest {
-    private lateinit var userPickDataQueryFetcher: UserPickDataQueryFetcher
+class UserPickQueryTest {
+    private lateinit var userPickQuery: UserPickQuery
     private lateinit var mockStatement: Statement
     private lateinit var mockConnection: Connection
 
@@ -32,7 +34,7 @@ class UserPickDataQueryFetcherTest {
         every { DriverManager.getConnection(any(), any()) } returns mockConnection
         every { mockConnection.createStatement() } returns mockStatement
 
-        userPickDataQueryFetcher = UserPickDataQueryFetcher(mockConnection)
+        userPickQuery = UserPickQuery(mockConnection)
     }
 
     @Test
@@ -45,7 +47,7 @@ class UserPickDataQueryFetcherTest {
         setupMocksForPicks(expectedPicks, setupResultMockForOneUserOnePick, week)
         val env = getEnvForWeek(week)
 
-        val results = UserPickDataQueryFetcher(mockConnection).get(env)
+        val results = UserPickQuery(mockConnection).get(env)
 
         assertEquals(expectedPicks.map { x -> x.user.name }, results.map { x -> x.user.name })
         assertEquals(expectedPicks[0].picks.map { x -> x.game }, results[0].picks.map { x -> x.game })
@@ -62,7 +64,7 @@ class UserPickDataQueryFetcherTest {
         setupMocksForPicks(expectedPicks, setupResultMockForOneUserOnePick, week)
         val env = getEnvForWeek(week)
 
-        val results = UserPickDataQueryFetcher(mockConnection).get(env)
+        val results = UserPickQuery(mockConnection).get(env)
 
         assertEquals(expectedPicks.map { x -> x.user.name }, results.map { x -> x.user.name })
         assertEquals(expectedPicks[0].picks.map { x -> x.game }, results[0].picks.map { x -> x.game })
@@ -81,7 +83,7 @@ class UserPickDataQueryFetcherTest {
         setupMocksForPicks(expectedPicks, setMockResultsForTwoUsersOnePick, week)
         val env = getEnvForWeek(week)
 
-        val results = UserPickDataQueryFetcher(mockConnection).get(env)
+        val results = UserPickQuery(mockConnection).get(env)
 
         assertEquals(expectedPicks.map { x -> x.user.name }, results.map { x -> x.user.name })
         assertEquals(expectedPicks[0].picks.map { x -> x.game }, results[0].picks.map { x -> x.game })
@@ -102,7 +104,7 @@ class UserPickDataQueryFetcherTest {
         setupMocksForPicks(expectedPicks, setMockResultsForOneUserTwoPicks, week)
         val env = getEnvForWeek(week)
 
-        val results = UserPickDataQueryFetcher(mockConnection).get(env)
+        val results = UserPickQuery(mockConnection).get(env)
 
         assertEquals(expectedPicks.map { x -> x.user.name }, results.map { x -> x.user.name })
         assertEquals(expectedPicks[0].picks.map { x -> x.game }, results[0].picks.map { x -> x.game })
