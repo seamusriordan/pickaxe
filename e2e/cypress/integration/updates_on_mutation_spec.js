@@ -3,17 +3,17 @@ describe('Mutation response update', () => {
     const graphqlRevertBody = "{\"operationName\":\"Mutation\",\"variables\":{\"name\":\"Seamus\",\"week\":\"0\",\"game\":\"SEA@PHI\",\"pick\":\"SEA\"},\"query\":\"mutation Mutation($name: String, $week: String, $game: String, $pick: String) {\\n  updatePick(name: $name, userPick: {week: $week, game: $game, pick: $pick})\\n}\\n\"}";
 
     beforeEach(() => {
-        cy.visit('localhost:8080/pickaxe');
+        cy.visit('localhost:8080/pickaxe').wait(500);
     });
 
     it('mutation query causes update', () => {
         cy.get('#Seamus-SEA\\@PHI')
             .contains("SEA")
             .request('POST', 'localhost:8080/pickaxe/graphql', graphqlMutateBody)
-            .get('#Seamus-SEA\\@PHI')
-            .contains("DERP",  {timeout: 10000})
+        cy.get('#Seamus-SEA\\@PHI')
+            .contains("DERP", {timeout: 10000})
             .request('POST', 'localhost:8080/pickaxe/graphql', graphqlRevertBody)
-            .get('#Seamus-SEA\\@PHI')
+        cy.visit('localhost:8080/pickaxe').get('#Seamus-SEA\\@PHI')
             .contains("SEA")
     });
 
@@ -24,14 +24,14 @@ describe('Mutation response update', () => {
 
         cy.request('POST', 'localhost:8080/pickaxe/graphql', graphqlMutateBody)
             .get('#Seamus-SEA\\@PHI')
-            .contains("SEA",  {timeout: 10000})
+            .contains("SEA", {timeout: 10000})
             .get('#Sereres-SEA\\@PHI').contains("thing")
-            .get('#Sereres-SEA\\@PHI')
+        cy.get('#Sereres-SEA\\@PHI')
             .click()
             .type("{backspace}{backspace}{backspace}{backspace}{backspace}PHI")
             .invoke('blur')
-            .request('POST', 'localhost:8080/pickaxe/graphql', graphqlRevertBody)
-            .get('#Seamus-SEA\\@PHI')
-            .contains("SEA",  {timeout: 10000});
+        cy.request('POST', 'localhost:8080/pickaxe/graphql', graphqlRevertBody)
+        cy.visit('localhost:8080/pickaxe').get('#Seamus-SEA\\@PHI')
+            .contains("SEA")
     });
 });
