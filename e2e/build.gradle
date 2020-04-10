@@ -29,7 +29,7 @@ task docker_rm(type: Exec) {
     commandLine 'docker', 'rm', 'pickaxe'
 }
 
-task docker_is_not_running(type: Exec){
+task docker_is_not_running(type: Exec) {
     commandLine 'docker', 'stop', 'pickaxe'
     ignoreExitValue true
 }

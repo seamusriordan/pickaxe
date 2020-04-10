@@ -8,13 +8,13 @@ describe('Mutation response update', () => {
 
     it('mutation query causes update', () => {
         cy.get('#Seamus-SEA\\@PHI')
-            .contains("SEA");
-
-        cy.request('POST', 'localhost:8080/pickaxe/graphql', graphqlMutateBody)
+            .contains("SEA")
+            .request('POST', 'localhost:8080/pickaxe/graphql', graphqlMutateBody)
             .get('#Seamus-SEA\\@PHI')
-            .contains("DERP",  {timeout: 10000});
-
-        cy.request('POST', 'localhost:8080/pickaxe/graphql', graphqlRevertBody)
+            .contains("DERP",  {timeout: 10000})
+            .request('POST', 'localhost:8080/pickaxe/graphql', graphqlRevertBody)
+            .get('#Seamus-SEA\\@PHI')
+            .contains("SEA")
     });
 
     it('does not overwrite text in updated cells while typing', () => {
@@ -24,16 +24,13 @@ describe('Mutation response update', () => {
 
         cy.request('POST', 'localhost:8080/pickaxe/graphql', graphqlMutateBody)
             .get('#Seamus-SEA\\@PHI')
-            .contains("SEA",  {timeout: 10000});
-
-        cy.get('#Sereres-SEA\\@PHI').contains("thing");
-
-        cy.get('#Sereres-SEA\\@PHI')
+            .contains("SEA",  {timeout: 10000})
+            .get('#Sereres-SEA\\@PHI').contains("thing")
+            .get('#Sereres-SEA\\@PHI')
             .click()
             .type("{backspace}{backspace}{backspace}{backspace}{backspace}PHI")
-            .invoke('blur');
-
-        cy.request('POST', 'localhost:8080/pickaxe/graphql', graphqlRevertBody)
+            .invoke('blur')
+            .request('POST', 'localhost:8080/pickaxe/graphql', graphqlRevertBody)
             .get('#Seamus-SEA\\@PHI')
             .contains("SEA",  {timeout: 10000});
     });
