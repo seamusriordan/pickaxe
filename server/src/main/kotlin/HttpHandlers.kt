@@ -16,7 +16,10 @@ fun postHandler(graphQL: GraphQL, wsContexts: ArrayList<WsContext>): (Context) -
         ctx.header("Access-Control-Allow-Origin", "*")
         ctx.result(JavalinJson.toJson(executionResult.toSpecification()))
 
-        if(executionInput.operationName!!.contentEquals("Mutation")){
+        if (
+            executionInput.operationName != null &&
+            operationNameIs(executionInput, "Mutation")
+        ) {
             wsContexts.toMutableList().map {
                 @Suppress("SENSELESS_COMPARISON")
                 if (it.session == null || it.session.isOpen)
@@ -25,6 +28,9 @@ fun postHandler(graphQL: GraphQL, wsContexts: ArrayList<WsContext>): (Context) -
         }
     }
 }
+
+private fun operationNameIs(executionInput: ExecutionInput, operationName: String) =
+    executionInput.operationName!!.contentEquals(operationName)
 
 fun optionsHandler(): (Context) -> Unit {
     return { ctx ->

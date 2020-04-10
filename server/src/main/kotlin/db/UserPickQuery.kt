@@ -1,3 +1,5 @@
+@file:Suppress("SqlResolve")
+
 package db
 
 import dto.PickDTO
@@ -8,7 +10,7 @@ import graphql.schema.DataFetchingEnvironment
 import java.sql.Connection
 import java.sql.ResultSet
 
-class UserPickDataQueryFetcher(private val connection: Connection) : DataFetcher<List<UserPicksDTO>> {
+class UserPickQuery(private val connection: Connection) : DataFetcher<List<UserPicksDTO>> {
     override fun get(environment: DataFetchingEnvironment): List<UserPicksDTO> {
         val statement = connection.createStatement()
         val week = environment.arguments["week"] as String

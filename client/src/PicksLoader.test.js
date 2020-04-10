@@ -18,7 +18,7 @@ describe('PicksLoader', () => {
         jest.resetAllMocks();
         useQuery
             .mockReturnValueOnce({
-                loading: false, error: null, data: {currentWeek: "0", weeks: ["0", "1"]}})
+                loading: false, error: null, data: {currentWeek: {week: "0"}, weeks: [{week: "0"}, {week: "1"}]}})
             .mockReturnValueOnce(picksQueryResult);
         useMutation.mockReturnValue([() => {
         }]);
@@ -50,7 +50,7 @@ describe('PicksLoader', () => {
         useQuery.mockReset();
         useQuery
             .mockReturnValueOnce({
-                loading: false, error: null, data: {currentWeek: "1", weeks: ["0", "1"]}})
+                loading: false, error: null, data: {currentWeek: {week: "1"}, weeks: ["0", "1"]}})
             .mockReturnValueOnce(picksQueryResult);
 
 

@@ -9,7 +9,7 @@ const PicksLoader = () => {
     return <div>{
             loading ? "Loading App" :
             error ? "Something has gone wrong" :
-            <PicksGrid id="picks-grid" defaultWeek={data.currentWeek}/>
+            <PicksGrid id="picks-grid" defaultWeek={data.currentWeek.week}/>
     }</div>;
 }
 

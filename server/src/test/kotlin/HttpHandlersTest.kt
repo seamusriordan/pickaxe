@@ -12,6 +12,7 @@ import java.util.concurrent.Future
 
 class HttpHandlersTest {
     private val idQueryBody = "{\"operationName\":\"Query\",\"variables\":{},\"query\":\"query Query {\\n  id\\n}\\n\"}"
+    private val nullOpBody = "{\"operationName\":null,\"variables\":{},\"query\":\"query Query {\\n  id\\n}\\n\"}"
     private val userQueryBody =
         "{\"operationName\":\"Query\",\"variables\":{},\"query\":\"query Query {\\n  user {\\n\\n  name}\\n}\\n\"}"
     private val mutationQueryBody7 =
@@ -115,7 +116,12 @@ class HttpHandlersTest {
         assertEquals(expectedResult, resultSlot.captured)
     }
 
+    @Test
+    fun nullOperationNameDoesntCrashServer(){
+        val mockContext = createMockNullOpContext()
 
+        postHandler(sampleGraphQL(), ArrayList(0))(mockContext)
+    }
 
     @Test
     fun postHandlerWithOneOpenContextSendsMessage() {
@@ -128,6 +134,14 @@ class HttpHandlersTest {
         postHandler(sampleGraphQL(), wsContexts)(mockContext)
 
         verify { openWsContext.send(any<String>()) }
+    }
+
+    private fun createMockNullOpContext(): Context {
+        val mockContext = mockkClass(Context::class)
+        every { mockContext.body() } returns nullOpBody
+        every { mockContext.header(any(), any()) } returns mockContext
+        every { mockContext.result(any<String>()) } returns mockContext
+        return mockContext
     }
 
     private fun createMockQueryContext(): Context {
@@ -177,6 +191,8 @@ class HttpHandlersTest {
         verify(exactly = 0) { openWsContext1.send(any<String>()) }
         verify(exactly = 0) { openWsContext2.send(any<String>()) }
     }
+
+
 
     interface FutureVoid : Future<Void>
 
