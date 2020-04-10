@@ -29,6 +29,18 @@ type Pick {
     pick: String
 }
 
+type CurrentWeek {
+    week: Week
+}
+
+type Weeks {
+    weeks: [Week]
+}
+
+type Week {
+    week: String
+}
+
 type Mutation {
     updatePick(name: String, userPick: UpdatedPick): Boolean
 }

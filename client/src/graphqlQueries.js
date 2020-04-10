@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 
-export const WEEKS_QUERY = gql`query Query {currentWeek {week} weeks}`;
+export const WEEKS_QUERY = gql`query Query {CurrentWeek {week} Weeks {weeks}}`;
 
 export const PICKS_QUERY = gql`
     query Query($week: String) {
