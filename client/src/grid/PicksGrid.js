@@ -23,7 +23,7 @@ function destructureGameData(games) {
 
 const PicksGrid = props => {
     const {defaultWeek} = props;
-    const [currentWeek, changeWeek] = useState(defaultWeek);
+    const [currentWeek, updateWeek] = useState(defaultWeek);
     const {loading, error, data, refetch} = useQuery(PICKS_QUERY, {
         variables: {week: defaultWeek},
         pollInterval: 600000
@@ -59,22 +59,22 @@ const PicksGrid = props => {
     const games = destructureGameData(data?.games);
 
     const advanceWeek = () => {
-        const index = data.weeks.findIndex(week => week.week === defaultWeek)
+        const index = data.weeks.findIndex(week => week.week === currentWeek)
         if (index >= data.weeks.length-1) {
             return;
         }
         const nextWeek = data.weeks[index + 1].week;
-        changeWeek(nextWeek);
+        updateWeek(nextWeek);
         refetch({week: nextWeek}).catch();
     };
 
     const rewindWeek = () => {
-        const index = data.weeks.findIndex(week => week.week === defaultWeek)
+        const index = data.weeks.findIndex(week => week.week === currentWeek)
         if (index === 0) {
             return;
         }
         const previousWeek = data.weeks[index - 1].week;
-        changeWeek(previousWeek);
+        updateWeek(previousWeek);
         refetch({week: previousWeek}).catch();
     };
 

@@ -106,11 +106,15 @@ describe('PicksGrid', () => {
     });
 
     describe('advance week', () => {
-        it('on week 0 refetches with week 1', () => {
-            const changeWeek = grid.findByProps({id: "change-week"})
+        let week0Change;
 
+        beforeEach(() => {
+            week0Change = grid.findByProps({id: "change-week"});
+        })
+
+        it('on week 0 refetches with week 1', () => {
             act(() => {
-                changeWeek.props.forward();
+                week0Change.props.forward();
             })
 
             expect(refetchSpy.mock.calls[0][0]).toEqual({
@@ -118,12 +122,24 @@ describe('PicksGrid', () => {
             })
         });
 
+        it('twice on week 0 refetches with week 2', () => {
+            act(() => {
+                week0Change.props.forward();
+            })
+            act(() => {
+                week0Change.props.forward();
+            })
+
+            expect(refetchSpy.mock.calls[1][0]).toEqual({
+                week: mockQueryData.weeks[2].week
+            })
+        });
+
         it('on week 0 updates displayed week', () => {
-            const changeWeek = grid.findByProps({id: "change-week"})
-            const displayedWeek = changeWeek.findByProps({id: "changeWeek-week"})
+            const displayedWeek = week0Change.findByProps({id: "changeWeek-week"})
 
             act(() => {
-                changeWeek.props.forward();
+                week0Change.props.forward();
             })
 
             expect(displayedWeek.children[0]).toContain(mockQueryData.weeks[1].week);
@@ -131,7 +147,6 @@ describe('PicksGrid', () => {
 
         it('on week 1 refetches with week 2', () => {
             const week1Grid = create(<PicksGrid defaultWeek="1"/>).root;
-
             const changeWeek = week1Grid.findByProps({id: "change-week"})
 
             act(() => {
@@ -145,7 +160,6 @@ describe('PicksGrid', () => {
 
         it('on final week does nothing', () => {
             const week2Grid = create(<PicksGrid defaultWeek="2"/>).root;
-
             const changeWeek = week2Grid.findByProps({id: "change-week"})
 
             act(() => {
@@ -157,13 +171,17 @@ describe('PicksGrid', () => {
     });
 
     describe('rewind week', () => {
+        let week2Grid;
+        let week2Change;
+
+        beforeEach(() => {
+            week2Grid = create(<PicksGrid defaultWeek="2"/>).root;
+            week2Change = week2Grid.findByProps({id: "change-week"});
+        })
+
         it('on week 2 refetches with week 1', () => {
-            const week2Grid = create(<PicksGrid defaultWeek="2"/>).root;
-
-            const changeWeek = week2Grid.findByProps({id: "change-week"})
-
             act(() => {
-                changeWeek.props.back();
+                week2Change.props.back();
             })
 
             expect(refetchSpy.mock.calls[0][0]).toEqual({
@@ -171,14 +189,24 @@ describe('PicksGrid', () => {
             })
         });
 
-        it('on week 2 updates displayed week', () => {
-            const week2Grid = create(<PicksGrid defaultWeek="2"/>).root;
+        it('twice on week 2 refetches with week 0', () => {
+            act(() => {
+                week2Change.props.back();
+            })
+            act(() => {
+                week2Change.props.back();
+            })
 
-            const changeWeek = week2Grid.findByProps({id: "change-week"})
-            const displayedWeek = changeWeek.findByProps({id: "changeWeek-week"})
+            expect(refetchSpy.mock.calls[1][0]).toEqual({
+                week: mockQueryData.weeks[0].week
+            })
+        });
+
+        it('on week 2 updates displayed week', () => {
+            const displayedWeek = week2Change.findByProps({id: "changeWeek-week"})
 
             act(() => {
-                changeWeek.props.back();
+                week2Change.props.back();
             })
 
             expect(displayedWeek.children[0]).toContain(mockQueryData.weeks[1].week);
@@ -186,7 +214,6 @@ describe('PicksGrid', () => {
 
         it('on week 1 refetches with week 0', () => {
             const week1Grid = create(<PicksGrid defaultWeek="1"/>).root;
-
             const changeWeek = week1Grid.findByProps({id: "change-week"})
 
             act(() => {
