@@ -4,7 +4,7 @@ const LinearCells = props => {
     const {items, name} = props;
     return !items ? undefined :
         items.map((item, index) => {
-            return <div className={`${name}-cell`} key={`${name}-${index}`}>{item}</div>
+            return <div className={`${name}-cell`} key={`${name}-${index}`} id={`${name}-${index}`}>{item}</div>
         });
 }
 
