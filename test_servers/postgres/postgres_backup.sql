@@ -104,6 +104,7 @@ COPY public.games (game, week, gametime, final, result, spread) FROM stdin;
 GB@CHI	0	\N	f	\N	\N
 SEA@PHI	0	\N	f	\N	\N
 BUF@NE	0	\N	f	\N	\N
+NE@TB	1	\N	f	NE	-14
 \.
 
 
@@ -112,18 +113,20 @@ BUF@NE	0	\N	f	\N	\N
 --
 
 COPY public.userpicks (name, week, game, pick) FROM stdin;
+Vegas	1	NE@TB	TB
+Seamus	1	NE@TB	TB
 Vegas	0	BUF@NE	BUF
 Sereres	0	BUF@NE	BUF
 Sereres	0	GB@CHI	CHI
-Sereres	0	SEA@PHI	SEA
-RNG	0	BUF@NE	BUF
-Vegas	0	GB@CHI	CHI
+Sereres	0	SEA@PHI	PHI
+Seamus	0	SEA@PHI	SEA
+RNG	0	GB@CHI	CHI
 Seamus	0	GB@CHI	CHI
 Seamus	0	BUF@NE	BUF
-RNG	0	GB@CHI	CHI
+RNG	0	BUF@NE	BUF
+Vegas	0	GB@CHI	CHI
 RNG	0	SEA@PHI	SEA
 Vegas	0	SEA@PHI	SEA
-Seamus	0	SEA@PHI	SEA
 \.
 
 
@@ -145,6 +148,7 @@ Vegas	t
 
 COPY public.weeks (week) FROM stdin;
 0
+1
 \.
 
 
