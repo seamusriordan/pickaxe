@@ -1,6 +1,7 @@
 package db
 
 import dto.GameDTO
+import getEnvForWeek
 import graphql.schema.DataFetchingEnvironment
 import graphql.schema.DataFetchingEnvironmentImpl
 import io.mockk.every
@@ -30,7 +31,7 @@ class GamesQueryTest {
         every { DriverManager.getConnection(any(), any()) } returns mockConnection
         every { mockConnection.createStatement() } returns mockStatement
 
-        env = DataFetchingEnvironmentImpl.newDataFetchingEnvironment().build()
+        env = getEnvForWeek("0")
     }
 
     @Test
@@ -45,7 +46,7 @@ class GamesQueryTest {
         every { mockResultSet.getString("result")
         } returns expectedGames[0].result
         every { mockResultSet.getDouble("spread")
-        } returns expectedGames[0].spread?.toDouble()!!
+        } returns expectedGames[0].spread!!
         every { mockResultSet.getString("week")
         } returns expectedGames[0].week
         every { mockResultSet.wasNull() } returns false
@@ -55,7 +56,7 @@ class GamesQueryTest {
 
         Assertions.assertEquals(expectedGames.map { x -> x.name }, results.map { x -> x.name })
         Assertions.assertEquals(expectedGames.map { x -> x.result }, results.map { x -> x.result })
-        Assertions.assertEquals(expectedGames.map { x -> x.spread?.toDouble() }, results.map { x -> x.spread })
+        Assertions.assertEquals(expectedGames.map { x -> x.spread }, results.map { x -> x.spread })
         Assertions.assertEquals(expectedGames.map { x -> x.week }, results.map { x -> x.week })
     }
     
@@ -94,7 +95,7 @@ class GamesQueryTest {
         every { mockResultSet.getString("result")
         } returns null
         every { mockResultSet.getDouble("spread")
-        } returns expectedGames[0].spread?.toDouble()!!
+        } returns expectedGames[0].spread!!
         every { mockResultSet.wasNull() } returns true andThen false
         every { mockResultSet.getString("week")
         } returns expectedGames[0].week
@@ -118,7 +119,7 @@ class GamesQueryTest {
         every { mockResultSet.getString("result")
         } returns expectedGames[0].result andThen expectedGames[1].result
         every { mockResultSet.getDouble("spread")
-        } returns expectedGames[0].spread?.toDouble()!! andThen expectedGames[1].spread?.toDouble()!!
+        } returns expectedGames[0].spread!! andThen expectedGames[1].spread!!
         every { mockResultSet.getString("week")
         } returns expectedGames[0].week andThen expectedGames[1].week
         every { mockResultSet.wasNull() } returns false
@@ -128,7 +129,33 @@ class GamesQueryTest {
 
         Assertions.assertEquals(expectedGames.map { x -> x.name }, results.map { x -> x.name })
         Assertions.assertEquals(expectedGames.map { x -> x.result }, results.map { x -> x.result })
-        Assertions.assertEquals(expectedGames.map { x -> x.spread?.toDouble() }, results.map { x -> x.spread })
+        Assertions.assertEquals(expectedGames.map { x -> x.spread }, results.map { x -> x.spread })
+        Assertions.assertEquals(expectedGames.map { x -> x.week }, results.map { x -> x.week })
+    }
+
+    @Test
+    fun getReturnsGameWithGameInWeek1() {
+        val expectedGames: ArrayList<GameDTO> = ArrayList(1)
+        expectedGames.add(generateGame("NE@TB", "TB", -10.5, "1"))
+        val mockResultSet = mockkClass(ResultSet::class)
+        every { mockResultSet.next()
+        } returns true andThen  false
+        every { mockResultSet.getString("game")
+        } returns expectedGames[0].name
+        every { mockResultSet.getString("result")
+        } returns expectedGames[0].result
+        every { mockResultSet.getDouble("spread")
+        } returns expectedGames[0].spread!!
+        every { mockResultSet.getString("week")
+        } returns expectedGames[0].week
+        every { mockResultSet.wasNull() } returns false
+        every { mockStatement.executeQuery("SELECT game, week, result, spread FROM games WHERE week = '1'") } returns mockResultSet
+
+        val results = GamesQuery(mockConnection).get(getEnvForWeek("1"))
+
+        Assertions.assertEquals(expectedGames.map { x -> x.name }, results.map { x -> x.name })
+        Assertions.assertEquals(expectedGames.map { x -> x.result }, results.map { x -> x.result })
+        Assertions.assertEquals(expectedGames.map { x -> x.spread }, results.map { x -> x.spread })
         Assertions.assertEquals(expectedGames.map { x -> x.week }, results.map { x -> x.week })
     }
 

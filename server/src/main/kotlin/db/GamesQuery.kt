@@ -6,10 +6,11 @@ import graphql.schema.DataFetchingEnvironment
 import java.sql.Connection
 
 class GamesQuery(private val connection: Connection): DataFetcher<List<GameDTO>> {
-    override fun get(environment: DataFetchingEnvironment?): List<GameDTO> {
+    override fun get(environment: DataFetchingEnvironment): List<GameDTO> {
         val statement = connection.createStatement()
+        val week = environment.arguments["week"] as String
 
-        val resultSet = statement.executeQuery("SELECT game, week, result, spread FROM games WHERE week = '0'")
+        val resultSet = statement.executeQuery("SELECT game, week, result, spread FROM games WHERE week = '$week'")
 
         val results = ArrayList<GameDTO>(0)
 
