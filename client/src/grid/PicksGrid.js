@@ -21,10 +21,70 @@ function destructureGameData(games) {
     };
 }
 
+function indexIsPastEndOfData(index, data) {
+    return index >= data.weeks.length - 1;
+}
+
+function generateAdvanceWeekCallback(data, currentWeek, updateWeek, refetch) {
+    return () => {
+        const index = data.weeks.findIndex(week => week.week === currentWeek)
+        if (indexIsPastEndOfData(index, data)) {
+            return;
+        }
+        const nextWeek = data.weeks[index + 1].week;
+        updateWeek(nextWeek);
+        refetch({week: nextWeek}).catch(err => {
+            console.warn(`Refetch failed ${err}`)
+        });
+    };
+}
+
+function generateRewindWeekCallback(data, currentWeek, updateWeek, refetch) {
+    return () => {
+        const index = data.weeks.findIndex(week => week.week === currentWeek)
+        if (index === 0) {
+            return;
+        }
+        const previousWeek = data.weeks[index - 1].week;
+        updateWeek(previousWeek);
+        refetch({week: previousWeek}).catch(err => {
+            console.warn(`Refetch failed ${err}`)
+        });
+    };
+}
+
+function generateWebsocketOnOpenCallback(refetch) {
+    return () => {
+        refetch().catch(err => {
+            console.warn(`Refetch failed ${err}`)
+        })
+    };
+}
+
+function generatedWebsocketOnMessageCallback(refetch) {
+    return () => {
+        refetch().catch(err => {
+            console.warn(`Refetch failed ${err}`)
+        })
+    };
+}
+
+function generateUseEffectCleanupCallback(webSocket) {
+    return () => {
+        if (webSocket.readyState === WebSocket.OPEN) {
+            webSocket.close()
+        } else {
+            webSocket.onopen = () => {
+                webSocket.close()
+            }
+        }
+    };
+}
+
 const PicksGrid = props => {
     const {defaultWeek} = props;
     const [currentWeek, updateWeek] = useState(defaultWeek);
-    const {loading, error, data, refetch} = useQuery(PICKS_QUERY, {
+    const {error, data, refetch} = useQuery(PICKS_QUERY, {
         variables: {week: defaultWeek},
         pollInterval: 600000
     });
@@ -33,53 +93,19 @@ const PicksGrid = props => {
 
     useEffect(() => {
         let webSocket = new WebSocket(buildWebsocketUri());
-        webSocket.onopen = () => {
-            refetch().catch(err => {
-                console.warn(`Refetch failed ${err}`)
-            })
-        };
-
-        webSocket.onmessage = () => {
-            refetch().catch(err => {
-                console.warn(`Refetch failed ${err}`)
-            })
-        };
-        return () => {
-            if (webSocket.readyState === WebSocket.OPEN) {
-                webSocket.close()
-            } else {
-                webSocket.onopen = () => {
-                    webSocket.close()
-                }
-            }
-        }
+        webSocket.onopen = generateWebsocketOnOpenCallback(refetch);
+        webSocket.onmessage = generatedWebsocketOnMessageCallback(refetch);
+        return generateUseEffectCleanupCallback(webSocket)
     });
 
     const users = destructureUserData(data?.users);
     const games = destructureGameData(data?.games);
 
-    const advanceWeek = () => {
-        const index = data.weeks.findIndex(week => week.week === currentWeek)
-        if (index >= data.weeks.length-1) {
-            return;
-        }
-        const nextWeek = data.weeks[index + 1].week;
-        updateWeek(nextWeek);
-        refetch({week: nextWeek}).catch();
-    };
-
-    const rewindWeek = () => {
-        const index = data.weeks.findIndex(week => week.week === currentWeek)
-        if (index === 0) {
-            return;
-        }
-        const previousWeek = data.weeks[index - 1].week;
-        updateWeek(previousWeek);
-        refetch({week: previousWeek}).catch();
-    };
+    const advanceWeek = generateAdvanceWeekCallback(data, currentWeek, updateWeek, refetch);
+    const rewindWeek = generateRewindWeekCallback(data, currentWeek, updateWeek, refetch);
 
     return <div>
-        {loading ? "Loading" : error ? "Error" : !data ? "derp" :
+        { error ? "Error" : !data ? "Waiting for data..." :
             [
                 <ChangeWeek key="change-week" id="change-week" week={currentWeek} forward={advanceWeek} back={rewindWeek}/>,
                 <LinearCells key="name-cells" items={users.names} name="name"/>,
@@ -93,6 +119,5 @@ const PicksGrid = props => {
     </div>
 
 };
-
 
 export default PicksGrid

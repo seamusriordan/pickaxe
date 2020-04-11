@@ -53,16 +53,6 @@ describe('PicksGrid', () => {
         expect(useMutation).toBeCalled()
     });
 
-    it('Renders loading when loading from query is true', () => {
-        useQuery.mockReturnValue({
-            loading: true, error: false, data: undefined, refetch: () => {
-            }
-        });
-        const grid = create(<PicksGrid/>).root;
-
-        expect(grid.findAll(el => el.props.children === 'Loading').length).toEqual(1);
-    });
-
     it('Renders error when error from query is truthy', () => {
         useQuery.mockReturnValue({
             loading: false, error: true, data: undefined, refetch: () => {
@@ -73,14 +63,14 @@ describe('PicksGrid', () => {
         expect(grid.findAll(el => el.props.children === 'Error').length).toEqual(1);
     });
 
-    it('Renders derp when data from query is undefined', () => {
+    it('Renders Waiting for data when data from query is undefined', () => {
         useQuery.mockReturnValue({
             loading: false, error: undefined, data: undefined, refetch: () => {
             }
         });
         const grid = create(<PicksGrid/>).root;
 
-        expect(grid.findAll(el => el.props.children === 'derp').length).toEqual(1);
+        expect(grid.findAll(el => el.props.children === 'Waiting for data...').length).toEqual(1);
     });
 
     it('useMutation is called with pick updating query', () => {
