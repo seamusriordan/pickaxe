@@ -5,6 +5,7 @@ package db
 import dto.PickDTO
 import dto.UserDTO
 import dto.UserPicksDTO
+import getEnvForWeek
 import graphql.schema.DataFetchingEnvironment
 import graphql.schema.DataFetchingEnvironmentImpl
 import io.mockk.MockKAdditionalAnswerScope
@@ -111,12 +112,6 @@ class UserPickQueryTest {
         assertEquals(expectedPicks[0].picks.map { x -> x.pick }, results[0].picks.map { x -> x.pick })
     }
 
-    private fun getEnvForWeek(week: String): DataFetchingEnvironment {
-        val arguments = HashMap<String, Any>().apply {
-            set("week", week)
-        }
-        return setupEnvForArguments(arguments)
-    }
 
     private fun setupMockForQueryWithWeek(mockResultSet: ResultSet, week: String) {
         val queryString = "SELECT name, game, pick FROM userpicks WHERE week = '$week'"
@@ -134,12 +129,7 @@ class UserPickQueryTest {
         setupMockForQueryWithWeek(mockResultSet, week)
     }
 
-    private fun setupEnvForArguments(arguments: HashMap<String, Any>): DataFetchingEnvironment {
-        return DataFetchingEnvironmentImpl
-            .newDataFetchingEnvironment()
-            .arguments(arguments)
-            .build()
-    }
+
 
     private val setupResultMockForOneUserOnePick = { mockResultSet: ResultSet,
                                                      expectedPicks: ArrayList<UserPicksDTO>

@@ -34,11 +34,15 @@ export const mockQueryData = {
                 ],
         },
     ],
-
     "games": [
         {"name": "CHI@GB", "week": "0", "spread": 400, "result": "CHI"},
         {"name": "HAR@NOR", "week": "0", "spread": -22, "result": ""},
         {"name": "SFE@CRL", "week": "0", "spread": 7, "result": "CRL"},
         {"name": "ANN@COL", "week": "0", "spread": 0, "result": "CHI"},
+    ],
+    "weeks": [
+        {"week": "0"},
+        {"week": "1"},
+        {"week": "2"},
     ]
 };
