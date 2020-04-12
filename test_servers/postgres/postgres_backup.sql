@@ -90,21 +90,53 @@ ALTER TABLE public.users OWNER TO postgres;
 --
 
 CREATE TABLE public.weeks (
-    week character varying NOT NULL
+    name character varying NOT NULL,
+    week integer NOT NULL,
+    week_type character varying DEFAULT 'REG'::character varying NOT NULL,
+    week_order integer NOT NULL
 );
 
 
 ALTER TABLE public.weeks OWNER TO postgres;
 
 --
+-- Name: weeks_week_order_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.weeks_week_order_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.weeks_week_order_seq OWNER TO postgres;
+
+--
+-- Name: weeks_week_order_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.weeks_week_order_seq OWNED BY public.weeks.week_order;
+
+
+--
+-- Name: weeks week_order; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.weeks ALTER COLUMN week_order SET DEFAULT nextval('public.weeks_week_order_seq'::regclass);
+
+
+--
 -- Data for Name: games; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.games (game, week, gametime, final, result, spread) FROM stdin;
-GB@CHI	0	\N	f	\N	\N
-SEA@PHI	0	\N	f	\N	\N
-BUF@NE	0	\N	f	\N	\N
-NE@TB	1	\N	f	NE	-14
+GB@CHI	Week 0	\N	f	\N	\N
+SEA@PHI	Week 0	\N	f	\N	\N
+BUF@NE	Week 0	\N	f	\N	\N
+NE@TB	Week 1	\N	f	NE	-14
 \.
 
 
@@ -113,20 +145,20 @@ NE@TB	1	\N	f	NE	-14
 --
 
 COPY public.userpicks (name, week, game, pick) FROM stdin;
-Vegas	1	NE@TB	TB
-Seamus	1	NE@TB	TB
-Vegas	0	BUF@NE	BUF
-Sereres	0	BUF@NE	BUF
-Sereres	0	GB@CHI	CHI
-Sereres	0	SEA@PHI	PHI
-Seamus	0	SEA@PHI	SEA
-RNG	0	GB@CHI	CHI
-Seamus	0	GB@CHI	CHI
-Seamus	0	BUF@NE	BUF
-RNG	0	BUF@NE	BUF
-Vegas	0	GB@CHI	CHI
-RNG	0	SEA@PHI	SEA
-Vegas	0	SEA@PHI	SEA
+Sereres	Week 0	GB@CHI	CHI
+RNG	Week 0	GB@CHI	CHI
+Seamus	Week 0	GB@CHI	CHI
+Vegas	Week 0	GB@CHI	CHI
+Sereres	Week 0	SEA@PHI	PHI
+Seamus	Week 0	SEA@PHI	SEA
+RNG	Week 0	SEA@PHI	SEA
+Vegas	Week 0	SEA@PHI	SEA
+Vegas	Week 0	BUF@NE	BUF
+Sereres	Week 0	BUF@NE	BUF
+Seamus	Week 0	BUF@NE	BUF
+RNG	Week 0	BUF@NE	BUF
+Vegas	Week 1	NE@TB	TB
+Seamus	Week 1	NE@TB	TB
 \.
 
 
@@ -146,10 +178,17 @@ Vegas	t
 -- Data for Name: weeks; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.weeks (week) FROM stdin;
-0
-1
+COPY public.weeks (name, week, week_type, week_order) FROM stdin;
+Week 0	0	REG	1
+Week 1	1	REG	2
 \.
+
+
+--
+-- Name: weeks_week_order_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.weeks_week_order_seq', 2, true);
 
 
 --
@@ -181,7 +220,7 @@ ALTER TABLE ONLY public.users
 --
 
 ALTER TABLE ONLY public.weeks
-    ADD CONSTRAINT weeks_pk PRIMARY KEY (week);
+    ADD CONSTRAINT weeks_pk PRIMARY KEY (name);
 
 
 --
@@ -199,10 +238,17 @@ CREATE UNIQUE INDEX users_name_uindex ON public.users USING btree (name);
 
 
 --
+-- Name: weeks_week_order_uindex; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE UNIQUE INDEX weeks_week_order_uindex ON public.weeks USING btree (week_order);
+
+
+--
 -- Name: weeks_week_uindex; Type: INDEX; Schema: public; Owner: postgres
 --
 
-CREATE UNIQUE INDEX weeks_week_uindex ON public.weeks USING btree (week);
+CREATE UNIQUE INDEX weeks_week_uindex ON public.weeks USING btree (name);
 
 
 --
@@ -210,7 +256,7 @@ CREATE UNIQUE INDEX weeks_week_uindex ON public.weeks USING btree (week);
 --
 
 ALTER TABLE ONLY public.games
-    ADD CONSTRAINT games_weeks_week_fk FOREIGN KEY (week) REFERENCES public.weeks(week) ON UPDATE CASCADE ON DELETE RESTRICT;
+    ADD CONSTRAINT games_weeks_week_fk FOREIGN KEY (week) REFERENCES public.weeks(name) ON UPDATE CASCADE ON DELETE RESTRICT;
 
 
 --

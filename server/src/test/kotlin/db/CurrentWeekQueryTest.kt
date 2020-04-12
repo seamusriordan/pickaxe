@@ -39,13 +39,13 @@ class CurrentWeekQueryTest {
         val mockResultSet = mockkClass(ResultSet::class)
         every { mockResultSet.next()
         } returns true andThen false
-        every { mockResultSet.getString("week")
-        } returns expectedWeek.week
-        every { mockStatement.executeQuery("SELECT week FROM weeks") } returns mockResultSet
+        every { mockResultSet.getString("name")
+        } returns expectedWeek.name
+        every { mockStatement.executeQuery("SELECT name FROM weeks") } returns mockResultSet
 
         val results = CurrentWeekQuery(mockConnection).get(env)
 
-        Assertions.assertEquals(expectedWeek.week, results.week)
+        Assertions.assertEquals(expectedWeek.name, results.name)
     }
 
     @Test
@@ -55,13 +55,13 @@ class CurrentWeekQueryTest {
         val mockResultSet = mockkClass(ResultSet::class)
         every { mockResultSet.next()
         } returns true andThen false
-        every { mockResultSet.getString("week")
-        } returns expectedWeek.week
-        every { mockStatement.executeQuery("SELECT week FROM weeks") } returns mockResultSet
+        every { mockResultSet.getString("name")
+        } returns expectedWeek.name
+        every { mockStatement.executeQuery("SELECT name FROM weeks") } returns mockResultSet
 
         val results = CurrentWeekQuery(mockConnection).get(env)
 
-        Assertions.assertEquals(expectedWeek.week, results.week)
+        Assertions.assertEquals(expectedWeek.name, results.name)
     }
 
     @Test
@@ -71,12 +71,12 @@ class CurrentWeekQueryTest {
         val mockResultSet = mockkClass(ResultSet::class)
         every { mockResultSet.next()
         } returns true andThen true andThen false
-        every { mockResultSet.getString("week")
-        } returns expectedWeek.week andThen "7"
-        every { mockStatement.executeQuery("SELECT week FROM weeks") } returns mockResultSet
+        every { mockResultSet.getString("name")
+        } returns expectedWeek.name andThen "7"
+        every { mockStatement.executeQuery("SELECT name FROM weeks") } returns mockResultSet
 
         val results = CurrentWeekQuery(mockConnection).get(env)
 
-        Assertions.assertEquals(expectedWeek.week, results.week)
+        Assertions.assertEquals(expectedWeek.name, results.name)
     }
 }

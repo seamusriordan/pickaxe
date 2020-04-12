@@ -2,7 +2,7 @@ import PickCell from "./PickCell";
 import React from "react";
 
 const PickCells = props => {
-    const {data, sendData} = props;
+    const {data, sendData, currentWeek} = props;
     return (!data.users || !data.games) ? undefined :
         data.users.map((user, index1) => {
             return data.games.map((game, index2) => {
@@ -13,7 +13,7 @@ const PickCells = props => {
                     sendData({
                         variables: {
                             name: user.name,
-                            week: "0",
+                            week: currentWeek,
                             game: game.name,
                             pick: updatedPick,
                         }

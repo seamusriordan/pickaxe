@@ -27,11 +27,11 @@ function indexIsPastEndOfData(index, data) {
 
 function generateAdvanceWeekCallback(data, currentWeek, updateWeek, refetch) {
     return () => {
-        const index = data.weeks.findIndex(week => week.week === currentWeek)
+        const index = data.weeks.findIndex(week => week.name === currentWeek)
         if (indexIsPastEndOfData(index, data)) {
             return;
         }
-        const nextWeek = data.weeks[index + 1].week;
+        const nextWeek = data.weeks[index + 1].name;
         updateWeek(nextWeek);
         refetch({week: nextWeek}).catch(err => {
             console.warn(`Refetch failed ${err}`)
@@ -41,11 +41,11 @@ function generateAdvanceWeekCallback(data, currentWeek, updateWeek, refetch) {
 
 function generateRewindWeekCallback(data, currentWeek, updateWeek, refetch) {
     return () => {
-        const index = data.weeks.findIndex(week => week.week === currentWeek)
+        const index = data.weeks.findIndex(week => week.name === currentWeek)
         if (index === 0) {
             return;
         }
-        const previousWeek = data.weeks[index - 1].week;
+        const previousWeek = data.weeks[index - 1].name;
         updateWeek(previousWeek);
         refetch({week: previousWeek}).catch(err => {
             console.warn(`Refetch failed ${err}`)
@@ -90,7 +90,6 @@ const PicksGrid = props => {
     });
     const [sendData] = useMutation(UPDATE_PICKS_MUTATION);
 
-
     useEffect(() => {
         let webSocket = new WebSocket(buildWebsocketUri());
         webSocket.onopen = generateWebsocketOnOpenCallback(refetch);
@@ -111,7 +110,7 @@ const PicksGrid = props => {
                 <LinearCells key="name-cells" items={users.names} name="name"/>,
                 <LinearCells key="game-cells" id="game-cells" items={games.names} name="game"/>,
                 <LinearCells key="spread-cells" items={games.spreads} name="spread"/>,
-                <PickCells key="pick-cells" id="pick-cells" data={data} sendData={sendData}/>,
+                <PickCells key="pick-cells" id="pick-cells" data={data} sendData={sendData} currentWeek={currentWeek}/>,
                 <LinearCells key="result-cells" items={games.results} name="result"/>,
                 <LinearCells key="total-cells" items={users.totals} name="total"/>
             ]

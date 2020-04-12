@@ -41,8 +41,8 @@ export const mockQueryData = {
         {"name": "ANN@COL", "week": "0", "spread": 0, "result": "CHI"},
     ],
     "weeks": [
-        {"week": "0"},
-        {"week": "1"},
-        {"week": "2"},
+        {"name": "0"},
+        {"name": "1"},
+        {"name": "2"},
     ]
 };

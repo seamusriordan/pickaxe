@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 
-export const WEEKS_QUERY = gql`query Query {currentWeek {week}}`;
+export const WEEKS_QUERY = gql`query Query {currentWeek {name}}`;
 
 export const PICKS_QUERY = gql`
     query Query($week: String) {
@@ -25,7 +25,8 @@ export const PICKS_QUERY = gql`
         }
         
         weeks {
-            week
+            name
+            weekOrder
         }
     }`;
 
