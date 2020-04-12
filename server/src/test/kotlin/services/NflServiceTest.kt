@@ -10,55 +10,97 @@ import java.net.HttpURLConnection
 import java.net.URL
 import com.auth0.jwt.algorithms.Algorithm
 import com.fasterxml.jackson.databind.ObjectMapper
+import java.io.ByteArrayInputStream
+import java.util.*
 
 
 class NflServiceTest {
     private val handler = MockURLStreamHandler
     private val tokenURL = URL("https://tokenendpoint")
     private val mockUrlConnection = mockkClass(HttpURLConnection::class)
+    private val absoluteTime = { GregorianCalendar(2020, 3, 12, 13, 5).time }
 
     @BeforeEach
-    fun beforeEach(){
+    fun beforeEach() {
         handler.setConnection(tokenURL, mockUrlConnection)
     }
 
     @Test
     fun shouldGetApiTokenWithGetAccessTokenOfToken() {
-        val algorithmHS: Algorithm = Algorithm.HMAC256("secret")
-        val expectedToken = JWT.create().withIssuer("me").sign(algorithmHS)
-        val json = buildTokenResponse(expectedToken)
-        every { mockUrlConnection.inputStream } returns json.byteInputStream()
+        val expectedToken = generateExpiringToken(1)
+        every { mockUrlConnection.inputStream } returns buildByteStreamResponse(expectedToken)
+        val nflService = nflServiceWithFixedTime(tokenURL)
 
-        val token = NflService(tokenURL).accessToken
+        val token = nflService.accessToken
 
         assertEquals(expectedToken, token)
     }
 
+
     @Test
     fun shouldGetApiTokenWithGetAccessTokenOfLongToken() {
-        val algorithmHS: Algorithm = Algorithm.HMAC256("secret")
-        val expectedToken = JWT.create().withIssuer("someone else").sign(algorithmHS)
-        val json = buildTokenResponse(expectedToken)
-        every { mockUrlConnection.inputStream } returns json.byteInputStream()
+        val expectedToken = generateExpiringToken(2)
+        every { mockUrlConnection.inputStream } returns buildByteStreamResponse(expectedToken)
+        val nflService = nflServiceWithFixedTime(tokenURL)
 
-        val token = NflService(tokenURL).accessToken
+        val token = nflService.accessToken
 
         assertEquals(expectedToken, token)
     }
 
     @Test
     fun ifAccessTokenIsSetAndValidDoNotFetchNewToken() {
-        val expectedToken = "Expected Token"
-        val nflService = NflService(tokenURL)
-        nflService.accessToken = expectedToken
-        val algorithmHS: Algorithm = Algorithm.HMAC256("secret")
-        val unexpectedToken = JWT.create().withIssuer("me").sign(algorithmHS)
-        val json = buildTokenResponse(unexpectedToken)
-        every { mockUrlConnection.inputStream } returns json.byteInputStream()
+        val expectedToken = generateExpiringToken(1)
+        val nflService = nflServiceWithFixedTime(tokenURL, expectedToken)
+        val unexpectedToken = generateExpiringToken(2)
+        every { mockUrlConnection.inputStream } returns buildByteStreamResponse(unexpectedToken)
 
         val token = nflService.accessToken
 
         assertEquals(expectedToken, token)
+    }
+
+
+    @Test
+    fun ifAccessTokenIsSetAndInvalidFetchNewToken() {
+        val expiredToken = generateExpiringToken(-1)
+        val nflService = nflServiceWithFixedTime(tokenURL, expiredToken)
+        val expectedToken = generateExpiringToken(1)
+        every { mockUrlConnection.inputStream } returns buildByteStreamResponse(expectedToken)
+
+        val token = nflService.accessToken
+
+        assertEquals(expectedToken, token)
+    }
+
+    private fun buildByteStreamResponse(expectedToken: String) = buildTokenResponse(expectedToken).byteInputStream()
+
+    private fun nflServiceWithFixedTime(url: URL, token: String? = null): NflService {
+        val service = NflService(url).apply {
+            now = absoluteTime
+        }
+        if (token != null) {
+            service.accessToken = token
+        }
+        return service
+    }
+
+
+    private fun generateExpiringToken(hoursToExpiration: Int): String {
+        val algorithmHS: Algorithm = Algorithm.HMAC256("secret")
+
+        val issued = absoluteTime()
+        val expires = with(GregorianCalendar()) {
+            time = issued
+            add(Calendar.HOUR, hoursToExpiration)
+            time
+        }
+
+        return JWT.create()
+            .withIssuedAt(issued)
+            .withExpiresAt(expires)
+            .withClaim("clientId", "xxx")
+            .sign(algorithmHS)
     }
 
     @Suppress("unused")
