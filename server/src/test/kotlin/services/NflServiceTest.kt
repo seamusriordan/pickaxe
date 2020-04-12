@@ -9,15 +9,27 @@ import java.net.URL
 
 class NflServiceTest {
     @Test
-    fun shouldGetApiTokenWithGetAccessToken() {
+    fun shouldGetApiTokenWithGetAccessTokenoftoken() {
         val expectedToken = "token"
-        val mockUrl = mockkClass(URL::class)
 
         val mockUrlConnection = mockkClass(HttpURLConnection::class)
-        every { mockUrl.openConnection() } returns mockUrlConnection
         every { mockUrlConnection.inputStream } returns expectedToken.byteInputStream()
 
-        val service = NflService()
+        val service = NflService(mockUrlConnection)
+
+        val token = service.getAccessToken()
+
+        assertEquals(expectedToken, token)
+    }
+
+    @Test
+    fun shouldGetApiTokenWithGetAccessTokenoflongtoken() {
+        val expectedToken = "long token"
+
+        val mockUrlConnection = mockkClass(HttpURLConnection::class)
+        every { mockUrlConnection.inputStream } returns expectedToken.byteInputStream()
+
+        val service = NflService(mockUrlConnection)
 
         val token = service.getAccessToken()
 
