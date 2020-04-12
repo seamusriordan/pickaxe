@@ -27,11 +27,11 @@ function indexIsPastEndOfData(index, data) {
 
 function generateAdvanceWeekCallback(data, currentWeek, updateWeek, refetch) {
     return () => {
-        const index = data.weeks.findIndex(week => week.week === currentWeek)
+        const index = data.weeks.findIndex(week => week.name === currentWeek)
         if (indexIsPastEndOfData(index, data)) {
             return;
         }
-        const nextWeek = data.weeks[index + 1].week;
+        const nextWeek = data.weeks[index + 1].name;
         updateWeek(nextWeek);
         refetch({week: nextWeek}).catch(err => {
             console.warn(`Refetch failed ${err}`)
@@ -41,11 +41,11 @@ function generateAdvanceWeekCallback(data, currentWeek, updateWeek, refetch) {
 
 function generateRewindWeekCallback(data, currentWeek, updateWeek, refetch) {
     return () => {
-        const index = data.weeks.findIndex(week => week.week === currentWeek)
+        const index = data.weeks.findIndex(week => week.name === currentWeek)
         if (index === 0) {
             return;
         }
-        const previousWeek = data.weeks[index - 1].week;
+        const previousWeek = data.weeks[index - 1].name;
         updateWeek(previousWeek);
         refetch({week: previousWeek}).catch(err => {
             console.warn(`Refetch failed ${err}`)
