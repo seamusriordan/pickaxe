@@ -1,0 +1,26 @@
+{
+  "id" : "1479b558-5a25-3c02-9a29-c3dc4c978c78",
+  "request" : {
+    "url" : "/v1/reroute",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalTo" : "grant_type=client_credentials"
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-v1-reroute-Bg9JV.json",
+    "headers" : {
+      "Content-Type" : "application/json",
+      "Pragma" : "no-cache",
+      "Cache-Control" : "no-store",
+      "Accept-Ranges" : "bytes",
+      "X-Served-By" : "cache-lax8643-LAX",
+      "X-Cache-Hits" : "0",
+      "X-Timer" : "S1586715347.011858,VS0,VE16",
+      "Date" : "Sun, 12 Apr 2020 18:15:47 GMT",
+      "X-NFL-APP" : "ssoprx"
+    }
+  },
+  "uuid" : "1479b558-5a25-3c02-9a29-c3dc4c978c78"
+}
