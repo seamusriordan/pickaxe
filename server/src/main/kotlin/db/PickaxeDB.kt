@@ -1,5 +1,6 @@
 package db
 
+import getEnvOrDefault
 import java.sql.Connection
 import java.sql.DriverManager
 import java.util.*
@@ -22,12 +23,4 @@ class PickaxeDB {
     }
 
     private fun generateDbUrl(host: String, port: String) = "jdbc:postgresql://$host:$port/pickaxe_dev"
-
-    private fun getEnvOrDefault(env: String, default: String): String {
-        var value = System.getenv(env)
-        if (value == null) {
-            value = default
-        }
-        return value
-    }
 }
