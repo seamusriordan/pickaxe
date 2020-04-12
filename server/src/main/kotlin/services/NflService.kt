@@ -3,12 +3,21 @@ package services
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 
-class NflService(private val urlConnection: HttpURLConnection) {
-    fun getAccessToken(): String {
-        val stream = urlConnection.inputStream
+class NflService() {
+    lateinit var tokenEndpoint: HttpURLConnection
+    private var _accessToken: String? = null
 
-        val reader = InputStreamReader(stream)
+    var accessToken: String
+        get() {
+            if(this._accessToken != null){
+                return _accessToken as String
+            }
 
-        return reader.readText()
-    }
+            val stream = tokenEndpoint.inputStream
+
+            val reader = InputStreamReader(stream)
+
+            return reader.readText()
+        }
+        set(value) {_accessToken = value}
 }
