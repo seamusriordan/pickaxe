@@ -1,5 +1,6 @@
 package services
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import java.io.InputStreamReader
 import java.net.URL
 
@@ -11,11 +12,17 @@ class NflService(private val tokenURL: URL) {
             if(this._accessToken != null){
                 return _accessToken as String
             }
-
-            val tokenEndpoint = tokenURL.openConnection()
-            val stream = tokenEndpoint.inputStream
-            val reader = InputStreamReader(stream)
-            return reader.readText()
+            return fetchNewToken()
         }
         set(token) {_accessToken = token}
+
+    private fun fetchNewToken(): String {
+        val tokenEndpoint = tokenURL.openConnection()
+        val stream = tokenEndpoint.inputStream
+        val response = InputStreamReader(stream).readText()
+
+        return responseMap(response)["access_token"] as String
+    }
+
+    private fun responseMap(response: String) = ObjectMapper().readValue(response, HashMap::class.java)
 }
