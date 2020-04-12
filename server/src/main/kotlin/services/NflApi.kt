@@ -31,6 +31,12 @@ class NflApi(private val tokenURL: URL) {
     private fun fetchNewToken(): String {
         val connection = tokenURL.openConnection() as HttpURLConnection
         connection.requestMethod = "POST"
+        connection.doOutput = true
+        connection.setRequestProperty("authority", "api.nfl.com")
+        connection.setRequestProperty("origin", "https://www.nfl.com")
+        connection.setRequestProperty("x-domain-id", "100")
+        connection.setRequestProperty("referer", "https://www.nfl.com/")
+        connection.setRequestProperty("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36")
 
         val dataOutputStream = DataOutputStream(connection.outputStream)
         dataOutputStream.writeBytes("grant_type=client_credentials")

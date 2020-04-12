@@ -27,6 +27,8 @@ class NflApiTest {
         handler.setConnection(tokenURL, mockUrlConnection)
         every { mockUrlConnection.requestMethod = "POST" } returns Unit
         every { mockUrlConnection.outputStream } returns requestOutputStream
+        every { mockUrlConnection.doOutput = true } returns Unit
+        every { mockUrlConnection.setRequestProperty(any(), any()) } returns Unit
     }
 
     @Test
@@ -62,6 +64,27 @@ class NflApiTest {
         nflService.accessToken
 
         assertArrayEquals(expectedBody.toByteArray(), requestOutputStream.toByteArray())
+    }
+
+    @Test
+    fun connectionHasCorrectPropertiesSet() {
+        val expectedToken = generateExpiringToken(1)
+        every { mockUrlConnection.inputStream } returns buildByteStreamResponse(expectedToken)
+        val nflService = nflServiceWithFixedTime(tokenURL)
+
+        nflService.accessToken
+
+        val properties = ArrayList<String>(5).apply {
+            add("authority")
+            add("origin")
+            add("x-domain-id")
+            add("referer")
+            add("user-agent")
+        }
+
+        properties.map { property ->
+            verify { mockUrlConnection.setRequestProperty(property, any()) }
+        }
     }
 
 
