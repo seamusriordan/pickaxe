@@ -10,7 +10,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 import com.auth0.jwt.algorithms.Algorithm
 import com.fasterxml.jackson.databind.ObjectMapper
-import java.io.ByteArrayInputStream
+import io.mockk.verify
 import java.util.*
 
 
@@ -60,6 +60,20 @@ class NflServiceTest {
         assertEquals(expectedToken, token)
     }
 
+    @Test
+    fun gettingTokenTwiceWillOnlyFetchOnce() {
+        val nflService = nflServiceWithFixedTime(tokenURL)
+        val expectedToken = generateExpiringToken(1)
+        val unexpectedToken = generateExpiringToken(2)
+        every { mockUrlConnection.inputStream } returns buildByteStreamResponse(expectedToken) andThen buildByteStreamResponse(unexpectedToken)
+
+        nflService.accessToken
+        val secondToken = nflService.accessToken
+
+        assertEquals(expectedToken, secondToken)
+        verify(exactly = 1) { mockUrlConnection.inputStream }
+    }
+
 
     @Test
     fun ifAccessTokenIsSetAndInvalidFetchNewToken() {
@@ -73,8 +87,6 @@ class NflServiceTest {
         assertEquals(expectedToken, token)
     }
 
-    private fun buildByteStreamResponse(expectedToken: String) = buildTokenResponse(expectedToken).byteInputStream()
-
     private fun nflServiceWithFixedTime(url: URL, token: String? = null): NflService {
         val service = NflService(url).apply {
             now = absoluteTime
@@ -84,7 +96,6 @@ class NflServiceTest {
         }
         return service
     }
-
 
     private fun generateExpiringToken(hoursToExpiration: Int): String {
         val algorithmHS: Algorithm = Algorithm.HMAC256("secret")
@@ -102,6 +113,8 @@ class NflServiceTest {
             .withClaim("clientId", "xxx")
             .sign(algorithmHS)
     }
+
+    private fun buildByteStreamResponse(expectedToken: String) = buildTokenResponse(expectedToken).byteInputStream()
 
     @Suppress("unused")
     private fun buildTokenResponse(expectedToken: String): String {

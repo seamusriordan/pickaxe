@@ -13,20 +13,17 @@ class NflService(private val tokenURL: URL) {
 
     var accessToken: String
         get() {
-            if (tokenIsValid(_accessToken)) {
-                return _accessToken as String
+            if(!tokenIsValid(_accessToken)){
+                _accessToken = fetchNewToken()
             }
-            return fetchNewToken()
+            return _accessToken!!
         }
         set(token) {
             _accessToken = token
         }
 
     private fun tokenIsValid(token: String?): Boolean {
-        if (token == null || JWT.decode(token).expiresAt < now()) {
-            return false
-        }
-        return true
+        return token != null && now() < JWT.decode(token).expiresAt
     }
 
     private fun fetchNewToken(): String {
