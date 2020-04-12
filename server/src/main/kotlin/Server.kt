@@ -6,6 +6,7 @@ import graphql.schema.idl.TypeDefinitionRegistry
 import io.javalin.Javalin
 import io.javalin.http.staticfiles.Location
 import io.javalin.websocket.WsContext
+import services.ServiceRunner
 import java.io.File
 
 
@@ -14,6 +15,8 @@ const val staticFilesPath = "html"
 const val schemaPath = "src/main/resources/schema.graphql"
 
 fun main(args: Array<String>) {
+    ServiceRunner().start()
+
     val typeDefinitionRegistry = pickaxeTypeDefinitionRegistry(schemaPath)
     val wiring = pickaxeRuntimeWiring()
 

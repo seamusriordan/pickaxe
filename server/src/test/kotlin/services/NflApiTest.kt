@@ -1,8 +1,6 @@
 package services
 
 import com.auth0.jwt.JWT
-import io.mockk.every
-import io.mockk.mockkClass
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -10,7 +8,9 @@ import java.net.HttpURLConnection
 import java.net.URL
 import com.auth0.jwt.algorithms.Algorithm
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.mockk.verify
+import io.mockk.*
+import org.junit.jupiter.api.Assertions.assertArrayEquals
+import java.io.*
 import java.util.*
 
 
@@ -20,9 +20,13 @@ class NflApiTest {
     private val mockUrlConnection = mockkClass(HttpURLConnection::class)
     private val absoluteTime = { GregorianCalendar(2020, 3, 12, 13, 5).time }
 
+    private val requestOutputStream = ByteArrayOutputStream()
+
     @BeforeEach
     fun beforeEach() {
         handler.setConnection(tokenURL, mockUrlConnection)
+        every { mockUrlConnection.requestMethod = "POST" } returns Unit
+        every { mockUrlConnection.outputStream } returns requestOutputStream
     }
 
     @Test
@@ -34,6 +38,30 @@ class NflApiTest {
         val token = nflService.accessToken
 
         assertEquals(expectedToken, token)
+    }
+
+    @Test
+    fun shouldMakePOSTToGetToken() {
+        val expectedToken = generateExpiringToken(1)
+        every { mockUrlConnection.inputStream } returns buildByteStreamResponse(expectedToken)
+        val nflService = nflServiceWithFixedTime(tokenURL)
+
+        nflService.accessToken
+
+        verify(exactly = 1) { mockUrlConnection.requestMethod = "POST" }
+    }
+
+    @Test
+    fun outputStreamPOSTsWithGrantTypeBody() {
+        val expectedBody = "grant_type=client_credentials"
+
+        val expectedToken = generateExpiringToken(1)
+        every { mockUrlConnection.inputStream } returns buildByteStreamResponse(expectedToken)
+        val nflService = nflServiceWithFixedTime(tokenURL)
+
+        nflService.accessToken
+
+        assertArrayEquals(expectedBody.toByteArray(), requestOutputStream.toByteArray())
     }
 
 
@@ -65,7 +93,9 @@ class NflApiTest {
         val nflService = nflServiceWithFixedTime(tokenURL)
         val expectedToken = generateExpiringToken(1)
         val unexpectedToken = generateExpiringToken(2)
-        every { mockUrlConnection.inputStream } returns buildByteStreamResponse(expectedToken) andThen buildByteStreamResponse(unexpectedToken)
+        every { mockUrlConnection.inputStream } returns buildByteStreamResponse(expectedToken) andThen buildByteStreamResponse(
+            unexpectedToken
+        )
 
         nflService.accessToken
         val secondToken = nflService.accessToken
@@ -73,7 +103,6 @@ class NflApiTest {
         assertEquals(expectedToken, secondToken)
         verify(exactly = 1) { mockUrlConnection.inputStream }
     }
-
 
     @Test
     fun ifAccessTokenIsSetAndInvalidFetchNewToken() {
