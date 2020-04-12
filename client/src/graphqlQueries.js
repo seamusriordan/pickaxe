@@ -26,6 +26,7 @@ export const PICKS_QUERY = gql`
         
         weeks {
             name
+            weekOrder
         }
     }`;
 

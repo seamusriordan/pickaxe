@@ -95,6 +95,11 @@ describe('PicksGrid', () => {
         expect(cell.props.sendData).toBe(callback);
     });
 
+    it('PickCells is given current week', () => {
+        const cell = grid.findByProps({id: "pick-cells"});
+        expect(cell.props.currentWeek).toBe(mockQueryData.weeks[0].name);
+    });
+
     describe('advance week', () => {
         let week0Change;
 
@@ -110,6 +115,15 @@ describe('PicksGrid', () => {
             expect(refetchSpy.mock.calls[0][0]).toEqual({
                 week: mockQueryData.weeks[1].name
             })
+        });
+
+        it('changes pick cells to advanced week', () => {
+            act(() => {
+                week0Change.props.forward();
+            })
+
+            const cell = grid.findByProps({id: "pick-cells"});
+            expect(cell.props.currentWeek).toBe(mockQueryData.weeks[1].name);
         });
 
         it('twice on week 0 refetches with week 2', () => {

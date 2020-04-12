@@ -90,7 +90,6 @@ const PicksGrid = props => {
     });
     const [sendData] = useMutation(UPDATE_PICKS_MUTATION);
 
-
     useEffect(() => {
         let webSocket = new WebSocket(buildWebsocketUri());
         webSocket.onopen = generateWebsocketOnOpenCallback(refetch);
@@ -111,7 +110,7 @@ const PicksGrid = props => {
                 <LinearCells key="name-cells" items={users.names} name="name"/>,
                 <LinearCells key="game-cells" id="game-cells" items={games.names} name="game"/>,
                 <LinearCells key="spread-cells" items={games.spreads} name="spread"/>,
-                <PickCells key="pick-cells" id="pick-cells" data={data} sendData={sendData}/>,
+                <PickCells key="pick-cells" id="pick-cells" data={data} sendData={sendData} currentWeek={currentWeek}/>,
                 <LinearCells key="result-cells" items={games.results} name="result"/>,
                 <LinearCells key="total-cells" items={users.totals} name="total"/>
             ]
