@@ -7,7 +7,7 @@ import java.net.URL
 import java.util.*
 import kotlin.collections.HashMap
 
-class NflService(private val tokenURL: URL) {
+class NflApi(private val tokenURL: URL) {
     private var _accessToken: String? = null
     var now = { Date() }
 

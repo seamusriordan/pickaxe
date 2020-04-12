@@ -14,7 +14,7 @@ import io.mockk.verify
 import java.util.*
 
 
-class NflServiceTest {
+class NflApiTest {
     private val handler = MockURLStreamHandler
     private val tokenURL = URL("https://tokenendpoint")
     private val mockUrlConnection = mockkClass(HttpURLConnection::class)
@@ -87,8 +87,8 @@ class NflServiceTest {
         assertEquals(expectedToken, token)
     }
 
-    private fun nflServiceWithFixedTime(url: URL, token: String? = null): NflService {
-        val service = NflService(url).apply {
+    private fun nflServiceWithFixedTime(url: URL, token: String? = null): NflApi {
+        val service = NflApi(url).apply {
             now = absoluteTime
         }
         if (token != null) {
