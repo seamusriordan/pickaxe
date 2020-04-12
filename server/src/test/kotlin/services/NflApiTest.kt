@@ -8,6 +8,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 import com.auth0.jwt.algorithms.Algorithm
 import com.fasterxml.jackson.databind.ObjectMapper
+import dto.WeekDTO
 import io.mockk.*
 import org.junit.jupiter.api.Assertions.assertArrayEquals
 import java.io.*
@@ -137,6 +138,17 @@ class NflApiTest {
         val token = nflService.accessToken
 
         assertEquals(expectedToken, token)
+    }
+
+    @Test
+    fun getsWeeksFromDatabaseWithOneWeek(){
+        val expectedWeeks = ArrayList<WeekDTO>(0)
+
+        val nflService = NflApi(URL("http://url"))
+
+        val weeks = nflService.getWeeks()
+
+        assertEquals(expectedWeeks, weeks)
     }
 
     private fun nflServiceWithFixedTime(url: URL, token: String? = null): NflApi {

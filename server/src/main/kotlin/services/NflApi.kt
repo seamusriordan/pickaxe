@@ -2,6 +2,7 @@ package services
 
 import com.auth0.jwt.JWT
 import com.fasterxml.jackson.databind.ObjectMapper
+import dto.WeekDTO
 import java.io.DataOutputStream
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
@@ -48,4 +49,8 @@ class NflApi(private val tokenURL: URL) {
     }
 
     private fun responseMap(response: String) = ObjectMapper().readValue(response, HashMap::class.java)
+
+    fun getWeeks(): List<WeekDTO> {
+        return ArrayList<WeekDTO>(0)
+    }
 }

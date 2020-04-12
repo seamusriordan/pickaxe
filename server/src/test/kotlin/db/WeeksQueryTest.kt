@@ -42,9 +42,9 @@ class WeeksQueryTest {
             mockResultSet.next()
         } returns true andThen false
         every {
-            mockResultSet.getString("week")
-        } returns expectedWeeks[0].week
-        every { mockStatement.executeQuery("SELECT week FROM weeks") } returns mockResultSet
+            mockResultSet.getString("name")
+        } returns expectedWeeks[0].name
+        every { mockStatement.executeQuery("SELECT name FROM weeks") } returns mockResultSet
 
         val results = WeeksQuery(mockConnection).get(env)
 
@@ -63,12 +63,12 @@ class WeeksQueryTest {
             mockResultSet.next()
         } returns true andThen true andThen true andThen false
         every {
-            mockResultSet.getString("week")
-        } returns expectedWeeks[0].week andThen expectedWeeks[1].week andThen expectedWeeks[2].week
-        every { mockStatement.executeQuery("SELECT week FROM weeks") } returns mockResultSet
+            mockResultSet.getString("name")
+        } returns expectedWeeks[0].name andThen expectedWeeks[1].name andThen expectedWeeks[2].name
+        every { mockStatement.executeQuery("SELECT name FROM weeks") } returns mockResultSet
 
         val results = WeeksQuery(mockConnection).get(env)
 
-        Assertions.assertEquals(expectedWeeks.map { week -> week.week }, results.map { week -> week.week })
+        Assertions.assertEquals(expectedWeeks.map { week -> week.name }, results.map { week -> week.name })
     }
 }

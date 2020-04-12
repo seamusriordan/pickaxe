@@ -34,7 +34,10 @@ type Pick {
 }
 
 type Week {
-    week: String
+    name: String
+    weekType: String
+    seasonType: String
+    week: Int
 }
 
 type Mutation {

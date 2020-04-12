@@ -3,7 +3,7 @@ GET https://api.nfl.com/v3/shield/?query=query%7Bviewer%7Bleague%7Bgames(first%3
 authority: api.nfl.com
 pragma: no-cache
 cache-control: no-cache
-authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1aWQiOm51bGwsInVzZXJuYW1lIjpudWxsLCJkZXZpY2VJZCI6bnVsbCwiY2xpZW50SWQiOiJ5TExiY1p6UWpBb0NBbXVhenVGS0d2T25GUUtneWNJdiIsImFkSWQiOm51bGwsImV4cCI6MTU4NjYyNzcwMCwiaWF0IjoxNTg2NjI0MTAwfQ.rpMm00ZFdsvBUw_6AP0N5u-tUARPRNMq_33tdmcDgOQ
+authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1aWQiOm51bGwsInVzZXJuYW1lIjpudWxsLCJkZXZpY2VJZCI6bnVsbCwiY2xpZW50SWQiOiJ5TExiY1p6UWpBb0NBbXVhenVGS0d2T25GUUtneWNJdiIsImFkSWQiOm51bGwsImV4cCI6MTU4NjcyMjM3NiwiaWF0IjoxNTg2NzE4Nzc2fQ.u8tqIVXE_Blrf1ZjBSlifCgMzRPtR5JdNueB4f6HNg0
 sec-fetch-dest: empty
 user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36
 accept: */*
