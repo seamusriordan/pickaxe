@@ -1,0 +1,21 @@
+# curl 'https://firebaseinstallations.googleapis.com/v1/projects/nfl-com/installations' -H 'authority: firebaseinstallations.googleapis.com' -H 'pragma: no-cache' -H 'cache-control: no-cache' -H 'accept: application/json' -H 'sec-fetch-dest: empty' -H 'x-goog-api-key: AIzaSyAIiN1LMnqAWZpyUQSF8H_q0gSn3S_IHvk' -H 'user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36' -H 'content-type: application/json' -H 'origin: https://www.nfl.com' -H 'sec-fetch-site: cross-site' -H 'sec-fetch-mode: cors' -H 'referer: https://www.nfl.com/' -H 'accept-language: en-US,en;q=0.9' --data-binary '{"fid":"fhk1ZQGPxP4xcdiMMIP_sM","authVersion":"FIS_v2","appId":"1:108039455945:web:5f87823fc3a17b7b","sdkVersion":"w:0.2.4"}' --compressed
+POST https://firebaseinstallations.googleapis.com/v1/projects/nfl-com/installations
+authority: firebaseinstallations.googleapis.com
+pragma: no-cache
+cache-control: no-cache
+accept: application/json
+sec-fetch-dest: empty
+x-goog-api-key: AIzaSyAIiN1LMnqAWZpyUQSF8H_q0gSn3S_IHvk
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36
+origin: https://www.nfl.com
+sec-fetch-site: cross-site
+sec-fetch-mode: cors
+referer: https://www.nfl.com/
+accept-language: en-US,en;q=0.9
+Content-Type: application/json
+
+{"fid":"fhk1ZQGPxP4xcdiMMIP_sM","authVersion":"FIS_v2","appId":"1:108039455945:web:5f87823fc3a17b7b","sdkVersion":"w:0.2.4"}
+
+###
+
+#"eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJmaWQiOiJkMF9scS0xcEF5U0hLbi0yeEo1d3ZvIiwicHJvamVjdE51bWJlciI6MTA4MDM5NDU1OTQ1LCJleHAiOjE1ODcyMjY3MTAsImFwcElkIjoiMToxMDgwMzk0NTU5NDU6d2ViOjVmODc4MjNmYzNhMTdiN2IifQ.APH_0ZswRgIhAL0sSnWV--KAVAS_bI-QpO9PcypKAz0TxT9YeXQCol9_AiEAvQno2OzErTxhpDeV4WVd4sieoT9NN3EJK1-OG5jqhbk",
