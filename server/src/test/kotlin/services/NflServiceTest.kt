@@ -3,19 +3,27 @@ package services
 import io.mockk.every
 import io.mockk.mockkClass
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.net.HttpURLConnection
+import java.net.URL
 
 class NflServiceTest {
+    private val handler = MockURLStreamHandler
+    private val tokenURL = URL("https://tokenendpoint")
+    private val mockUrlConnection = mockkClass(HttpURLConnection::class)
+
+    @BeforeEach
+    fun beforeEach(){
+        handler.setConnection(tokenURL, mockUrlConnection)
+    }
+
     @Test
     fun shouldGetApiTokenWithGetAccessTokenOfToken() {
         val expectedToken = "token"
-        val mockUrlConnection = mockkClass(HttpURLConnection::class)
         every { mockUrlConnection.inputStream } returns expectedToken.byteInputStream()
-        val service = NflService()
-        service.tokenEndpoint = mockUrlConnection
 
-        val token = service.accessToken
+        val token = NflService(tokenURL).accessToken
 
         assertEquals(expectedToken, token)
     }
@@ -23,13 +31,9 @@ class NflServiceTest {
     @Test
     fun shouldGetApiTokenWithGetAccessTokenOfLongToken() {
         val expectedToken = "long token"
-
-        val mockUrlConnection = mockkClass(HttpURLConnection::class)
         every { mockUrlConnection.inputStream } returns expectedToken.byteInputStream()
-        val service = NflService()
-        service.tokenEndpoint = mockUrlConnection
 
-        val token = service.accessToken
+        val token = NflService(tokenURL).accessToken
 
         assertEquals(expectedToken, token)
     }
@@ -37,16 +41,12 @@ class NflServiceTest {
 
     @Test
     fun ifAccessTokenIsSetAndValidDoNotFetchNewToken() {
-        val unexpectedToken = "Unexpected Token"
         val expectedToken = "Expected Token"
+        val nflService = NflService(tokenURL)
+        nflService.accessToken = expectedToken
+        every { mockUrlConnection.inputStream } returns "Unexpected Token".byteInputStream()
 
-        val mockUrlConnection = mockkClass(HttpURLConnection::class)
-        every { mockUrlConnection.inputStream } returns unexpectedToken.byteInputStream()
-        val service = NflService()
-        service.tokenEndpoint = mockUrlConnection
-        service.accessToken = expectedToken
-
-        val token = service.accessToken
+        val token = nflService.accessToken
 
         assertEquals(expectedToken, token)
     }
