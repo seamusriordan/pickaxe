@@ -16,10 +16,8 @@ services:
       - 8081:8080
     volumes:
       - ./test_servers/nfl_api:/home/wiremock/mappings
-    environment:
-      - JAVA_OPTS=""
     command: >
-      java $JAVA_OPTS -cp /var/wiremock/lib/*:/var/wiremock/extensions/*
+      java -cp /var/wiremock/lib/*:/var/wiremock/extensions/*
       com.github.tomakehurst.wiremock.standalone.WireMockServerRunner
       --root-dir=mappings
  #     --proxy-all="https://api.nfl.com/"
