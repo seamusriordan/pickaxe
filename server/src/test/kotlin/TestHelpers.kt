@@ -1,5 +1,7 @@
 import graphql.schema.DataFetchingEnvironment
 import graphql.schema.DataFetchingEnvironmentImpl
+import io.mockk.every
+import java.sql.ResultSet
 
 fun getEnvForWeek(week: String): DataFetchingEnvironment {
     val arguments = HashMap<String, Any>().apply {
@@ -13,4 +15,15 @@ private fun setupEnvForArguments(arguments: HashMap<String, Any>): DataFetchingE
         .newDataFetchingEnvironment()
         .arguments(arguments)
         .build()
+}
+
+fun mockNextReturnTimes(mockResultSet: ResultSet, times: Int) {
+    val trues = ArrayList<Boolean>(0)
+    for (i in 1..times) {
+        trues.add(true)
+    }
+
+    every {
+        mockResultSet.next()
+    } returnsMany trues + listOf(false)
 }

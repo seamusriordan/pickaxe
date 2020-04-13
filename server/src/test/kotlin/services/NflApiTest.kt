@@ -117,9 +117,14 @@ class NflApiTest {
         val nflService = nflServiceWithFixedTime(tokenURL)
         val expectedToken = generateExpiringToken(1)
         val unexpectedToken = generateExpiringToken(2)
-        every { mockUrlConnection.inputStream } returns buildByteStreamResponse(expectedToken) andThen buildByteStreamResponse(
-            unexpectedToken
+
+        every {
+            mockUrlConnection.inputStream
+        } returnsMany listOf(
+            buildByteStreamResponse(expectedToken),
+            buildByteStreamResponse(unexpectedToken)
         )
+
 
         nflService.accessToken
         val secondToken = nflService.accessToken
@@ -141,7 +146,7 @@ class NflApiTest {
     }
 
     @Test
-    fun getsWeeksFromDatabaseWithOneWeek(){
+    fun getsWeeksFromDatabaseWithOneWeek() {
         val expectedWeeks = ArrayList<WeekDTO>(0)
 
         val nflService = NflApi(URL("http://url"))
