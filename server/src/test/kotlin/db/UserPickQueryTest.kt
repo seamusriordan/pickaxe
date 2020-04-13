@@ -6,12 +6,11 @@ import dto.PickDTO
 import dto.UserDTO
 import dto.UserPicksDTO
 import getEnvForWeek
-import graphql.schema.DataFetchingEnvironment
-import graphql.schema.DataFetchingEnvironmentImpl
 import io.mockk.MockKAdditionalAnswerScope
 import io.mockk.every
 import io.mockk.mockkClass
 import io.mockk.mockkStatic
+import mockNextReturnTimes
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -45,7 +44,7 @@ class UserPickQueryTest {
         expectedPicks.add(UserPicksDTO(UserDTO("Seamus")))
         expectedPicks[0].picks.add(PickDTO("GB@CHI", "CHI"))
 
-        setupMocksForPicks(expectedPicks, setupResultMockForOneUserOnePick, week)
+        setupMocksForPicks(expectedPicks, setupResultMockForManyUsersOnePick, week)
         val env = getEnvForWeek(week)
 
         val results = UserPickQuery(mockConnection).get(env)
@@ -62,7 +61,7 @@ class UserPickQueryTest {
         expectedPicks.add(UserPicksDTO(UserDTO("Seamus")))
         expectedPicks[0].picks.add(PickDTO("GB@CHI", "CHI"))
 
-        setupMocksForPicks(expectedPicks, setupResultMockForOneUserOnePick, week)
+        setupMocksForPicks(expectedPicks, setupResultMockForManyUsersOnePick, week)
         val env = getEnvForWeek(week)
 
         val results = UserPickQuery(mockConnection).get(env)
@@ -81,7 +80,7 @@ class UserPickQueryTest {
         expectedPicks.add(UserPicksDTO(UserDTO("Sereres")))
         expectedPicks[1].picks.add(PickDTO("SEA@PHI", "PHI"))
 
-        setupMocksForPicks(expectedPicks, setMockResultsForTwoUsersOnePick, week)
+        setupMocksForPicks(expectedPicks, setupResultMockForManyUsersOnePick, week)
         val env = getEnvForWeek(week)
 
         val results = UserPickQuery(mockConnection).get(env)
@@ -102,7 +101,7 @@ class UserPickQueryTest {
         expectedPicks[0].picks.add(PickDTO("GB@CHI", "CHI"))
         expectedPicks[0].picks.add(PickDTO("SEA@PHI", "PHI"))
 
-        setupMocksForPicks(expectedPicks, setMockResultsForOneUserTwoPicks, week)
+        setupMocksForPicks(expectedPicks, setMockResultsForOneUserManyPicks, week)
         val env = getEnvForWeek(week)
 
         val results = UserPickQuery(mockConnection).get(env)
@@ -129,33 +128,22 @@ class UserPickQueryTest {
         setupMockForQueryWithWeek(mockResultSet, week)
     }
 
-
-
-    private val setupResultMockForOneUserOnePick = { mockResultSet: ResultSet,
-                                                     expectedPicks: ArrayList<UserPicksDTO>
+    private val setupResultMockForManyUsersOnePick = { mockResultSet: ResultSet,
+                                                       expectedPicks: ArrayList<UserPicksDTO>
         ->
-        every { mockResultSet.next() } returns true andThen false
-        every { mockResultSet.getString("name") } returns expectedPicks[0].user.name
-        every { mockResultSet.getString("game") } returns expectedPicks[0].picks[0].game
-        every { mockResultSet.getString("pick") } returns expectedPicks[0].picks[0].pick
+        mockNextReturnTimes(mockResultSet, expectedPicks.size)
+        every { mockResultSet.getString("name") } returnsMany expectedPicks.map { pick -> pick.user.name }
+        every { mockResultSet.getString("game") } returnsMany expectedPicks.map { pick -> pick.picks[0].game }
+        every { mockResultSet.getString("pick") } returnsMany expectedPicks.map { pick -> pick.picks[0].pick }
     }
 
-    private var setMockResultsForTwoUsersOnePick = { mockResultSet: ResultSet,
-                                                     expectedPicks: ArrayList<UserPicksDTO>
+    private var setMockResultsForOneUserManyPicks = { mockResultSet: ResultSet,
+                                                      expectedPicks: ArrayList<UserPicksDTO>
         ->
-        every { mockResultSet.next() } returns true andThen true andThen false
-        every { mockResultSet.getString("name") } returns expectedPicks[0].user.name andThen expectedPicks[1].user.name
-        every { mockResultSet.getString("game") } returns expectedPicks[0].picks[0].game andThen expectedPicks[1].picks[0].game
-        every { mockResultSet.getString("pick") } returns expectedPicks[0].picks[0].pick andThen expectedPicks[1].picks[0].pick
-    }
-
-    private var setMockResultsForOneUserTwoPicks = { mockResultSet: ResultSet,
-                                                     expectedPicks: ArrayList<UserPicksDTO>
-        ->
-        every { mockResultSet.next() } returns true andThen true andThen false
+        mockNextReturnTimes(mockResultSet, expectedPicks[0].picks.size)
         every { mockResultSet.getString("name") } returns expectedPicks[0].user.name
-        every { mockResultSet.getString("game") } returns expectedPicks[0].picks[0].game andThen expectedPicks[0].picks[1].game
-        every { mockResultSet.getString("pick") } returns expectedPicks[0].picks[0].pick andThen expectedPicks[0].picks[1].pick
+        every { mockResultSet.getString("game") } returnsMany expectedPicks[0].picks.map { pick -> pick.game}
+        every { mockResultSet.getString("pick") } returnsMany expectedPicks[0].picks.map { pick -> pick.pick}
     }
 }
 
