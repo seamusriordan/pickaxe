@@ -14,6 +14,10 @@ export const PICKS_QUERY = gql`
                 game
                 pick
             }
+        }
+        
+        userTotals(week: $week) {
+            user {name}
             total
         }
 

@@ -35,6 +35,7 @@ describe('PicksGrid data row/column rendering', () => {
                 {"name": "Someone"},
                 {"name": "Derp"},
             ],
+            "userTotals":[],
             "games": []
         };
         useQuery.mockReturnValue({loading: false, error: null, data: twoMockUserData});
@@ -52,7 +53,7 @@ describe('PicksGrid data row/column rendering', () => {
 
         expect(totalCells.length).toBe(mockQueryData.users.length);
         expect(totalCells.map(cell => cell.props.children))
-            .toEqual(mockQueryData.users.map(user => user.total))
+            .toEqual(mockQueryData.userTotals.map(user => user.total))
     });
 
     it('Renders two total cells when there are two users in data response', () => {
@@ -60,6 +61,10 @@ describe('PicksGrid data row/column rendering', () => {
             "users": [
                 {"name": "Someone"},
                 {"name": "Derp"},
+            ],
+            "userTotals":[
+                {"name": "Someone", "total": 0},
+                {"name": "Derp", "total": 4}
             ],
             "games": []
         };
@@ -70,7 +75,7 @@ describe('PicksGrid data row/column rendering', () => {
 
         expect(totalCells.length).toBe(twoMockUserData.users.length);
         expect(totalCells.map(cell => cell.props.children))
-            .toEqual(twoMockUserData.users.map(user => user.total))
+            .toEqual(twoMockUserData.userTotals.map(user => user.total))
     });
 
 
@@ -87,7 +92,8 @@ describe('PicksGrid data row/column rendering', () => {
             "users": [],
             "games": [
                 {"name": "TLH@PCL"},
-            ]
+            ],
+            "userTotals":[],
         };
         useQuery.mockReturnValue({loading: false, error: null, data: oneMockGameData});
 
@@ -112,7 +118,8 @@ describe('PicksGrid data row/column rendering', () => {
             "users": [],
             "games": [
                 {"name": "TLH@PCL", "spread": "-20"},
-            ]
+            ],
+            "userTotals":[],
         };
         useQuery.mockReturnValue({loading: false, error: null, data: oneMockGameData});
 
@@ -137,7 +144,8 @@ describe('PicksGrid data row/column rendering', () => {
             "users": [],
             "games": [
                 {"name": "TLH@PCL", "spread": "-20", "result": "PCL"},
-            ]
+            ],
+            "userTotals":[]
         };
         useQuery.mockReturnValue({loading: false, error: null, data: oneMockGameData});
 

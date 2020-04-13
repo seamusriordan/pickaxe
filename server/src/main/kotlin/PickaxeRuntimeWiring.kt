@@ -12,6 +12,7 @@ fun wiringMap(): HashMap<String, HashMap<String, DataFetcher<*>>> {
     queryFields["weeks"] = WeeksQuery(connection)
     queryFields["users"] = UserQuery(connection)
     queryFields["games"] = GamesQuery(connection)
+    queryFields["userTotals"] = UserWeekTotalQuery(connection)
 
     queryFields["userPicks"] = UserPickQuery(connection)
 

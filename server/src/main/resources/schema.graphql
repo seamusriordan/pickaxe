@@ -5,6 +5,8 @@ type Query {
     games(week: String): [Game]
     "Picks for users"
     userPicks(week: String): [UserPicks]
+    "Totals for users this week"
+    userTotals(week: String): [UserWeekTotal]
     "Game Weeks"
     weeks: [Week]
     "Current game week"
@@ -25,6 +27,10 @@ type Game {
 type UserPicks {
     user: User
     picks: [Pick]
+}
+
+type UserWeekTotal {
+    user: User
     total: Int
 }
 
