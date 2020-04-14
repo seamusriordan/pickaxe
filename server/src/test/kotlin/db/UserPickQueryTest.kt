@@ -11,9 +11,12 @@ import io.mockk.every
 import io.mockk.mockkClass
 import io.mockk.mockkStatic
 import mockNextReturnTimes
+import mockStatementToReturnPickResultSet
+import org.eclipse.jetty.server.Authentication
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import setupSQLQueryForPicks
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.ResultSet
@@ -40,11 +43,13 @@ class UserPickQueryTest {
     @Test
     fun getReturnsUserPicksWithOneUserAndOnePickForWeekWithWeek0() {
         val week = "0"
-        val expectedPicks: ArrayList<UserPicksDTO> = ArrayList(1)
-        expectedPicks.add(UserPicksDTO(UserDTO("Seamus")))
-        expectedPicks[0].picks.add(PickDTO("GB@CHI", "CHI"))
-
-        setupMocksForPicks(expectedPicks, setupResultMockForManyUsersOnePick, week)
+        val expectedPicks = arrayListOf(
+            UserPicksDTO(UserDTO("Seamus")).apply {
+                picks.add(PickDTO("GB@CHI", "CHI"))
+            }
+        )
+        val mockResultSet = setupSQLQueryForPicks(expectedPicks)
+        mockStatementToReturnPickResultSet(mockStatement, mockResultSet, week)
         val env = getEnvForWeek(week)
 
         val results = UserPickQuery(mockConnection).get(env)
@@ -57,11 +62,13 @@ class UserPickQueryTest {
     @Test
     fun getReturnsUserPicksWithOneUserAndOnePickForWeekWithWeek7() {
         val week = "7"
-        val expectedPicks: ArrayList<UserPicksDTO> = ArrayList(1)
-        expectedPicks.add(UserPicksDTO(UserDTO("Seamus")))
-        expectedPicks[0].picks.add(PickDTO("GB@CHI", "CHI"))
-
-        setupMocksForPicks(expectedPicks, setupResultMockForManyUsersOnePick, week)
+        val expectedPicks = arrayListOf(
+            UserPicksDTO(UserDTO("Seamus")).apply {
+                picks.add(PickDTO("GB@CHI", "CHI"))
+            }
+        )
+        val mockResultSet = setupSQLQueryForPicks(expectedPicks)
+        mockStatementToReturnPickResultSet(mockStatement, mockResultSet, week)
         val env = getEnvForWeek(week)
 
         val results = UserPickQuery(mockConnection).get(env)
@@ -74,13 +81,16 @@ class UserPickQueryTest {
     @Test
     fun getReturnsUserPicksWithTwoUsersAndOnePickForWeekWithWeek0() {
         val week = "0"
-        val expectedPicks: ArrayList<UserPicksDTO> = ArrayList(1)
-        expectedPicks.add(UserPicksDTO(UserDTO("Seamus")))
-        expectedPicks[0].picks.add(PickDTO("GB@CHI", "CHI"))
-        expectedPicks.add(UserPicksDTO(UserDTO("Sereres")))
-        expectedPicks[1].picks.add(PickDTO("SEA@PHI", "PHI"))
-
-        setupMocksForPicks(expectedPicks, setupResultMockForManyUsersOnePick, week)
+        val expectedPicks = arrayListOf(
+            UserPicksDTO(UserDTO("Seamus")).apply {
+                picks.add(PickDTO("GB@CHI", "CHI"))
+            },
+            UserPicksDTO(UserDTO("Sereres")).apply {
+                picks.add(PickDTO("SEA@PHI", "PHI"))
+            }
+        )
+        val mockResultSet = setupSQLQueryForPicks(expectedPicks)
+        mockStatementToReturnPickResultSet(mockStatement, mockResultSet, week)
         val env = getEnvForWeek(week)
 
         val results = UserPickQuery(mockConnection).get(env)
@@ -96,10 +106,12 @@ class UserPickQueryTest {
     @Test
     fun getReturnsUserPicksWithOneUserAndTwoPicksForWeekWithWeek0() {
         val week = "0"
-        val expectedPicks: ArrayList<UserPicksDTO> = ArrayList(1)
-        expectedPicks.add(UserPicksDTO(UserDTO("Seamus")))
-        expectedPicks[0].picks.add(PickDTO("GB@CHI", "CHI"))
-        expectedPicks[0].picks.add(PickDTO("SEA@PHI", "PHI"))
+        val expectedPicks = arrayListOf(
+            UserPicksDTO(UserDTO("Seamus")).apply {
+                picks.add(PickDTO("GB@CHI", "CHI"))
+                picks.add(PickDTO("SEA@PHI", "PHI"))
+            }
+        )
 
         setupMocksForPicks(expectedPicks, setMockResultsForOneUserManyPicks, week)
         val env = getEnvForWeek(week)
@@ -142,8 +154,8 @@ class UserPickQueryTest {
         ->
         mockNextReturnTimes(mockResultSet, expectedPicks[0].picks.size)
         every { mockResultSet.getString("name") } returns expectedPicks[0].user.name
-        every { mockResultSet.getString("game") } returnsMany expectedPicks[0].picks.map { pick -> pick.game}
-        every { mockResultSet.getString("pick") } returnsMany expectedPicks[0].picks.map { pick -> pick.pick}
+        every { mockResultSet.getString("game") } returnsMany expectedPicks[0].picks.map { pick -> pick.game }
+        every { mockResultSet.getString("pick") } returnsMany expectedPicks[0].picks.map { pick -> pick.pick }
     }
 }
 

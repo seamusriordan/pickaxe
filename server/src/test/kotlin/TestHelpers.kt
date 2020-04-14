@@ -85,27 +85,21 @@ fun setupSQLQueryForGames(games: ArrayList<GameDTO>): ResultSet {
     return mockResultSet
 }
 
-fun setupSQLQueryForPicks(userPicks: ArrayList<UserPicksDTO>): ResultSet {
-    val mockResultSet = mockkClass(ResultSet::class)
-    mockNextReturnTimes(mockResultSet, totalNumberOfPicks(userPicks))
+fun setupSQLQueryForPicks(allUserPicks: ArrayList<UserPicksDTO>): ResultSet {
+    val resultSet = mockkClass(ResultSet::class)
+    mockNextReturnTimes(resultSet, totalNumberOfPicks(allUserPicks))
 
-    for (userPick in userPicks) {
-        setupSQLQueryForUser(userPick, mockResultSet)
-    }
-
-    return mockResultSet
-}
-
-private fun totalNumberOfPicks(userPicks: ArrayList<UserPicksDTO>) =
-    userPicks.sumBy { picks -> picks.picks.size }
-
-private fun setupSQLQueryForUser(
-    userPicks: UserPicksDTO,
-    resultSet: ResultSet
-) {
     val names = ArrayList<String>()
-    for (i in 0 until userPicks.picks.size) {
-        names.add(userPicks.user.name)
+    val games = ArrayList<String>()
+    val picks = ArrayList<String>()
+    for (userPicks in allUserPicks) {
+        for (i in 0 until userPicks.picks.size) {
+            names.add(userPicks.user.name)
+        }
+        for(pick in userPicks.picks){
+            games.add(pick.game)
+            picks.add(pick.pick)
+        }
     }
 
     every {
@@ -114,9 +108,14 @@ private fun setupSQLQueryForUser(
 
     every {
         resultSet.getString("game")
-    } returnsMany userPicks.picks.map { pick -> pick.game }
+    } returnsMany games
 
     every {
         resultSet.getString("pick")
-    } returnsMany userPicks.picks.map { pick -> pick.pick }
+    } returnsMany picks
+
+    return resultSet
 }
+
+private fun totalNumberOfPicks(userPicks: ArrayList<UserPicksDTO>) =
+    userPicks.sumBy { picks -> picks.picks.size }

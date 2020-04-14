@@ -9,9 +9,11 @@ import io.mockk.every
 import io.mockk.mockkClass
 import io.mockk.mockkStatic
 import mockNextReturnTimes
+import mockStatementToReturnUserResultSet
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import setupSQLQueryForUsers
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.ResultSet
@@ -37,18 +39,9 @@ class UserQueryTest {
 
     @Test
     fun getReturnsActiveUsersFromDatabaseWhenSingleUser() {
-        val expectedUsers: ArrayList<UserDTO> = ArrayList(1)
-        expectedUsers.add(UserDTO("Seamus"))
-        val mockResultSet = mockkClass(ResultSet::class)
-
-        mockNextReturnTimes(mockResultSet, 1)
-
-        every {
-            mockResultSet.getString("name")
-        } returns expectedUsers[0].name
-
-        every { mockStatement.executeQuery("SELECT name FROM users WHERE active = TRUE") } returns mockResultSet
-
+        val expectedUsers: ArrayList<UserDTO> = arrayListOf(UserDTO("Seamus"))
+        val mockResultSet = setupSQLQueryForUsers(expectedUsers)
+        mockStatementToReturnUserResultSet(mockStatement, mockResultSet)
 
         val results = UserQuery(mockConnection).get(env)
 
@@ -57,19 +50,12 @@ class UserQueryTest {
 
     @Test
     fun getReturnsActiveUsersFromDatabaseWhenTwoUsers() {
-        val expectedUsers: ArrayList<UserDTO> = ArrayList(2)
-        expectedUsers.add(UserDTO("Stebe"))
-        expectedUsers.add(UserDTO("Dave"))
-        val mockResultSet = mockkClass(ResultSet::class)
-
-        mockNextReturnTimes(mockResultSet, 2)
-
-        every {
-            mockResultSet.getString("name")
-        } returnsMany expectedUsers.map { user -> user.name }
-
-        every { mockStatement.executeQuery("SELECT name FROM users WHERE active = TRUE") } returns mockResultSet
-
+        val expectedUsers: ArrayList<UserDTO> = arrayListOf(
+            UserDTO("Stebe"),
+            UserDTO("Dave")
+        )
+        val mockResultSet = setupSQLQueryForUsers(expectedUsers)
+        mockStatementToReturnUserResultSet(mockStatement, mockResultSet)
 
         val results = UserQuery(mockConnection).get(env)
 

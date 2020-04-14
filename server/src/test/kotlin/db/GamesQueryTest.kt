@@ -9,9 +9,11 @@ import io.mockk.every
 import io.mockk.mockkClass
 import io.mockk.mockkStatic
 import mockNextReturnTimes
+import mockStatementToReturnGameResultSet
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import setupSQLQueryForGames
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.ResultSet
@@ -38,17 +40,13 @@ class GamesQueryTest {
 
     @Test
     fun getReturnsGameWithChicago() {
-        val expectedGames: ArrayList<GameDTO> = ArrayList(1)
-        expectedGames.add(generateGame("GB@CHI", "CHI", -100.5, "0"))
-        val mockResultSet = mockkClass(ResultSet::class)
-        mockNextReturnTimes(mockResultSet, 1)
-
+        val week = "0"
+        val expectedGames = arrayListOf(
+            generateGame("GB@CHI", "CHI", -100.5, week)
+        )
+        val mockResultSet = setupSQLQueryForGames(expectedGames)
         configureNonNullReturn(mockResultSet, expectedGames)
-
-        every {
-            mockStatement.executeQuery("SELECT game, week, result, spread FROM games WHERE week = '0'")
-        } returns mockResultSet
-
+        mockStatementToReturnGameResultSet(mockStatement, mockResultSet, week)
 
         val results = GamesQuery(mockConnection).get(env)
 
