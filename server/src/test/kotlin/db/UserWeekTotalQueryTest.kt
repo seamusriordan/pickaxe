@@ -35,9 +35,7 @@ class UserWeekTotalQueryTest {
         val expectedUsers = arrayListOf(UserDTO("Dave"))
 
         val mockResultSet = setupSQLQueryForUsers(expectedUsers)
-
-        val queryString = "SELECT name FROM users WHERE active = true"
-        every { mockStatement.executeQuery(queryString) } returns mockResultSet
+        setMockStatementToReturnResultSet(mockStatement, mockResultSet)
 
 
         val query = UserWeekTotalQuery(mockConnection).get(env)
@@ -56,9 +54,7 @@ class UserWeekTotalQueryTest {
                 = arrayListOf(UserDTO("Dave"), UserDTO("Jack"))
 
         val mockResultSet = setupSQLQueryForUsers(expectedUsers)
-
-        val queryString = "SELECT name FROM users WHERE active = true"
-        every { mockStatement.executeQuery(queryString) } returns mockResultSet
+        setMockStatementToReturnResultSet(mockStatement, mockResultSet)
 
 
         val query = UserWeekTotalQuery(mockConnection).get(env)
@@ -68,6 +64,11 @@ class UserWeekTotalQueryTest {
             query.map { result -> result.user.name }
         )
         assertEquals(expectedUsers.size, query.size)
+    }
+
+    private fun setMockStatementToReturnResultSet(statement: Statement, results: ResultSet) {
+        val queryString = "SELECT name FROM users WHERE active = TRUE"
+        every { statement.executeQuery(queryString) } returns results
     }
 
     private fun setupSQLQueryForUsers(users: ArrayList<UserDTO>): ResultSet {
