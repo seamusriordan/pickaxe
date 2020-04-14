@@ -35,9 +35,9 @@ export const mockQueryData = {
         },
     ],
     "userTotals":[
-        {"name": "Davebob", "total": "4"},
-        {"name": "Luuand", "total": "1"},
-        {"name": "Vegas", "total": "0"}
+        {"name": "Davebob", "total": "4", "games": [ {"name": "HAR@NOR"}, {"name": "CHI@GB"}, {"name": "SFE@CRL"}, {"name": "ANN@COL"}]},
+        {"name": "Luuand", "total": "1", "games": [ {"name": "HAR@NOR"}]},
+        {"name": "Vegas", "total": "0", "games": []}
     ],
     "games": [
         {"name": "CHI@GB", "week": "0", "spread": 400, "result": "CHI"},

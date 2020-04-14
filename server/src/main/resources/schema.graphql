@@ -32,6 +32,7 @@ type UserPicks {
 type UserWeekTotal {
     user: User
     total: Int
+    games: [Game]
 }
 
 type Pick {
