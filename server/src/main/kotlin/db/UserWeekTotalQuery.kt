@@ -1,5 +1,6 @@
 package db
 
+import dto.GameDTO
 import dto.UserWeekTotalDTO
 import graphql.schema.DataFetcher
 import graphql.schema.DataFetchingEnvironment
@@ -12,7 +13,9 @@ class UserWeekTotalQuery(val connection: Connection) : DataFetcher<List<UserWeek
         val results = ArrayList<UserWeekTotalDTO>(0)
 
         for(userResult in userResults){
-            results.add(UserWeekTotalDTO(userResult))
+            val weeklyTotal = UserWeekTotalDTO(userResult)
+            weeklyTotal.games.add(GameDTO("GB@CHI", "Week 0"))
+            results.add(weeklyTotal)
         }
 
         return results
