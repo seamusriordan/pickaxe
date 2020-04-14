@@ -32,18 +32,52 @@ class UserWeekTotalQueryTest {
     @Test
     fun returnsListWithUsersWhenOneUserInUserField() {
         val env = getEnvForWeek("Week 0")
-        val expectedUser = UserDTO("Dave")
+        val expectedUsers = arrayListOf(UserDTO("Dave"))
 
-        val mockResultSet = mockkClass(ResultSet::class)
-        mockNextReturnTimes(mockResultSet, 1)
-        every { mockResultSet.getString("name") } returns expectedUser.name
+        val mockResultSet = setupSQLQueryForUsers(expectedUsers)
+
         val queryString = "SELECT name FROM users WHERE active = true"
         every { mockStatement.executeQuery(queryString) } returns mockResultSet
 
 
         val query = UserWeekTotalQuery(mockConnection).get(env)
 
-        assertEquals(expectedUser.name, query.first().user.name)
-        assertEquals(1, query.size)
+        assertEquals(
+            expectedUsers.map { user -> user.name },
+            query.map { result -> result.user.name }
+        )
+        assertEquals(expectedUsers.size, query.size)
     }
+
+    @Test
+    fun returnsListWithUsersWhenTwoUserInUserField() {
+        val env = getEnvForWeek("Week 0")
+        val expectedUsers
+                = arrayListOf(UserDTO("Dave"), UserDTO("Jack"))
+
+        val mockResultSet = setupSQLQueryForUsers(expectedUsers)
+
+        val queryString = "SELECT name FROM users WHERE active = true"
+        every { mockStatement.executeQuery(queryString) } returns mockResultSet
+
+
+        val query = UserWeekTotalQuery(mockConnection).get(env)
+
+        assertEquals(
+            expectedUsers.map { user -> user.name },
+            query.map { result -> result.user.name }
+        )
+        assertEquals(expectedUsers.size, query.size)
+    }
+
+    private fun setupSQLQueryForUsers(users: ArrayList<UserDTO>): ResultSet {
+        val mockResultSet = mockkClass(ResultSet::class)
+        mockNextReturnTimes(mockResultSet, users.size)
+
+        every {
+            mockResultSet.getString("name")
+        } returnsMany users.map { user -> user.name }
+        return mockResultSet
+    }
+
 }
