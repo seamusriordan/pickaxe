@@ -9,9 +9,15 @@ import io.mockk.every
 import io.mockk.mockkClass
 import io.mockk.mockkStatic
 import mockNextReturnTimes
+import mockStatementToReturnGameResultSet
+import mockStatementToReturnPickResultSet
+import mockStatementToReturnUserResultSet
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import setupSQLQueryForGames
+import setupSQLQueryForPicks
+import setupSQLQueryForUsers
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.ResultSet
@@ -158,6 +164,30 @@ class UserWeekTotalQueryTest {
         assertEquals(0, query[0].games.size)
     }
 
+    @Test
+    fun nullResultDoesNotMatchNullPick() {
+        val week = "Week 4"
+        val env = getEnvForWeek(week)
+
+        val expectedUsers = arrayListOf(UserDTO("Dave"))
+        val expectedGames = arrayListOf(GameDTO("GB@CHI", week))
+        val expectedPicks = arrayListOf(UserPicksDTO(expectedUsers[0]))
+
+        val mockUserSet = setupSQLQueryForUsers(expectedUsers)
+        mockStatementToReturnUserResultSet(mockStatement, mockUserSet)
+
+        val mockGameSet = setupSQLQueryForGames(expectedGames)
+        mockStatementToReturnGameResultSet(mockStatement, mockGameSet, week)
+
+        val mockPickSet = setupSQLQueryForPicks(expectedPicks)
+        mockStatementToReturnPickResultSet(mockStatement, mockPickSet, week)
+
+
+        val query = UserWeekTotalQuery(mockConnection).get(env)
+
+        assertEquals(0, query[0].games.size)
+    }
+
 
     @Test
     fun returnsListWithUsersWhenTwoUserInUserField() {
@@ -183,89 +213,6 @@ class UserWeekTotalQueryTest {
         assertEquals(expectedUsers.size, query.size)
     }
 
-    private fun mockStatementToReturnUserResultSet(statement: Statement, results: ResultSet) {
-        val queryString = "SELECT name FROM users WHERE active = TRUE"
-        every { statement.executeQuery(queryString) } returns results
-    }
 
-    private fun mockStatementToReturnGameResultSet(statement: Statement, results: ResultSet, week: String) {
-        val queryString = "SELECT game, week, result, spread FROM games WHERE week = '$week'"
-        every { statement.executeQuery(queryString) } returns results
-    }
-
-    private fun mockStatementToReturnPickResultSet(statement: Statement, results: ResultSet, week: String) {
-        val queryString = "SELECT name, game, pick FROM userpicks WHERE week = '$week'"
-        every { statement.executeQuery(queryString) } returns results
-    }
-
-    private fun setupSQLQueryForUsers(users: ArrayList<UserDTO>): ResultSet {
-        val mockResultSet = mockkClass(ResultSet::class)
-        mockNextReturnTimes(mockResultSet, users.size)
-
-        every {
-            mockResultSet.getString("name")
-        } returnsMany users.map { user -> user.name }
-        return mockResultSet
-    }
-
-    private fun setupSQLQueryForGames(games: ArrayList<GameDTO>): ResultSet {
-        val mockResultSet = mockkClass(ResultSet::class)
-        mockNextReturnTimes(mockResultSet, games.size)
-
-        every {
-            mockResultSet.getString("game")
-        } returnsMany games.map { game -> game.name }
-
-        every {
-            mockResultSet.getString("week")
-        } returnsMany games.map { game -> game.week }
-
-        every {
-            mockResultSet.getDouble("spread")
-        } returns 0.0
-
-        every {
-            mockResultSet.getString("result")
-        } returnsMany games.map { game -> game.result }
-
-        every {
-            mockResultSet.wasNull()
-        } returns false
-
-        return mockResultSet
-    }
-
-    private fun setupSQLQueryForPicks(userPicks: ArrayList<UserPicksDTO>): ResultSet {
-        val mockResultSet = mockkClass(ResultSet::class)
-        mockNextReturnTimes(mockResultSet, userPicks.size)
-
-        for (userPick in userPicks) {
-            setupSQLQueryForUser(userPick, mockResultSet)
-        }
-
-        return mockResultSet
-    }
-
-    private fun setupSQLQueryForUser(
-        userPicks: UserPicksDTO,
-        resultSet: ResultSet
-    ) {
-        val names = ArrayList<String>()
-        for (i in 0 until userPicks.picks.size) {
-            names.add(userPicks.user.name)
-        }
-
-        every {
-            resultSet.getString("name")
-        } returnsMany names
-
-        every {
-            resultSet.getString("game")
-        } returnsMany userPicks.picks.map { pick -> pick.game }
-
-        every {
-            resultSet.getString("pick")
-        } returnsMany userPicks.picks.map { pick -> pick.pick }
-    }
 
 }
