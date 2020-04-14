@@ -7,9 +7,11 @@ import io.mockk.every
 import io.mockk.mockkClass
 import io.mockk.mockkStatic
 import mockNextReturnTimes
+import mockStatementToReturnWeekResultSet
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import setupSQLQueryForWeeks
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.ResultSet
@@ -35,22 +37,11 @@ class WeeksQueryTest {
 
     @Test
     fun getReturnsWeeksWhenOnlyWeekIs0() {
-        val expectedWeeks = ArrayList<WeekDTO>(1)
-        addWeekWithNameAndOrder(expectedWeeks, "3", 3)
-
-        val mockResultSet = mockkClass(ResultSet::class)
-        mockNextReturnTimes(mockResultSet, 1)
-
-        every {
-            mockResultSet.getString("name")
-        } returns expectedWeeks[0].name
-
-        every {
-            mockResultSet.getInt("week_order")
-        } returns expectedWeeks[0].weekOrder!!
-
-        every { mockStatement.executeQuery("SELECT name, week_order FROM weeks") } returns mockResultSet
-
+        val expectedWeeks = arrayListOf(
+            weekWithNameAndOrder("3", 3)
+        )
+        val mockResultSet = setupSQLQueryForWeeks(expectedWeeks)
+        mockStatementToReturnWeekResultSet(mockStatement, mockResultSet)
 
         val results = WeeksQuery(mockConnection).get(env)
 
@@ -60,23 +51,13 @@ class WeeksQueryTest {
 
     @Test
     fun getReturnsWeeksWhenThreeWeeks() {
-        val expectedWeeks = ArrayList<WeekDTO>(1)
-        addWeekWithNameAndOrder(expectedWeeks, "0", 1)
-        addWeekWithNameAndOrder(expectedWeeks, "4", 4)
-        addWeekWithNameAndOrder(expectedWeeks, "19", 199)
-
-        val mockResultSet = mockkClass(ResultSet::class)
-        mockNextReturnTimes(mockResultSet, 3)
-
-        every {
-            mockResultSet.getString("name")
-        } returnsMany expectedWeeks.map { week -> week.name }
-
-        every {
-            mockResultSet.getInt("week_order")
-        } returnsMany expectedWeeks.map { week -> week.weekOrder!! }
-
-        every { mockStatement.executeQuery("SELECT name, week_order FROM weeks") } returns mockResultSet
+        val expectedWeeks = arrayListOf(
+            weekWithNameAndOrder("0", 1),
+            weekWithNameAndOrder("4", 4),
+            weekWithNameAndOrder("19", 199)
+        )
+        val mockResultSet = setupSQLQueryForWeeks(expectedWeeks)
+        mockStatementToReturnWeekResultSet(mockStatement, mockResultSet)
 
         val results = WeeksQuery(mockConnection).get(env)
 
@@ -84,12 +65,9 @@ class WeeksQueryTest {
         Assertions.assertEquals(expectedWeeks.map { week -> week.weekOrder }, results.map { week -> week.weekOrder })
     }
 
-
-
-    private fun addWeekWithNameAndOrder(expectedWeeks: ArrayList<WeekDTO>, name: String, order: Int) {
-        val week = WeekDTO(name).apply {
+    private fun weekWithNameAndOrder(name: String, order: Int): WeekDTO {
+        return WeekDTO(name).apply {
             weekOrder = order
         }
-        expectedWeeks.add(week)
     }
 }

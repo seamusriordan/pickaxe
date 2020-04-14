@@ -1,6 +1,7 @@
 import dto.GameDTO
 import dto.UserDTO
 import dto.UserPicksDTO
+import dto.WeekDTO
 import graphql.schema.DataFetchingEnvironment
 import graphql.schema.DataFetchingEnvironmentImpl
 import io.mockk.every
@@ -48,6 +49,11 @@ fun mockStatementToReturnPickResultSet(statement: Statement, results: ResultSet,
     every { statement.executeQuery(queryString) } returns results
 }
 
+fun mockStatementToReturnWeekResultSet(statement: Statement, results: ResultSet) {
+    every { statement.executeQuery("SELECT name, week_order FROM weeks") } returns results
+
+}
+
 fun setupSQLQueryForUsers(users: ArrayList<UserDTO>): ResultSet {
     val mockResultSet = mockkClass(ResultSet::class)
     mockNextReturnTimes(mockResultSet, users.size)
@@ -58,7 +64,7 @@ fun setupSQLQueryForUsers(users: ArrayList<UserDTO>): ResultSet {
     return mockResultSet
 }
 
-fun setupSQLQueryForGames(games: ArrayList<GameDTO>): ResultSet {
+fun setupSQLQueryForGamesWithNonNullFields(games: ArrayList<GameDTO>): ResultSet {
     val mockResultSet = mockkClass(ResultSet::class)
     mockNextReturnTimes(mockResultSet, games.size)
 
@@ -72,7 +78,13 @@ fun setupSQLQueryForGames(games: ArrayList<GameDTO>): ResultSet {
 
     every {
         mockResultSet.getDouble("spread")
-    } returns 0.0
+    } returnsMany games.map {
+        if (it.spread == null) {
+            0.0
+        } else {
+            it.spread!!
+        }
+    }
 
     every {
         mockResultSet.getString("result")
@@ -96,7 +108,7 @@ fun setupSQLQueryForPicks(allUserPicks: ArrayList<UserPicksDTO>): ResultSet {
         for (i in 0 until userPicks.picks.size) {
             names.add(userPicks.user.name)
         }
-        for(pick in userPicks.picks){
+        for (pick in userPicks.picks) {
             games.add(pick.game)
             picks.add(pick.pick)
         }
@@ -115,6 +127,20 @@ fun setupSQLQueryForPicks(allUserPicks: ArrayList<UserPicksDTO>): ResultSet {
     } returnsMany picks
 
     return resultSet
+}
+
+fun setupSQLQueryForWeeks(weeks: ArrayList<WeekDTO>): ResultSet {
+    val mockResultSet = mockkClass(ResultSet::class)
+    mockNextReturnTimes(mockResultSet, weeks.size)
+    every {
+        mockResultSet.getString("name")
+    } returnsMany weeks.map { week -> week.name }
+
+    every {
+        mockResultSet.getInt("week_order")
+    } returnsMany weeks.map { week -> week.weekOrder!! }
+
+    return mockResultSet
 }
 
 private fun totalNumberOfPicks(userPicks: ArrayList<UserPicksDTO>) =

@@ -8,19 +8,17 @@ import getEnvForWeek
 import io.mockk.every
 import io.mockk.mockkClass
 import io.mockk.mockkStatic
-import mockNextReturnTimes
 import mockStatementToReturnGameResultSet
 import mockStatementToReturnPickResultSet
 import mockStatementToReturnUserResultSet
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import setupSQLQueryForGames
+import setupSQLQueryForGamesWithNonNullFields
 import setupSQLQueryForPicks
 import setupSQLQueryForUsers
 import java.sql.Connection
 import java.sql.DriverManager
-import java.sql.ResultSet
 import java.sql.Statement
 
 class UserWeekTotalQueryTest {
@@ -47,7 +45,7 @@ class UserWeekTotalQueryTest {
         val mockResultSet = setupSQLQueryForUsers(expectedUsers)
         mockStatementToReturnUserResultSet(mockStatement, mockResultSet)
 
-        val mockGameSet = setupSQLQueryForGames(arrayListOf())
+        val mockGameSet = setupSQLQueryForGamesWithNonNullFields(arrayListOf())
         mockStatementToReturnGameResultSet(mockStatement, mockGameSet, week)
 
         val mockPickSet = setupSQLQueryForPicks(arrayListOf())
@@ -83,7 +81,7 @@ class UserWeekTotalQueryTest {
         val mockUserSet = setupSQLQueryForUsers(expectedUsers)
         mockStatementToReturnUserResultSet(mockStatement, mockUserSet)
 
-        val mockGameSet = setupSQLQueryForGames(expectedGames)
+        val mockGameSet = setupSQLQueryForGamesWithNonNullFields(expectedGames)
         mockStatementToReturnGameResultSet(mockStatement, mockGameSet, week)
 
         val mockPickSet = setupSQLQueryForPicks(expectedPicks)
@@ -118,7 +116,7 @@ class UserWeekTotalQueryTest {
         val mockUserSet = setupSQLQueryForUsers(expectedUsers)
         mockStatementToReturnUserResultSet(mockStatement, mockUserSet)
 
-        val mockGameSet = setupSQLQueryForGames(expectedGames)
+        val mockGameSet = setupSQLQueryForGamesWithNonNullFields(expectedGames)
         mockStatementToReturnGameResultSet(mockStatement, mockGameSet, week)
 
         val mockPickSet = setupSQLQueryForPicks(expectedPicks)
@@ -152,7 +150,7 @@ class UserWeekTotalQueryTest {
         val mockUserSet = setupSQLQueryForUsers(expectedUsers)
         mockStatementToReturnUserResultSet(mockStatement, mockUserSet)
 
-        val mockGameSet = setupSQLQueryForGames(expectedGames)
+        val mockGameSet = setupSQLQueryForGamesWithNonNullFields(expectedGames)
         mockStatementToReturnGameResultSet(mockStatement, mockGameSet, week)
 
         val mockPickSet = setupSQLQueryForPicks(expectedPicks)
@@ -176,7 +174,7 @@ class UserWeekTotalQueryTest {
         val mockUserSet = setupSQLQueryForUsers(expectedUsers)
         mockStatementToReturnUserResultSet(mockStatement, mockUserSet)
 
-        val mockGameSet = setupSQLQueryForGames(expectedGames)
+        val mockGameSet = setupSQLQueryForGamesWithNonNullFields(expectedGames)
         mockStatementToReturnGameResultSet(mockStatement, mockGameSet, week)
 
         val mockPickSet = setupSQLQueryForPicks(expectedPicks)
@@ -198,7 +196,7 @@ class UserWeekTotalQueryTest {
         val mockResultSet = setupSQLQueryForUsers(expectedUsers)
         mockStatementToReturnUserResultSet(mockStatement, mockResultSet)
 
-        val mockGameSet = setupSQLQueryForGames(arrayListOf())
+        val mockGameSet = setupSQLQueryForGamesWithNonNullFields(arrayListOf())
         mockStatementToReturnGameResultSet(mockStatement, mockGameSet, week)
 
         val mockPickSet = setupSQLQueryForPicks(arrayListOf())

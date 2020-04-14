@@ -3,8 +3,6 @@ package db
 import dto.GameDTO
 import getEnvForWeek
 import graphql.schema.DataFetchingEnvironment
-import graphql.schema.DataFetchingEnvironmentImpl
-import io.mockk.clearMocks
 import io.mockk.every
 import io.mockk.mockkClass
 import io.mockk.mockkStatic
@@ -13,7 +11,7 @@ import mockStatementToReturnGameResultSet
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import setupSQLQueryForGames
+import setupSQLQueryForGamesWithNonNullFields
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.ResultSet
@@ -44,8 +42,7 @@ class GamesQueryTest {
         val expectedGames = arrayListOf(
             generateGame("GB@CHI", "CHI", -100.5, week)
         )
-        val mockResultSet = setupSQLQueryForGames(expectedGames)
-        configureNonNullReturn(mockResultSet, expectedGames)
+        val mockResultSet = setupSQLQueryForGamesWithNonNullFields(expectedGames)
         mockStatementToReturnGameResultSet(mockStatement, mockResultSet, week)
 
         val results = GamesQuery(mockConnection).get(env)
@@ -58,28 +55,32 @@ class GamesQueryTest {
 
     @Test
     fun nullSpreadInDbIsNullInResult() {
-        val expectedGames: ArrayList<GameDTO> = ArrayList(1)
-        expectedGames.add(generateGame("GB@CHI", "CHI", null, "0"))
+        val week = "0"
+        val expectedGames = arrayListOf(
+            generateGame("GB@CHI", "CHI", null, week)
+        )
         val mockResultSet = mockkClass(ResultSet::class)
-
         mockNextReturnTimes(mockResultSet, 1)
 
-        every { mockResultSet.getString("game")
+        every {
+            mockResultSet.getString("game")
         } returns expectedGames[0].name
 
-        every { mockResultSet.getString("result")
+        every {
+            mockResultSet.getString("result")
         } returns expectedGames[0].result
 
-        every { mockResultSet.getDouble("spread")
+        every {
+            mockResultSet.getDouble("spread")
         } returns 0.0
 
         every { mockResultSet.wasNull() } returnsMany listOf(false, true)
 
-        every { mockResultSet.getString("week")
+        every {
+            mockResultSet.getString("week")
         } returns expectedGames[0].week
 
-        every { mockStatement.executeQuery("SELECT game, week, result, spread FROM games WHERE week = '0'")
-        } returns mockResultSet
+        mockStatementToReturnGameResultSet(mockStatement, mockResultSet, week)
 
         val results = GamesQuery(mockConnection).get(env)
 
@@ -88,28 +89,33 @@ class GamesQueryTest {
 
     @Test
     fun nullResultInDbIsNullInResult() {
-        val expectedGames: ArrayList<GameDTO> = ArrayList(1)
-        expectedGames.add(generateGame("GB@CHI", null, -10.0, "0"))
+        val week = "0"
+        val expectedGames = arrayListOf(
+            generateGame("GB@CHI", null, -10.0, week)
+        )
         val mockResultSet = mockkClass(ResultSet::class)
 
         mockNextReturnTimes(mockResultSet, 1)
 
-        every { mockResultSet.getString("game")
+        every {
+            mockResultSet.getString("game")
         } returns expectedGames[0].name
 
-        every { mockResultSet.getString("result")
+        every {
+            mockResultSet.getString("result")
         } returns null
 
-        every { mockResultSet.getDouble("spread")
+        every {
+            mockResultSet.getDouble("spread")
         } returns expectedGames[0].spread!!
 
         every { mockResultSet.wasNull() } returnsMany listOf(true, false)
 
-        every { mockResultSet.getString("week")
+        every {
+            mockResultSet.getString("week")
         } returns expectedGames[0].week
 
-        every { mockStatement.executeQuery("SELECT game, week, result, spread FROM games WHERE week = '0'") } returns mockResultSet
-
+        mockStatementToReturnGameResultSet(mockStatement, mockResultSet, week)
 
         val results = GamesQuery(mockConnection).get(env)
 
@@ -118,18 +124,13 @@ class GamesQueryTest {
 
     @Test
     fun getReturnsGameWithTwoGames() {
-        val expectedGames: ArrayList<GameDTO> = ArrayList(1)
-        expectedGames.add(generateGame("SEA@ARI", "SEA", 10.5, "0"))
-        expectedGames.add(generateGame("GB@CHI", "CHI", -100.5, "0"))
-        val mockResultSet = mockkClass(ResultSet::class)
-        mockNextReturnTimes(mockResultSet, 2)
-
-        configureNonNullReturn(mockResultSet, expectedGames)
-
-        every {
-            mockStatement.executeQuery("SELECT game, week, result, spread FROM games WHERE week = '0'")
-        } returns mockResultSet
-
+        val week = "0"
+        val expectedGames = arrayListOf(
+            generateGame("SEA@ARI", "SEA", 10.5, "0"),
+            generateGame("GB@CHI", "CHI", -100.5, "0")
+        )
+        val mockResultSet = setupSQLQueryForGamesWithNonNullFields(expectedGames)
+        mockStatementToReturnGameResultSet(mockStatement, mockResultSet, week)
 
         val results = GamesQuery(mockConnection).get(env)
 
@@ -141,17 +142,12 @@ class GamesQueryTest {
 
     @Test
     fun getReturnsGameWithGameInWeek1() {
-        val expectedGames: ArrayList<GameDTO> = ArrayList(1)
-        expectedGames.add(generateGame("NE@TB", "TB", -10.5, "1"))
-        val mockResultSet = mockkClass(ResultSet::class)
-
-        mockNextReturnTimes(mockResultSet, 1)
-
-        configureNonNullReturn(mockResultSet, expectedGames)
-
-        every {
-            mockStatement.executeQuery("SELECT game, week, result, spread FROM games WHERE week = '1'")
-        } returns mockResultSet
+        val week = "1"
+        val expectedGames = arrayListOf(
+            generateGame("NE@TB", "TB", -10.5, "1")
+        )
+        val mockResultSet = setupSQLQueryForGamesWithNonNullFields(expectedGames)
+        mockStatementToReturnGameResultSet(mockStatement, mockResultSet, week)
 
         val results = GamesQuery(mockConnection).get(getEnvForWeek("1"))
 
@@ -161,28 +157,6 @@ class GamesQueryTest {
         Assertions.assertEquals(expectedGames.map { x -> x.week }, results.map { x -> x.week })
     }
 
-    private fun configureNonNullReturn(
-        mockResultSet: ResultSet,
-        expectedGames: ArrayList<GameDTO>
-    ) {
-        every {
-            mockResultSet.getString("game")
-        } returnsMany expectedGames.map { game -> game.name }
-
-        every {
-            mockResultSet.getString("result")
-        } returnsMany expectedGames.map { game -> game.result }
-
-        every {
-            mockResultSet.getDouble("spread")
-        } returnsMany expectedGames.map { game -> game.spread!! }
-
-        every {
-            mockResultSet.getString("week")
-        } returnsMany expectedGames.map { game -> game.week }
-
-        every { mockResultSet.wasNull() } returns false
-    }
 
     private fun generateGame(name: String, result: String?, spread: Double?, week: String): GameDTO {
         val game = GameDTO(name, week)
