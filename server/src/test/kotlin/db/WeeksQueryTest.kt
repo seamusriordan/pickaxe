@@ -1,5 +1,6 @@
 package db
 
+import SQLState
 import dto.WeekDTO
 import graphql.schema.DataFetchingEnvironment
 import graphql.schema.DataFetchingEnvironmentImpl
@@ -37,32 +38,30 @@ class WeeksQueryTest {
 
     @Test
     fun getReturnsWeeksWhenOnlyWeekIs0() {
-        val expectedWeeks = arrayListOf(
-            weekWithNameAndOrder("3", 3)
-        )
-        val mockResultSet = setupSQLQueryForWeeks(expectedWeeks)
-        mockStatementToReturnWeekResultSet(mockStatement, mockResultSet)
+        val sqlState = SQLState().apply {
+            weeks.add(weekWithNameAndOrder("3", 3))
+        }
+        sqlState.mockSQLState(mockStatement)
 
         val results = WeeksQuery(mockConnection).get(env)
 
-        Assertions.assertEquals(expectedWeeks[0].name, results[0].name)
-        Assertions.assertEquals(expectedWeeks[0].weekOrder, results[0].weekOrder)
+        Assertions.assertEquals(sqlState.weeks[0].name, results[0].name)
+        Assertions.assertEquals(sqlState.weeks[0].weekOrder, results[0].weekOrder)
     }
 
     @Test
     fun getReturnsWeeksWhenThreeWeeks() {
-        val expectedWeeks = arrayListOf(
-            weekWithNameAndOrder("0", 1),
-            weekWithNameAndOrder("4", 4),
-            weekWithNameAndOrder("19", 199)
-        )
-        val mockResultSet = setupSQLQueryForWeeks(expectedWeeks)
-        mockStatementToReturnWeekResultSet(mockStatement, mockResultSet)
+        val sqlState = SQLState().apply {
+            weeks.add(weekWithNameAndOrder("0", 1))
+            weeks.add(weekWithNameAndOrder("4", 4))
+            weeks.add(weekWithNameAndOrder("19", 199))
+        }
+        sqlState.mockSQLState(mockStatement)
 
         val results = WeeksQuery(mockConnection).get(env)
 
-        Assertions.assertEquals(expectedWeeks.map { week -> week.name }, results.map { week -> week.name })
-        Assertions.assertEquals(expectedWeeks.map { week -> week.weekOrder }, results.map { week -> week.weekOrder })
+        Assertions.assertEquals(sqlState.weeks.map { week -> week.name }, results.map { week -> week.name })
+        Assertions.assertEquals(sqlState.weeks.map { week -> week.weekOrder }, results.map { week -> week.weekOrder })
     }
 
     private fun weekWithNameAndOrder(name: String, order: Int): WeekDTO {

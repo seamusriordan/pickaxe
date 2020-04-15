@@ -7,10 +7,11 @@ import io.mockk.mockkClass
 import java.sql.ResultSet
 import java.sql.Statement
 
-class SQLState(val week: String) {
+class SQLState(private val week: String = "0") {
     var users: ArrayList<UserDTO> = arrayListOf()
     var games: ArrayList<GameDTO> = arrayListOf()
     var picks: ArrayList<UserPicksDTO> = arrayListOf()
+    var weeks: ArrayList<WeekDTO> = arrayListOf()
 
     fun mockSQLState(
         statement: Statement
@@ -25,6 +26,9 @@ class SQLState(val week: String) {
 
         val mockPickSet = setupSQLQueryForPicks(picks)
         mockStatementToReturnPickResultSet(statement, mockPickSet, week)
+
+        val mockWeekSet = setupSQLQueryForWeeks(weeks)
+        mockStatementToReturnWeekResultSet(statement, mockWeekSet)
     }
 
 }
