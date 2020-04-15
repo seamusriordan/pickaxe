@@ -1,5 +1,6 @@
 package db
 
+import SQLState
 import dto.GameDTO
 import getEnvForWeek
 import graphql.schema.DataFetchingEnvironment
@@ -9,6 +10,8 @@ import io.mockk.mockkStatic
 import mockNextReturnTimes
 import mockStatementToReturnGameResultSet
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertArrayEquals
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import setupSQLQueryForGamesWithNonNullFields
@@ -39,18 +42,42 @@ class GamesQueryTest {
     @Test
     fun getReturnsGameWithChicago() {
         val week = "0"
-        val expectedGames = arrayListOf(
-            generateGame("GB@CHI", "CHI", -100.5, week)
-        )
-        val mockResultSet = setupSQLQueryForGamesWithNonNullFields(expectedGames)
-        mockStatementToReturnGameResultSet(mockStatement, mockResultSet, week)
+        val sqlState = SQLState(week).apply {
+            games.add(generateGame("GB@CHI", "CHI", -100.5, week))
+        }
+        sqlState.mockSQLState(mockStatement)
 
         val results = GamesQuery(mockConnection).get(env)
 
-        Assertions.assertEquals(expectedGames.map { x -> x.name }, results.map { x -> x.name })
-        Assertions.assertEquals(expectedGames.map { x -> x.result }, results.map { x -> x.result })
-        Assertions.assertEquals(expectedGames.map { x -> x.spread }, results.map { x -> x.spread })
-        Assertions.assertEquals(expectedGames.map { x -> x.week }, results.map { x -> x.week })
+        assertGamesShallowEquals(sqlState, results)
+    }
+
+    @Test
+    fun getReturnsGameWithTwoGames() {
+        val week = "0"
+        val sqlState = SQLState(week).apply {
+            games.add(generateGame("SEA@ARI", "SEA", 10.5, week))
+            games.add(generateGame("GB@CHI", "CHI", -100.5, week))
+        }
+        sqlState.mockSQLState(mockStatement)
+
+        val results = GamesQuery(mockConnection).get(env)
+
+        assertGamesShallowEquals(sqlState, results)
+    }
+
+    @Test
+    fun getReturnsGameWithGameInWeek1() {
+        val week = "1"
+        val sqlState = SQLState(week).apply {
+            games.add(generateGame("NE@TB", "TB", -10.5, week))
+
+        }
+        sqlState.mockSQLState(mockStatement)
+
+        val results = GamesQuery(mockConnection).get(getEnvForWeek(week))
+
+        assertGamesShallowEquals(sqlState, results)
     }
 
     @Test
@@ -122,41 +149,12 @@ class GamesQueryTest {
         Assertions.assertNull(results[0].result)
     }
 
-    @Test
-    fun getReturnsGameWithTwoGames() {
-        val week = "0"
-        val expectedGames = arrayListOf(
-            generateGame("SEA@ARI", "SEA", 10.5, "0"),
-            generateGame("GB@CHI", "CHI", -100.5, "0")
-        )
-        val mockResultSet = setupSQLQueryForGamesWithNonNullFields(expectedGames)
-        mockStatementToReturnGameResultSet(mockStatement, mockResultSet, week)
-
-        val results = GamesQuery(mockConnection).get(env)
-
-        Assertions.assertEquals(expectedGames.map { x -> x.name }, results.map { x -> x.name })
-        Assertions.assertEquals(expectedGames.map { x -> x.result }, results.map { x -> x.result })
-        Assertions.assertEquals(expectedGames.map { x -> x.spread }, results.map { x -> x.spread })
-        Assertions.assertEquals(expectedGames.map { x -> x.week }, results.map { x -> x.week })
+    private fun assertGamesShallowEquals(sqlState: SQLState, results: List<GameDTO>) {
+        assertEquals(sqlState.games.map { x -> x.name }, results.map { x -> x.name })
+        assertEquals(sqlState.games.map { x -> x.result }, results.map { x -> x.result })
+        assertEquals(sqlState.games.map { x -> x.spread }, results.map { x -> x.spread })
+        assertEquals(sqlState.games.map { x -> x.week }, results.map { x -> x.week })
     }
-
-    @Test
-    fun getReturnsGameWithGameInWeek1() {
-        val week = "1"
-        val expectedGames = arrayListOf(
-            generateGame("NE@TB", "TB", -10.5, "1")
-        )
-        val mockResultSet = setupSQLQueryForGamesWithNonNullFields(expectedGames)
-        mockStatementToReturnGameResultSet(mockStatement, mockResultSet, week)
-
-        val results = GamesQuery(mockConnection).get(getEnvForWeek("1"))
-
-        Assertions.assertEquals(expectedGames.map { x -> x.name }, results.map { x -> x.name })
-        Assertions.assertEquals(expectedGames.map { x -> x.result }, results.map { x -> x.result })
-        Assertions.assertEquals(expectedGames.map { x -> x.spread }, results.map { x -> x.spread })
-        Assertions.assertEquals(expectedGames.map { x -> x.week }, results.map { x -> x.week })
-    }
-
 
     private fun generateGame(name: String, result: String?, spread: Double?, week: String): GameDTO {
         val game = GameDTO(name, week)
