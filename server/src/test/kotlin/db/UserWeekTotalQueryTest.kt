@@ -1,5 +1,6 @@
 package db
 
+import SQLState
 import dto.GameDTO
 import dto.PickDTO
 import dto.UserDTO
@@ -8,15 +9,9 @@ import getEnvForWeek
 import io.mockk.every
 import io.mockk.mockkClass
 import io.mockk.mockkStatic
-import mockStatementToReturnGameResultSet
-import mockStatementToReturnPickResultSet
-import mockStatementToReturnUserResultSet
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import setupSQLQueryForGamesWithNonNullFields
-import setupSQLQueryForPicks
-import setupSQLQueryForUsers
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.Statement
@@ -41,15 +36,10 @@ class UserWeekTotalQueryTest {
         val week = "Week 0"
         val env = getEnvForWeek(week)
         val expectedUsers = arrayListOf(UserDTO("Dave"))
-
-        val mockResultSet = setupSQLQueryForUsers(expectedUsers)
-        mockStatementToReturnUserResultSet(mockStatement, mockResultSet)
-
-        val mockGameSet = setupSQLQueryForGamesWithNonNullFields(arrayListOf())
-        mockStatementToReturnGameResultSet(mockStatement, mockGameSet, week)
-
-        val mockPickSet = setupSQLQueryForPicks(arrayListOf())
-        mockStatementToReturnPickResultSet(mockStatement, mockPickSet, week)
+        val sqlState = SQLState(week).apply {
+            users = expectedUsers
+        }
+        sqlState.mockSQLState(mockStatement)
 
         val query = UserWeekTotalQuery(mockConnection).get(env)
 
@@ -64,29 +54,18 @@ class UserWeekTotalQueryTest {
     fun oneUserWithOneCorrectPickHasGameAndTotalInResponse() {
         val week = "Week 0"
         val env = getEnvForWeek(week)
-        val expectedUsers = arrayListOf(UserDTO("Dave"))
         val gameName = "GB@CHI"
         val pick = "CHI"
-
-        val expectedGames = arrayListOf(
-            GameDTO(gameName, week).apply {
+        val sqlState = SQLState(week).apply {
+            users.add(UserDTO("Dave"))
+            games.add(GameDTO(gameName, week).apply {
                 result = pick
-            }
-        )
-        val expectedPicks = arrayListOf(
-            UserPicksDTO(expectedUsers[0]).apply {
+            })
+            picks.add(UserPicksDTO(users[0]).apply {
                 picks.add(PickDTO(gameName, pick))
             })
-
-        val mockUserSet = setupSQLQueryForUsers(expectedUsers)
-        mockStatementToReturnUserResultSet(mockStatement, mockUserSet)
-
-        val mockGameSet = setupSQLQueryForGamesWithNonNullFields(expectedGames)
-        mockStatementToReturnGameResultSet(mockStatement, mockGameSet, week)
-
-        val mockPickSet = setupSQLQueryForPicks(expectedPicks)
-        mockStatementToReturnPickResultSet(mockStatement, mockPickSet, week)
-
+        }
+        sqlState.mockSQLState(mockStatement)
 
         val query = UserWeekTotalQuery(mockConnection).get(env)
 
@@ -98,30 +77,19 @@ class UserWeekTotalQueryTest {
     @Test
     fun oneUserWithWeek4CorrectPickHasGameAndTotalInResponse() {
         val week = "Week 4"
-        val env = getEnvForWeek(week)
-        val expectedUsers = arrayListOf(UserDTO("Dave"))
         val gameName = "GB@CHI"
         val pick = "CHI"
-
-        val expectedGames = arrayListOf(
-            GameDTO(gameName, week).apply {
+        val env = getEnvForWeek(week)
+        val sqlState = SQLState(week).apply {
+            users.add(UserDTO("Dave"))
+            games.add(GameDTO(gameName, week).apply {
                 result = pick
-            }
-        )
-        val expectedPicks = arrayListOf(
-            UserPicksDTO(expectedUsers[0]).apply {
+            })
+            picks.add(UserPicksDTO(users[0]).apply {
                 picks.add(PickDTO(gameName, pick))
             })
-
-        val mockUserSet = setupSQLQueryForUsers(expectedUsers)
-        mockStatementToReturnUserResultSet(mockStatement, mockUserSet)
-
-        val mockGameSet = setupSQLQueryForGamesWithNonNullFields(expectedGames)
-        mockStatementToReturnGameResultSet(mockStatement, mockGameSet, week)
-
-        val mockPickSet = setupSQLQueryForPicks(expectedPicks)
-        mockStatementToReturnPickResultSet(mockStatement, mockPickSet, week)
-
+        }
+        sqlState.mockSQLState(mockStatement)
 
         val query = UserWeekTotalQuery(mockConnection).get(env)
 
@@ -134,28 +102,17 @@ class UserWeekTotalQueryTest {
     fun oneUserWithWrongPickDoesNotHaveTotalInResponse() {
         val week = "Week 4"
         val env = getEnvForWeek(week)
-        val expectedUsers = arrayListOf(UserDTO("Dave"))
         val gameName = "GB@CHI"
-
-        val expectedGames = arrayListOf(
-            GameDTO(gameName, week).apply {
+        val sqlState = SQLState(week).apply {
+            users.add(UserDTO("Dave"))
+            games.add(GameDTO(gameName, week).apply {
                 result = "CHI"
-            }
-        )
-        val expectedPicks = arrayListOf(
-            UserPicksDTO(expectedUsers[0]).apply {
+            })
+            picks.add(UserPicksDTO(users[0]).apply {
                 picks.add(PickDTO(gameName, "No one"))
             })
-
-        val mockUserSet = setupSQLQueryForUsers(expectedUsers)
-        mockStatementToReturnUserResultSet(mockStatement, mockUserSet)
-
-        val mockGameSet = setupSQLQueryForGamesWithNonNullFields(expectedGames)
-        mockStatementToReturnGameResultSet(mockStatement, mockGameSet, week)
-
-        val mockPickSet = setupSQLQueryForPicks(expectedPicks)
-        mockStatementToReturnPickResultSet(mockStatement, mockPickSet, week)
-
+        }
+        sqlState.mockSQLState(mockStatement)
 
         val query = UserWeekTotalQuery(mockConnection).get(env)
 
@@ -166,20 +123,12 @@ class UserWeekTotalQueryTest {
     fun nullResultDoesNotMatchNullPick() {
         val week = "Week 4"
         val env = getEnvForWeek(week)
-
-        val expectedUsers = arrayListOf(UserDTO("Dave"))
-        val expectedGames = arrayListOf(GameDTO("GB@CHI", week))
-        val expectedPicks = arrayListOf(UserPicksDTO(expectedUsers[0]))
-
-        val mockUserSet = setupSQLQueryForUsers(expectedUsers)
-        mockStatementToReturnUserResultSet(mockStatement, mockUserSet)
-
-        val mockGameSet = setupSQLQueryForGamesWithNonNullFields(expectedGames)
-        mockStatementToReturnGameResultSet(mockStatement, mockGameSet, week)
-
-        val mockPickSet = setupSQLQueryForPicks(expectedPicks)
-        mockStatementToReturnPickResultSet(mockStatement, mockPickSet, week)
-
+        val sqlState = SQLState(week).apply {
+            users.add(UserDTO("Dave"))
+            games.add(GameDTO("GB@CHI", week))
+            picks.add(UserPicksDTO(users[0]))
+        }
+        sqlState.mockSQLState(mockStatement)
 
         val query = UserWeekTotalQuery(mockConnection).get(env)
 
@@ -191,26 +140,18 @@ class UserWeekTotalQueryTest {
     fun returnsListWithUsersWhenTwoUserInUserField() {
         val week = "Week 0"
         val env = getEnvForWeek(week)
-        val expectedUsers = arrayListOf(UserDTO("Dave"), UserDTO("Jack"))
-
-        val mockResultSet = setupSQLQueryForUsers(expectedUsers)
-        mockStatementToReturnUserResultSet(mockStatement, mockResultSet)
-
-        val mockGameSet = setupSQLQueryForGamesWithNonNullFields(arrayListOf())
-        mockStatementToReturnGameResultSet(mockStatement, mockGameSet, week)
-
-        val mockPickSet = setupSQLQueryForPicks(arrayListOf())
-        mockStatementToReturnPickResultSet(mockStatement, mockPickSet, week)
+        val sqlState = SQLState(week).apply {
+            users.add(UserDTO("Dave"))
+            users.add(UserDTO("Jack"))
+        }
+        sqlState.mockSQLState(mockStatement)
 
         val query = UserWeekTotalQuery(mockConnection).get(env)
 
         assertEquals(
-            expectedUsers.map { user -> user.name },
+            sqlState.users.map { user -> user.name },
             query.map { result -> result.user.name }
         )
-        assertEquals(expectedUsers.size, query.size)
+        assertEquals(sqlState.users.size, query.size)
     }
-
-
-
 }
