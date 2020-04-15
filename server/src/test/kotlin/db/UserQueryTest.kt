@@ -2,6 +2,7 @@
 
 package db
 
+import SQLState
 import dto.UserDTO
 import graphql.schema.DataFetchingEnvironment
 import graphql.schema.DataFetchingEnvironmentImpl
@@ -39,26 +40,26 @@ class UserQueryTest {
 
     @Test
     fun getReturnsActiveUsersFromDatabaseWhenSingleUser() {
-        val expectedUsers: ArrayList<UserDTO> = arrayListOf(UserDTO("Seamus"))
-        val mockResultSet = setupSQLQueryForUsers(expectedUsers)
-        mockStatementToReturnUserResultSet(mockStatement, mockResultSet)
+        val sqlState = SQLState().apply {
+            users.add(UserDTO("Seamus"))
+        }
+        sqlState.mockSQLState(mockStatement)
 
         val results = UserQuery(mockConnection).get(env)
 
-        assertEquals(expectedUsers.map { x -> x.name }, results.map { x -> x.name })
+        assertEquals(sqlState.users.map { x -> x.name }, results.map { x -> x.name })
     }
 
     @Test
     fun getReturnsActiveUsersFromDatabaseWhenTwoUsers() {
-        val expectedUsers: ArrayList<UserDTO> = arrayListOf(
-            UserDTO("Stebe"),
-            UserDTO("Dave")
-        )
-        val mockResultSet = setupSQLQueryForUsers(expectedUsers)
-        mockStatementToReturnUserResultSet(mockStatement, mockResultSet)
+        val sqlState = SQLState().apply {
+            users.add(UserDTO("Stebe"))
+            users.add(UserDTO("Dabe"))
+        }
+        sqlState.mockSQLState(mockStatement)
 
         val results = UserQuery(mockConnection).get(env)
 
-        assertEquals(expectedUsers.map { x -> x.name }, results.map { x -> x.name })
+        assertEquals(sqlState.users.map { x -> x.name }, results.map { x -> x.name })
     }
 }
