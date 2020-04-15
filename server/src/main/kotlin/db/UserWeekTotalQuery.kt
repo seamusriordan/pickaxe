@@ -19,9 +19,9 @@ class UserWeekTotalQuery(val connection: Connection) : DataFetcher<List<UserWeek
 
             val userPicks = allUserPicks.find { pick -> pick.user.name == user.name }
 
-            userPicks?.picks?.forEach { pick ->
-                val game = games.find { game -> game.name == pick.game }
-                if (game?.result == pick.pick) {
+            userPicks?.picks?.forEach { userPick ->
+                val game = games.find { game -> game.name == userPick.game }
+                if (game != null && game.result.equals(userPick.pick.trim(), ignoreCase = true)) {
                     weeklyTotal.games.add(game)
                 }
             }

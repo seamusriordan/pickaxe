@@ -1,10 +1,7 @@
 package db
 
 import SQLState
-import dto.GameDTO
-import dto.PickDTO
-import dto.UserDTO
-import dto.UserPicksDTO
+import dto.*
 import getEnvForWeek
 import io.mockk.every
 import io.mockk.mockkClass
@@ -69,9 +66,49 @@ class UserWeekTotalQueryTest {
 
         val query = UserWeekTotalQuery(mockConnection).get(env)
 
-        assertEquals(1, query[0].games.size)
-        assertEquals(gameName, query[0].games[0].name)
-        assertEquals(week, query[0].games[0].week)
+        assertQueryResultIsGameAndWeek(query, gameName, week)
+    }
+
+    @Test
+    fun correctPickWithDifferentCaseSensitivityMatches() {
+        val week = "Week 0"
+        val env = getEnvForWeek(week)
+        val gameName = "GB@CHI"
+        val sqlState = SQLState(week).apply {
+            users.add(UserDTO("DaeV"))
+            games.add(GameDTO(gameName, week).apply {
+                result = "CHI"
+            })
+            picks.add(UserPicksDTO(users[0]).apply {
+                picks.add(PickDTO(gameName, "ChI"))
+            })
+        }
+        sqlState.mockSQLState(mockStatement)
+
+        val query = UserWeekTotalQuery(mockConnection).get(env)
+
+        assertQueryResultIsGameAndWeek(query, gameName, week)
+    }
+
+    @Test
+    fun correctPickWithLeadingWhitespaceMatches() {
+        val week = "Week 0"
+        val env = getEnvForWeek(week)
+        val gameName = "GB@CHI"
+        val sqlState = SQLState(week).apply {
+            users.add(UserDTO(" DaeV"))
+            games.add(GameDTO(gameName, week).apply {
+                result = "CHI"
+            })
+            picks.add(UserPicksDTO(users[0]).apply {
+                picks.add(PickDTO(gameName, " ChI"))
+            })
+        }
+        sqlState.mockSQLState(mockStatement)
+
+        val query = UserWeekTotalQuery(mockConnection).get(env)
+
+        assertQueryResultIsGameAndWeek(query, gameName, week)
     }
 
     @Test
@@ -93,9 +130,7 @@ class UserWeekTotalQueryTest {
 
         val query = UserWeekTotalQuery(mockConnection).get(env)
 
-        assertEquals(1, query[0].games.size)
-        assertEquals(gameName, query[0].games[0].name)
-        assertEquals(week, query[0].games[0].week)
+        assertQueryResultIsGameAndWeek(query, gameName, week)
     }
 
     @Test
@@ -135,7 +170,6 @@ class UserWeekTotalQueryTest {
         assertEquals(0, query[0].games.size)
     }
 
-
     @Test
     fun returnsListWithUsersWhenTwoUserInUserField() {
         val week = "Week 0"
@@ -153,5 +187,16 @@ class UserWeekTotalQueryTest {
             query.map { result -> result.user.name }
         )
         assertEquals(sqlState.users.size, query.size)
+    }
+
+
+    private fun assertQueryResultIsGameAndWeek(
+        query: List<UserWeekTotalDTO>,
+        gameName: String,
+        week: String
+    ) {
+        assertEquals(1, query[0].games.size)
+        assertEquals(gameName, query[0].games[0].name)
+        assertEquals(week, query[0].games[0].week)
     }
 }
