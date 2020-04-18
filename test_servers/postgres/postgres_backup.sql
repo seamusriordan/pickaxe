@@ -79,7 +79,8 @@ ALTER TABLE public.userpicks OWNER TO postgres;
 
 CREATE TABLE public.users (
     name character varying NOT NULL,
-    active boolean DEFAULT true
+    active boolean DEFAULT true,
+    email character varying
 );
 
 
@@ -133,10 +134,10 @@ ALTER TABLE ONLY public.weeks ALTER COLUMN week_order SET DEFAULT nextval('publi
 --
 
 COPY public.games (game, week, gametime, final, result, spread) FROM stdin;
-GB@CHI	Week 0	\N	f	\N	\N
-SEA@PHI	Week 0	\N	f	\N	\N
-BUF@NE	Week 0	\N	f	\N	\N
 NE@TB	Week 1	\N	f	NE	-14
+GB@CHI	Week 0	\N	f	CHI	\N
+BUF@NE	Week 0	\N	f		\N
+SEA@PHI	Week 0	\N	f	SEA	\N
 \.
 
 
@@ -145,12 +146,14 @@ NE@TB	Week 1	\N	f	NE	-14
 --
 
 COPY public.userpicks (name, week, game, pick) FROM stdin;
+Seamus	Week 1	NE@TB	
+Seamus	Week 0	GB@CHI	CHI
+Sereres	Week 0	SEA@PHI	PHI
+Sereres	Week 1	NE@TB	ne
+Seamus	Week 0	SEA@PHI	SEA
 Sereres	Week 0	GB@CHI	CHI
 RNG	Week 0	GB@CHI	CHI
-Seamus	Week 0	GB@CHI	CHI
 Vegas	Week 0	GB@CHI	CHI
-Sereres	Week 0	SEA@PHI	PHI
-Seamus	Week 0	SEA@PHI	SEA
 RNG	Week 0	SEA@PHI	SEA
 Vegas	Week 0	SEA@PHI	SEA
 Vegas	Week 0	BUF@NE	BUF
@@ -158,7 +161,6 @@ Sereres	Week 0	BUF@NE	BUF
 Seamus	Week 0	BUF@NE	BUF
 RNG	Week 0	BUF@NE	BUF
 Vegas	Week 1	NE@TB	TB
-Seamus	Week 1	NE@TB	TB
 \.
 
 
@@ -166,11 +168,11 @@ Seamus	Week 1	NE@TB	TB
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.users (name, active) FROM stdin;
-Seamus	t
-Sereres	t
-RNG	t
-Vegas	t
+COPY public.users (name, active, email) FROM stdin;
+Seamus	t	\N
+Sereres	t	\N
+RNG	t	\N
+Vegas	t	\N
 \.
 
 
