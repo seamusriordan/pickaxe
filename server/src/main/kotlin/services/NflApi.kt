@@ -92,14 +92,7 @@ class NflApi(private val tokenURL: URL, private val apiURL: URL) {
                     + "%7D%7D%7D%7D%7D%7D%7D&variables=null"
         )
 
-        val connection = fullApiUrl.openConnection() as HttpURLConnection
-        connection.let {
-            setCommonHeaders(it)
-            it.setRequestProperty("authorization", "Bearer $accessToken")
-            it.setRequestProperty("accept", "*/*")
-            it.setRequestProperty("Content-Type", "application/json")
-        }
-        return connection
+        return connectionWithQueryHeaders(fullApiUrl)
     }
 
     private fun formatGameName(game: Node) = game.awayTeam.abbreviation + "@" + game.homeTeam.abbreviation
@@ -141,8 +134,19 @@ class NflApi(private val tokenURL: URL, private val apiURL: URL) {
                 "?query=query%7Bviewer%7BgameDetailsByIds(ids%3A%5B%22$id%22%2C%5D)%7Bid%2CgameTime%2Cphase%2ChomePointsTotal%2CvisitorPointsTotal%2Cphase%2ChomeTeam%7Babbreviation%7D%2CvisitorTeam%7Babbreviation%7D%7D%7D%7D&variables=null\n"
             )
 
-        return fullUrl.openConnection() as HttpURLConnection
+        return connectionWithQueryHeaders(fullUrl)
 
+    }
+
+    private fun connectionWithQueryHeaders(fullUrl: URL): HttpURLConnection {
+        val connection = fullUrl.openConnection() as HttpURLConnection
+        connection.let {
+            setCommonHeaders(it)
+            it.setRequestProperty("authorization", "Bearer $accessToken")
+            it.setRequestProperty("accept", "*/*")
+            it.setRequestProperty("Content-Type", "application/json")
+        }
+        return connection
     }
 }
 
