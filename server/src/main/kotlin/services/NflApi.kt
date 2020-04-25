@@ -12,7 +12,7 @@ import java.net.URL
 import java.util.*
 import kotlin.collections.HashMap
 
-class NflApi(private val tokenURL: URL) {
+class NflApi(private val tokenURL: URL, private val apiURL: URL) {
     private var _accessToken: String? = null
     var now = { Date() }
 
@@ -64,8 +64,8 @@ class NflApi(private val tokenURL: URL) {
         val result = ArrayList<GameDTO>(0)
 
         val apiURL = URL(
-            "https://api.nfl.com/v3/shield/"
-                    + "?query=query%7Bviewer%7Bleague%7Bgames(first%3A100%2Cweek_seasonValue%3A${season}%2Cweek_seasonType%3A${week.weekType}%2Cweek_weekValue%3A${week.week}%2C)%7Bedges%7Bnode%7Bid%20awayTeam%7BnickName%20abbreviation%20%7DhomeTeam%7BnickName%20id%20abbreviation%20%7D%7D%7D%7D%7D%7D%7D&variables=null"
+            apiURL,
+            "/v3/shield/?query=query%7Bviewer%7Bleague%7Bgames(first%3A100%2Cweek_seasonValue%3A${season}%2Cweek_seasonType%3A${week.weekType}%2Cweek_weekValue%3A${week.week}%2C)%7Bedges%7Bnode%7Bid%20awayTeam%7BnickName%20abbreviation%20%7DhomeTeam%7BnickName%20id%20abbreviation%20%7D%7D%7D%7D%7D%7D%7D&variables=null"
         )
 
         val connection = apiURL.openConnection() as HttpURLConnection
@@ -73,8 +73,8 @@ class NflApi(private val tokenURL: URL) {
 
         val response = ObjectMapper().readValue(InputStreamReader(stream).readText(), QueryDTO::class.java)
 
-        for(game in response.data.viewer.league.games.edges){
-            result.add(GameDTO(game.awayTeam.abbreviation+"@"+game.homeTeam.abbreviation, week.name))
+        for (game in response.data.viewer.league.games.edges) {
+            result.add(GameDTO(game.awayTeam.abbreviation + "@" + game.homeTeam.abbreviation, week.name))
         }
 
         return result
