@@ -189,6 +189,7 @@ class NflApiTest {
         assertEquals(1, result.size)
         assertEquals("ARI@SF", result.first().name)
         assertEquals("Week 5", result.first().week)
+        assertEquals(expectedGames.data.viewer.league.games.edges.first().node.id, result.first().id)
     }
 
     @Test

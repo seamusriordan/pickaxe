@@ -63,7 +63,10 @@ class NflApi(private val tokenURL: URL, private val apiURL: URL) {
         val response = ObjectMapper().readValue(InputStreamReader(stream).readText(), QueryDTO::class.java)
 
         for (edge in response.data.viewer.league.games.edges) {
-            result.add(GameDTO(formatGameName(edge.node), week.name))
+            val game = GameDTO(formatGameName(edge.node), week.name).apply {
+                id = edge.node.id
+            }
+            result.add(game)
         }
 
         return result
