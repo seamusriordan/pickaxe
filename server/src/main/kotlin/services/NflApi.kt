@@ -4,18 +4,26 @@ import com.auth0.jwt.JWT
 import com.fasterxml.jackson.databind.ObjectMapper
 import dto.GameDTO
 import dto.WeekDTO
-import dto.nfl.week.Node
-import dto.nfl.week.QueryDTO
+import dto.nfl.api.game.GameQueryDTO
+import dto.nfl.api.week.Node
+import dto.nfl.api.week.WeekQueryDTO
 import java.io.DataOutputStream
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.HashMap
 
 class NflApi(private val tokenURL: URL, private val apiURL: URL) {
     private var _accessToken: String? = null
     var now = { Date() }
+
+    private val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.000'Z'")
+
+    init {
+        formatter.timeZone = TimeZone.getTimeZone("UTC")
+    }
 
     var accessToken: String
         get() {
@@ -60,7 +68,7 @@ class NflApi(private val tokenURL: URL, private val apiURL: URL) {
         val result = ArrayList<GameDTO>(0)
 
         val stream = createWeekQueryConnection(week).inputStream
-        val response = ObjectMapper().readValue(InputStreamReader(stream).readText(), QueryDTO::class.java)
+        val response = ObjectMapper().readValue(InputStreamReader(stream).readText(), WeekQueryDTO::class.java)
 
         for (edge in response.data.viewer.league.games.edges) {
             val game = GameDTO(formatGameName(edge.node), week.name).apply {
@@ -71,6 +79,7 @@ class NflApi(private val tokenURL: URL, private val apiURL: URL) {
 
         return result
     }
+
 
     private fun createWeekQueryConnection(week: WeekDTO): HttpURLConnection {
         val season = 2019
@@ -104,4 +113,37 @@ class NflApi(private val tokenURL: URL, private val apiURL: URL) {
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36"
         )
     }
+
+    fun getGame(game: GameDTO): GameDTO {
+        val stream = createGameQueryConnection(game.id!!).inputStream
+        val text = InputStreamReader(stream).readText()
+        val response = ObjectMapper().readValue(text, GameQueryDTO::class.java)
+        val details = response.data.viewer.gameDetailsByIds.first()
+
+        return GameDTO(game.name, game.week).apply {
+            if(details.phase == "FINAL") {
+                result = "TIE"
+                if(details.homePointsTotal > details.visitorPointsTotal){
+                    result = details.homeTeam.abbreviation
+                }
+                if(details.homePointsTotal < details.visitorPointsTotal){
+                    result = details.visitorTeam.abbreviation
+                }
+            }
+            gameTime = formatter.parse(details.gameTime)
+        }
+    }
+
+    private fun createGameQueryConnection(id: UUID): HttpURLConnection {
+        val fullUrl =
+            URL(
+                apiURL,
+                "?query=query%7Bviewer%7BgameDetailsByIds(ids%3A%5B%22$id%22%2C%5D)%7Bid%2CgameTime%2Cphase%2ChomePointsTotal%2CvisitorPointsTotal%2Cphase%2ChomeTeam%7Babbreviation%7D%2CvisitorTeam%7Babbreviation%7D%7D%7D%7D&variables=null\n"
+            )
+
+        return fullUrl.openConnection() as HttpURLConnection
+
+    }
 }
+
+

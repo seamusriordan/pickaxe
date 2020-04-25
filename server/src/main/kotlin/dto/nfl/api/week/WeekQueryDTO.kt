@@ -1,17 +1,17 @@
-package dto.nfl.week
+package dto.nfl.api.week
 
 import java.util.*
 import kotlin.collections.ArrayList
 
-class QueryDTO {
-    var data = Data()
+class WeekQueryDTO {
+    var data = WeekData()
 }
 
-class Data {
-    var viewer = Viewer()
+class WeekData {
+    var viewer = WeekViewer()
 }
 
-class Viewer {
+class WeekViewer {
     var league = League()
 }
 
