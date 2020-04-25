@@ -9,6 +9,7 @@ import java.net.URL
 import com.auth0.jwt.algorithms.Algorithm
 import com.fasterxml.jackson.databind.ObjectMapper
 import dto.WeekDTO
+import dto.nfl.week.*
 import io.mockk.*
 import org.junit.jupiter.api.Assertions.assertArrayEquals
 import java.io.*
@@ -157,33 +158,31 @@ class NflApiTest {
     }
 
     @Test
-    fun loadWeeksGetsGamesFromNFL() {
+    fun getWeekGetsGamesFromNFLWithOneGameRegularWeek5() {
         val season = 2020
-        val weekType = "REG"
-        val week = "5"
+        val weekTypeQuery = "REG"
+        val weekQuery = 5
         val uri =
-            "https://api.nfl.com/v3/shield/?query=query%7Bviewer%7Bleague%7Bgames(first%3A100%2Cweek_seasonValue%3A${season}%2Cweek_seasonType%3A${weekType}%2Cweek_weekValue%3A${week}%2C)%7Bedges%7Bnode%7Bid%20awayTeam%7BnickName%20abbreviation%20%7DhomeTeam%7BnickName%20id%20abbreviation%20%7D%7D%7D%7D%7D%7D%7D&variables=null"
+            "https://api.nfl.com/v3/shield/?query=query%7Bviewer%7Bleague%7Bgames(first%3A100%2Cweek_seasonValue%3A${season}%2Cweek_seasonType%3A${weekTypeQuery}%2Cweek_weekValue%3A${weekQuery}%2C)%7Bedges%7Bnode%7Bid%20awayTeam%7BnickName%20abbreviation%20%7DhomeTeam%7BnickName%20id%20abbreviation%20%7D%7D%7D%7D%7D%7D%7D&variables=null"
 
         val mockConnection = mockkClass(HttpURLConnection::class)
         handler.setConnection(URL(uri), mockConnection)
-        val expectedGames = object {
-            val data = object {
-                val viewer = object {
-                    val league = object {
-                        val games = object {
-                            val edges = listOf(
-                                object {
-                                    val node = object {
-                                        val id = "10012016-1006-0091-2590-6d5ccb310545"
-                                        val awayTeam = {
-                                            val nickName = "Cardinals"
-                                            val abbreviation = "ARI"
-                                        }
-                                        val homeTeam = object {
-                                            val nickName = "49ers"
-                                            val id = "10044500-2016-98ea-5998-12e71471f00f"
-                                            val abbreviation = "SF"
-                                        }
+        val expectedGames = QueryDTO().apply {
+            data = Data().apply {
+                viewer = Viewer().apply {
+                    league = League().apply {
+                        games = Games().apply {
+                            edges = listOf(
+                                Node().apply {
+                                    id = UUID.fromString("10012016-1006-0091-2590-6d5ccb310545")
+                                    awayTeam = Team().apply {
+                                        nickName = "Cardinals"
+                                        abbreviation = "ARI"
+                                    }
+                                    homeTeam = Team().apply {
+                                        nickName = "49ers"
+                                        id = UUID.fromString("10044500-2016-98ea-5998-12e71471f00f")
+                                        abbreviation = "SF"
                                     }
                                 }
                             )
@@ -195,9 +194,85 @@ class NflApiTest {
         every { mockConnection.inputStream } returns ObjectMapper().writeValueAsString(expectedGames).byteInputStream();
 
         val nflService = NflApi(tokenURL)
-        nflService.loadWeeks("REG", "5");
+
+        val week = WeekDTO("Week 5").apply {
+            weekType = weekTypeQuery
+            week = weekQuery
+        }
+
+        val result = nflService.getWeek(week);
 
         verify(exactly = 1) { mockConnection.inputStream }
+
+        assertEquals(1, result.size)
+        assertEquals("ARI@SF", result.first().name)
+        assertEquals("Week 5", result.first().week)
+    }
+
+    @Test
+    fun getWeekGetsGamesFromNFLWithTwoGamesRegularWeek8() {
+        val season = 2020
+        val weekTypeQuery = "REG"
+        val weekQuery = 8
+        val uri =
+            "https://api.nfl.com/v3/shield/?query=query%7Bviewer%7Bleague%7Bgames(first%3A100%2Cweek_seasonValue%3A${season}%2Cweek_seasonType%3A${weekTypeQuery}%2Cweek_weekValue%3A${weekQuery}%2C)%7Bedges%7Bnode%7Bid%20awayTeam%7BnickName%20abbreviation%20%7DhomeTeam%7BnickName%20id%20abbreviation%20%7D%7D%7D%7D%7D%7D%7D&variables=null"
+
+        val mockConnection = mockkClass(HttpURLConnection::class)
+        handler.setConnection(URL(uri), mockConnection)
+        val expectedGames = QueryDTO().apply {
+            data = Data().apply {
+                viewer = Viewer().apply {
+                    league = League().apply {
+                        games = Games().apply {
+                            edges = listOf(
+                                Node().apply {
+                                    id = UUID.fromString("10012016-1009-037b-4da5-253318b1edf5")
+                                    awayTeam = Team().apply {
+                                        nickName = "Bears"
+                                        abbreviation = "CHI"
+                                    }
+                                    homeTeam = Team().apply {
+                                        nickName = "Colts"
+                                        id = UUID.fromString("10042200-2016-72c1-ae86-da1766af64e2")
+                                        abbreviation = "IND"
+                                    }
+                                },
+                                Node().apply {
+                                    id = UUID.fromString("10012016-1009-0475-b63c-0f469876adbc")
+                                    awayTeam = Team().apply {
+                                        nickName = "Titans"
+                                        abbreviation = "TEN"
+                                    }
+                                    homeTeam = Team().apply {
+                                        nickName = "Dolphins"
+                                        id = UUID.fromString("10042700-2016-d0f0-5d77-ded4f602f779")
+                                        abbreviation = "MIA"
+                                    }
+                                }
+                            )
+                        }
+                    }
+                }
+            }
+        }
+        every { mockConnection.inputStream } returns ObjectMapper().writeValueAsString(expectedGames).byteInputStream();
+
+        val nflService = NflApi(tokenURL)
+
+        val week = WeekDTO("Week 8").apply {
+            weekType = weekTypeQuery
+            week = weekQuery
+        }
+
+        val result = nflService.getWeek(week);
+
+        verify(exactly = 1) { mockConnection.inputStream }
+
+        assertEquals(2, result.size)
+        assertEquals("CHI@IND", result[0].name)
+        assertEquals("Week 8", result[0].week)
+        assertEquals("TEN@MIA", result[1].name)
+        assertEquals("Week 8", result[1].week)
     }
 
     private fun nflServiceWithFixedTime(url: URL, token: String? = null): NflApi {
