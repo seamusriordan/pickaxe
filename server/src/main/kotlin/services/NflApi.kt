@@ -57,8 +57,20 @@ class NflApi(private val tokenURL: URL, private val apiURL: URL) {
     }
 
     fun getWeek(week: WeekDTO): List<GameDTO> {
-        val season = 2020
         val result = ArrayList<GameDTO>(0)
+
+        val stream = createWeekQueryConnection(week).inputStream
+        val response = ObjectMapper().readValue(InputStreamReader(stream).readText(), QueryDTO::class.java)
+
+        for (edge in response.data.viewer.league.games.edges) {
+            result.add(GameDTO(formatGameName(edge.node), week.name))
+        }
+
+        return result
+    }
+
+    private fun createWeekQueryConnection(week: WeekDTO): HttpURLConnection {
+        val season = 2019
 
         val fullApiUrl = URL(
             apiURL,
@@ -75,15 +87,7 @@ class NflApi(private val tokenURL: URL, private val apiURL: URL) {
             it.setRequestProperty("accept", "*/*")
             it.setRequestProperty("Content-Type", "application/json")
         }
-
-        val stream = connection.inputStream
-        val response = ObjectMapper().readValue(InputStreamReader(stream).readText(), QueryDTO::class.java)
-
-        for (game in response.data.viewer.league.games.edges) {
-            result.add(GameDTO(formatGameName(game), week.name))
-        }
-
-        return result
+        return connection
     }
 
     private fun formatGameName(game: Node) = game.awayTeam.abbreviation + "@" + game.homeTeam.abbreviation

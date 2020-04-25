@@ -20,7 +20,11 @@ class League {
 }
 
 class Games {
-    var edges: List<Node> = ArrayList(0)
+    var edges: List<Edge> = ArrayList(0)
+}
+
+class Edge {
+    var node = Node()
 }
 
 class Node {

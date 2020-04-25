@@ -24,7 +24,9 @@ class NflApiTest {
     private val mockTokenConnection = mockkClass(HttpURLConnection::class)
     private val mockApiConnection = mockkClass(HttpURLConnection::class)
 
-    private val absoluteTime = { GregorianCalendar(2020, 3, 12, 13, 5).time }
+    private val season = 2019
+
+    private val absoluteTime = { GregorianCalendar(season, 3, 12, 13, 5).time }
 
     private val requestOutputStream = ByteArrayOutputStream()
 
@@ -171,14 +173,15 @@ class NflApiTest {
             weekType = weekTypeQuery
             week = weekQuery
         }
-        val uri = buildRelativeApiUrl(2020, weekTypeQuery, weekQuery)
+        val uri = buildRelativeApiUrl(season, weekTypeQuery, weekQuery)
         handler.setConnection(URL(baseApiUrl, uri), mockApiConnection)
         val expectedGames = baseQueryDTO.apply {
             data.viewer.league.games.edges = listOf(
                 buildGame("ARI", "SF")
             )
         }
-        every { mockApiConnection.inputStream } returns ObjectMapper().writeValueAsString(expectedGames).byteInputStream();
+        every { mockApiConnection.inputStream } returns ObjectMapper().writeValueAsString(expectedGames)
+            .byteInputStream();
 
         val result = NflApi(tokenURL, baseApiUrl).getWeek(week);
 
@@ -196,7 +199,7 @@ class NflApiTest {
             weekType = weekTypeQuery
             week = weekQuery
         }
-        val uri = buildRelativeApiUrl(2020, weekTypeQuery, weekQuery)
+        val uri = buildRelativeApiUrl(season, weekTypeQuery, weekQuery)
         handler.setConnection(URL(baseApiUrl, uri), mockApiConnection)
         every { mockApiConnection.setRequestProperty(any(), any()) } returns Unit
         val expectedGames = baseQueryDTO.apply {
@@ -218,7 +221,7 @@ class NflApiTest {
     fun getWeekWithDifferentBaseUrl() {
         val weekTypeQuery = "REG"
         val weekQuery = 5
-        val uri = buildRelativeApiUrl(2020, weekTypeQuery, weekQuery)
+        val uri = buildRelativeApiUrl(season, weekTypeQuery, weekQuery)
         val week = WeekDTO("Week 5").apply {
             weekType = weekTypeQuery
             week = weekQuery
@@ -246,7 +249,7 @@ class NflApiTest {
     fun getWeekGetsGamesFromNFLWithTwoGamesRegularWeek8() {
         val weekTypeQuery = "REG"
         val weekQuery = 8
-        val uri = buildRelativeApiUrl(2020, weekTypeQuery, weekQuery)
+        val uri = buildRelativeApiUrl(season, weekTypeQuery, weekQuery)
         val week = WeekDTO("Week 8").apply {
             weekType = weekTypeQuery
             week = weekQuery
@@ -273,7 +276,7 @@ class NflApiTest {
 
     @Test
     fun weekRequestHasStaticHeadersSet() {
-        val uri = buildRelativeApiUrl(2020, "REG", 3)
+        val uri = buildRelativeApiUrl(season, "REG", 3)
         val week = WeekDTO("Week 3").apply {
             weekType = "REG"
             week = 3
@@ -299,7 +302,7 @@ class NflApiTest {
 
     @Test
     fun weekRequestHasBearerTokenSet() {
-        val uri = buildRelativeApiUrl(2020, "REG", 3)
+        val uri = buildRelativeApiUrl(season, "REG", 3)
         handler.setConnection(URL(baseApiUrl, uri), mockApiConnection)
         val token = generateExpiringToken(1)
         every { mockTokenConnection.inputStream } returns buildByteStreamResponse(token)
@@ -367,17 +370,19 @@ class NflApiTest {
             }
         }
 
-    private fun buildGame(away: String, home: String): Node {
-        return Node().apply {
-            id = UUID.fromString("10012016-1006-0091-2590-6d5ccb310545")
-            awayTeam = Team().apply {
-                nickName = "Cardinals"
-                abbreviation = away
-            }
-            homeTeam = Team().apply {
-                nickName = "49ers"
-                id = UUID.fromString("10044500-2016-98ea-5998-12e71471f00f")
-                abbreviation = home
+    private fun buildGame(away: String, home: String): Edge {
+        return Edge().apply {
+            node = Node().apply {
+                id = UUID.fromString("10012016-1006-0091-2590-6d5ccb310545")
+                awayTeam = Team().apply {
+                    nickName = "Cardinals"
+                    abbreviation = away
+                }
+                homeTeam = Team().apply {
+                    nickName = "49ers"
+                    id = UUID.fromString("10044500-2016-98ea-5998-12e71471f00f")
+                    abbreviation = home
+                }
             }
         }
     }
