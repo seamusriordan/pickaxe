@@ -53,4 +53,7 @@ class NflApi(private val tokenURL: URL) {
     fun getWeeks(): List<WeekDTO> {
         return ArrayList<WeekDTO>(0)
     }
+
+    fun loadWeeks(weekType: String, week: String) {
+    }
 }

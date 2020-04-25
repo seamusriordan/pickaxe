@@ -156,6 +156,50 @@ class NflApiTest {
         assertEquals(expectedWeeks, weeks)
     }
 
+    @Test
+    fun loadWeeksGetsGamesFromNFL() {
+        val season = 2016
+        val weekType = "REG"
+        val week = "5"
+        val uri =
+            "https://api.nfl.com/v3/shield/?query=query%7Bviewer%7Bleague%7Bgames(first%3A100%2Cweek_seasonValue%3A${season}%2Cweek_seasonType%3A${weekType}%2Cweek_weekValue%3A${week}%2C)%7Bedges%7Bnode%7Bid%20awayTeam%7BnickName%20abbreviation%20%7DhomeTeam%7BnickName%20id%20abbreviation%20%7D%7D%7D%7D%7D%7D%7D&variables=null"
+
+        val mockConnection = mockkClass(HttpURLConnection::class)
+        handler.setConnection(URL(uri), mockConnection)
+        val expectedGames = object {
+            val data = object {
+                val viewer = object {
+                    val league = object {
+                        val games = object {
+                            val edges = listOf(
+                                object {
+                                    val node = object {
+                                        val id = "10012016-1006-0091-2590-6d5ccb310545"
+                                        val awayTeam = {
+                                            val nickName = "Cardinals"
+                                            val abbreviation = "ARI"
+                                        }
+                                        val homeTeam = object {
+                                            val nickName = "49ers"
+                                            val id = "10044500-2016-98ea-5998-12e71471f00f"
+                                            val abbreviation = "SF"
+                                        }
+                                    }
+                                }
+                            )
+                        }
+                    }
+                }
+            }
+        }
+        every { mockConnection.inputStream } returns ObjectMapper().writeValueAsString(expectedGames).byteInputStream();
+
+        val nflService = NflApi(URL("https://api.nfl.com"))
+        nflService.loadWeeks("REG", "5");
+
+        verify(exactly = 1) { mockConnection.inputStream }
+    }
+
     private fun nflServiceWithFixedTime(url: URL, token: String? = null): NflApi {
         val service = NflApi(url).apply {
             now = absoluteTime
