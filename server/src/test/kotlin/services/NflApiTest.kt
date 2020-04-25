@@ -177,7 +177,8 @@ class NflApiTest {
     fun getWeekGetsGamesFromNFLWithOneGameRegularWeek5() {
         val weekTypeQuery = "REG"
         val weekQuery = 5
-        val week = WeekDTO("Week 5").apply {
+        val weekName = "Week 5"
+        val week = WeekDTO(weekName).apply {
             weekType = weekTypeQuery
             week = weekQuery
         }
@@ -189,14 +190,14 @@ class NflApiTest {
             )
         }
         every { mockApiConnection.inputStream } returns ObjectMapper().writeValueAsString(expectedGames)
-            .byteInputStream();
+            .byteInputStream()
 
-        val result = NflApi(tokenURL, baseApiUrl).getWeek(week);
+        val result = NflApi(tokenURL, baseApiUrl).getWeek(week)
 
         verify(exactly = 1) { mockApiConnection.inputStream }
         assertEquals(1, result.size)
         assertEquals("ARI@SF", result.first().name)
-        assertEquals("Week 5", result.first().week)
+        assertEquals(weekName, result.first().week)
         assertEquals(expectedGames.data.viewer.league.games.edges.first().node.id, result.first().id)
     }
 
@@ -204,7 +205,8 @@ class NflApiTest {
     fun getWeekGetsGamesFromNFLWithOneGamePreseasonWeek1() {
         val weekTypeQuery = "PRE"
         val weekQuery = 1
-        val week = WeekDTO("Preseason Week 1").apply {
+        val weekName = "Preseason Week 1"
+        val week = WeekDTO(weekName).apply {
             weekType = weekTypeQuery
             week = weekQuery
         }
@@ -217,21 +219,22 @@ class NflApiTest {
             )
         }
         every { mockApiConnection.inputStream } returns ObjectMapper().writeValueAsString(expectedGames)
-            .byteInputStream();
+            .byteInputStream()
 
-        val result = NflApi(tokenURL, baseApiUrl).getWeek(week);
+        val result = NflApi(tokenURL, baseApiUrl).getWeek(week)
 
         verify(exactly = 1) { mockApiConnection.inputStream }
         assertEquals(1, result.size)
-        assertEquals("Preseason Week 1", result.first().week)
+        assertEquals(weekName, result.first().week)
     }
 
     @Test
     fun getWeekWithDifferentBaseUrl() {
         val weekTypeQuery = "REG"
         val weekQuery = 5
+        val weekName = "Week 5"
         val uri = buildRelativeApiWeekQueryUrl(season, weekTypeQuery, weekQuery)
-        val week = WeekDTO("Week 5").apply {
+        val week = WeekDTO(weekName).apply {
             weekType = weekTypeQuery
             week = weekQuery
         }
@@ -244,22 +247,23 @@ class NflApiTest {
                 buildGame("ARI", "SF")
             )
         }
-        every { mockConnection.inputStream } returns ObjectMapper().writeValueAsString(expectedGames).byteInputStream();
+        every { mockConnection.inputStream } returns ObjectMapper().writeValueAsString(expectedGames).byteInputStream()
 
-        val result = NflApi(tokenURL, differentBaseUrl).getWeek(week);
+        val result = NflApi(tokenURL, differentBaseUrl).getWeek(week)
 
         verify(exactly = 1) { mockConnection.inputStream }
         assertEquals(1, result.size)
         assertEquals("ARI@SF", result.first().name)
-        assertEquals("Week 5", result.first().week)
+        assertEquals(weekName, result.first().week)
     }
 
     @Test
     fun getWeekGetsGamesFromNFLWithTwoGamesRegularWeek8() {
+        val weekName = "Week 8"
         val weekTypeQuery = "REG"
         val weekQuery = 8
         val uri = buildRelativeApiWeekQueryUrl(season, weekTypeQuery, weekQuery)
-        val week = WeekDTO("Week 8").apply {
+        val week = WeekDTO(weekName).apply {
             weekType = weekTypeQuery
             week = weekQuery
         }
@@ -271,16 +275,16 @@ class NflApiTest {
             )
         }
         every { mockApiConnection.inputStream } returns ObjectMapper().writeValueAsString(expectedGames)
-            .byteInputStream();
+            .byteInputStream()
 
-        val result = NflApi(tokenURL, baseApiUrl).getWeek(week);
+        val result = NflApi(tokenURL, baseApiUrl).getWeek(week)
 
         verify(exactly = 1) { mockApiConnection.inputStream }
         assertEquals(2, result.size)
         assertEquals("CHI@IND", result[0].name)
-        assertEquals("Week 8", result[0].week)
+        assertEquals(weekName, result[0].week)
         assertEquals("TEN@MIA", result[1].name)
-        assertEquals("Week 8", result[1].week)
+        assertEquals(weekName, result[1].week)
     }
 
     @Test
@@ -292,9 +296,9 @@ class NflApiTest {
         }
         handler.setConnection(URL(baseApiUrl, uri), mockApiConnection)
         every { mockApiConnection.inputStream } returns
-                ObjectMapper().writeValueAsString(baseWeekQueryDTO).byteInputStream();
+                ObjectMapper().writeValueAsString(baseWeekQueryDTO).byteInputStream()
 
-        NflApi(tokenURL, baseApiUrl).getWeek(week);
+        NflApi(tokenURL, baseApiUrl).getWeek(week)
 
         val properties = ArrayList<String>(5).apply {
             add("authority")
@@ -316,20 +320,20 @@ class NflApiTest {
         val token = generateExpiringToken(1)
         every { mockTokenConnection.inputStream } returns buildByteStreamResponse(token)
         every { mockApiConnection.inputStream } returns ObjectMapper().writeValueAsString(baseWeekQueryDTO)
-            .byteInputStream();
+            .byteInputStream()
         val week = WeekDTO("Week 3").apply {
             weekType = "REG"
             week = 3
         }
 
-        NflApi(tokenURL, baseApiUrl).getWeek(week);
+        NflApi(tokenURL, baseApiUrl).getWeek(week)
 
         verify { mockApiConnection.setRequestProperty("authorization", "Bearer $token") }
     }
 
     @Test
     fun gameRequestForFinalGameUpdatesResultWithWinnerCHIAtHome() {
-        val gameUuid = "10160000-0569-64b5-f7c3-0be4baabf0ff"
+        val gameUuid = "10160000-dd69-64b5-f7c3-0be4babbf0ff"
         val uri = buildGameQueryUrl(gameUuid)
 
         handler.setConnection(URL(baseApiUrl, uri), mockApiConnection)
@@ -338,7 +342,7 @@ class NflApiTest {
         val game = baseGameQueryDTO.apply {
             data.viewer.gameDetailsByIds = listOf(
                 Details().apply {
-                    gameTime = formatter.format(gameStart.time);
+                    gameTime = formatter.format(gameStart.time)
                     phase = "FINAL"
                     homePointsTotal = 7
                     visitorPointsTotal = 3
@@ -349,13 +353,13 @@ class NflApiTest {
         }
 
         every { mockApiConnection.inputStream } returns ObjectMapper().writeValueAsString(game)
-            .byteInputStream();
+            .byteInputStream()
 
         val gameDTO = GameDTO("GB@CHI", "Week 4").apply {
             id = UUID.fromString(gameUuid)
         }
 
-        val result: GameDTO = NflApi(tokenURL, baseApiUrl).getGame(gameDTO);
+        val result: GameDTO = NflApi(tokenURL, baseApiUrl).getGame(gameDTO)
 
         assertEquals(result.name, gameDTO.name)
         assertEquals(result.week, gameDTO.week)
@@ -365,7 +369,7 @@ class NflApiTest {
 
     @Test
     fun gameRequestForFinalGameUpdatesResultWithWinnerTBAway() {
-        val gameUuid = "10160000-0569-64b5-f7c3-0be4baabf0ff"
+        val gameUuid = "1016aa00-05f9-64b5-f7c3-0be4baabf0ff"
         val uri = buildGameQueryUrl(gameUuid)
 
         handler.setConnection(URL(baseApiUrl, uri), mockApiConnection)
@@ -374,7 +378,7 @@ class NflApiTest {
         val game = baseGameQueryDTO.apply {
             data.viewer.gameDetailsByIds = listOf(
                 Details().apply {
-                    gameTime = formatter.format(gameStart.time);
+                    gameTime = formatter.format(gameStart.time)
                     phase = "FINAL"
                     homePointsTotal = 3
                     visitorPointsTotal = 17
@@ -385,13 +389,13 @@ class NflApiTest {
         }
 
         every { mockApiConnection.inputStream } returns ObjectMapper().writeValueAsString(game)
-            .byteInputStream();
+            .byteInputStream()
 
         val gameDTO = GameDTO("TB@NE", "Week 12").apply {
             id = UUID.fromString(gameUuid)
         }
 
-        val result: GameDTO = NflApi(tokenURL, baseApiUrl).getGame(gameDTO);
+        val result: GameDTO = NflApi(tokenURL, baseApiUrl).getGame(gameDTO)
 
         assertEquals(result.name, gameDTO.name)
         assertEquals(result.week, gameDTO.week)
@@ -401,7 +405,7 @@ class NflApiTest {
 
     @Test
     fun gameRequestForFinalGameUpdatesResultWithTIE() {
-        val gameUuid = "10160000-0569-64b5-f7c3-0be4baabf0ff"
+        val gameUuid = "1016000c-0569-6425-f7c3-0be4baabfaff"
         val uri = buildGameQueryUrl(gameUuid)
 
         handler.setConnection(URL(baseApiUrl, uri), mockApiConnection)
@@ -410,7 +414,7 @@ class NflApiTest {
         val game = baseGameQueryDTO.apply {
             data.viewer.gameDetailsByIds = listOf(
                 Details().apply {
-                    gameTime = formatter.format(gameStart.time);
+                    gameTime = formatter.format(gameStart.time)
                     phase = "FINAL"
                     homePointsTotal = 3
                     visitorPointsTotal = 3
@@ -421,20 +425,20 @@ class NflApiTest {
         }
 
         every { mockApiConnection.inputStream } returns ObjectMapper().writeValueAsString(game)
-            .byteInputStream();
+            .byteInputStream()
 
         val gameDTO = GameDTO("CLE@CIN", "Week 7").apply {
             id = UUID.fromString(gameUuid)
         }
 
-        val result: GameDTO = NflApi(tokenURL, baseApiUrl).getGame(gameDTO);
+        val result: GameDTO = NflApi(tokenURL, baseApiUrl).getGame(gameDTO)
 
         assertEquals("TIE", result.result)
     }
 
     @Test
     fun gameRequestForNonfinalGameDoesNotHaveResult() {
-        val gameUuid = "10160000-0569-64b5-f7c3-0be4baabf0ff"
+        val gameUuid = "10160000-0569-3333-f7c3-0be4baabf0ff"
         val uri = buildGameQueryUrl(gameUuid)
 
         handler.setConnection(URL(baseApiUrl, uri), mockApiConnection)
@@ -443,7 +447,7 @@ class NflApiTest {
         val game = baseGameQueryDTO.apply {
             data.viewer.gameDetailsByIds = listOf(
                 Details().apply {
-                    gameTime = formatter.format(gameStart.time);
+                    gameTime = formatter.format(gameStart.time)
                     phase = "In progress"
                     homePointsTotal =17
                     visitorPointsTotal = 3
@@ -454,13 +458,10 @@ class NflApiTest {
         }
 
         every { mockApiConnection.inputStream } returns ObjectMapper().writeValueAsString(game)
-            .byteInputStream();
+            .byteInputStream()
 
-        val gameDTO = GameDTO("TB@NE", "Week 14").apply {
-            id = UUID.fromString(gameUuid)
-        }
-
-        val result: GameDTO = NflApi(tokenURL, baseApiUrl).getGame(gameDTO);
+        val gameDTO = defaultGameDTO(gameUuid)
+        val result: GameDTO = NflApi(tokenURL, baseApiUrl).getGame(gameDTO)
 
         assertEquals(result.name, gameDTO.name)
         assertEquals(result.week, gameDTO.week)
@@ -471,30 +472,14 @@ class NflApiTest {
 
     @Test
     fun gameRequestHasStaticHeadersSet() {
-        val gameUuid = "10160000-0569-64b5-f7c3-0be4baabf0ff"
+        val gameUuid = "10160000-0569-64b5-f7c3-0be4b4abf0ff"
         val uri = buildGameQueryUrl(gameUuid)
         handler.setConnection(URL(baseApiUrl, uri), mockApiConnection)
 
-        val game = baseGameQueryDTO.apply {
-            data.viewer.gameDetailsByIds = listOf(
-                Details().apply {
-                    gameTime = formatter.format(GregorianCalendar().time);
-                    phase = "In progress"
-                    homePointsTotal =17
-                    visitorPointsTotal = 3
-                    homeTeam = GameTeam("NE")
-                    visitorTeam = GameTeam("TB")
-                }
-            )
-        }
-
         every { mockApiConnection.inputStream } returns
-                ObjectMapper().writeValueAsString(game).byteInputStream();
+                ObjectMapper().writeValueAsString(defaultGame()).byteInputStream()
 
-        val gameDTO = GameDTO("TB@NE", "Week 14").apply {
-            id = UUID.fromString(gameUuid)
-        }
-        NflApi(tokenURL, baseApiUrl).getGame(gameDTO);
+        NflApi(tokenURL, baseApiUrl).getGame(defaultGameDTO(gameUuid))
 
         val properties = ArrayList<String>(5).apply {
             add("authority")
@@ -517,29 +502,35 @@ class NflApiTest {
         val token = generateExpiringToken(4)
         every { mockTokenConnection.inputStream } returns buildByteStreamResponse(token)
 
+        every { mockApiConnection.inputStream } returns ObjectMapper().writeValueAsString(defaultGame())
+            .byteInputStream()
 
-        val game = baseGameQueryDTO.apply {
+        val gameDTO = defaultGameDTO(gameUuid)
+        NflApi(tokenURL, baseApiUrl).getGame(gameDTO)
+
+        verify { mockApiConnection.setRequestProperty("authorization", "Bearer $token") }
+    }
+
+    private fun defaultGameDTO(gameUuid: String): GameDTO {
+        val gameDTO = GameDTO("TB@NE", "Week 14").apply {
+            id = UUID.fromString(gameUuid)
+        }
+        return gameDTO
+    }
+
+    private fun defaultGame(): GameQueryDTO {
+        return baseGameQueryDTO.apply {
             data.viewer.gameDetailsByIds = listOf(
                 Details().apply {
-                    gameTime = formatter.format(GregorianCalendar().time);
+                    gameTime = formatter.format(GregorianCalendar().time)
                     phase = "In progress"
-                    homePointsTotal =17
+                    homePointsTotal = 17
                     visitorPointsTotal = 3
                     homeTeam = GameTeam("NE")
                     visitorTeam = GameTeam("TB")
                 }
             )
         }
-
-        every { mockApiConnection.inputStream } returns ObjectMapper().writeValueAsString(game)
-            .byteInputStream();
-
-        val gameDTO = GameDTO("TB@NE", "Week 14").apply {
-            id = UUID.fromString(gameUuid)
-        }
-        NflApi(tokenURL, baseApiUrl).getGame(gameDTO);
-
-        verify { mockApiConnection.setRequestProperty("authorization", "Bearer $token") }
     }
 
     private fun buildGameQueryUrl(gameUuid: String) =
