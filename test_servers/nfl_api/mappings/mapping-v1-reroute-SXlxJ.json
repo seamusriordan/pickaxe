@@ -1,5 +1,5 @@
 {
-  "id" : "c2017477-cec3-39e9-a5fe-c6932cccf3fe",
+  "id" : "3bb4f56a-6883-3a1b-a22a-544247a063d5",
   "request" : {
     "url" : "/v1/reroute",
     "method" : "POST",
@@ -9,18 +9,18 @@
   },
   "response" : {
     "status" : 200,
-    "bodyFileName" : "body-v1-reroute-mJ54k.json",
+    "bodyFileName" : "body-v1-reroute-SXlxJ.json",
     "headers" : {
       "Content-Type" : "application/json",
       "Pragma" : "no-cache",
       "Cache-Control" : "no-store",
       "Accept-Ranges" : "bytes",
-      "X-Served-By" : "cache-lax8626-LAX",
+      "X-Served-By" : "cache-lax8629-LAX",
       "X-Cache-Hits" : "0",
-      "X-Timer" : "S1587829032.402234,VS0,VE15",
-      "Date" : "Sat, 25 Apr 2020 15:37:12 GMT",
+      "X-Timer" : "S1587840375.572343,VS0,VE21",
+      "Date" : "Sat, 25 Apr 2020 18:46:14 GMT",
       "X-NFL-APP" : "ssoprx"
     }
   },
-  "uuid" : "c2017477-cec3-39e9-a5fe-c6932cccf3fe"
+  "uuid" : "3bb4f56a-6883-3a1b-a22a-544247a063d5"
 }
