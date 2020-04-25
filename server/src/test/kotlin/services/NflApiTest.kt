@@ -284,6 +284,60 @@ class NflApiTest {
         assertEquals("Week 8", result[1].week)
     }
 
+    @Test
+    fun weekRequestHasStaticHeadersSet() {
+        val uri = buildRelativeApiUrl(2020, "REG", 3)
+        val mockConnection = mockkClass(HttpURLConnection::class)
+        handler.setConnection(URL(baseApiUrl, uri), mockConnection)
+
+        every { mockConnection.inputStream } returns ObjectMapper().writeValueAsString(baseQueryDTO).byteInputStream();
+        every { mockConnection.setRequestProperty(any(), any()) } returns Unit
+
+
+        val nflService = NflApi(tokenURL, baseApiUrl)
+        val week = WeekDTO("Week 3").apply {
+            weekType = "REG"
+            week = 3
+        }
+        val result = nflService.getWeek(week);
+
+        val properties = ArrayList<String>(5).apply {
+            add("authority")
+            add("origin")
+            add("accept")
+            add("referer")
+            add("user-agent")
+            add("Content-Type")
+        }
+
+        properties.map { property ->
+            verify { mockConnection.setRequestProperty(property, any()) }
+        }
+    }
+
+    @Test
+    fun weekRequestHasBearerTokenSet() {
+        val uri = buildRelativeApiUrl(2020, "REG", 3)
+        val mockConnection = mockkClass(HttpURLConnection::class)
+        handler.setConnection(URL(baseApiUrl, uri), mockConnection)
+
+        val token = generateExpiringToken(1)
+        every { mockUrlConnection.inputStream } returns buildByteStreamResponse(token)
+
+        every { mockConnection.inputStream } returns ObjectMapper().writeValueAsString(baseQueryDTO).byteInputStream();
+        every { mockConnection.setRequestProperty(any(), any()) } returns Unit
+
+
+        val nflService = NflApi(tokenURL, baseApiUrl)
+        val week = WeekDTO("Week 3").apply {
+            weekType = "REG"
+            week = 3
+        }
+        nflService.getWeek(week);
+
+        verify { mockConnection.setRequestProperty("authorization", "Bearer $token") }
+    }
+
     private fun buildRelativeApiUrl(
         season: Int,
         weekTypeQuery: String,

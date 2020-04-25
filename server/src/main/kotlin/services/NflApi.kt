@@ -69,6 +69,18 @@ class NflApi(private val tokenURL: URL, private val apiURL: URL) {
         )
 
         val connection = apiURL.openConnection() as HttpURLConnection
+        connection.setRequestProperty("authority", "api.nfl.com")
+        connection.setRequestProperty("authorization", "Bearer $accessToken")
+        connection.setRequestProperty("accept", "*/*")
+        connection.setRequestProperty("origin", "https://www.nfl.com")
+        connection.setRequestProperty("referer", "https://www.nfl.com/")
+        connection.setRequestProperty(
+            "user-agent",
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36"
+        )
+        connection.setRequestProperty("Content-Type", "application/json")
+
+
         val stream = connection.inputStream
 
         val response = ObjectMapper().readValue(InputStreamReader(stream).readText(), QueryDTO::class.java)
