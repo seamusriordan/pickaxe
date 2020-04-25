@@ -158,7 +158,7 @@ class NflApiTest {
 
     @Test
     fun loadWeeksGetsGamesFromNFL() {
-        val season = 2016
+        val season = 2020
         val weekType = "REG"
         val week = "5"
         val uri =
@@ -194,7 +194,7 @@ class NflApiTest {
         }
         every { mockConnection.inputStream } returns ObjectMapper().writeValueAsString(expectedGames).byteInputStream();
 
-        val nflService = NflApi(URL("https://api.nfl.com"))
+        val nflService = NflApi(tokenURL)
         nflService.loadWeeks("REG", "5");
 
         verify(exactly = 1) { mockConnection.inputStream }

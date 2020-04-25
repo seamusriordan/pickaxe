@@ -16,7 +16,7 @@ class NflApi(private val tokenURL: URL) {
 
     var accessToken: String
         get() {
-            if(!tokenIsValid(_accessToken)){
+            if (!tokenIsValid(_accessToken)) {
                 _accessToken = fetchNewToken()
             }
             return _accessToken!!
@@ -37,7 +37,10 @@ class NflApi(private val tokenURL: URL) {
         connection.setRequestProperty("origin", "https://www.nfl.com")
         connection.setRequestProperty("x-domain-id", "100")
         connection.setRequestProperty("referer", "https://www.nfl.com/")
-        connection.setRequestProperty("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36")
+        connection.setRequestProperty(
+            "user-agent",
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36"
+        )
 
         val dataOutputStream = DataOutputStream(connection.outputStream)
         dataOutputStream.writeBytes("grant_type=client_credentials")
@@ -55,5 +58,17 @@ class NflApi(private val tokenURL: URL) {
     }
 
     fun loadWeeks(weekType: String, week: String) {
+        val season = 2020
+        val week = "5"
+        val weekType = "REG"
+
+        val apiURL = URL(
+            "https://api.nfl.com/v3/shield/"
+                    + "?query=query%7Bviewer%7Bleague%7Bgames(first%3A100%2Cweek_seasonValue%3A${season}%2Cweek_seasonType%3A${weekType}%2Cweek_weekValue%3A${week}%2C)%7Bedges%7Bnode%7Bid%20awayTeam%7BnickName%20abbreviation%20%7DhomeTeam%7BnickName%20id%20abbreviation%20%7D%7D%7D%7D%7D%7D%7D&variables=null"
+        )
+
+        val connection = apiURL.openConnection() as HttpURLConnection
+        val stream = connection.inputStream
+        return
     }
 }
