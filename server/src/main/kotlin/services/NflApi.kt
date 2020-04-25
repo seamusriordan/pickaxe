@@ -82,7 +82,8 @@ class NflApi(private val tokenURL: URL, private val apiURL: URL) {
 
     fun getGame(game: GameDTO): GameDTO {
         val stream = createGameQueryConnection(game.id!!).inputStream
-        val response = ObjectMapper().readValue(InputStreamReader(stream).readText(), GameQueryDTO::class.java)
+        val responseText = InputStreamReader(stream).readText()
+        val response = ObjectMapper().readValue(responseText, GameQueryDTO::class.java)
         val details = response.data.viewer.gameDetailsByIds.first()
 
         return buildGameResponse(game, details)
@@ -90,7 +91,7 @@ class NflApi(private val tokenURL: URL, private val apiURL: URL) {
 
     private fun buildGameInWeek(edge: Edge, week: WeekDTO): GameDTO {
         return GameDTO(formatGameName(edge.node), week.name).apply {
-            id = edge.node.id
+            id = edge.node.gameDetailId
         }
     }
 
@@ -120,8 +121,8 @@ class NflApi(private val tokenURL: URL, private val apiURL: URL) {
         val fullApiUrl = URL(
             apiURL,
             "/v3/shield/?query=query%7Bviewer%7Bleague%7Bgames(first%3A100%2Cweek_seasonValue%3A${season}%2C"
-                    + "week_seasonType%3A${week.weekType}%2Cweek_weekValue%3A${week.week}%2C)%7Bedges%7Bnode%7Bid%20"
-                    + "awayTeam%7BnickName%20abbreviation%20%7DhomeTeam%7BnickName%20id%20abbreviation%20"
+                    + "week_seasonType%3A${week.weekType}%2Cweek_weekValue%3A${week.week}%2C)%7Bedges%7Bnode%7B"
+                    +"gameDetailId%20awayTeam%7BnickName%20abbreviation%20%7DhomeTeam%7BnickName%20abbreviation%20"
                     + "%7D%7D%7D%7D%7D%7D%7D&variables=null"
         )
 
@@ -132,7 +133,7 @@ class NflApi(private val tokenURL: URL, private val apiURL: URL) {
         val fullUrl =
             URL(
                 apiURL,
-                "?query=query%7Bviewer%7BgameDetailsByIds(ids%3A%5B%22$id%22%2C%5D)%7Bid%2CgameTime%2Cphase%2ChomePointsTotal%2CvisitorPointsTotal%2Cphase%2ChomeTeam%7Babbreviation%7D%2CvisitorTeam%7Babbreviation%7D%7D%7D%7D&variables=null\n"
+                "/v3/shield/?query=query%7Bviewer%7BgameDetailsByIds(ids%3A%5B%22$id%22%2C%5D)%7Bid%2CgameTime%2Cphase%2ChomePointsTotal%2CvisitorPointsTotal%2Cphase%2ChomeTeam%7Babbreviation%7D%2CvisitorTeam%7Babbreviation%7D%7D%7D%7D&variables=null\n"
             )
 
         return connectionWithQueryHeaders(fullUrl)

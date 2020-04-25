@@ -198,7 +198,7 @@ class NflApiTest {
         assertEquals(1, result.size)
         assertEquals("ARI@SF", result.first().name)
         assertEquals(weekName, result.first().week)
-        assertEquals(expectedGames.data.viewer.league.games.edges.first().node.id, result.first().id)
+        assertEquals(expectedGames.data.viewer.league.games.edges.first().node.gameDetailId, result.first().id)
     }
 
     @Test
@@ -534,14 +534,14 @@ class NflApiTest {
     }
 
     private fun buildGameQueryUrl(gameUuid: String) =
-        "?query=query%7Bviewer%7BgameDetailsByIds(ids%3A%5B%22$gameUuid%22%2C%5D)%7Bid%2CgameTime%2Cphase%2ChomePointsTotal%2CvisitorPointsTotal%2Cphase%2ChomeTeam%7Babbreviation%7D%2CvisitorTeam%7Babbreviation%7D%7D%7D%7D&variables=null\n"
+        "/v3/shield/?query=query%7Bviewer%7BgameDetailsByIds(ids%3A%5B%22$gameUuid%22%2C%5D)%7Bid%2CgameTime%2Cphase%2ChomePointsTotal%2CvisitorPointsTotal%2Cphase%2ChomeTeam%7Babbreviation%7D%2CvisitorTeam%7Babbreviation%7D%7D%7D%7D&variables=null\n"
 
     private fun buildRelativeApiWeekQueryUrl(
         season: Int,
         weekTypeQuery: String,
         weekQuery: Int
     ): String {
-        return "/v3/shield/?query=query%7Bviewer%7Bleague%7Bgames(first%3A100%2Cweek_seasonValue%3A${season}%2Cweek_seasonType%3A${weekTypeQuery}%2Cweek_weekValue%3A${weekQuery}%2C)%7Bedges%7Bnode%7Bid%20awayTeam%7BnickName%20abbreviation%20%7DhomeTeam%7BnickName%20id%20abbreviation%20%7D%7D%7D%7D%7D%7D%7D&variables=null"
+        return "/v3/shield/?query=query%7Bviewer%7Bleague%7Bgames(first%3A100%2Cweek_seasonValue%3A${season}%2Cweek_seasonType%3A${weekTypeQuery}%2Cweek_weekValue%3A${weekQuery}%2C)%7Bedges%7Bnode%7BgameDetailId%20awayTeam%7BnickName%20abbreviation%20%7DhomeTeam%7BnickName%20abbreviation%20%7D%7D%7D%7D%7D%7D%7D&variables=null"
     }
 
     private fun nflServiceWithFixedTime(url: URL, token: String? = null): NflApi {
@@ -603,14 +603,14 @@ class NflApiTest {
     private fun buildGame(away: String, home: String): Edge {
         return Edge().apply {
             node = Node().apply {
-                id = UUID.fromString("10012016-1006-0091-2590-6d5ccb310545")
+                gameDetailId = UUID.fromString("10012016-1006-0091-2590-6d5ccb310545")
                 awayTeam = Team().apply {
                     nickName = "Cardinals"
                     abbreviation = away
                 }
                 homeTeam = Team().apply {
                     nickName = "49ers"
-                    id = UUID.fromString("10044500-2016-98ea-5998-12e71471f00f")
+                    gameDetailId = UUID.fromString("10044500-2016-98ea-5998-12e71471f00f")
                     abbreviation = home
                 }
             }

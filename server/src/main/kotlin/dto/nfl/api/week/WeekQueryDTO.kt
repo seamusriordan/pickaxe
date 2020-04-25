@@ -28,7 +28,7 @@ class Edge {
 }
 
 class Node {
-    var id = UUID.randomUUID()
+    var gameDetailId = UUID.randomUUID()
     var awayTeam = Team()
     var homeTeam = Team()
 }
@@ -36,5 +36,4 @@ class Node {
 class Team {
     var nickName: String = ""
     var abbreviation: String = ""
-    var id: UUID? = null
 }
