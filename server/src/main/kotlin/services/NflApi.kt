@@ -4,7 +4,9 @@ import com.auth0.jwt.JWT
 import com.fasterxml.jackson.databind.ObjectMapper
 import dto.GameDTO
 import dto.WeekDTO
+import dto.nfl.api.game.Details
 import dto.nfl.api.game.GameQueryDTO
+import dto.nfl.api.week.Edge
 import dto.nfl.api.week.Node
 import dto.nfl.api.week.WeekQueryDTO
 import java.io.DataOutputStream
@@ -71,15 +73,46 @@ class NflApi(private val tokenURL: URL, private val apiURL: URL) {
         val response = ObjectMapper().readValue(InputStreamReader(stream).readText(), WeekQueryDTO::class.java)
 
         for (edge in response.data.viewer.league.games.edges) {
-            val game = GameDTO(formatGameName(edge.node), week.name).apply {
-                id = edge.node.id
-            }
+            val game = buildGameInWeek(edge, week)
             result.add(game)
         }
 
         return result
     }
 
+    fun getGame(game: GameDTO): GameDTO {
+        val stream = createGameQueryConnection(game.id!!).inputStream
+        val response = ObjectMapper().readValue(InputStreamReader(stream).readText(), GameQueryDTO::class.java)
+        val details = response.data.viewer.gameDetailsByIds.first()
+
+        return buildGameResponse(game, details)
+    }
+
+    private fun buildGameInWeek(edge: Edge, week: WeekDTO): GameDTO {
+        return GameDTO(formatGameName(edge.node), week.name).apply {
+            id = edge.node.id
+        }
+    }
+
+    private fun buildGameResponse(game: GameDTO, details: Details): GameDTO {
+        return GameDTO(game.name, game.week).apply {
+            if (details.phase == "FINAL") {
+                result = determineOutcome(details)
+            }
+            gameTime = formatter.parse(details.gameTime)
+        }
+    }
+
+    private fun determineOutcome(details: Details): String {
+        var result = "TIE"
+        if (details.homePointsTotal > details.visitorPointsTotal) {
+            result = details.homeTeam.abbreviation
+        }
+        if (details.homePointsTotal < details.visitorPointsTotal) {
+            result = details.visitorTeam.abbreviation
+        }
+        return result
+    }
 
     private fun createWeekQueryConnection(week: WeekDTO): HttpURLConnection {
         val season = 2019
@@ -95,6 +128,17 @@ class NflApi(private val tokenURL: URL, private val apiURL: URL) {
         return connectionWithQueryHeaders(fullApiUrl)
     }
 
+    private fun createGameQueryConnection(id: UUID): HttpURLConnection {
+        val fullUrl =
+            URL(
+                apiURL,
+                "?query=query%7Bviewer%7BgameDetailsByIds(ids%3A%5B%22$id%22%2C%5D)%7Bid%2CgameTime%2Cphase%2ChomePointsTotal%2CvisitorPointsTotal%2Cphase%2ChomeTeam%7Babbreviation%7D%2CvisitorTeam%7Babbreviation%7D%7D%7D%7D&variables=null\n"
+            )
+
+        return connectionWithQueryHeaders(fullUrl)
+
+    }
+
     private fun formatGameName(game: Node) = game.awayTeam.abbreviation + "@" + game.homeTeam.abbreviation
 
     private fun setCommonHeaders(connection: HttpURLConnection) {
@@ -105,37 +149,6 @@ class NflApi(private val tokenURL: URL, private val apiURL: URL) {
             "user-agent",
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36"
         )
-    }
-
-    fun getGame(game: GameDTO): GameDTO {
-        val stream = createGameQueryConnection(game.id!!).inputStream
-        val text = InputStreamReader(stream).readText()
-        val response = ObjectMapper().readValue(text, GameQueryDTO::class.java)
-        val details = response.data.viewer.gameDetailsByIds.first()
-
-        return GameDTO(game.name, game.week).apply {
-            if(details.phase == "FINAL") {
-                result = "TIE"
-                if(details.homePointsTotal > details.visitorPointsTotal){
-                    result = details.homeTeam.abbreviation
-                }
-                if(details.homePointsTotal < details.visitorPointsTotal){
-                    result = details.visitorTeam.abbreviation
-                }
-            }
-            gameTime = formatter.parse(details.gameTime)
-        }
-    }
-
-    private fun createGameQueryConnection(id: UUID): HttpURLConnection {
-        val fullUrl =
-            URL(
-                apiURL,
-                "?query=query%7Bviewer%7BgameDetailsByIds(ids%3A%5B%22$id%22%2C%5D)%7Bid%2CgameTime%2Cphase%2ChomePointsTotal%2CvisitorPointsTotal%2Cphase%2ChomeTeam%7Babbreviation%7D%2CvisitorTeam%7Babbreviation%7D%7D%7D%7D&variables=null\n"
-            )
-
-        return connectionWithQueryHeaders(fullUrl)
-
     }
 
     private fun connectionWithQueryHeaders(fullUrl: URL): HttpURLConnection {
