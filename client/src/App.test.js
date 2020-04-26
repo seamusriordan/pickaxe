@@ -57,7 +57,7 @@ describe('App', () => {
     });
 
     it('graphqlProtocol returns https from environment variable', () => {
-        process.env.REACT_APP_GRAPHQL_HTTPS = 1;
+        process.env.REACT_APP_GRAPHQL_HTTPS = "1";
         expect(getGraphqlProtocol()).toEqual("https");
         expect(buildGraphqlUri()).toEqual('https://localhost:8080/pickaxe/graphql')
     });
