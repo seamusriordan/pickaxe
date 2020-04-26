@@ -7,14 +7,26 @@ import io.javalin.http.staticfiles.Location
 import io.javalin.websocket.*
 import io.mockk.*
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.util.function.Consumer
 
 
 internal class ServerTest {
+    private lateinit var serverSpy: Javalin
+
+    @BeforeEach
+    fun setUp() {
+        mockkStatic("HttpHandlersKt")
+        serverSpy = spyk(Javalin.create { config ->
+            run {
+                config.logIfServerNotStarted = false
+            }
+        })
+    }
+
     @Test
     fun addsStaticFilesWithPathHtml() {
-        val serverSpy = spyk(Javalin.create())
         val configMock = mockkClass(JavalinConfig::class)
         serverSpy.config = configMock
         every { configMock.addStaticFiles(any(), any()) } returns configMock
@@ -26,9 +38,6 @@ internal class ServerTest {
 
     @Test
     fun handlesOptionsMethod() {
-        val serverSpy = spyk(Javalin.create())
-        mockkStatic("HttpHandlersKt")
-
         addGraphQLOptionServe(serverSpy)
 
         verify { serverSpy.options("/pickaxe/graphql/", any()) }
@@ -62,9 +71,6 @@ internal class ServerTest {
 
     @Test
     fun handlesPostMethod() {
-        mockkStatic("HttpHandlersKt")
-
-        val serverSpy = spyk(Javalin.create())
         val graphQLMock = mockkClass(GraphQL::class)
 
         addGraphQLPostServe(serverSpy, graphQLMock, ArrayList(0))
@@ -77,8 +83,6 @@ internal class ServerTest {
 
     @Test
     fun opensWebsocket() {
-        val serverSpy = spyk(Javalin.create())
-
         addNotificationWebSocket(serverSpy, ArrayList(0))
 
         verify { serverSpy.ws("/pickaxe/updateNotification", any()) }
@@ -86,7 +90,6 @@ internal class ServerTest {
 
     @Test
     fun websocketHandlerAddsContextToPassedListOnConnect() {
-        val serverSpy = spyk(Javalin.create())
         val contextList = ArrayList<WsContext>(0)
         addNotificationWebSocket(serverSpy, contextList)
 
@@ -97,7 +100,7 @@ internal class ServerTest {
         wsHandlerConsumer.captured.accept(wsHandler)
 
         val connectHandler = slot<WsConnectHandler>()
-        verify {wsHandler.onConnect(capture(connectHandler))}
+        verify { wsHandler.onConnect(capture(connectHandler)) }
         val mockContext = mockkClass(WsConnectContext::class)
 
         connectHandler.captured.handleConnect(mockContext)
@@ -107,7 +110,6 @@ internal class ServerTest {
 
     @Test
     fun websocketHandlerRemovesContextToPassedListOnClose() {
-        val serverSpy = spyk(Javalin.create())
         val contextList = ArrayList<WsContext>(0)
         val mockContext = mockkClass(WsCloseContext::class)
         contextList.add(mockContext)
@@ -121,7 +123,7 @@ internal class ServerTest {
         wsHandlerConsumer.captured.accept(wsHandler)
 
         val closeHandler = slot<WsCloseHandler>()
-        verify {wsHandler.onClose(capture(closeHandler))}
+        verify { wsHandler.onClose(capture(closeHandler)) }
 
         closeHandler.captured.handleClose(mockContext)
 
@@ -130,7 +132,6 @@ internal class ServerTest {
 
     @Test
     fun websocketHandlerRemovesSpecificContextToPassedListOnClose() {
-        val serverSpy = spyk(Javalin.create())
         val contextList = ArrayList<WsContext>(0)
         val mockContext1 = mockkClass(WsCloseContext::class)
         val mockContext2 = mockkClass(WsCloseContext::class)
@@ -146,12 +147,27 @@ internal class ServerTest {
         wsHandlerConsumer.captured.accept(wsHandler)
 
         val closeHandler = slot<WsCloseHandler>()
-        verify {wsHandler.onClose(capture(closeHandler))}
+        verify { wsHandler.onClose(capture(closeHandler)) }
 
         closeHandler.captured.handleClose(mockContext1)
 
         assertEquals(1, contextList.size)
         assertEquals(mockContext2, contextList[0])
+    }
+
+    @Test
+    fun addGraphQLPostServePassesWsContextToHandler() {
+        val graphQLMock = mockkClass(GraphQL::class)
+
+        val listWithContext = ArrayList<WsContext>(0)
+        listWithContext.add(mockkClass(WsContext::class))
+
+        addGraphQLPostServe(serverSpy, graphQLMock, listWithContext)
+
+        verify { serverSpy.post("/pickaxe/graphql/", any()) }
+        verify(exactly = 1) { postHandler(graphQLMock, listWithContext) }
+
+        unmockkAll()
     }
 
     private fun stubWsHandler(): WsHandler {
@@ -165,22 +181,5 @@ internal class ServerTest {
         val modifiedWiringMap = HashMap(sampleRuntimeWiringMap())
         modifiedWiringMap["Query"]?.put("id", StaticDataFetcher(modifiedId))
         return generateRuntimeWiringForTest(modifiedWiringMap)
-    }
-
-    @Test
-    fun addGraphQLPostServePassesWsContextToHandler() {
-        mockkStatic("HttpHandlersKt")
-        val serverSpy = spyk(Javalin.create())
-        val graphQLMock = mockkClass(GraphQL::class)
-
-        val listWithContext = ArrayList<WsContext>(0)
-        listWithContext.add(mockkClass(WsContext::class))
-
-        addGraphQLPostServe(serverSpy, graphQLMock, listWithContext)
-
-        verify { serverSpy.post("/pickaxe/graphql/", any()) }
-        verify(exactly = 1) { postHandler(graphQLMock, listWithContext) }
-
-        unmockkAll()
     }
 }
