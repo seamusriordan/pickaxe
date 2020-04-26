@@ -97,7 +97,7 @@ class NflApi(private val tokenURL: URL, private val apiURL: URL) {
 
     private fun buildGameResponse(game: GameDTO, details: Details): GameDTO {
         return GameDTO(game.name, game.week).apply {
-            if (details.phase == "FINAL") {
+            if (details.phase.contains("FINAL")) {
                 result = determineOutcome(details)
             }
             gameTime = formatter.parse(details.gameTime)

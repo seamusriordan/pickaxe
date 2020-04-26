@@ -361,10 +361,36 @@ class NflApiTest {
 
         val result: GameDTO = NflApi(tokenURL, baseApiUrl).getGame(gameDTO)
 
-        assertEquals(result.name, gameDTO.name)
-        assertEquals(result.week, gameDTO.week)
         assertEquals("CHI", result.result)
-        assertEquals(gameStart.time, result.gameTime)
+    }
+
+    @Test
+    fun gameRequestForFinalOvertimeGameUpdatesResultWithWinnerCHIAtHome() {
+        val gameUuid = "10160000-dd69-64b5-f7c3-0be4babbf0ff"
+        val uri = buildGameQueryUrl(gameUuid)
+        handler.setConnection(URL(baseApiUrl, uri), mockApiConnection)
+        val gameStart = GregorianCalendar(2020, 4, 25, 12, 20, 0)
+        val game = baseGameQueryDTO.apply {
+            data.viewer.gameDetailsByIds = listOf(
+                Details().apply {
+                    gameTime = formatter.format(gameStart.time)
+                    phase = "FINAL_OVERTIME"
+                    homePointsTotal = 7
+                    visitorPointsTotal = 3
+                    homeTeam = GameTeam("CHI")
+                    visitorTeam = GameTeam("GB")
+                }
+            )
+        }
+        every { mockApiConnection.inputStream } returns ObjectMapper().writeValueAsString(game)
+            .byteInputStream()
+        val gameDTO = GameDTO("GB@CHI", "Week 4").apply {
+            id = UUID.fromString(gameUuid)
+        }
+
+        val result: GameDTO = NflApi(tokenURL, baseApiUrl).getGame(gameDTO)
+
+        assertEquals("CHI", result.result)
     }
 
     @Test
