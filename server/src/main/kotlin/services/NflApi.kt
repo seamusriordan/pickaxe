@@ -14,6 +14,7 @@ import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 import java.text.SimpleDateFormat
+import java.time.OffsetDateTime
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -100,7 +101,7 @@ class NflApi(private val tokenURL: URL, private val apiURL: URL) {
             if (details.phase.contains("FINAL")) {
                 result = determineOutcome(details)
             }
-            gameTime = formatter.parse(details.gameTime)
+            gameTime = OffsetDateTime.parse(details.gameTime)
         }
     }
 

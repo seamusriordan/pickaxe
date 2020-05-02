@@ -16,6 +16,8 @@ import io.mockk.*
 import org.junit.jupiter.api.Assertions.assertArrayEquals
 import java.io.*
 import java.text.SimpleDateFormat
+import java.time.*
+import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -338,11 +340,14 @@ class NflApiTest {
 
         handler.setConnection(URL(baseApiUrl, uri), mockApiConnection)
 
-        val gameStart = GregorianCalendar(2020, 4, 25, 12, 20, 0)
+        val gameStart = ZonedDateTime.of(
+            2020, 4, 25,
+            12, 20, 0, 0,
+            ZoneId.of("America/Chicago"))
         val game = baseGameQueryDTO.apply {
             data.viewer.gameDetailsByIds = listOf(
                 Details().apply {
-                    gameTime = formatter.format(gameStart.time)
+                    gameTime = gameStart.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
                     phase = "FINAL"
                     homePointsTotal = 7
                     visitorPointsTotal = 3
@@ -369,11 +374,14 @@ class NflApiTest {
         val gameUuid = "10160000-dd69-64b5-f7c3-0be4babbf0ff"
         val uri = buildGameQueryUrl(gameUuid)
         handler.setConnection(URL(baseApiUrl, uri), mockApiConnection)
-        val gameStart = GregorianCalendar(2020, 4, 25, 12, 20, 0)
+        val gameStart = ZonedDateTime.of(
+            2020, 4, 25,
+            12, 20, 0, 0,
+            ZoneId.of("America/Chicago"))
         val game = baseGameQueryDTO.apply {
             data.viewer.gameDetailsByIds = listOf(
                 Details().apply {
-                    gameTime = formatter.format(gameStart.time)
+                    gameTime = gameStart.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
                     phase = "FINAL_OVERTIME"
                     homePointsTotal = 7
                     visitorPointsTotal = 3
@@ -400,11 +408,14 @@ class NflApiTest {
 
         handler.setConnection(URL(baseApiUrl, uri), mockApiConnection)
 
-        val gameStart = GregorianCalendar(2017, 4, 25, 12, 20, 0)
+        val gameStart = ZonedDateTime.of(
+            2020, 4, 25,
+            12, 20, 0, 0,
+            ZoneId.of("America/Chicago"))
         val game = baseGameQueryDTO.apply {
             data.viewer.gameDetailsByIds = listOf(
                 Details().apply {
-                    gameTime = formatter.format(gameStart.time)
+                    gameTime = gameStart.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
                     phase = "FINAL"
                     homePointsTotal = 3
                     visitorPointsTotal = 17
@@ -426,7 +437,7 @@ class NflApiTest {
         assertEquals(result.name, gameDTO.name)
         assertEquals(result.week, gameDTO.week)
         assertEquals("TB", result.result)
-        assertEquals(gameStart.time, result.gameTime)
+        assertEquals(gameStart.toOffsetDateTime(), result.gameTime)
     }
 
     @Test
@@ -436,11 +447,14 @@ class NflApiTest {
 
         handler.setConnection(URL(baseApiUrl, uri), mockApiConnection)
 
-        val gameStart = GregorianCalendar(2017, 9, 15, 12, 20, 0)
+        val gameStart = ZonedDateTime.of(
+            2017, 9, 15,
+            12, 20, 0, 0,
+            ZoneId.of("America/Chicago"))
         val game = baseGameQueryDTO.apply {
             data.viewer.gameDetailsByIds = listOf(
                 Details().apply {
-                    gameTime = formatter.format(gameStart.time)
+                    gameTime = gameStart.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
                     phase = "FINAL"
                     homePointsTotal = 3
                     visitorPointsTotal = 3
@@ -469,11 +483,14 @@ class NflApiTest {
 
         handler.setConnection(URL(baseApiUrl, uri), mockApiConnection)
 
-        val gameStart = GregorianCalendar(2020, 4, 26, 12, 20, 0)
+        val gameStart = ZonedDateTime.of(
+            2020, 4, 26,
+            12, 20, 0, 0,
+            ZoneId.of("America/Chicago"))
         val game = baseGameQueryDTO.apply {
             data.viewer.gameDetailsByIds = listOf(
                 Details().apply {
-                    gameTime = formatter.format(gameStart.time)
+                    gameTime = gameStart.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
                     phase = "In progress"
                     homePointsTotal =17
                     visitorPointsTotal = 3
@@ -492,7 +509,7 @@ class NflApiTest {
         assertEquals(result.name, gameDTO.name)
         assertEquals(result.week, gameDTO.week)
         assertEquals(null, result.result)
-        assertEquals(gameStart.time, result.gameTime)
+        assertEquals(gameStart.toOffsetDateTime(), result.gameTime)
     }
 
 
@@ -538,10 +555,9 @@ class NflApiTest {
     }
 
     private fun defaultGameDTO(gameUuid: String): GameDTO {
-        val gameDTO = GameDTO("TB@NE", "Week 14").apply {
+        return GameDTO("TB@NE", "Week 14").apply {
             id = UUID.fromString(gameUuid)
         }
-        return gameDTO
     }
 
     private fun defaultGame(): GameQueryDTO {
