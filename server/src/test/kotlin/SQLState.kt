@@ -60,7 +60,7 @@ fun mockStatementToReturnPickResultSet(statement: Statement, results: ResultSet,
 }
 
 fun mockStatementToReturnWeekResultSet(statement: Statement, results: ResultSet) {
-    every { statement.executeQuery("SELECT name, week_order FROM weeks") } returns results
+    every { statement.executeQuery("SELECT name, week_type, week, week_order FROM weeks") } returns results
 
 }
 
@@ -145,6 +145,14 @@ fun setupSQLQueryForWeeks(weeks: List<WeekDTO>): ResultSet {
     every {
         mockResultSet.getString("name")
     } returnsMany weeks.map { week -> week.name }
+
+    every {
+        mockResultSet.getString("week_type")
+    } returnsMany weeks.map { week -> week.weekType!! }
+
+    every {
+        mockResultSet.getInt("week")
+    } returnsMany weeks.map { week -> week.week!! }
 
     every {
         mockResultSet.getInt("week_order")

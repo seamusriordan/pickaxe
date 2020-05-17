@@ -7,15 +7,11 @@ import graphql.schema.DataFetchingEnvironmentImpl
 import io.mockk.every
 import io.mockk.mockkClass
 import io.mockk.mockkStatic
-import mockNextReturnTimes
-import mockStatementToReturnWeekResultSet
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import setupSQLQueryForWeeks
 import java.sql.Connection
 import java.sql.DriverManager
-import java.sql.ResultSet
 import java.sql.Statement
 
 class WeeksQueryTest {
@@ -39,7 +35,7 @@ class WeeksQueryTest {
     @Test
     fun getReturnsWeeksWhenOnlyWeekIs0() {
         val sqlState = SQLState().apply {
-            weeks.add(weekWithNameAndOrder("3", 3))
+            weeks.add(buildWeek("3", "REG",3, 13))
         }
         sqlState.mockSQLState(mockStatement)
 
@@ -47,14 +43,15 @@ class WeeksQueryTest {
 
         Assertions.assertEquals(sqlState.weeks[0].name, results[0].name)
         Assertions.assertEquals(sqlState.weeks[0].weekOrder, results[0].weekOrder)
+        Assertions.assertEquals(sqlState.weeks[0].weekType, results[0].weekType)
     }
 
     @Test
     fun getReturnsWeeksWhenThreeWeeks() {
         val sqlState = SQLState().apply {
-            weeks.add(weekWithNameAndOrder("0", 1))
-            weeks.add(weekWithNameAndOrder("4", 4))
-            weeks.add(weekWithNameAndOrder("19", 199))
+            weeks.add(buildWeek("0", "REG",1, 1))
+            weeks.add(buildWeek("4", "POST",1, 4))
+            weeks.add(buildWeek("19", "PRE",0, 199))
         }
         sqlState.mockSQLState(mockStatement)
 
@@ -62,10 +59,14 @@ class WeeksQueryTest {
 
         Assertions.assertEquals(sqlState.weeks.map { week -> week.name }, results.map { week -> week.name })
         Assertions.assertEquals(sqlState.weeks.map { week -> week.weekOrder }, results.map { week -> week.weekOrder })
+        Assertions.assertEquals(sqlState.weeks.map { week -> week.weekType }, results.map { week -> week.weekType })
+        Assertions.assertEquals(sqlState.weeks.map { week -> week.week }, results.map { week -> week.week })
     }
 
-    private fun weekWithNameAndOrder(name: String, order: Int): WeekDTO {
+    private fun buildWeek(name: String, type: String, weekNumber: Int, order: Int): WeekDTO {
         return WeekDTO(name).apply {
+            weekType = type
+            week = weekNumber
             weekOrder = order
         }
     }
