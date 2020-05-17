@@ -50,10 +50,11 @@ SET default_table_access_method = heap;
 CREATE TABLE public.games (
     game character varying NOT NULL,
     week character varying NOT NULL,
-    gametime date,
+    gametime timestamp with time zone,
     final boolean DEFAULT false NOT NULL,
     result character varying,
-    spread numeric
+    spread numeric,
+    id uuid
 );
 
 
@@ -133,11 +134,11 @@ ALTER TABLE ONLY public.weeks ALTER COLUMN week_order SET DEFAULT nextval('publi
 -- Data for Name: games; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.games (game, week, gametime, final, result, spread) FROM stdin;
-NE@TB	Week 1	\N	f	NE	-14
-GB@CHI	Week 0	\N	f	CHI	\N
-BUF@NE	Week 0	\N	f		\N
-SEA@PHI	Week 0	\N	f	SEA	\N
+COPY public.games (game, week, gametime, final, result, spread, id) FROM stdin;
+GB@CHI	Week 0	\N	f	CHI	\N	\N
+BUF@NE	Week 0	\N	f		\N	\N
+SEA@PHI	Week 0	\N	f	SEA	\N	\N
+NE@TB	Week 1	\N	f	NE	-14	a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11
 \.
 
 
@@ -147,10 +148,6 @@ SEA@PHI	Week 0	\N	f	SEA	\N
 
 COPY public.userpicks (name, week, game, pick) FROM stdin;
 Seamus	Week 1	NE@TB	
-Seamus	Week 0	GB@CHI	CHI
-Sereres	Week 0	SEA@PHI	PHI
-Sereres	Week 1	NE@TB	ne
-Seamus	Week 0	SEA@PHI	SEA
 Sereres	Week 0	GB@CHI	CHI
 RNG	Week 0	GB@CHI	CHI
 Vegas	Week 0	GB@CHI	CHI
@@ -160,7 +157,11 @@ Vegas	Week 0	BUF@NE	BUF
 Sereres	Week 0	BUF@NE	BUF
 Seamus	Week 0	BUF@NE	BUF
 RNG	Week 0	BUF@NE	BUF
+Seamus	Week 0	GB@CHI	CHI
 Vegas	Week 1	NE@TB	TB
+Sereres	Week 0	SEA@PHI	PHI
+Sereres	Week 1	NE@TB	ne
+Seamus	Week 0	SEA@PHI	SEA
 \.
 
 
@@ -183,6 +184,7 @@ Vegas	t	\N
 COPY public.weeks (name, week, week_type, week_order) FROM stdin;
 Week 0	0	REG	1
 Week 1	1	REG	2
+Week 6	6	REG	6
 \.
 
 

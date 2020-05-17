@@ -15,7 +15,9 @@ const val staticFilesPath = "html"
 const val schemaPath = "src/main/resources/schema.graphql"
 
 fun main(args: Array<String>) {
-    ServiceRunner().start()
+
+    val serviceThread = Thread(ServiceRunner())
+    serviceThread.start()
 
     val typeDefinitionRegistry = pickaxeTypeDefinitionRegistry(schemaPath)
     val wiring = pickaxeRuntimeWiring()

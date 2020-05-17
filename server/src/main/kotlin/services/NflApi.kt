@@ -102,6 +102,7 @@ class NflApi(private val tokenURL: URL, private val apiURL: URL) {
                 result = determineOutcome(details)
             }
             gameTime = OffsetDateTime.parse(details.gameTime)
+            id = game.id
         }
     }
 

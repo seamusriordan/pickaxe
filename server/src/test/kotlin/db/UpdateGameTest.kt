@@ -41,7 +41,7 @@ class UpdateGameTest {
 
     @Test
     fun updateFinishedGamePutsInDatabase() {
-        val game = GameDTO("GB@CHI", "Week 1").apply{
+        val game = GameDTO("GB@CHI", "Week 1").apply {
             result = "CHI"
             id = UUID.randomUUID()
             gameTime = OffsetDateTime.now()
@@ -57,7 +57,7 @@ class UpdateGameTest {
 
     @Test
     fun updateFinishedGamePutsInDatabaseWithGameTBatNE() {
-        val game = GameDTO("TB@NE", "Week 1").apply{
+        val game = GameDTO("TB@NE", "Week 1").apply {
             result = "NE"
             id = UUID.randomUUID()
             gameTime = OffsetDateTime.now()
@@ -73,7 +73,7 @@ class UpdateGameTest {
 
     @Test
     fun updateFinishedGamePutsInDatabaseWithWeek2() {
-        val game = GameDTO("TB@NE", "Week 2").apply{
+        val game = GameDTO("TB@NE", "Week 2").apply {
             result = "NE"
             id = UUID.randomUUID()
             gameTime = OffsetDateTime.now()
@@ -89,7 +89,7 @@ class UpdateGameTest {
 
     @Test
     fun updateFinishedGamePutsInDatabaseWithGametimeFewDaysAgo() {
-        val game = GameDTO("TB@NE", "Week 2").apply{
+        val game = GameDTO("TB@NE", "Week 2").apply {
             result = "NE"
             id = UUID.randomUUID()
             gameTime = OffsetDateTime.now().minusDays(10)
@@ -105,7 +105,7 @@ class UpdateGameTest {
 
     @Test
     fun updateUnfinishedGamePutsInDatabase() {
-        val game = GameDTO("GB@CHI", "Week 1").apply{
+        val game = GameDTO("GB@CHI", "Week 1").apply {
             id = UUID.randomUUID()
             gameTime = OffsetDateTime.now()
         }
@@ -120,7 +120,7 @@ class UpdateGameTest {
 
     @Test
     fun updateUnfinishedGamePutsInDatabaseWithGameTBatNE() {
-        val game = GameDTO("TB@NE", "Week 1").apply{
+        val game = GameDTO("TB@NE", "Week 1").apply {
             id = UUID.randomUUID()
             gameTime = OffsetDateTime.now()
         }
@@ -136,7 +136,7 @@ class UpdateGameTest {
 
     @Test
     fun updateUnfinishedGamePutsInDatabaseWithWeek4() {
-        val game = GameDTO("TB@NE", "Week 4").apply{
+        val game = GameDTO("TB@NE", "Week 4").apply {
             id = UUID.randomUUID()
             gameTime = OffsetDateTime.now()
         }
@@ -152,14 +152,14 @@ class UpdateGameTest {
     private fun buildInsertStringWithFinalResult(
         game: GameDTO
     ): String {
-        return "INSERT INTO games VALUES ('${game.name}', '${game.week}', '${game.gameTime}', true, '${game.result}', '${game.id}') " +
-                "ON CONFLICT (name, week, gametime, final, result, id) DO UPDATE SET (gametime, final, result, id) = ('${game.gameTime}', true, ${game.result}, ${game.id})"
+        return "INSERT INTO games(game, week, gametime, final, result, id) VALUES ('${game.name}', '${game.week}', '${game.gameTime}', true, '${game.result}', '${game.id}') " +
+                "ON CONFLICT (game, week) DO UPDATE SET (gametime, final, result, id) = ('${game.gameTime}', true, '${game.result}', '${game.id}')"
     }
 
     private fun buildInsertStringNoResult(
         game: GameDTO
     ): String {
-        return "INSERT INTO games VALUES ('${game.name}', '${game.week}', '${game.gameTime}', false, '${game.id}') " +
-                "ON CONFLICT (name, week, gametime, final, id) DO UPDATE SET (gametime, final, id) = ('${game.gameTime}', false, ${game.id})"
+        return "INSERT INTO games(game, week, gametime, final, id) VALUES ('${game.name}', '${game.week}', '${game.gameTime}', false, '${game.id}') " +
+                "ON CONFLICT (game, week) DO UPDATE SET (gametime, final, id) = ('${game.gameTime}', false, '${game.id}')"
     }
 }

@@ -370,6 +370,42 @@ class NflApiTest {
     }
 
     @Test
+    fun gameRequestHasId() {
+        val gameUuid = "10160000-dd69-64b5-f7c3-0be4babbf0ff"
+        val uri = buildGameQueryUrl(gameUuid)
+
+        handler.setConnection(URL(baseApiUrl, uri), mockApiConnection)
+
+        val gameStart = ZonedDateTime.of(
+            2020, 4, 25,
+            12, 20, 0, 0,
+            ZoneId.of("America/Chicago"))
+        val game = baseGameQueryDTO.apply {
+            data.viewer.gameDetailsByIds = listOf(
+                Details().apply {
+                    gameTime = gameStart.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
+                    phase = "FINAL"
+                    homePointsTotal = 7
+                    visitorPointsTotal = 3
+                    homeTeam = GameTeam("CHI")
+                    visitorTeam = GameTeam("GB")
+                }
+            )
+        }
+
+        every { mockApiConnection.inputStream } returns ObjectMapper().writeValueAsString(game)
+            .byteInputStream()
+
+        val gameDTO = GameDTO("GB@CHI", "Week 4").apply {
+            id = UUID.fromString(gameUuid)
+        }
+
+        val result: GameDTO = NflApi(tokenURL, baseApiUrl).getGame(gameDTO)
+
+        assertEquals(gameUuid, result.id.toString())
+    }
+
+    @Test
     fun gameRequestForFinalOvertimeGameUpdatesResultWithWinnerCHIAtHome() {
         val gameUuid = "10160000-dd69-64b5-f7c3-0be4babbf0ff"
         val uri = buildGameQueryUrl(gameUuid)
