@@ -1,5 +1,6 @@
 package db
 
+import SQLState
 import dto.WeekDTO
 import graphql.schema.DataFetchingEnvironment
 import graphql.schema.DataFetchingEnvironmentImpl
@@ -11,7 +12,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.sql.Connection
 import java.sql.DriverManager
-import java.sql.ResultSet
 import java.sql.Statement
 
 class WeeksQueryTest {
@@ -34,56 +34,55 @@ class WeeksQueryTest {
 
     @Test
     fun getReturnsWeeksWhenOnlyWeekIs0() {
-        val expectedWeeks = ArrayList<WeekDTO>(1)
-        addWeekWithNameAndOrder(expectedWeeks, "3", 3)
-
-        val mockResultSet = mockkClass(ResultSet::class)
-        every {
-            mockResultSet.next()
-        } returns true andThen false
-        every {
-            mockResultSet.getString("name")
-        } returns expectedWeeks[0].name
-        every {
-            mockResultSet.getInt("week_order")
-        } returns expectedWeeks[0].weekOrder!!
-        every { mockStatement.executeQuery("SELECT name, week_order FROM weeks") } returns mockResultSet
+        val sqlState = SQLState().apply {
+            weeks.add(buildWeek("3", "REG",3, 13))
+        }
+        sqlState.mockSQLState(mockStatement)
 
         val results = WeeksQuery(mockConnection).get(env)
 
-        Assertions.assertEquals(expectedWeeks[0].name, results[0].name)
-        Assertions.assertEquals(expectedWeeks[0].weekOrder, results[0].weekOrder)
+        Assertions.assertEquals(sqlState.weeks[0].name, results[0].name)
+        Assertions.assertEquals(sqlState.weeks[0].weekOrder, results[0].weekOrder)
+        Assertions.assertEquals(sqlState.weeks[0].weekType, results[0].weekType)
+    }
+
+
+    @Test
+    fun getWithoutArgumentsReturnsSameDataAsWith() {
+        val sqlState = SQLState().apply {
+            weeks.add(buildWeek("3", "REG",3, 13))
+        }
+        sqlState.mockSQLState(mockStatement)
+
+        val results = WeeksQuery(mockConnection).get()
+
+        Assertions.assertEquals(sqlState.weeks[0].name, results[0].name)
+        Assertions.assertEquals(sqlState.weeks[0].weekOrder, results[0].weekOrder)
+        Assertions.assertEquals(sqlState.weeks[0].weekType, results[0].weekType)
     }
 
     @Test
     fun getReturnsWeeksWhenThreeWeeks() {
-        val expectedWeeks = ArrayList<WeekDTO>(1)
-        addWeekWithNameAndOrder(expectedWeeks, "0", 1)
-        addWeekWithNameAndOrder(expectedWeeks, "4", 4)
-        addWeekWithNameAndOrder(expectedWeeks, "19", 199)
-
-        val mockResultSet = mockkClass(ResultSet::class)
-        every {
-            mockResultSet.next()
-        } returns true andThen true andThen true andThen false
-        every {
-            mockResultSet.getString("name")
-        } returns expectedWeeks[0].name andThen expectedWeeks[1].name andThen expectedWeeks[2].name
-        every {
-            mockResultSet.getInt("week_order")
-        } returns expectedWeeks[0].weekOrder!! andThen expectedWeeks[1].weekOrder!! andThen expectedWeeks[2].weekOrder!!
-        every { mockStatement.executeQuery("SELECT name, week_order FROM weeks") } returns mockResultSet
+        val sqlState = SQLState().apply {
+            weeks.add(buildWeek("0", "REG",1, 1))
+            weeks.add(buildWeek("4", "POST",1, 4))
+            weeks.add(buildWeek("19", "PRE",0, 199))
+        }
+        sqlState.mockSQLState(mockStatement)
 
         val results = WeeksQuery(mockConnection).get(env)
 
-        Assertions.assertEquals(expectedWeeks.map { week -> week.name }, results.map { week -> week.name })
-        Assertions.assertEquals(expectedWeeks.map { week -> week.weekOrder }, results.map { week -> week.weekOrder })
+        Assertions.assertEquals(sqlState.weeks.map { week -> week.name }, results.map { week -> week.name })
+        Assertions.assertEquals(sqlState.weeks.map { week -> week.weekOrder }, results.map { week -> week.weekOrder })
+        Assertions.assertEquals(sqlState.weeks.map { week -> week.weekType }, results.map { week -> week.weekType })
+        Assertions.assertEquals(sqlState.weeks.map { week -> week.week }, results.map { week -> week.week })
     }
 
-    private fun addWeekWithNameAndOrder(expectedWeeks: ArrayList<WeekDTO>, name: String, order: Int) {
-        val week = WeekDTO(name).apply {
+    private fun buildWeek(name: String, type: String, weekNumber: Int, order: Int): WeekDTO {
+        return WeekDTO(name).apply {
+            weekType = type
+            week = weekNumber
             weekOrder = order
         }
-        expectedWeeks.add(week)
     }
 }

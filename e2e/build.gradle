@@ -1,5 +1,14 @@
 import org.apache.tools.ant.taskdefs.condition.Os
 
+def get_number_pickaxe_containers = { ->
+    def out = new ByteArrayOutputStream()
+    exec {
+        commandLine "docker", "ps", "-f", 'name="pickaxe$"', "-q"
+        standardOutput = out
+    }
+    return out.toString().trim().split("\n").findAll({ x -> x.length() > 0 }).size()
+}
+
 task install(type: Exec) {
     commandLine getYarnCmdForOs(), 'install'
 }
@@ -15,7 +24,9 @@ task docker_build(type: Exec) {
 task docker_start(type: Exec) {
     dependsOn 'docker_build'
     dependsOn ':client:build'
-    dependsOn 'docker_env_is_clean'
+    if (get_number_pickaxe_containers() > 0) {
+        dependsOn 'docker_clean_pickaxe_container'
+    }
     dependsOn 'auxilary_servers'
     commandLine 'docker', 'run', '-d', '-p', '8080:8080', '--net', "pickaxe_default", '--name', 'pickaxe', 'pickaxe:e2e'
 }
@@ -34,7 +45,7 @@ task docker_is_not_running(type: Exec) {
     ignoreExitValue true
 }
 
-task docker_env_is_clean(type: Exec){
+task docker_clean_pickaxe_container(type: Exec) {
     dependsOn 'docker_is_not_running'
     commandLine 'docker', 'rm', 'pickaxe'
     ignoreExitValue true
@@ -49,7 +60,9 @@ task docker_build_full(type: Exec) {
 task docker_start_full(type: Exec) {
     dependsOn 'docker_build_full'
     dependsOn ':client:build'
-    dependsOn 'docker_env_is_clean'
+    if (get_number_pickaxe_containers() > 0) {
+        dependsOn 'docker_clean_pickaxe_container'
+    }
     dependsOn 'auxilary_servers'
     commandLine 'docker', 'run', '-d', '-p', '8080:8080', '--name', 'pickaxe', 'pickaxe:full-build-e2e'
 }

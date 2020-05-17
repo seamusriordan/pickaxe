@@ -9,6 +9,5 @@ class UserPicksDTOTest {
         val userPicks = UserPicksDTO(UserDTO("Some dude"))
 
         assertEquals(userPicks.user.name, "Some dude")
-        assertEquals(0, userPicks.total)
     }
 }

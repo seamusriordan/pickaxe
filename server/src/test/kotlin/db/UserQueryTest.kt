@@ -2,15 +2,19 @@
 
 package db
 
+import SQLState
 import dto.UserDTO
 import graphql.schema.DataFetchingEnvironment
 import graphql.schema.DataFetchingEnvironmentImpl
 import io.mockk.every
 import io.mockk.mockkClass
 import io.mockk.mockkStatic
+import mockNextReturnTimes
+import mockStatementToReturnUserResultSet
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import setupSQLQueryForUsers
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.ResultSet
@@ -19,7 +23,7 @@ import java.sql.Statement
 class UserQueryTest {
     private lateinit var mockStatement: Statement
     private lateinit var mockConnection: Connection
-    private lateinit var env: DataFetchingEnvironment;
+    private lateinit var env: DataFetchingEnvironment
 
     @BeforeEach
     fun beforeEach() {
@@ -32,39 +36,30 @@ class UserQueryTest {
         every { mockConnection.createStatement() } returns mockStatement
 
         env = DataFetchingEnvironmentImpl.newDataFetchingEnvironment().build()
-
     }
 
     @Test
     fun getReturnsActiveUsersFromDatabaseWhenSingleUser() {
-        val expectedUsers: ArrayList<UserDTO> = ArrayList(1)
-        expectedUsers.add(UserDTO("Seamus"))
-        val mockResultSet = mockkClass(ResultSet::class)
-        every { mockResultSet.next()
-        } returns true andThen false;
-        every { mockResultSet.getString("name")
-        } returns expectedUsers[0].name
-        every { mockStatement.executeQuery("SELECT name FROM users WHERE active = TRUE") } returns mockResultSet
+        val sqlState = SQLState().apply {
+            users.add(UserDTO("Seamus"))
+        }
+        sqlState.mockSQLState(mockStatement)
 
         val results = UserQuery(mockConnection).get(env)
 
-        assertEquals(expectedUsers.map { x -> x.name }, results.map { x -> x.name })
+        assertEquals(sqlState.users.map { x -> x.name }, results.map { x -> x.name })
     }
 
     @Test
     fun getReturnsActiveUsersFromDatabaseWhenTwoUsers() {
-        val expectedUsers: ArrayList<UserDTO> = ArrayList(2)
-        expectedUsers.add(UserDTO("Stebe"))
-        expectedUsers.add(UserDTO("Dave"))
-        val mockResultSet = mockkClass(ResultSet::class)
-        every { mockResultSet.next()
-        } returns true andThen true andThen false
-        every { mockResultSet.getString("name")
-        } returns expectedUsers[0].name andThen expectedUsers[1].name
-        every { mockStatement.executeQuery("SELECT name FROM users WHERE active = TRUE") } returns mockResultSet
+        val sqlState = SQLState().apply {
+            users.add(UserDTO("Stebe"))
+            users.add(UserDTO("Dabe"))
+        }
+        sqlState.mockSQLState(mockStatement)
 
         val results = UserQuery(mockConnection).get(env)
 
-        assertEquals(expectedUsers.map { x -> x.name }, results.map { x -> x.name })
+        assertEquals(sqlState.users.map { x -> x.name }, results.map { x -> x.name })
     }
 }

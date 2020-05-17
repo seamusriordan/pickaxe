@@ -11,8 +11,8 @@ describe('Default data renders', () => {
     it('has games', () => {
         cy.visit('localhost:8080/pickaxe');
         cy.get('#game-0').contains("GB@CHI");
-        cy.get('#game-1').contains("SEA@PHI");
-        cy.get('#game-2').contains("BUF@NE");
+        cy.get('#game-1').contains("BUF@NE");
+        cy.get('#game-2').contains("SEA@PHI");
     });
 
 });

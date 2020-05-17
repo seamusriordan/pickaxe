@@ -15,10 +15,10 @@ class HttpHandlersTest {
     private val nullOpBody = "{\"operationName\":null,\"variables\":{},\"query\":\"query Query {\\n  id\\n}\\n\"}"
     private val userQueryBody =
         "{\"operationName\":\"Query\",\"variables\":{},\"query\":\"query Query {\\n  user {\\n\\n  name}\\n}\\n\"}"
-    private val mutationQueryBody7 =
-        "{\"operationName\":\"Mutation\",\"variables\":{ \"id\": 7 },\"query\":\"mutation Mutation {\\n  mutate(\$id: Int) }\\n\"}"
     private val mutationQueryBody0 =
-        "{\"operationName\":\"Mutation\",\"variables\":{ \"id\": 0 },\"query\":\"mutation Mutation {\\n  mutate(\$id: Int) }\\n\"}"
+        "{\"operationName\":\"Mutation\",\"variables\":{ \"id\": 0 },\"query\":\"mutation Mutation(\$id: Int){\\n  mutate(id: \$id) }\\n\"}"
+    private val mutationQueryBody7 =
+        "{\"operationName\":\"Mutation\",\"variables\":{ \"id\": 7 },\"query\":\"mutation Mutation(\$id: Int){\\n  mutate(id: \$id) }\\n\"}"
 
     @Test
     fun extractExecutionInputFromPostBodyForIdQuery() {

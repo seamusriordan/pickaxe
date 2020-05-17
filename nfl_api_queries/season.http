@@ -1,6 +1,6 @@
 # curl 'https://api.nfl.com/v3/shield/?query=%20query%7Bviewer%7BcurrentSeason%20currentSeasonType%20currentWeek%7D%7D&variables=null' -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1aWQiOm51bGwsInVzZXJuYW1lIjpudWxsLCJkZXZpY2VJZCI6bnVsbCwiY2xpZW50SWQiOiJ5TExiY1p6UWpBb0NBbXVhenVGS0d2T25GUUtneWNJdiIsImFkSWQiOm51bGwsImV4cCI6MTU4NjYyNjY1NiwiaWF0IjoxNTg2NjIzMDU2fQ.1kxTjk5E2UQlsQO_Py_PkZKxC_lzutdnzxsvM5CikYE' -H 'Referer: https://www.nfl.com/' -H 'Sec-Fetch-Dest: empty' -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36' -H 'Content-Type: application/json' --compressed
 GET https://api.nfl.com/v3/shield/?query=%20query%7Bviewer%7BcurrentSeason%20currentSeasonType%20currentWeek%20weeks%7D%7D&variables=null
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1aWQiOm51bGwsInVzZXJuYW1lIjpudWxsLCJkZXZpY2VJZCI6bnVsbCwiY2xpZW50SWQiOiJ5TExiY1p6UWpBb0NBbXVhenVGS0d2T25GUUtneWNJdiIsImFkSWQiOm51bGwsImV4cCI6MTU4NjcyMjM3NiwiaWF0IjoxNTg2NzE4Nzc2fQ.u8tqIVXE_Blrf1ZjBSlifCgMzRPtR5JdNueB4f6HNg0
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1aWQiOm51bGwsInVzZXJuYW1lIjpudWxsLCJkZXZpY2VJZCI6bnVsbCwiY2xpZW50SWQiOiJ5TExiY1p6UWpBb0NBbXVhenVGS0d2T25GUUtneWNJdiIsImFkSWQiOm51bGwsImV4cCI6MTU4NzgyNDkzOCwiaWF0IjoxNTg3ODIxMzM4fQ.FF9hAiD8XSP8QPrw5sIr07oZpWxIbgYkJQBjm4tcWzI
 Referer: https://www.nfl.com/
 Sec-Fetch-Dest: empty
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36

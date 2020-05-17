@@ -27,7 +27,8 @@ describe('Websocket behavior', () => {
                     return Promise.resolve(mockQueryData);
                 }
             });
-            useMutation.mockReturnValue([() => {}]);
+            useMutation.mockReturnValue([() => {
+            }]);
 
             act(() => {
                 // eslint-disable-next-line no-unused-vars
@@ -62,7 +63,7 @@ describe('Websocket behavior', () => {
         it('On unmount disconnects if connection is open', async () => {
             await server.connected;
 
-            act(() => {
+            await act(async () => {
                 grid.unmount()
             });
 
@@ -72,7 +73,7 @@ describe('Websocket behavior', () => {
         });
 
         it('On unmount eventually closes if connection has not completed', async () => {
-            act(() => {
+            await act(async () => {
                 grid.unmount()
             });
 
@@ -113,7 +114,7 @@ describe('Websocket behavior', () => {
         });
 
         it('websocketProtocol returns wss from environment variable', () => {
-            process.env.REACT_APP_GRAPHQL_HTTPS = 1;
+            process.env.REACT_APP_GRAPHQL_HTTPS = "1";
             expect(getWebsocketProtocol()).toEqual("wss");
             expect(buildWebsocketUri()).toEqual('wss://localhost:8080/pickaxe/updateNotification')
         });

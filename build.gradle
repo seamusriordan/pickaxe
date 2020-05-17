@@ -16,3 +16,9 @@ task server_start {
 task server_stop {
     dependsOn 'e2e:docker_stop'
 }
+
+task test {
+    def e2e = dependsOn ':e2e:test'
+    e2e.mustRunAfter(':client:test')
+    e2e.mustRunAfter(':pickaxe-server:test')
+}

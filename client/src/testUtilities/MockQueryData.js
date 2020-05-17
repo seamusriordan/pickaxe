@@ -6,7 +6,7 @@ export const mockQueryData = {
     ],
     "userPicks": [
         {
-            "user": {"name": "Davebob"}, "total": "0", "picks":
+            "user": {"name": "Davebob"}, "picks":
                 [
                     {"game": "CHI@GB", "pick": "CHI"},
                     {"game": "HAR@NOR", "pick": "NOR"},
@@ -15,7 +15,7 @@ export const mockQueryData = {
                 ],
         },
         {
-            "user": {"name": "Luuand"}, "total": "3", "picks": [
+            "user": {"name": "Luuand"}, "picks": [
                 {"game": "CHI@GB", "pick": "GB"},
                 {"game": "HAR@NOR", "pick": "NOR"},
                 {"game": "SFE@CRL", "pick": "SF"},
@@ -25,7 +25,7 @@ export const mockQueryData = {
 
         },
         {
-            "user": {"name": "Vegas"}, "total": "1", "picks":
+            "user": {"name": "Vegas"}, "picks":
                 [
                     {"game": "CHI@GB", "pick": "B"},
                     {"game": "HAR@NOR", "pick": "TH"},
@@ -33,6 +33,11 @@ export const mockQueryData = {
                     {"game": "ANN@COL", "pick": "A"},
                 ],
         },
+    ],
+    "userTotals":[
+        {"name": "Davebob", "total": "4", "games": [ {"name": "HAR@NOR"}, {"name": "CHI@GB"}, {"name": "SFE@CRL"}, {"name": "ANN@COL"}]},
+        {"name": "Luuand", "total": "1", "games": [ {"name": "HAR@NOR"}]},
+        {"name": "Vegas", "total": "0", "games": []}
     ],
     "games": [
         {"name": "CHI@GB", "week": "0", "spread": 400, "result": "CHI"},

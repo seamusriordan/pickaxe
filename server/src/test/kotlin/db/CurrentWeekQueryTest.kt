@@ -6,6 +6,7 @@ import graphql.schema.DataFetchingEnvironmentImpl
 import io.mockk.every
 import io.mockk.mockkClass
 import io.mockk.mockkStatic
+import mockNextReturnTimes
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -35,13 +36,7 @@ class CurrentWeekQueryTest {
     @Test
     fun getReturnsCurrentWeek0WhenOnlyWeekIs0() {
         val expectedWeek = WeekDTO("0")
-
-        val mockResultSet = mockkClass(ResultSet::class)
-        every { mockResultSet.next()
-        } returns true andThen false
-        every { mockResultSet.getString("name")
-        } returns expectedWeek.name
-        every { mockStatement.executeQuery("SELECT name FROM weeks") } returns mockResultSet
+        mockResultSetWithOneNameForWeek(expectedWeek)
 
         val results = CurrentWeekQuery(mockConnection).get(env)
 
@@ -51,14 +46,8 @@ class CurrentWeekQueryTest {
     @Test
     fun getReturnsCurrentWeek1WhenOnlyWeekIs1() {
         val expectedWeek = WeekDTO("1")
-
-        val mockResultSet = mockkClass(ResultSet::class)
-        every { mockResultSet.next()
-        } returns true andThen false
-        every { mockResultSet.getString("name")
-        } returns expectedWeek.name
-        every { mockStatement.executeQuery("SELECT name FROM weeks") } returns mockResultSet
-
+        mockResultSetWithOneNameForWeek(expectedWeek)
+        
         val results = CurrentWeekQuery(mockConnection).get(env)
 
         Assertions.assertEquals(expectedWeek.name, results.name)
@@ -69,14 +58,28 @@ class CurrentWeekQueryTest {
         val expectedWeek = WeekDTO("3")
 
         val mockResultSet = mockkClass(ResultSet::class)
-        every { mockResultSet.next()
-        } returns true andThen true andThen false
-        every { mockResultSet.getString("name")
-        } returns expectedWeek.name andThen "7"
+        mockNextReturnTimes(mockResultSet, 2)
+
+        every {
+            mockResultSet.getString("name")
+        } returnsMany listOf(expectedWeek.name, "7")
+
         every { mockStatement.executeQuery("SELECT name FROM weeks") } returns mockResultSet
+
 
         val results = CurrentWeekQuery(mockConnection).get(env)
 
         Assertions.assertEquals(expectedWeek.name, results.name)
+    }
+
+    private fun mockResultSetWithOneNameForWeek(expectedWeek: WeekDTO) {
+        val mockResultSet = mockkClass(ResultSet::class)
+        mockNextReturnTimes(mockResultSet, 1)
+
+        every {
+            mockResultSet.getString("name")
+        } returns expectedWeek.name
+
+        every { mockStatement.executeQuery("SELECT name FROM weeks") } returns mockResultSet
     }
 }

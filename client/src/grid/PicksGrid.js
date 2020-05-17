@@ -9,7 +9,11 @@ import ChangeWeek from "../ChangeWeek";
 function destructureUserData(users) {
     return {
         names: users?.map(user => user.name),
-        totals: users?.map(user => user.total)
+    };
+}
+function destructureTotalData(totals) {
+    return {
+        total: totals?.map(total => total.total),
     };
 }
 
@@ -99,6 +103,7 @@ const PicksGrid = props => {
 
     const users = destructureUserData(data?.users);
     const games = destructureGameData(data?.games);
+    const totals = destructureTotalData(data?.userTotals);
 
     const advanceWeek = generateAdvanceWeekCallback(data, currentWeek, updateWeek, refetch);
     const rewindWeek = generateRewindWeekCallback(data, currentWeek, updateWeek, refetch);
@@ -112,7 +117,7 @@ const PicksGrid = props => {
                 <LinearCells key="spread-cells" items={games.spreads} name="spread"/>,
                 <PickCells key="pick-cells" id="pick-cells" data={data} sendData={sendData} currentWeek={currentWeek}/>,
                 <LinearCells key="result-cells" items={games.results} name="result"/>,
-                <LinearCells key="total-cells" items={users.totals} name="total"/>
+                <LinearCells key="total-cells" items={totals.total} name="total"/>
             ]
         }
     </div>
