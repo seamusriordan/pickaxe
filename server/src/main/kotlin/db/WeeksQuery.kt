@@ -6,7 +6,7 @@ import graphql.schema.DataFetchingEnvironment
 import java.sql.Connection
 
 class WeeksQuery(private val connection: Connection) :DataFetcher<List<WeekDTO>> {
-    override fun get(environment: DataFetchingEnvironment?): List<WeekDTO> {
+    fun get(): List<WeekDTO> {
         val statement = connection.createStatement()
 
         val resultSet = statement.executeQuery("SELECT name, week_type, week, week_order FROM weeks")
@@ -21,5 +21,9 @@ class WeeksQuery(private val connection: Connection) :DataFetcher<List<WeekDTO>>
             results.add(week)
         }
         return results
+    }
+
+    override fun get(environment: DataFetchingEnvironment?): List<WeekDTO> {
+        return get()
     }
 }

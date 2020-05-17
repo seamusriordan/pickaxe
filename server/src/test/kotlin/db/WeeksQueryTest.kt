@@ -46,6 +46,21 @@ class WeeksQueryTest {
         Assertions.assertEquals(sqlState.weeks[0].weekType, results[0].weekType)
     }
 
+
+    @Test
+    fun getWithoutArgumentsReturnsSameDataAsWith() {
+        val sqlState = SQLState().apply {
+            weeks.add(buildWeek("3", "REG",3, 13))
+        }
+        sqlState.mockSQLState(mockStatement)
+
+        val results = WeeksQuery(mockConnection).get()
+
+        Assertions.assertEquals(sqlState.weeks[0].name, results[0].name)
+        Assertions.assertEquals(sqlState.weeks[0].weekOrder, results[0].weekOrder)
+        Assertions.assertEquals(sqlState.weeks[0].weekType, results[0].weekType)
+    }
+
     @Test
     fun getReturnsWeeksWhenThreeWeeks() {
         val sqlState = SQLState().apply {
