@@ -1,0 +1,17 @@
+# curl 'https://api.nfl.com/v3/shield/?query=query%7Bviewer%7Bseasons(orderBy%3Aseason%2C)%7Bedges%7Bcursor%20node%7Bseason%20weeks%7Bid%20seasonType%20seasonValue%20weekType%20weekValue%20weekOrder%7D%7D%7D%7D%7D%7D&variables=null' -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:76.0) Gecko/20100101 Firefox/76.0' -H 'Accept: */*' -H 'Accept-Language: en-US,en;q=0.5' --compressed -H 'Referer: https://www.nfl.com/' -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1aWQiOm51bGwsInVzZXJuYW1lIjpudWxsLCJkZXZpY2VJZCI6bnVsbCwiY2xpZW50SWQiOiJ5TExiY1p6UWpBb0NBbXVhenVGS0d2T25GUUtneWNJdiIsImFkSWQiOm51bGwsImV4cCI6MTU4OTc1MDQ0NiwiaWF0IjoxNTg5NzQ2ODQ2fQ.aHHZ_IxrCygndFoX7ym5MqJumDmnWwThkqCHblpfyOQ' -H 'Content-Type: application/json' -H 'Origin: https://www.nfl.com' -H 'Connection: keep-alive' -H 'DNT: 1' -H 'Pragma: no-cache' -H 'Cache-Control: no-cache' -H 'TE: Trailers'
+GET https://api.nfl.com/v3/shield/?query=query%7Bviewer%7Bseasons(orderBy%3Aseason%2C)%7Bedges%7Bcursor%20node%7Bseason%20weeks%7Bid%20seasonType%20seasonValue%20weekType%20weekValue%20weekOrder%7D%7D%7D%7D%7D%7D&variables=null
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:76.0) Gecko/20100101 Firefox/76.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Referer: https://www.nfl.com/
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1aWQiOm51bGwsInVzZXJuYW1lIjpudWxsLCJkZXZpY2VJZCI6bnVsbCwiY2xpZW50SWQiOiJ5TExiY1p6UWpBb0NBbXVhenVGS0d2T25GUUtneWNJdiIsImFkSWQiOm51bGwsImV4cCI6MTU4OTc1MDQ0NiwiaWF0IjoxNTg5NzQ2ODQ2fQ.aHHZ_IxrCygndFoX7ym5MqJumDmnWwThkqCHblpfyOQ
+Origin: https://www.nfl.com
+Connection: keep-alive
+DNT: 1
+Pragma: no-cache
+Cache-Control: no-cache
+TE: Trailers
+Content-Type: application/json
+
+###
+

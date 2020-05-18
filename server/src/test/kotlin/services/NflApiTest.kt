@@ -1,7 +1,6 @@
 package services
 
 import com.auth0.jwt.JWT
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.net.HttpURLConnection
@@ -13,11 +12,11 @@ import dto.WeekDTO
 import dto.nfl.api.game.*
 import dto.nfl.api.week.*
 import io.mockk.*
-import org.junit.jupiter.api.Assertions.assertArrayEquals
+import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.assertThrows
 import java.io.*
 import java.text.SimpleDateFormat
 import java.time.*
-import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -188,7 +187,7 @@ class NflApiTest {
         handler.setConnection(URL(baseApiUrl, uri), mockApiConnection)
         val expectedGames = baseWeekQueryDTO.apply {
             data.viewer.league.games.edges = listOf(
-                buildGame("ARI", "SF")
+                buildGame("ARI", "SF", defaultGameStart)
             )
         }
         every { mockApiConnection.inputStream } returns ObjectMapper().writeValueAsString(expectedGames)
@@ -201,6 +200,7 @@ class NflApiTest {
         assertEquals("ARI@SF", result.first().name)
         assertEquals(weekName, result.first().week)
         assertEquals(expectedGames.data.viewer.league.games.edges.first().node.gameDetailId, result.first().id)
+        assertEquals(defaultGameStart, result.first().gameTime)
     }
 
     @Test
@@ -217,7 +217,7 @@ class NflApiTest {
         every { mockApiConnection.setRequestProperty(any(), any()) } returns Unit
         val expectedGames = baseWeekQueryDTO.apply {
             data.viewer.league.games.edges = listOf(
-                buildGame("ARI", "SF")
+                buildGame("ARI", "SF", defaultGameStart)
             )
         }
         every { mockApiConnection.inputStream } returns ObjectMapper().writeValueAsString(expectedGames)
@@ -246,7 +246,7 @@ class NflApiTest {
         every { mockConnection.setRequestProperty(any(), any()) } returns Unit
         val expectedGames = baseWeekQueryDTO.apply {
             data.viewer.league.games.edges = listOf(
-                buildGame("ARI", "SF")
+                buildGame("ARI", "SF", defaultGameStart)
             )
         }
         every { mockConnection.inputStream } returns ObjectMapper().writeValueAsString(expectedGames).byteInputStream()
@@ -272,8 +272,8 @@ class NflApiTest {
         handler.setConnection(URL(baseApiUrl, uri), mockApiConnection)
         val expectedGames = baseWeekQueryDTO.apply {
             data.viewer.league.games.edges = listOf(
-                buildGame("CHI", "IND"),
-                buildGame("TEN", "MIA")
+                buildGame("CHI", "IND", defaultGameStart),
+                buildGame("TEN", "MIA", defaultGameStart.plusHours(3))
             )
         }
         every { mockApiConnection.inputStream } returns ObjectMapper().writeValueAsString(expectedGames)
@@ -287,6 +287,7 @@ class NflApiTest {
         assertEquals(weekName, result[0].week)
         assertEquals("TEN@MIA", result[1].name)
         assertEquals(weekName, result[1].week)
+        assertEquals(defaultGameStart.plusHours(3), result[1].gameTime)
     }
 
     @Test
@@ -337,26 +338,18 @@ class NflApiTest {
     fun gameRequestForFinalGameUpdatesResultWithWinnerCHIAtHome() {
         val gameUuid = "10160000-dd69-64b5-f7c3-0be4babbf0ff"
         val uri = buildGameQueryUrl(gameUuid)
-
         handler.setConnection(URL(baseApiUrl, uri), mockApiConnection)
-
-        val gameStart = ZonedDateTime.of(
-            2020, 4, 25,
-            12, 20, 0, 0,
-            ZoneId.of("America/Chicago"))
         val game = baseGameQueryDTO.apply {
             data.viewer.gameDetailsByIds = listOf(
                 Details().apply {
-                    gameTime = gameStart.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
                     phase = "FINAL"
-                    homePointsTotal = 7
-                    visitorPointsTotal = 3
+                    homePointsTotal = 107
+                    visitorPointsTotal = 0
                     homeTeam = GameTeam("CHI")
                     visitorTeam = GameTeam("GB")
                 }
             )
         }
-
         every { mockApiConnection.inputStream } returns ObjectMapper().writeValueAsString(game)
             .byteInputStream()
 
@@ -370,32 +363,12 @@ class NflApiTest {
     }
 
     @Test
-    fun gameRequestHasId() {
+    fun gameRequestHasCopiedId() {
         val gameUuid = "10160000-dd69-64b5-f7c3-0be4babbf0ff"
         val uri = buildGameQueryUrl(gameUuid)
-
         handler.setConnection(URL(baseApiUrl, uri), mockApiConnection)
-
-        val gameStart = ZonedDateTime.of(
-            2020, 4, 25,
-            12, 20, 0, 0,
-            ZoneId.of("America/Chicago"))
-        val game = baseGameQueryDTO.apply {
-            data.viewer.gameDetailsByIds = listOf(
-                Details().apply {
-                    gameTime = gameStart.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
-                    phase = "FINAL"
-                    homePointsTotal = 7
-                    visitorPointsTotal = 3
-                    homeTeam = GameTeam("CHI")
-                    visitorTeam = GameTeam("GB")
-                }
-            )
-        }
-
-        every { mockApiConnection.inputStream } returns ObjectMapper().writeValueAsString(game)
+        every { mockApiConnection.inputStream } returns ObjectMapper().writeValueAsString(defaultGame())
             .byteInputStream()
-
         val gameDTO = GameDTO("GB@CHI", "Week 4").apply {
             id = UUID.fromString(gameUuid)
         }
@@ -406,18 +379,50 @@ class NflApiTest {
     }
 
     @Test
+    fun gameRequestHasCopiedTime() {
+        val gameUuid = "10160000-dd69-64b5-f7c3-0be4babbf0ff"
+        val uri = buildGameQueryUrl(gameUuid)
+        handler.setConnection(URL(baseApiUrl, uri), mockApiConnection)
+        every { mockApiConnection.inputStream } returns ObjectMapper().writeValueAsString(defaultGame())
+            .byteInputStream()
+        val gameDTO = GameDTO("GB@CHI", "Week 4").apply {
+            id = UUID.fromString(gameUuid)
+            gameTime = OffsetDateTime.of(
+                2020, 5, 17,
+                0, 3, 55, 2000,
+                ZoneOffset.ofHours(-5)
+            )
+        }
+
+        val result: GameDTO = NflApi(tokenURL, baseApiUrl).getGame(gameDTO)
+
+        assertEquals(gameDTO.gameTime, result.gameTime)
+    }
+
+    @Test
+    fun gameRequestWithoutIdThrowsFileNotFoundException() {
+        val gameDTO = GameDTO("GB@CHI", "Week 4").apply {
+            id = null
+            gameTime = OffsetDateTime.of(
+                2020, 5, 17,
+                0, 3, 55, 2000,
+                ZoneOffset.ofHours(-5)
+            )
+        }
+
+        assertThrows(FileNotFoundException::class.java) {
+            NflApi(tokenURL, baseApiUrl).getGame(gameDTO)
+        }
+    }
+
+    @Test
     fun gameRequestForFinalOvertimeGameUpdatesResultWithWinnerCHIAtHome() {
         val gameUuid = "10160000-dd69-64b5-f7c3-0be4babbf0ff"
         val uri = buildGameQueryUrl(gameUuid)
         handler.setConnection(URL(baseApiUrl, uri), mockApiConnection)
-        val gameStart = ZonedDateTime.of(
-            2020, 4, 25,
-            12, 20, 0, 0,
-            ZoneId.of("America/Chicago"))
         val game = baseGameQueryDTO.apply {
             data.viewer.gameDetailsByIds = listOf(
                 Details().apply {
-                    gameTime = gameStart.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
                     phase = "FINAL_OVERTIME"
                     homePointsTotal = 7
                     visitorPointsTotal = 3
@@ -444,14 +449,9 @@ class NflApiTest {
 
         handler.setConnection(URL(baseApiUrl, uri), mockApiConnection)
 
-        val gameStart = ZonedDateTime.of(
-            2020, 4, 25,
-            12, 20, 0, 0,
-            ZoneId.of("America/Chicago"))
         val game = baseGameQueryDTO.apply {
             data.viewer.gameDetailsByIds = listOf(
                 Details().apply {
-                    gameTime = gameStart.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
                     phase = "FINAL"
                     homePointsTotal = 3
                     visitorPointsTotal = 17
@@ -473,24 +473,16 @@ class NflApiTest {
         assertEquals(result.name, gameDTO.name)
         assertEquals(result.week, gameDTO.week)
         assertEquals("TB", result.result)
-        assertEquals(gameStart.toOffsetDateTime(), result.gameTime)
     }
 
     @Test
     fun gameRequestForFinalGameUpdatesResultWithTIE() {
         val gameUuid = "1016000c-0569-6425-f7c3-0be4baabfaff"
         val uri = buildGameQueryUrl(gameUuid)
-
         handler.setConnection(URL(baseApiUrl, uri), mockApiConnection)
-
-        val gameStart = ZonedDateTime.of(
-            2017, 9, 15,
-            12, 20, 0, 0,
-            ZoneId.of("America/Chicago"))
         val game = baseGameQueryDTO.apply {
             data.viewer.gameDetailsByIds = listOf(
                 Details().apply {
-                    gameTime = gameStart.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
                     phase = "FINAL"
                     homePointsTotal = 3
                     visitorPointsTotal = 3
@@ -499,10 +491,8 @@ class NflApiTest {
                 }
             )
         }
-
         every { mockApiConnection.inputStream } returns ObjectMapper().writeValueAsString(game)
             .byteInputStream()
-
         val gameDTO = GameDTO("CLE@CIN", "Week 7").apply {
             id = UUID.fromString(gameUuid)
         }
@@ -513,22 +503,17 @@ class NflApiTest {
     }
 
     @Test
-    fun gameRequestForNonfinalGameDoesNotHaveResult() {
+    fun gameRequestForInProgressGameDoesNotHaveResult() {
         val gameUuid = "10160000-0569-3333-f7c3-0be4baabf0ff"
         val uri = buildGameQueryUrl(gameUuid)
 
         handler.setConnection(URL(baseApiUrl, uri), mockApiConnection)
 
-        val gameStart = ZonedDateTime.of(
-            2020, 4, 26,
-            12, 20, 0, 0,
-            ZoneId.of("America/Chicago"))
         val game = baseGameQueryDTO.apply {
             data.viewer.gameDetailsByIds = listOf(
                 Details().apply {
-                    gameTime = gameStart.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
                     phase = "In progress"
-                    homePointsTotal =17
+                    homePointsTotal = 17
                     visitorPointsTotal = 3
                     homeTeam = GameTeam("NE")
                     visitorTeam = GameTeam("TB")
@@ -545,9 +530,7 @@ class NflApiTest {
         assertEquals(result.name, gameDTO.name)
         assertEquals(result.week, gameDTO.week)
         assertEquals(null, result.result)
-        assertEquals(gameStart.toOffsetDateTime(), result.gameTime)
     }
-
 
     @Test
     fun gameRequestHasStaticHeadersSet() {
@@ -596,11 +579,16 @@ class NflApiTest {
         }
     }
 
+    private val defaultGameStart = OffsetDateTime.of(
+        2020, 4, 25,
+        12, 20, 55, 0,
+        ZoneOffset.of("-0500")
+    )
+
     private fun defaultGame(): GameQueryDTO {
         return baseGameQueryDTO.apply {
             data.viewer.gameDetailsByIds = listOf(
                 Details().apply {
-                    gameTime = formatter.format(GregorianCalendar().time)
                     phase = "In progress"
                     homePointsTotal = 17
                     visitorPointsTotal = 3
@@ -612,14 +600,14 @@ class NflApiTest {
     }
 
     private fun buildGameQueryUrl(gameUuid: String) =
-        "/v3/shield/?query=query%7Bviewer%7BgameDetailsByIds(ids%3A%5B%22$gameUuid%22%2C%5D)%7Bid%2CgameTime%2Cphase%2ChomePointsTotal%2CvisitorPointsTotal%2Cphase%2ChomeTeam%7Babbreviation%7D%2CvisitorTeam%7Babbreviation%7D%7D%7D%7D&variables=null\n"
+        "/v3/shield/?query=query%7Bviewer%7BgameDetailsByIds(ids%3A%5B%22$gameUuid%22%2C%5D)%7Bid%2Cphase%2ChomePointsTotal%2CvisitorPointsTotal%2Cphase%2ChomeTeam%7Babbreviation%7D%2CvisitorTeam%7Babbreviation%7D%7D%7D%7D&variables=null\n"
 
     private fun buildRelativeApiWeekQueryUrl(
         season: Int,
         weekTypeQuery: String,
         weekQuery: Int
     ): String {
-        return "/v3/shield/?query=query%7Bviewer%7Bleague%7Bgames(first%3A100%2Cweek_seasonValue%3A${season}%2Cweek_seasonType%3A${weekTypeQuery}%2Cweek_weekValue%3A${weekQuery}%2C)%7Bedges%7Bnode%7BgameDetailId%20awayTeam%7BnickName%20abbreviation%20%7DhomeTeam%7BnickName%20abbreviation%20%7D%7D%7D%7D%7D%7D%7D&variables=null"
+        return "/v3/shield/?query=query%7Bviewer%7Bleague%7Bgames(first%3A100%2Cweek_seasonValue%3A${season}%2Cweek_seasonType%3A${weekTypeQuery}%2Cweek_weekValue%3A${weekQuery}%2C)%7Bedges%7Bnode%7BgameDetailId%20gameTime%20awayTeam%7BnickName%20abbreviation%20%7DhomeTeam%7BnickName%20abbreviation%20%7D%7D%7D%7D%7D%7D%7D&variables=null"
     }
 
     private fun nflServiceWithFixedTime(url: URL, token: String? = null): NflApi {
@@ -651,7 +639,6 @@ class NflApiTest {
 
     private fun buildByteStreamResponse(expectedToken: String) = buildTokenResponse(expectedToken).byteInputStream()
 
-
     private val baseGameQueryDTO: GameQueryDTO
         get() {
             return GameQueryDTO().apply {
@@ -663,7 +650,7 @@ class NflApiTest {
             }
         }
 
-    private val baseWeekQueryDTO : WeekQueryDTO
+    private val baseWeekQueryDTO: WeekQueryDTO
         get() {
             return WeekQueryDTO().apply {
                 data = WeekData().apply {
@@ -678,10 +665,11 @@ class NflApiTest {
             }
         }
 
-    private fun buildGame(away: String, home: String): Edge {
+    private fun buildGame(away: String, home: String, time: OffsetDateTime): Edge {
         return Edge().apply {
             node = Node().apply {
                 gameDetailId = UUID.fromString("10012016-1006-0091-2590-6d5ccb310545")
+                gameTime = time.toString()
                 awayTeam = Team().apply {
                     nickName = "Cardinals"
                     abbreviation = away

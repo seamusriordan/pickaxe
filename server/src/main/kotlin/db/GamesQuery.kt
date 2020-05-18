@@ -9,9 +9,7 @@ class GamesQuery(private val connection: Connection): DataFetcher<List<GameDTO>>
     override fun get(environment: DataFetchingEnvironment): List<GameDTO> {
         val week = environment.arguments["week"] as String
 
-        val results = getGamesForWeek(week)
-
-        return results
+        return getGamesForWeek(week)
     }
 
     fun getGamesForWeek(week: String): ArrayList<GameDTO> {
