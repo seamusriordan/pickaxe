@@ -1,7 +1,6 @@
 package services
 
 import com.auth0.jwt.JWT
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.net.HttpURLConnection
@@ -13,7 +12,8 @@ import dto.WeekDTO
 import dto.nfl.api.game.*
 import dto.nfl.api.week.*
 import io.mockk.*
-import org.junit.jupiter.api.Assertions.assertArrayEquals
+import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.assertThrows
 import java.io.*
 import java.text.SimpleDateFormat
 import java.time.*
@@ -397,6 +397,22 @@ class NflApiTest {
         val result: GameDTO = NflApi(tokenURL, baseApiUrl).getGame(gameDTO)
 
         assertEquals(gameDTO.gameTime, result.gameTime)
+    }
+
+    @Test
+    fun gameRequestWithoutIdThrowsFileNotFoundException() {
+        val gameDTO = GameDTO("GB@CHI", "Week 4").apply {
+            id = null
+            gameTime = OffsetDateTime.of(
+                2020, 5, 17,
+                0, 3, 55, 2000,
+                ZoneOffset.ofHours(-5)
+            )
+        }
+
+        assertThrows(FileNotFoundException::class.java) {
+            NflApi(tokenURL, baseApiUrl).getGame(gameDTO)
+        }
     }
 
     @Test

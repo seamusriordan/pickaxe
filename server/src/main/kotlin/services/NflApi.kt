@@ -11,6 +11,7 @@ import dto.nfl.api.week.Node
 import dto.nfl.api.week.WeekQueryDTO
 import getEnvOrDefault
 import java.io.DataOutputStream
+import java.io.FileNotFoundException
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
@@ -83,6 +84,10 @@ class NflApi(private val tokenURL: URL, private val apiURL: URL) {
     }
 
     fun getGame(game: GameDTO): GameDTO {
+        if(game.id == null ){
+            throw FileNotFoundException("Game ID not defined")
+        }
+
         val stream = createGameQueryConnection(game.id!!).inputStream
         val responseText = InputStreamReader(stream).readText()
         val response = ObjectMapper().readValue(responseText, GameQueryDTO::class.java)
