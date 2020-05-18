@@ -31,8 +31,10 @@ class ServiceRunner : Runnable {
 
         games.map { baseGame ->
             try {
-                val fetchedGame = nflApi.getGame(baseGame)
-                gameMutator.putInDatabase(fetchedGame)
+                if(baseGame.id != null) {
+                    val fetchedGame = nflApi.getGame(baseGame)
+                    gameMutator.putInDatabase(fetchedGame)
+                }
             } catch (e: FileNotFoundException) {
                 println("Game ${baseGame.week} ${baseGame.name} could not be fetched - ${e.message}")
             }

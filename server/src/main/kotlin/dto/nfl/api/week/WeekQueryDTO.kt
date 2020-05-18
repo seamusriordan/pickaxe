@@ -28,7 +28,7 @@ class Edge {
 }
 
 class Node {
-    var gameDetailId: UUID? = UUID.randomUUID()
+    var gameDetailId: UUID? = null
     var gameTime: String? = null
     var awayTeam = Team()
     var homeTeam = Team()

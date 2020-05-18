@@ -149,6 +149,22 @@ class GameMutatorTest {
         }
     }
 
+
+    @Test
+    fun updateWithoutGameDetailsId() {
+        val game = GameDTO("BAL@CIN", "Week 12").apply {
+            id = null
+            gameTime = OffsetDateTime.now()
+        }
+        val expectedQuery = buildInsertStringNoID(game)
+
+        gameMutator.putInDatabase(game)
+
+        verify {
+            mockStatement.executeUpdate(expectedQuery)
+        }
+    }
+
     private fun buildInsertStringWithFinalResult(
         game: GameDTO
     ): String {
@@ -161,5 +177,12 @@ class GameMutatorTest {
     ): String {
         return "INSERT INTO games(game, week, gametime, final, id) VALUES ('${game.name}', '${game.week}', '${game.gameTime}', false, '${game.id}') " +
                 "ON CONFLICT (game, week) DO UPDATE SET (gametime, final, id) = ('${game.gameTime}', false, '${game.id}')"
+    }
+
+    private fun buildInsertStringNoID(
+        game: GameDTO
+    ): String {
+        return "INSERT INTO games(game, week, gametime, final) VALUES ('${game.name}', '${game.week}', '${game.gameTime}', false) " +
+                "ON CONFLICT (game, week) DO UPDATE SET (gametime, final) = ('${game.gameTime}', false)"
     }
 }

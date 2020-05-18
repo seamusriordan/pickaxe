@@ -7,14 +7,24 @@ class GameMutator(private var connection: Connection) {
     fun putInDatabase(game: GameDTO) {
         val statement = connection.createStatement()
 
-        val insertOrUpdateStatement = if (game.result != null) {
-            buildInsertOrUpdateWithResult(game)
-        } else {
-            buildInsertOrUpdateWithoutResult(game)
+        var insertOrUpdateStatement = buildInsertOrUpdateWithoutID(game)
+
+
+        if (game.id != null) {
+            if (game.result != null) {
+                insertOrUpdateStatement = buildInsertOrUpdateWithResult(game)
+            } else {
+                insertOrUpdateStatement = buildInsertOrUpdateWithoutResult(game)
+            }
         }
 
         statement.executeUpdate(insertOrUpdateStatement)
     }
+
+    private fun buildInsertOrUpdateWithoutID(game: GameDTO) =
+        "INSERT INTO games(game, week, gametime, final) VALUES ('${game.name}', '${game.week}', '${game.gameTime}', false) " +
+                "ON CONFLICT (game, week) DO UPDATE SET (gametime, final) = ('${game.gameTime}', false)"
+
 
     private fun buildInsertOrUpdateWithoutResult(game: GameDTO) =
         "INSERT INTO games(game, week, gametime, final, id) VALUES ('${game.name}', '${game.week}', '${game.gameTime}', false, '${game.id}') " +
