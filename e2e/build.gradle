@@ -3,7 +3,7 @@ import org.apache.tools.ant.taskdefs.condition.Os
 def get_number_pickaxe_containers = { ->
     def out = new ByteArrayOutputStream()
     exec {
-        commandLine "docker", "ps", "-f", 'name="pickaxe$"', "-q"
+        commandLine "docker", "ps", "-f", 'name="pickaxe$"', "-qa"
         standardOutput = out
     }
     return out.toString().trim().split("\n").findAll({ x -> x.length() > 0 }).size()
