@@ -3,7 +3,7 @@ package db
 import dto.GameDTO
 import java.sql.Connection
 
-class UpdateGame(private var connection: Connection) {
+class GameMutator(private var connection: Connection) {
     fun putInDatabase(game: GameDTO) {
         val statement = connection.createStatement()
 

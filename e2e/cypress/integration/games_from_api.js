@@ -5,7 +5,7 @@ describe('games comes from api', () => {
     })
 
     it('gets a set of games from the api', () => {
-        cy.get('.game-cell').should("have.length", 2)
+        cy.get('.game-cell').should("have.length", 14)
     });
 
     it('completed game is set', () => {

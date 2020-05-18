@@ -9,6 +9,7 @@ import dto.nfl.api.game.GameQueryDTO
 import dto.nfl.api.week.Edge
 import dto.nfl.api.week.Node
 import dto.nfl.api.week.WeekQueryDTO
+import getEnvOrDefault
 import java.io.DataOutputStream
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
@@ -119,7 +120,7 @@ class NflApi(private val tokenURL: URL, private val apiURL: URL) {
     }
 
     private fun createWeekQueryConnection(week: WeekDTO): HttpURLConnection {
-        val season = 2019
+        val season = getEnvOrDefault("PICKAXE_SEASON", "2019")
 
         val fullApiUrl = URL(
             apiURL,

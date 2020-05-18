@@ -13,11 +13,11 @@ import java.sql.Statement
 import java.time.OffsetDateTime
 import java.util.*
 
-class UpdateGameTest {
+class GameMutatorTest {
     private lateinit var mockStatement: Statement
     private lateinit var mockConnection: Connection
 
-    private lateinit var updateGame: UpdateGame
+    private lateinit var gameMutator: GameMutator
 
     @BeforeEach
     fun setup() {
@@ -31,12 +31,12 @@ class UpdateGameTest {
         every { DriverManager.getConnection(any(), any()) } returns mockConnection
         every { mockConnection.createStatement() } returns mockStatement
 
-        updateGame = UpdateGame(mockConnection)
+        gameMutator = GameMutator(mockConnection)
     }
 
     @Test
     fun instantiates() {
-        UpdateGame(mockConnection)
+        GameMutator(mockConnection)
     }
 
     @Test
@@ -48,7 +48,7 @@ class UpdateGameTest {
         }
         val expectedQuery = buildInsertStringWithFinalResult(game)
 
-        updateGame.putInDatabase(game)
+        gameMutator.putInDatabase(game)
 
         verify {
             mockStatement.executeUpdate(expectedQuery)
@@ -64,7 +64,7 @@ class UpdateGameTest {
         }
         val expectedQuery = buildInsertStringWithFinalResult(game)
 
-        updateGame.putInDatabase(game)
+        gameMutator.putInDatabase(game)
 
         verify {
             mockStatement.executeUpdate(expectedQuery)
@@ -80,7 +80,7 @@ class UpdateGameTest {
         }
         val expectedQuery = buildInsertStringWithFinalResult(game)
 
-        updateGame.putInDatabase(game)
+        gameMutator.putInDatabase(game)
 
         verify {
             mockStatement.executeUpdate(expectedQuery)
@@ -96,7 +96,7 @@ class UpdateGameTest {
         }
         val expectedQuery = buildInsertStringWithFinalResult(game)
 
-        updateGame.putInDatabase(game)
+        gameMutator.putInDatabase(game)
 
         verify {
             mockStatement.executeUpdate(expectedQuery)
@@ -111,7 +111,7 @@ class UpdateGameTest {
         }
         val expectedQuery = buildInsertStringNoResult(game)
 
-        updateGame.putInDatabase(game)
+        gameMutator.putInDatabase(game)
 
         verify {
             mockStatement.executeUpdate(expectedQuery)
@@ -126,7 +126,7 @@ class UpdateGameTest {
         }
         val expectedQuery = buildInsertStringNoResult(game)
 
-        updateGame.putInDatabase(game)
+        gameMutator.putInDatabase(game)
 
         verify {
             mockStatement.executeUpdate(expectedQuery)
@@ -142,7 +142,7 @@ class UpdateGameTest {
         }
         val expectedQuery = buildInsertStringNoResult(game)
 
-        updateGame.putInDatabase(game)
+        gameMutator.putInDatabase(game)
 
         verify {
             mockStatement.executeUpdate(expectedQuery)

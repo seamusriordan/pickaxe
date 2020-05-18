@@ -1,0 +1,21 @@
+{
+  "id" : "93295e61-c1a9-39b6-997a-efd80af57634",
+  "request" : {
+    "url" : "/v3/shield/?query=query%7Bviewer%7BgameDetailsByIds(ids%3A%5B%2210160000-0579-796f-0cdc-5d40a6a516ad%22%2C%5D)%7Bid%2Cphase%2ChomePointsTotal%2CvisitorPointsTotal%2Cphase%2ChomeTeam%7Babbreviation%7D%2CvisitorTeam%7Babbreviation%7D%7D%7D%7D&variables=null",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-v3-shield-ZOugr.json",
+    "headers" : {
+      "Content-Type" : "application/json;charset=utf-8",
+      "X-Served-By" : "cache-lax8624-LAX",
+      "X-Cache-Hits" : "0",
+      "X-Timer" : "S1589801448.545532,VS0,VE44",
+      "Cache-Control" : "max-age=10, s-maxage=10",
+      "Date" : "Mon, 18 May 2020 11:30:47 GMT",
+      "X-NFL-APP" : "jarvis"
+    }
+  },
+  "uuid" : "93295e61-c1a9-39b6-997a-efd80af57634"
+}
