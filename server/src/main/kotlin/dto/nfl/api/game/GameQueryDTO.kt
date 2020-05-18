@@ -20,7 +20,6 @@ class Details {
     var phase: String = ""
     var homePointsTotal: Int = 0
     var visitorPointsTotal: Int = 0
-    var gameTime: String? = null
     var visitorTeam = GameTeam()
     var homeTeam = GameTeam()
 }

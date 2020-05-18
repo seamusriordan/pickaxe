@@ -24,7 +24,7 @@ class ServiceRunner: Runnable {
         }
         val games = nflApi.getWeek(sampleWeek)
         games.map {
-            println(it.name)
+            println(it.name + " " + it.gameTime)
         }
 
 
