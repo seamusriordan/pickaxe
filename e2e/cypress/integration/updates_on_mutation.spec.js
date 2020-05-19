@@ -3,7 +3,9 @@ describe('Mutation response update', () => {
     const graphqlRevertBody = "{\"operationName\":\"Mutation\",\"variables\":{\"name\":\"Seamus\",\"week\":\"Week 0\",\"game\":\"SEA@PHI\",\"pick\":\"SEA\"},\"query\":\"mutation Mutation($name: String, $week: String, $game: String, $pick: String) {\\n  updatePick(name: $name, userPick: {week: $week, game: $game, pick: $pick})\\n}\\n\"}";
 
     beforeEach(() => {
-        cy.visit('localhost:8080/pickaxe').wait(500);
+        cy.visit('localhost:8080/pickaxe')
+            .get('#changeWeek-back').click().click()
+            .wait(500);
     });
 
     it('mutation query causes update', () => {
@@ -13,7 +15,9 @@ describe('Mutation response update', () => {
         cy.get('#Seamus-SEA\\@PHI')
             .contains("DERP", {timeout: 10000})
             .request('POST', 'localhost:8080/pickaxe/graphql', graphqlRevertBody)
-        cy.visit('localhost:8080/pickaxe').get('#Seamus-SEA\\@PHI')
+        cy.visit('localhost:8080/pickaxe')
+            .get('#changeWeek-back').click().click()
+            .get('#Seamus-SEA\\@PHI')
             .contains("SEA")
     });
 
@@ -31,7 +35,9 @@ describe('Mutation response update', () => {
             .type("{backspace}{backspace}{backspace}{backspace}{backspace}PHI")
             .invoke('blur')
         cy.request('POST', 'localhost:8080/pickaxe/graphql', graphqlRevertBody)
-        cy.visit('localhost:8080/pickaxe').get('#Seamus-SEA\\@PHI')
+        cy.visit('localhost:8080/pickaxe')
+            .get('#changeWeek-back').click().click()
+            .get('#Seamus-SEA\\@PHI')
             .contains("SEA")
     });
 });
