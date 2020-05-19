@@ -16,8 +16,7 @@ const val schemaPath = "src/main/resources/schema.graphql"
 
 fun main(args: Array<String>) {
 
-    val serviceThread = Thread(ServiceRunner())
-    serviceThread.start()
+    ServiceRunner().start()
 
     val typeDefinitionRegistry = pickaxeTypeDefinitionRegistry(schemaPath)
     val wiring = pickaxeRuntimeWiring()
