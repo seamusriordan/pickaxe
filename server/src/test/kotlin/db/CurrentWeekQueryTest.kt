@@ -43,4 +43,70 @@ class CurrentWeekQueryTest {
 
         Assertions.assertEquals(expectedWeek.name, results.name)
     }
+
+
+    @Test
+    fun getReturnsCurrentWeek44WhenYearOld() {
+        val expectedWeek = WeekDTO("44")
+        every {mockWeeksQuery.get()} returns listOf(WeekDTO("Week 5"), expectedWeek)
+        every { mockGamesQuery.getGamesForWeek("Week 5")} returns listOf(
+            GameDTO("SEA@PHI", expectedWeek.name).apply {
+                gameTime = OffsetDateTime.now().minusYears(1).minusDays(1)
+            }
+        )
+        every { mockGamesQuery.getGamesForWeek(expectedWeek.name)} returns listOf(
+            GameDTO("GB@CHI", expectedWeek.name).apply {
+                gameTime = OffsetDateTime.now().minusYears(1)
+            }
+        )
+
+        val results = CurrentWeekQuery(mockWeeksQuery, mockGamesQuery).get(env)
+
+        Assertions.assertEquals(expectedWeek.name, results.name)
+    }
+
+    @Test
+    fun week1WhenGameTimeIs18HoursAfterWeek0() {
+        val unexpectedWeek = WeekDTO("0")
+        val expectedWeek = WeekDTO("1")
+        every {mockWeeksQuery.get()} returns listOf(unexpectedWeek, expectedWeek)
+        every { mockGamesQuery.getGamesForWeek(unexpectedWeek.name)} returns listOf(
+            GameDTO("LAR@DEN", expectedWeek.name).apply {
+                gameTime = OffsetDateTime.now().minusHours(18)
+            }
+        )
+        every { mockGamesQuery.getGamesForWeek(expectedWeek.name)} returns listOf(
+            GameDTO("GB@CHI", expectedWeek.name).apply {
+                gameTime = OffsetDateTime.now().plusDays(1)
+            }
+        )
+
+        val results = CurrentWeekQuery(mockWeeksQuery, mockGamesQuery).get(env)
+
+        Assertions.assertEquals(expectedWeek.name, results.name)
+    }
+
+    @Test
+    fun week0WhenGameTimeIsBeforeSecondWeek0Game() {
+        val expectedWeek = WeekDTO("0")
+        val unexpectedWeek = WeekDTO("1")
+        every {mockWeeksQuery.get()} returns listOf(expectedWeek, unexpectedWeek)
+        every { mockGamesQuery.getGamesForWeek(expectedWeek.name)} returns listOf(
+            GameDTO("LAR@DEN", expectedWeek.name).apply {
+                gameTime = OffsetDateTime.now().minusHours(18)
+            },
+            GameDTO("CAR@WAs", expectedWeek.name).apply {
+                gameTime = OffsetDateTime.now().plusHours(18)
+            }
+        )
+        every { mockGamesQuery.getGamesForWeek(unexpectedWeek.name)} returns listOf(
+            GameDTO("GB@CHI", unexpectedWeek.name).apply {
+                gameTime = OffsetDateTime.now().plusDays(1)
+            }
+        )
+
+        val results = CurrentWeekQuery(mockWeeksQuery, mockGamesQuery).get(env)
+
+        Assertions.assertEquals(expectedWeek.name, results.name)
+    }
 }
