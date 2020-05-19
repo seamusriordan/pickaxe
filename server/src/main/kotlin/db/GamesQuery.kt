@@ -15,7 +15,7 @@ class GamesQuery(private val connection: Connection): DataFetcher<List<GameDTO>>
         return getGamesForWeek(week)
     }
 
-    fun getGamesForWeek(week: String): ArrayList<GameDTO> {
+    fun getGamesForWeek(week: String): List<GameDTO> {
         val results = ArrayList<GameDTO>(0)
         val statement = connection.createStatement()
         val resultSet = statement.executeQuery("SELECT game, week, id, gametime, result, spread FROM games WHERE week = '$week'")

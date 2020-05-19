@@ -1,10 +1,12 @@
 import db.GameMutator
+import db.GamesQuery
+import db.WeeksQuery
 import dto.GameDTO
 import dto.WeekDTO
 import io.mockk.every
 import io.mockk.mockkClass
 import io.mockk.verify
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import services.NflApi
 import services.ServiceRunner
@@ -80,7 +82,7 @@ class ServiceRunnerTest {
 
     @Test
     fun loadInfoForWeekAndFileNotFoundDoesNothing() {
-        every { mockNflApi.getWeek(any()) }  throws FileNotFoundException("Mock failure")
+        every { mockNflApi.getWeek(any()) } throws FileNotFoundException("Mock failure")
         every { mockMutator.putInDatabase(any()) } returns Unit
 
         ServiceRunner.reloadGamesForWeek(WeekDTO("Week -1"), mockNflApi, mockMutator)
@@ -187,6 +189,117 @@ class ServiceRunnerTest {
 
         verify(exactly = 1) { mockNflApi.getGame(any()) }
         verify(exactly = 0) { mockMutator.putInDatabase(any()) }
+    }
+
+    @Test
+    fun hasGamesMissingIdReturnsFalseWhenOnlyGameIsFinal() {
+        val mockGamesQuery = mockkClass(GamesQuery::class)
+        val mockWeeksQuery = mockkClass(WeeksQuery::class)
+        every { mockWeeksQuery.get() } returns listOf(WeekDTO("Week 1"))
+        every { mockGamesQuery.getGamesForWeek("Week 1") } returns listOf(
+            GameDTO("GB@CHI", "Week 1").apply {
+                result = "CHI"
+            }
+        )
+
+        val result = ServiceRunner.hasGamesMissingId(mockWeeksQuery, mockGamesQuery)
+
+        assertFalse(result)
+    }
+
+    @Test
+    fun hasGamesMissingIdReturnsTrueWhenFirstGameInSecondWeekHasNoId() {
+        val mockGamesQuery = mockkClass(GamesQuery::class)
+        val mockWeeksQuery = mockkClass(WeeksQuery::class)
+        every { mockWeeksQuery.get() } returns listOf(WeekDTO("Week 1"), WeekDTO("Week 2"))
+        every { mockGamesQuery.getGamesForWeek("Week 1") } returns listOf(
+            GameDTO("GB@CHI", "Week 1").apply {
+                result = "CHI"
+                id = UUID.randomUUID()
+            }
+        )
+        every { mockGamesQuery.getGamesForWeek("Week 2") } returns listOf(
+            GameDTO("DET@CHI", "Week 2").apply {
+                gameTime = OffsetDateTime.now().minusDays(1)
+            }
+        )
+
+        val result = ServiceRunner.hasGamesMissingId(mockWeeksQuery, mockGamesQuery)
+
+        assertTrue(result)
+    }
+
+    @Test
+    fun hasGamesMissingIdReturnsTrueWhenMissingIdAndTenMinutesBeforeGame() {
+        val mockGamesQuery = mockkClass(GamesQuery::class)
+        val mockWeeksQuery = mockkClass(WeeksQuery::class)
+        every { mockWeeksQuery.get() } returns listOf(WeekDTO("Week 1"))
+        every { mockGamesQuery.getGamesForWeek("Week 1") } returns listOf(
+            GameDTO("GB@CHI", "Week 1").apply {
+                gameTime = OffsetDateTime.now().plusMinutes(10)
+            }
+        )
+
+        val result = ServiceRunner.hasGamesMissingId(mockWeeksQuery, mockGamesQuery)
+
+        assertTrue(result)
+    }
+
+    @Test
+    fun hasGamesMissingIdResultAndGametimeReturnsFalse() {
+        val mockGamesQuery = mockkClass(GamesQuery::class)
+        val mockWeeksQuery = mockkClass(WeeksQuery::class)
+        every { mockWeeksQuery.get() } returns listOf(WeekDTO("Week 1"))
+        every { mockGamesQuery.getGamesForWeek("Week 1") } returns listOf(
+            GameDTO("GB@CHI", "Week 1")
+        )
+
+        val result = ServiceRunner.hasGamesMissingId(mockWeeksQuery, mockGamesQuery)
+
+        assertFalse(result)
+    }
+
+    @Test
+    fun hasGamesMissingIdReturnsFalseWhenMissingIdAndFifteenMinutesAfterGame() {
+        val mockGamesQuery = mockkClass(GamesQuery::class)
+        val mockWeeksQuery = mockkClass(WeeksQuery::class)
+        every { mockWeeksQuery.get() } returns listOf(WeekDTO("Week 1"))
+        every { mockGamesQuery.getGamesForWeek("Week 1") } returns listOf(
+            GameDTO("GB@CHI", "Week 1").apply {
+                gameTime = OffsetDateTime.now().plusMinutes(105)
+            }
+        )
+
+        val result = ServiceRunner.hasGamesMissingId(mockWeeksQuery, mockGamesQuery)
+
+        assertFalse(result)
+    }
+
+    @Test
+    fun hasGamesMissingIdReturnsTrueWhenSecondGameInSecondWeekHasNoId() {
+        val mockGamesQuery = mockkClass(GamesQuery::class)
+        val mockWeeksQuery = mockkClass(WeeksQuery::class)
+        every { mockWeeksQuery.get() } returns listOf(WeekDTO("Week 1"), WeekDTO("Week 2"))
+        every { mockGamesQuery.getGamesForWeek("Week 1") } returns listOf(
+            GameDTO("GB@CHI", "Week 1").apply {
+                result = "CHI"
+                gameTime = OffsetDateTime.now().minusDays(1)
+                id = UUID.randomUUID()
+            }
+        )
+        every { mockGamesQuery.getGamesForWeek("Week 2") } returns listOf(
+            GameDTO("DET@CHI", "Week 2").apply {
+                gameTime = OffsetDateTime.now().minusDays(1)
+                id = UUID.randomUUID()
+            },
+            GameDTO("NE@NYJ", "Week 2").apply {
+                gameTime = OffsetDateTime.now().minusDays(1)
+            }
+        )
+
+        val result = ServiceRunner.hasGamesMissingId(mockWeeksQuery, mockGamesQuery)
+
+        assertTrue(result)
     }
 
 }

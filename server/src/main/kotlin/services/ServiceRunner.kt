@@ -42,7 +42,7 @@ class ServiceRunner {
     }
 
     private fun updateGameDetailsForFinalGames(nflApi: NflApi, dbConnection: Connection) {
-        WeeksQuery(dbConnection).get().map { week ->
+        WeeksQuery(dbConnection).get().forEach { week ->
             updateDetailsForFinalGamesInWeek(week, dbConnection, nflApi)
         }
     }
@@ -51,14 +51,14 @@ class ServiceRunner {
         week: WeekDTO,
         dbConnection: Connection,
         nflApi: NflApi
-    ): List<Unit> {
-        return GamesQuery(dbConnection).getGamesForWeek(week.name).map { baseGame ->
+    ) {
+        return GamesQuery(dbConnection).getGamesForWeek(week.name).forEach { baseGame ->
             updateDetailsForFinalGame(baseGame, nflApi, GameMutator(dbConnection))
         }
     }
 
     private fun reloadAllWeeks(nflApi: NflApi, dbConnection: Connection) {
-        WeeksQuery(dbConnection).get().map { week ->
+        WeeksQuery(dbConnection).get().forEach { week ->
             reloadGamesForWeek(week, nflApi, GameMutator(dbConnection))
         }
     }
@@ -75,7 +75,7 @@ class ServiceRunner {
             } catch (e: FileNotFoundException) {
                 println("Week ${week.name} could not be fetched - ${e.message}")
             }
-            games.map { baseGame ->
+            games.forEach { baseGame ->
                 gameMutator.putInDatabase(baseGame)
             }
         }
@@ -94,6 +94,19 @@ class ServiceRunner {
             ) {
                 updateGameDetails(nflApi, baseGame, gameMutator)
             }
+        }
+
+
+        fun hasGamesMissingId(weeksQuery: WeeksQuery, gamesQuery: GamesQuery): Boolean {
+            val weeks = weeksQuery.get()
+            weeks.forEach { week ->
+                gamesQuery.getGamesForWeek(week.name).forEach {
+                    if (it.id == null && it.result == null && it.gameTime != null && it.gameTime!!.minusMinutes(15).isBefore(OffsetDateTime.now()))
+                        return true
+                }
+            }
+
+            return false
         }
 
         private fun gameResultNotRecorded(baseGame: GameDTO) = baseGame.result == null
