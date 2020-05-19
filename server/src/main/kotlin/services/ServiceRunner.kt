@@ -36,6 +36,9 @@ class ServiceRunner {
         GlobalScope.launch {
             while (true) {
                 delay(fiveMinutes)
+                if(hasImmanentGamesMissingId(WeeksQuery(dbConnection), GamesQuery(dbConnection))){
+                    reloadAllWeeks(nflApi, dbConnection)
+                }
                 updateGameDetailsForFinalGames(nflApi, dbConnection)
             }
         }
@@ -97,16 +100,25 @@ class ServiceRunner {
         }
 
 
-        fun hasGamesMissingId(weeksQuery: WeeksQuery, gamesQuery: GamesQuery): Boolean {
+        fun hasImmanentGamesMissingId(weeksQuery: WeeksQuery, gamesQuery: GamesQuery): Boolean {
             val weeks = weeksQuery.get()
             weeks.forEach { week ->
-                gamesQuery.getGamesForWeek(week.name).forEach {
-                    if (it.id == null && it.result == null && it.gameTime != null && it.gameTime!!.minusMinutes(15).isBefore(OffsetDateTime.now()))
-                        return true
+                if (weekHasImmanentGamesMissingId(week.name, gamesQuery)) {
+                    return true
                 }
             }
-
             return false
+        }
+
+        private fun weekHasImmanentGamesMissingId(week: String, gamesQuery: GamesQuery): Boolean {
+            return gamesQuery.getGamesForWeek(week).any {
+                it.id == null && it.result == null &&
+                        hasGameStartInXMinutes(it.gameTime, 15)
+            }
+        }
+
+        private fun hasGameStartInXMinutes(time: OffsetDateTime?, minutes: Long): Boolean {
+            return time != null && time.minusMinutes(minutes).isBefore(OffsetDateTime.now())
         }
 
         private fun gameResultNotRecorded(baseGame: GameDTO) = baseGame.result == null

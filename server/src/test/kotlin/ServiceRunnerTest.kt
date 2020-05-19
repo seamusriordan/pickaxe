@@ -202,7 +202,7 @@ class ServiceRunnerTest {
             }
         )
 
-        val result = ServiceRunner.hasGamesMissingId(mockWeeksQuery, mockGamesQuery)
+        val result = ServiceRunner.hasImmanentGamesMissingId(mockWeeksQuery, mockGamesQuery)
 
         assertFalse(result)
     }
@@ -224,7 +224,7 @@ class ServiceRunnerTest {
             }
         )
 
-        val result = ServiceRunner.hasGamesMissingId(mockWeeksQuery, mockGamesQuery)
+        val result = ServiceRunner.hasImmanentGamesMissingId(mockWeeksQuery, mockGamesQuery)
 
         assertTrue(result)
     }
@@ -240,7 +240,7 @@ class ServiceRunnerTest {
             }
         )
 
-        val result = ServiceRunner.hasGamesMissingId(mockWeeksQuery, mockGamesQuery)
+        val result = ServiceRunner.hasImmanentGamesMissingId(mockWeeksQuery, mockGamesQuery)
 
         assertTrue(result)
     }
@@ -254,7 +254,7 @@ class ServiceRunnerTest {
             GameDTO("GB@CHI", "Week 1")
         )
 
-        val result = ServiceRunner.hasGamesMissingId(mockWeeksQuery, mockGamesQuery)
+        val result = ServiceRunner.hasImmanentGamesMissingId(mockWeeksQuery, mockGamesQuery)
 
         assertFalse(result)
     }
@@ -270,7 +270,7 @@ class ServiceRunnerTest {
             }
         )
 
-        val result = ServiceRunner.hasGamesMissingId(mockWeeksQuery, mockGamesQuery)
+        val result = ServiceRunner.hasImmanentGamesMissingId(mockWeeksQuery, mockGamesQuery)
 
         assertFalse(result)
     }
@@ -297,7 +297,7 @@ class ServiceRunnerTest {
             }
         )
 
-        val result = ServiceRunner.hasGamesMissingId(mockWeeksQuery, mockGamesQuery)
+        val result = ServiceRunner.hasImmanentGamesMissingId(mockWeeksQuery, mockGamesQuery)
 
         assertTrue(result)
     }
