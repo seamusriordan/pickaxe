@@ -92,13 +92,12 @@ class ServiceRunner {
                 return
             }
 
-            if (gameStartedMoreThanHoursAgo(baseGame.gameTime, 2) &&
+            if (gameStartedMoreThanXHoursAgo(baseGame.gameTime, 2) &&
                 gameResultNotRecorded(baseGame)
             ) {
                 updateGameDetails(nflApi, baseGame, gameMutator)
             }
         }
-
 
         fun hasImmanentGamesMissingId(weeksQuery: WeeksQuery, gamesQuery: GamesQuery): Boolean {
             val weeks = weeksQuery.get()
@@ -108,17 +107,6 @@ class ServiceRunner {
                 }
             }
             return false
-        }
-
-        private fun weekHasImmanentGamesMissingId(week: String, gamesQuery: GamesQuery): Boolean {
-            return gamesQuery.getGamesForWeek(week).any {
-                it.id == null && it.result == null &&
-                        hasGameStartInXMinutes(it.gameTime, 15)
-            }
-        }
-
-        private fun hasGameStartInXMinutes(time: OffsetDateTime?, minutes: Long): Boolean {
-            return time != null && time.minusMinutes(minutes).isBefore(OffsetDateTime.now())
         }
 
         private fun gameResultNotRecorded(baseGame: GameDTO) = baseGame.result == null
@@ -132,9 +120,20 @@ class ServiceRunner {
             }
         }
 
-        private fun gameStartedMoreThanHoursAgo(gameTime: OffsetDateTime?, hoursAgo: Long): Boolean {
+        private fun weekHasImmanentGamesMissingId(week: String, gamesQuery: GamesQuery): Boolean {
+            return gamesQuery.getGamesForWeek(week).any {
+                it.id == null && it.result == null &&
+                        hasGameStartInXMinutes(it.gameTime, 15)
+            }
+        }
+
+        private fun gameStartedMoreThanXHoursAgo(gameTime: OffsetDateTime?, hoursAgo: Long): Boolean {
             return gameTime != null &&
                     OffsetDateTime.now().isAfter(gameTime.plusHours(hoursAgo))
+        }
+
+        private fun hasGameStartInXMinutes(time: OffsetDateTime?, minutes: Long): Boolean {
+            return time != null && time.minusMinutes(minutes).isBefore(OffsetDateTime.now())
         }
     }
 

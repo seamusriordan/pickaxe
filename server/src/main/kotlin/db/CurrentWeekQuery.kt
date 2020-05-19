@@ -3,15 +3,9 @@ package db
 import dto.WeekDTO
 import graphql.schema.DataFetcher
 import graphql.schema.DataFetchingEnvironment
-import java.sql.Connection
 
-class CurrentWeekQuery(private val connection: Connection) : DataFetcher<WeekDTO> {
+class CurrentWeekQuery(private val weeksQuery: WeeksQuery, private val gamesQuery: GamesQuery) : DataFetcher<WeekDTO> {
     override fun get(environment: DataFetchingEnvironment?): WeekDTO {
-        val statement = connection.createStatement()
-
-        val resultSet = statement.executeQuery("SELECT name FROM weeks")
-
-        resultSet.next()
-        return WeekDTO(resultSet.getString("name"))
+        return weeksQuery.get().first()
     }
 }
