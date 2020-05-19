@@ -16,7 +16,11 @@ class CurrentWeekQuery(private val weeksQuery: WeeksQuery, private val gamesQuer
                 .any { game -> isLessThanXHoursBeforeNow(game.gameTime, 18) }
         }.toMutableList()
 
-        weeksWithGamesLessThanSeveralHoursAgo.add(sortedWeeks.last())
+        try {
+            weeksWithGamesLessThanSeveralHoursAgo.add(sortedWeeks.last())
+        } catch(e: NoSuchElementException) {
+            weeksWithGamesLessThanSeveralHoursAgo.add(weeksQuery.get().first())
+        }
         return weeksWithGamesLessThanSeveralHoursAgo.first()
     }
 

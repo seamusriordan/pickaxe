@@ -39,6 +39,19 @@ class CurrentWeekQueryTest {
     }
 
     @Test
+    fun getReturnsCurrentWeek0WhenOnlyWeekIs0AndNoGameTimes() {
+        val expectedWeek = WeekDTO("0")
+        every {mockWeeksQuery.get()} returns listOf(expectedWeek)
+        every { mockGamesQuery.getGamesForWeek(expectedWeek.name)} returns listOf(
+            GameDTO("GB@CHI", expectedWeek.name)
+        )
+
+        val results = CurrentWeekQuery(mockWeeksQuery, mockGamesQuery).get(env)
+
+        Assertions.assertEquals(expectedWeek.name, results.name)
+    }
+
+    @Test
     fun getReturnsCurrentWeek1WhenWeek0GameTimeIsNull() {
         val unexpectedWeek = WeekDTO("0")
         val expectedWeek = WeekDTO("1")
