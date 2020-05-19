@@ -6,15 +6,9 @@ import graphql.schema.DataFetchingEnvironment
 import graphql.schema.DataFetchingEnvironmentImpl
 import io.mockk.every
 import io.mockk.mockkClass
-import io.mockk.mockkStatic
-import mockNextReturnTimes
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.sql.Connection
-import java.sql.DriverManager
-import java.sql.ResultSet
-import java.sql.Statement
 import java.time.OffsetDateTime
 
 class CurrentWeekQueryTest {
@@ -44,11 +38,50 @@ class CurrentWeekQueryTest {
         Assertions.assertEquals(expectedWeek.name, results.name)
     }
 
+    @Test
+    fun getReturnsCurrentWeek1WhenWeek0GameTimeIsNull() {
+        val unexpectedWeek = WeekDTO("0")
+        val expectedWeek = WeekDTO("1")
+        every {mockWeeksQuery.get()} returns listOf(unexpectedWeek, expectedWeek)
+        every { mockGamesQuery.getGamesForWeek(unexpectedWeek.name)} returns listOf(
+            GameDTO("GB@CHI", unexpectedWeek.name)
+        )
+        every { mockGamesQuery.getGamesForWeek(expectedWeek.name)} returns listOf(
+            GameDTO("ARI@MIN", expectedWeek.name).apply {
+                gameTime = OffsetDateTime.now()
+            }
+        )
+
+        val results = CurrentWeekQuery(mockWeeksQuery, mockGamesQuery).get(env)
+
+        Assertions.assertEquals(expectedWeek.name, results.name)
+    }
+
 
     @Test
     fun getReturnsCurrentWeek44WhenYearOld() {
         val expectedWeek = WeekDTO("44")
         every {mockWeeksQuery.get()} returns listOf(WeekDTO("Week 5"), expectedWeek)
+        every { mockGamesQuery.getGamesForWeek("Week 5")} returns listOf(
+            GameDTO("SEA@PHI", expectedWeek.name).apply {
+                gameTime = OffsetDateTime.now().minusYears(1).minusDays(1)
+            }
+        )
+        every { mockGamesQuery.getGamesForWeek(expectedWeek.name)} returns listOf(
+            GameDTO("GB@CHI", expectedWeek.name).apply {
+                gameTime = OffsetDateTime.now().minusYears(1)
+            }
+        )
+
+        val results = CurrentWeekQuery(mockWeeksQuery, mockGamesQuery).get(env)
+
+        Assertions.assertEquals(expectedWeek.name, results.name)
+    }
+
+    @Test
+    fun getReturnsCurrentWeek44WhenYearOldAndOutOfOrder() {
+        val expectedWeek = WeekDTO("44")
+        every {mockWeeksQuery.get()} returns listOf(expectedWeek, WeekDTO("Week 5"))
         every { mockGamesQuery.getGamesForWeek("Week 5")} returns listOf(
             GameDTO("SEA@PHI", expectedWeek.name).apply {
                 gameTime = OffsetDateTime.now().minusYears(1).minusDays(1)
