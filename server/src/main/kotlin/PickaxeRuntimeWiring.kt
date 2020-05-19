@@ -8,11 +8,11 @@ fun wiringMap(): HashMap<String, HashMap<String, DataFetcher<*>>> {
     val mutationFields: HashMap<String, DataFetcher<*>> = HashMap()
 
     val connection = PickaxeDB().getDBConnection()
-    queryFields["currentWeek"] = CurrentWeekQuery(connection)
     queryFields["weeks"] = WeeksQuery(connection)
     queryFields["users"] = UserQuery(connection)
     queryFields["games"] = GamesQuery(connection)
     queryFields["userTotals"] = UserWeekTotalQuery(connection)
+    queryFields["currentWeek"] = CurrentWeekQuery(WeeksQuery(connection), GamesQuery(connection))
 
     queryFields["userPicks"] = UserPickQuery(connection)
 

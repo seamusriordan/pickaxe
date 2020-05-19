@@ -25,7 +25,7 @@ class UserWeekTotalQuery(val connection: Connection) : DataFetcher<List<UserWeek
     private fun getCorrectPicksForUser(
         user: UserDTO,
         userPicks: UserPicksDTO?,
-        games: ArrayList<GameDTO>
+        games: List<GameDTO>
     ): UserWeekTotalDTO {
         val correctPicks = UserWeekTotalDTO(user)
         userPicks?.picks?.forEach { userPick ->
@@ -38,7 +38,7 @@ class UserWeekTotalQuery(val connection: Connection) : DataFetcher<List<UserWeek
 
     private fun addGameForMatchingPick(
         correctPicks: UserWeekTotalDTO,
-        games: ArrayList<GameDTO>,
+        games: List<GameDTO>,
         userPick: PickDTO
     ) {
         val game = games.find(gameForPick(userPick))

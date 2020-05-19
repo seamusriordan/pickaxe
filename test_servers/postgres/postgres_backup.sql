@@ -147,7 +147,12 @@ NE@TB	Week 1	\N	f	NE	-14	a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11
 --
 
 COPY public.userpicks (name, week, game, pick) FROM stdin;
+Seamus	Week 0	GB@CHI	CHI
+Sereres	Week 0	SEA@PHI	PHI
+Sereres	Week 1	NE@TB	ne
 Seamus	Week 1	NE@TB	
+Seamus	Week 0	SEA@PHI	SEA
+RNG	Week 1	NE@TB	
 Sereres	Week 0	GB@CHI	CHI
 RNG	Week 0	GB@CHI	CHI
 Vegas	Week 0	GB@CHI	CHI
@@ -157,11 +162,7 @@ Vegas	Week 0	BUF@NE	BUF
 Sereres	Week 0	BUF@NE	BUF
 Seamus	Week 0	BUF@NE	BUF
 RNG	Week 0	BUF@NE	BUF
-Seamus	Week 0	GB@CHI	CHI
 Vegas	Week 1	NE@TB	TB
-Sereres	Week 0	SEA@PHI	PHI
-Sereres	Week 1	NE@TB	ne
-Seamus	Week 0	SEA@PHI	SEA
 \.
 
 
@@ -225,13 +226,6 @@ ALTER TABLE ONLY public.users
 
 ALTER TABLE ONLY public.weeks
     ADD CONSTRAINT weeks_pk PRIMARY KEY (name);
-
-
---
--- Name: games_game_uindex; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE UNIQUE INDEX games_game_uindex ON public.games USING btree (game);
 
 
 --

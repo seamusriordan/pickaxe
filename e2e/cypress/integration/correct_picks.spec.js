@@ -1,6 +1,6 @@
 describe('correct picks', () => {
     beforeEach(() => {
-        cy.visit('localhost:8080/pickaxe');
+        cy.visit('localhost:8080/pickaxe').get('#changeWeek-back').click().click()
     })
     it('two correct picks are counted correctly', () => {
         cy.get("#total-0").should('contain', '2');
