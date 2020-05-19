@@ -6,6 +6,9 @@ import io.mockk.every
 import io.mockk.mockkClass
 import java.sql.ResultSet
 import java.sql.Statement
+import java.time.OffsetDateTime
+import java.util.*
+import kotlin.collections.ArrayList
 
 class SQLState(private val week: String = "0") {
     var users: ArrayList<UserDTO> = arrayListOf()
@@ -50,7 +53,7 @@ fun mockStatementToReturnUserResultSet(statement: Statement, results: ResultSet)
 }
 
 fun mockStatementToReturnGameResultSet(statement: Statement, results: ResultSet, week: String) {
-    val queryString = "SELECT game, week, result, spread FROM games WHERE week = '$week'"
+    val queryString = "SELECT game, week, id, gametime, result, spread FROM games WHERE week = '$week'"
     every { statement.executeQuery(queryString) } returns results
 }
 
@@ -85,6 +88,14 @@ fun setupSQLQueryForGamesWithNonNullFields(games: List<GameDTO>): ResultSet {
     every {
         mockResultSet.getString("week")
     } returnsMany games.map { game -> game.week }
+
+    every {
+        mockResultSet.getObject("id", UUID::class.java)
+    } returnsMany games.map { game -> game.id }
+
+    every {
+        mockResultSet.getObject("gametime", OffsetDateTime::class.java)
+    } returnsMany games.map { game -> game.gameTime }
 
     every {
         mockResultSet.getDouble("spread")

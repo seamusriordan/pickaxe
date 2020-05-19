@@ -35,8 +35,8 @@ class ServiceRunner {
 
         GlobalScope.launch {
             while (true) {
-                updateGameDetailsForFinalGames(nflApi, dbConnection)
                 delay(fiveMinutes)
+                updateGameDetailsForFinalGames(nflApi, dbConnection)
             }
         }
     }
