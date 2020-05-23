@@ -21,8 +21,13 @@ pipeline {
                     sh 'yarn install'
                     sh 'yarn run cypress run'
                 }
-
             }
+        }
+    }
+
+    post {
+        always {
+            sh 'docker-compose down'
         }
     }
 }
