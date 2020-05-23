@@ -24,4 +24,4 @@ services:
 #      --record-mappings
 
 volumes:
-  postgres-dev-data:
+  postgres-pipeline-data:
