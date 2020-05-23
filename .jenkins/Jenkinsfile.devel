@@ -16,7 +16,7 @@ pipeline {
                 }
                 sh 'docker build . -f e2e/Dockerfile -t pickaxe:latest'
                 sh 'docker run -d -p 8080:8080 --net=pickaxe_default --name pickaxe_1 pickaxe:latest'
-                sleep 5
+                sleep 5000
                 dir('e2e') {
                     sh 'yarn install'
                     sh 'yarn run cypress run'
