@@ -43,6 +43,7 @@ pipeline {
     post {
         always {
             sh 'docker-compose down'
+            sh 'docker volume rm pickaxe_devel_devel_postgres-dev-data'
         }
     }
 }
