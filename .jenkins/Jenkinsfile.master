@@ -1,0 +1,48 @@
+pipeline {
+    agent any
+
+    stages {
+        parallel {
+            stage('Build and Test') {
+                steps {
+                    dir('client') {
+                        sh '../gradlew build'
+                        sh '../gradlew test'
+                    }
+                    sh 'docker-compose up --build -d'
+                    sleep(5)
+                    dir('server') {
+                        sh '../gradlew build'
+                        sh '../gradlew copy_dependencies'
+                    }
+                    sh 'docker build . -f e2e/Dockerfile -t pickaxe:latest'
+                    sh 'docker run -d -p 8080:8080 --net=pickaxe_default --name pickaxe_1 pickaxe:latest'
+                    sleep(5)
+                    dir('e2e') {
+                        sh 'yarn install'
+                        sh 'yarn run cypress run'
+                    }
+                }
+            }
+            stage('Build Image') {
+                dir('client') {
+                    sh '../gradlew build'
+                }
+                sh 'docker build . -f e2e/Dockerfile -t pickaxe:latest'
+                sh 'docker run -d -p 8080:8080 pickaxe:devel'
+                sh 'docker save pickaxe > pickaxe_devel.tar'
+            }
+        }
+        stage('Deploy') {
+            sh 'eval `ssh-agent -s`'
+            sh 'ssh-add - <<< "${{ secrets.DEVEL_HOST_PRIVATE_KEY }}"'
+            sh 'scp -o StrictHostKeyChecking=no pickaxe_devel.tar ${{ secrets.DEVEL_USER }}@${{ secrets.DEVEL_HOST }}:~'
+            sh 'ssh -o StrictHostKeyChecking=no ${{ secrets.DEVEL_USER }}@${{ secrets.DEVEL_HOST }} ./deploy.sh'
+        }
+    }
+    post {
+        always {
+            sh 'docker-compose down'
+        }
+    }
+}
