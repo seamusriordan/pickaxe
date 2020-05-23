@@ -1,0 +1,12 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Build and Test') {
+            steps {
+                cd client
+                gradle build
+            }
+        }
+    }
+}
