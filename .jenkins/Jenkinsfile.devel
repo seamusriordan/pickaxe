@@ -4,9 +4,9 @@ pipeline {
     stages {
         stage('Build and Test') {
             steps {
-                cd client
-                sh 'gradle build'
-                cd ..
+                dir("client") {
+                    sh 'gradle build'
+                }
             }
         }
     }
