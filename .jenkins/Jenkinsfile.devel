@@ -4,8 +4,9 @@ pipeline {
     stages {
         stage('Build and Test') {
             steps {
-                cd client
+                sh 'pushd client'
                 sh 'gradle build'
+                sh 'popd'
             }
         }
     }
