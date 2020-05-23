@@ -4,9 +4,24 @@ pipeline {
     stages {
         stage('Build and Test') {
             steps {
-                dir("client") {
+                dir('client') {
                     sh '../gradlew build'
+                    sh '../gradlew test'
                 }
+                sh 'docker-compose up --build -d'
+                sleep(5)
+                dir('server') {
+                    sh '../gradlew build'
+                    sh '../gradlew copy_dependencies'
+                }
+                sh 'docker build . -f e2e/Dockerfile -t pickaxe:latest'
+                sh 'docker run -d -p 8080:8080 --net=pickaxe_default --name pickaxe_1 pickaxe:latest'
+                sleep 5
+                dir('e2e') {
+                    sh 'yarn install'
+                    sh 'yarn run cypress run'
+                }
+
             }
         }
     }
