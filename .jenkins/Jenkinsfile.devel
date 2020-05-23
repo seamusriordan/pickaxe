@@ -5,7 +5,7 @@ pipeline {
         stage('Build and Test') {
             steps {
                 cd client
-                sh './gradlew build'
+                sh 'gradle build'
             }
         }
     }
