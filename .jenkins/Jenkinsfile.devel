@@ -5,6 +5,7 @@ pipeline {
         stage('Build and Test') {
             steps {
                 dir("client") {
+                    sh 'ls'
                     sh 'gradle build'
                 }
             }
