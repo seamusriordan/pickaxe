@@ -5,7 +5,7 @@ pipeline {
         stage('Build and Test') {
             steps {
                 cd client
-                echo "hello"
+                echo "hello!"
                 sh gradle build
             }
         }
