@@ -16,7 +16,7 @@ pipeline {
                 }
                 sh 'docker build . -f e2e/Dockerfile -t pickaxe:latest'
                 sh 'docker run -d -p 8080:8080 --net=pickaxe_default --name pickaxe_1 pickaxe:latest'
-                sleep 5000
+                sleep(5)
                 dir('e2e') {
                     sh 'yarn install'
                     sh 'yarn run cypress run'
@@ -29,7 +29,7 @@ pipeline {
         always {
             sh 'docker-compose down'
             sh 'docker image rm pickaxe_devel_devel_postgres'
-            sh 'docker volume rm pickaxe_devel_devel_postgres-dev-data'
+            sh 'docker volume rm pickaxe_devel_devel_postgres-pipeline-data'
             sh 'docker stop pickaxe_1'
             sh 'docker rm pickaxe_1'
             sh 'docker image rm pickaxe:latest'
