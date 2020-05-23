@@ -6,7 +6,7 @@ pipeline {
             steps {
                 cd client
                 echo "hello!"
-                ./gradlew build
+                sh ./gradlew build
             }
         }
     }
