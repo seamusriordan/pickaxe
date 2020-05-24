@@ -1,4 +1,4 @@
-def cleanupDocker
+def cleanupDocker()
 {
     step([
             sh('docker stop pickaxe_pipeline_1'),
