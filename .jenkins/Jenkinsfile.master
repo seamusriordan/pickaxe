@@ -25,9 +25,9 @@ pipeline {
         }
         stage('Build client for deploy') {
             environment {
-                REACT_APP_GRAPHQL_SERVER = credientials('react_app_graphql_server')
-                REACT_APP_GRAPHQL_PORT = credientials('react_app_graphql_port')
-                REACT_APP_GRAPHQL_HTTPS = credientials('react_app_graphql_https')
+                REACT_APP_GRAPHQL_SERVER = credentials('react_app_graphql_server')
+                REACT_APP_GRAPHQL_PORT = credentials('react_app_graphql_port')
+                REACT_APP_GRAPHQL_HTTPS = credentials('react_app_graphql_https')
             }
             steps {
                 dir('client') {
