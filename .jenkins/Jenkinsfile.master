@@ -2,20 +2,28 @@ pipeline {
     agent any
 
     stages {
-        stage('Tests') {
+        stage('Test client') {
             steps {
                 dir('client') {
                     sh 'gradle build'
                     sh 'gradle test'
                 }
+            }
+        }
+        stage('Test server') {
+            steps {
+                dir('server') {
+                    sh 'gradle build'
+                    sh 'gradle copy_dependencies'
+                }
+                sh 'docker build . -f e2e/Dockerfile -t pickaxe:deploy'
+            }
+        }
+        stage('Test e2e') {
+            steps{
                 lock('pickaxe-pipeline') {
                     sh 'docker-compose -p pickaxe_deploy up --build -d'
                     sleep(5)
-                    dir('server') {
-                        sh 'gradle build'
-                        sh 'gradle copy_dependencies'
-                    }
-                    sh 'docker build . -f e2e/Dockerfile -t pickaxe:deploy'
                     sh 'docker run -d -p 8080:8080 --net=pickaxe_deploy_default --name pickaxe_deploy_1 pickaxe:deploy'
                     sleep(5)
                     dir('e2e') {
@@ -38,7 +46,7 @@ pipeline {
                 }
             }
         }
-        stage('Build deploy docker image'){
+        stage('Build deploy docker image') {
             steps {
                 sh 'docker build . -t pickaxe:devel'
             }
@@ -49,7 +57,7 @@ pipeline {
                         keyFileVariable: '',
                         passphraseVariable: '',
                         usernameVariable: 'username')]) {
-                    sshagent(credentials:  ['pickaxe-server-creds']){
+                    sshagent(credentials: ['pickaxe-server-creds']) {
                         sh 'ssh -o StrictHostKeyChecking=no $username ./deploy.sh'
                     }
                 }
@@ -63,15 +71,12 @@ pipeline {
     }
 }
 
-def cleanupDocker()
-{
-    step([
-            sh('docker stop pickaxe_deploy_1'),
-            sh('docker rm pickaxe_deploy_1'),
-            sh('docker image rm pickaxe:deploy'),
-            sh('docker-compose -p pickaxe_deploy down'),
-            sleep(5),
-            sh('docker image rm pickaxe_deploy_postgres'),
-            sh('docker volume rm pickaxe_pipeline_postgres-pipeline-data')
-    ])
+def cleanupDocker() {
+    sh('docker stop pickaxe_deploy_1')
+    sh('docker rm pickaxe_deploy_1')
+    sh('docker image rm pickaxe:deploy')
+    sh('docker-compose -p pickaxe_deploy down')
+    sleep(5)
+    sh('docker image rm pickaxe_deploy_postgres')
+    sh('docker volume rm pickaxe_pipeline_postgres-pipeline-data')
 }

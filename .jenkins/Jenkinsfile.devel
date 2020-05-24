@@ -2,27 +2,34 @@ pipeline {
     agent any
 
     stages {
-        stage('Build and Test') {
+        stage('Test client') {
             steps {
-//                dir('client') {
-//                    sh 'gradle build'
-//                    sh 'gradle test'
-//                }
-//                dir('server') {
-//                    sh 'gradle build'
-//                    sh 'gradle copy_dependencies'
-//                }
-
+                dir('client') {
+                    sh 'gradle build'
+                    sh 'gradle test'
+                }
+            }
+        }
+        stage('Test server') {
+            steps {
+                dir('server') {
+                    sh 'gradle build'
+                    sh 'gradle copy_dependencies'
+                }
                 sh 'docker build . -f e2e/Dockerfile -t pickaxe:pipeline'
+            }
+        }
+        stage('Test e2e') {
+            steps {
                 lock('pickaxe-pipeline') {
                     sh 'docker-compose -p pickaxe_pipeline up --build -d'
                     sleep(5)
                     sh 'docker run -d -p 8080:8080 --net=pickaxe_pipeline_default --name pickaxe_pipeline_1 pickaxe:pipeline'
                     sleep(5)
-//                    dir('e2e') {
-//                        sh 'yarn install'
-//                        sh 'yarn run cypress run'
-//                    }
+                    dir('e2e') {
+                        sh 'yarn install'
+                        sh 'yarn run cypress run'
+                    }
                     cleanupDocker()
                 }
             }
@@ -31,7 +38,6 @@ pipeline {
 
     post {
         failure {
-            echo "This has failed"
             cleanupDocker()
         }
     }
