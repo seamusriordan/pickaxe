@@ -43,7 +43,7 @@ pipeline {
                         usernameVariable: 'username')]) {
                     sh 'docker build . -t pickaxe:devel'
                     sh 'eval `ssh-agent -s`'
-                    sh 'ssh-add - <<< "$ssh-private-key"'
+                    sh 'ssh-add $ssh-private-key'
                     sh 'ssh -o StrictHostKeyChecking=no $username ./deploy.sh'
                 }
             }
@@ -56,7 +56,7 @@ pipeline {
             sh 'docker image rm pickaxe:deploy'
             sh 'docker-compose -p pickaxe_deploy down'
             sh 'docker image rm pickaxe_deploy_postgres'
-            sh 'docker volume rm pickaxe_deploy_postgres-deploy-data'
+            sh 'docker volume rm pickaxe_deploy_postgres-pipeline-data'
 
         }
     }
