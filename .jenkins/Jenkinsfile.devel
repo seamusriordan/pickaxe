@@ -1,5 +1,3 @@
-
-
 pipeline {
     agent any
 
@@ -16,7 +14,7 @@ pipeline {
 //                }
 
                 sh 'docker build . -f e2e/Dockerfile -t pickaxe:pipeline'
-                lock('pickaxe-pipeline'){
+                lock('pickaxe-pipeline') {
                     sh 'docker-compose -p pickaxe_pipeline up --build -d'
                     sleep(5)
                     sh 'docker run -d -p 8080:8080 --net=pickaxe_pipeline_default --name pickaxe_pipeline_1 pickaxe:pipeline'
@@ -39,15 +37,12 @@ pipeline {
     }
 }
 
-def cleanupDocker()
-{
-    steps {
-        sh('docker stop pickaxe_pipeline_1')
-        sh('docker rm pickaxe_pipeline_1')
-        sh('docker image rm pickaxe:pipeline')
-        sh('docker-compose -p pickaxe_pipeline down')
-        sleep(5)
-        sh('docker image rm pickaxe_pipeline_postgres')
-        sh('docker volume rm pickaxe_pipeline_postgres-pipeline-data')
-    }
+def cleanupDocker() {
+    sh('docker stop pickaxe_pipeline_1')
+    sh('docker rm pickaxe_pipeline_1')
+    sh('docker image rm pickaxe:pipeline')
+    sh('docker-compose -p pickaxe_pipeline down')
+    sleep(5)
+    sh('docker image rm pickaxe_pipeline_postgres')
+    sh('docker volume rm pickaxe_pipeline_postgres-pipeline-data')
 }
