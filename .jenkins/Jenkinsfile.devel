@@ -6,14 +6,14 @@ pipeline {
     stages {
         stage('Build and Test') {
             steps {
-                dir('client') {
-                    sh 'gradle build'
-                    sh 'gradle test'
-                }
-                dir('server') {
-                    sh 'gradle build'
-                    sh 'gradle copy_dependencies'
-                }
+//                dir('client') {
+//                    sh 'gradle build'
+//                    sh 'gradle test'
+//                }
+//                dir('server') {
+//                    sh 'gradle build'
+//                    sh 'gradle copy_dependencies'
+//                }
 
                 sh 'docker build . -f e2e/Dockerfile -t pickaxe:pipeline'
                 lock('pickaxe-pipeline'){
@@ -21,10 +21,10 @@ pipeline {
                     sleep(5)
                     sh 'docker run -d -p 8080:8080 --net=pickaxe_pipeline_default --name pickaxe_pipeline_1 pickaxe:pipeline'
                     sleep(5)
-                    dir('e2e') {
-                        sh 'yarn install'
-                        sh 'yarn run cypress run'
-                    }
+//                    dir('e2e') {
+//                        sh 'yarn install'
+//                        sh 'yarn run cypress run'
+//                    }
                     cleanupDocker()
                 }
             }
@@ -41,7 +41,7 @@ pipeline {
 
 def cleanupDocker()
 {
-    step([
+    steps([
             sh('docker stop pickaxe_pipeline_1'),
             sh('docker rm pickaxe_pipeline_1'),
             sh('docker image rm pickaxe:pipeline'),
