@@ -22,7 +22,7 @@ pipeline {
                         sh 'yarn install'
                         sh 'yarn run cypress run'
                     }
-                    cleanupDocker
+                    cleanupDocker()
                 }
             }
         }
@@ -57,8 +57,11 @@ pipeline {
         }
     }
     post {
+        always {
+
+        }
         failure {
-            cleanupDocker
+            cleanupDocker()
         }
     }
 }
