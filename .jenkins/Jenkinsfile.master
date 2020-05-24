@@ -10,18 +10,14 @@ pipeline {
                 }
             }
         }
-        stage('Test server') {
-            steps {
-                dir('server') {
-                    sh 'gradle build'
-                    sh 'gradle copy_dependencies'
-                }
-                sh 'docker build . -f e2e/Dockerfile -t pickaxe:deploy'
-            }
-        }
-        stage('Test e2e') {
+        stage('Test server and e2e') {
             steps{
                 lock('pickaxe-pipeline') {
+                    dir('server') {
+                        sh 'gradle build'
+                        sh 'gradle copy_dependencies'
+                    }
+                    sh 'docker build . -f e2e/Dockerfile -t pickaxe:deploy'
                     sh 'docker-compose -p pickaxe_deploy up --build -d'
                     sleep(5)
                     sh 'docker run -d -p 8080:8080 --net=pickaxe_deploy_default --name pickaxe_deploy_1 pickaxe:deploy'
