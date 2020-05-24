@@ -32,10 +32,8 @@ pipeline {
     }
 
     post {
-        always {
-
-        }
         failure {
+            echo "This has failed"
             cleanupDocker()
         }
     }

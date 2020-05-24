@@ -57,9 +57,6 @@ pipeline {
         }
     }
     post {
-        always {
-
-        }
         failure {
             cleanupDocker()
         }
