@@ -17,18 +17,18 @@ pipeline {
         stage('Build and Test') {
             steps {
                 dir('client') {
-                    sh '../gradlew build'
-                    sh '../gradlew test'
+                    sh 'gradle build'
+                    sh 'gradle test'
                 }
                 dir('server') {
-                    sh '../gradlew build'
-                    sh '../gradlew copy_dependencies'
+                    sh 'gradle build'
+                    sh 'gradle copy_dependencies'
                 }
 
+                sh 'docker build . -f e2e/Dockerfile -t pickaxe:pipeline'
                 lock('pickaxe-pipeline'){
                     sh 'docker-compose -p pickaxe_pipeline up --build -d'
                     sleep(5)
-                    sh 'docker build . -f e2e/Dockerfile -t pickaxe:pipeline'
                     sh 'docker run -d -p 8080:8080 --net=pickaxe_pipeline_default --name pickaxe_pipeline_1 pickaxe:pipeline'
                     sleep(5)
                     dir('e2e') {
