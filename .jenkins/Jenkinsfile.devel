@@ -27,9 +27,9 @@ pipeline {
 
     post {
         always {
-            sh 'docker-compose down'
-            sh 'docker image rm pickaxe_devel_devel_postgres'
-            sh 'docker volume rm pickaxe_devel_devel_postgres-pipeline-data'
+            sh 'docker-compose -p pickaxe_pipeline down'
+            sh 'docker image rm pickaxe_pipeline_postgres'
+            sh 'docker volume rm pickaxe_pipeline_postgres-pipeline-data'
             sh 'docker stop pickaxe_pipeline_1'
             sh 'docker rm pickaxe_pipeline_1'
             sh 'docker image rm pickaxe:latest'
