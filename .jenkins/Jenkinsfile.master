@@ -43,7 +43,7 @@ pipeline {
                         usernameVariable: 'devel-server-user')]) {
                     sh 'docker build . -t pickaxe:devel'
                     sshagent(credentials:  ['pickaxe-server-creds']){
-                        sh 'ssh -o StrictHostKeyChecking=no ./deploy.sh'
+                        sh 'ssh -o StrictHostKeyChecking=no $devel-server-user ./deploy.sh'
                     }
                 }
             }
