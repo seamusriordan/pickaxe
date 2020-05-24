@@ -1,0 +1,63 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Tests') {
+            steps {
+                dir('client') {
+                    sh '../gradlew build'
+                    sh '../gradlew test'
+                }
+                sh 'docker-compose -p pickaxe_deploy up --build -d'
+                sleep(5)
+                dir('server') {
+                    sh '../gradlew build'
+                    sh '../gradlew copy_dependencies'
+                }
+                sh 'docker build . -f e2e/Dockerfile -t pickaxe:deploy'
+                sh 'docker run -d -p 8080:8080 --net=pickaxe_deploy_default --name pickaxe_deploy_1 pickaxe:deploy'
+                sleep(5)
+                dir('e2e') {
+                    sh 'yarn install'
+                    sh 'yarn run cypress run'
+                }
+            }
+        }
+        stage('Build client for deploy') {
+            environment {
+                REACT_APP_GRAPHQL_SERVER = credentials('react_app_graphql_server')
+                REACT_APP_GRAPHQL_PORT = credentials('react_app_graphql_port')
+                REACT_APP_GRAPHQL_HTTPS = credentials('react_app_graphql_https')
+            }
+            steps {
+                dir('client') {
+                    sh '../gradlew build'
+                }
+            }
+        }
+        stage('Deploy') {
+            steps {
+                withCredentials(bindings: [sshUserPrivateKey(credentialsId: 'pickaxe-server-creds',
+                        keyFileVariable: '',
+                        passphraseVariable: '',
+                        usernameVariable: 'username')]) {
+                    sh 'docker build . -t pickaxe:devel'
+                    sshagent(credentials:  ['pickaxe-server-creds']){
+                        sh 'ssh -o StrictHostKeyChecking=no $username ./deploy.sh'
+                    }
+                }
+            }
+        }
+    }
+    post {
+        always {
+            sh 'docker stop pickaxe_deploy_1'
+            sh 'docker rm pickaxe_deploy_1'
+            sh 'docker image rm pickaxe:deploy'
+            sh 'docker-compose -p pickaxe_deploy down'
+            sh 'docker image rm pickaxe_deploy_postgres'
+            sh 'docker volume rm pickaxe_deploy_postgres-pipeline-data'
+
+        }
+    }
+}

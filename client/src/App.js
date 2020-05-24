@@ -26,7 +26,7 @@ function App() {
                     rel="noopener noreferrer"
                 >Make a pick</a>
 
-                Also we have newly deployed
+                Also we have a new pipeline!
             </header>
             <ApolloProvider client={apolloClient}><PicksLoader/></ApolloProvider>
         </div>
