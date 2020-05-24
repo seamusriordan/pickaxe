@@ -1,14 +1,4 @@
-def cleanupDocker()
-{
-    step([
-            sh('docker stop pickaxe_pipeline_1'),
-            sh('docker rm pickaxe_pipeline_1'),
-            sh('docker image rm pickaxe:pipeline'),
-            sh('docker-compose -p pickaxe_pipeline down'),
-            sh('docker image rm pickaxe_pipeline_postgres'),
-            sh('docker volume rm pickaxe_pipeline_postgres-pipeline-data')
-    ])
-}
+
 
 pipeline {
     agent any
@@ -48,3 +38,15 @@ pipeline {
     }
 }
 
+def cleanupDocker()
+{
+    step([
+            sh('docker stop pickaxe_pipeline_1'),
+            sh('docker rm pickaxe_pipeline_1'),
+            sh('docker image rm pickaxe:pipeline'),
+            sh('docker-compose -p pickaxe_pipeline down'),
+            sleep(5),
+            sh('docker image rm pickaxe_pipeline_postgres'),
+            sh('docker volume rm pickaxe_pipeline_postgres-pipeline-data')
+    ])
+}
