@@ -1,128 +1,128 @@
-name: master to Deploy
-
-on:
-  push:
-    branches:
-      - master
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: master
-      - uses: actions/setup-java@v1
-        with:
-          java-version: '11'
-
-      - name: Get yarn cache
-        id: yarn-cache
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-
-      - uses: actions/cache@v1
-        with:
-          path: ${{ steps.yarn-cache.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-      - uses: actions/cache@v1
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-
-      - name: Build client
-        working-directory: ./client
-        run: gradle build
-
-      - name: Test client
-        working-directory: ./client
-        run: gradle test
-
-      - name: Start auxiliary servers
-        working-directory: ./
-        run: docker-compose up --build -d
-
-      - name: Server test and build jar
-        working-directory: ./server
-        run: gradle build
-
-      - name: Build and start docker image
-        run: |
-          docker build . -t pickaxe:devel
-          docker run -d -p 8080:8080 --net=pickaxe_default pickaxe:devel
-
-      - name: Integration tests
-        working-directory: ./e2e
-        run: |
-          yarn install
-          yarn run cypress run
-
-  build-image:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: master
-      - uses: actions/setup-java@v1
-        with:
-          java-version: '12'
-      - name: Get yarn cache
-        id: yarn-cache
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - uses: actions/cache@v1
-        with:
-          path: ${{ steps.yarn-cache.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-      - uses: actions/cache@v1
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-
-      - name: Build client
-        working-directory: ./client
-        env:
-          REACT_APP_GRAPHQL_SERVER: ${{secrets.REACT_APP_GRAPHQL_SERVER}}
-          REACT_APP_GRAPHQL_PORT: ${{secrets.REACT_APP_GRAPHQL_PORT}}
-          REACT_APP_GRAPHQL_HTTPS: ${{secrets.REACT_APP_GRAPHQL_HTTPS}}
-        run: gradle build
-
-      - name: Build development docker image
-        run: |
-          docker build . -t pickaxe:devel
-          docker run -d -p 8080:8080 pickaxe:devel
-
-      - name: Save docker image
-        run: docker save pickaxe > pickaxe_devel.tar
-
-      - uses: actions/upload-artifact@v1
-        with:
-          name: pickaxe_devel_image
-          path: ./pickaxe_devel.tar
-
-  deploy:
-    needs: [test, build-image]
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/download-artifact@v1
-        with:
-          name: pickaxe_devel_image
-          path: .
-
-      - name: Deploy to development server
-        run: |
-          ls -lahtr
-          ls -lahtr pickaxe_devel.tar
-          eval `ssh-agent -s`
-          ssh-add - <<< "${{ secrets.DEVEL_HOST_PRIVATE_KEY }}"
-          scp -o StrictHostKeyChecking=no pickaxe_devel.tar ${{ secrets.DEVEL_USER }}@${{ secrets.DEVEL_HOST }}:~
-          ssh -o StrictHostKeyChecking=no ${{ secrets.DEVEL_USER }}@${{ secrets.DEVEL_HOST }} ./deploy.sh
+#name: master to Deploy
+#
+#on:
+#  push:
+#    branches:
+#      - master
+#
+#jobs:
+#  test:
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - uses: actions/checkout@v2
+#        with:
+#          ref: master
+#      - uses: actions/setup-java@v1
+#        with:
+#          java-version: '11'
+#
+#      - name: Get yarn cache
+#        id: yarn-cache
+#        run: echo "::set-output name=dir::$(yarn cache dir)"
+#
+#      - uses: actions/cache@v1
+#        with:
+#          path: ${{ steps.yarn-cache.outputs.dir }}
+#          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+#          restore-keys: |
+#            ${{ runner.os }}-yarn-
+#      - uses: actions/cache@v1
+#        with:
+#          path: ~/.gradle/caches
+#          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+#          restore-keys: |
+#            ${{ runner.os }}-gradle-
+#
+#      - name: Build client
+#        working-directory: ./client
+#        run: gradle build
+#
+#      - name: Test client
+#        working-directory: ./client
+#        run: gradle test
+#
+#      - name: Start auxiliary servers
+#        working-directory: ./
+#        run: docker-compose up --build -d
+#
+#      - name: Server test and build jar
+#        working-directory: ./server
+#        run: gradle build
+#
+#      - name: Build and start docker image
+#        run: |
+#          docker build . -t pickaxe:devel
+#          docker run -d -p 8080:8080 --net=pickaxe_default pickaxe:devel
+#
+#      - name: Integration tests
+#        working-directory: ./e2e
+#        run: |
+#          yarn install
+#          yarn run cypress run
+#
+#  build-image:
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - uses: actions/checkout@v2
+#        with:
+#          ref: master
+#      - uses: actions/setup-java@v1
+#        with:
+#          java-version: '12'
+#      - name: Get yarn cache
+#        id: yarn-cache
+#        run: echo "::set-output name=dir::$(yarn cache dir)"
+#      - uses: actions/cache@v1
+#        with:
+#          path: ${{ steps.yarn-cache.outputs.dir }}
+#          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+#          restore-keys: |
+#            ${{ runner.os }}-yarn-
+#      - uses: actions/cache@v1
+#        with:
+#          path: ~/.gradle/caches
+#          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+#          restore-keys: |
+#            ${{ runner.os }}-gradle-
+#
+#      - name: Build client
+#        working-directory: ./client
+#        env:
+#          REACT_APP_GRAPHQL_SERVER: ${{secrets.REACT_APP_GRAPHQL_SERVER}}
+#          REACT_APP_GRAPHQL_PORT: ${{secrets.REACT_APP_GRAPHQL_PORT}}
+#          REACT_APP_GRAPHQL_HTTPS: ${{secrets.REACT_APP_GRAPHQL_HTTPS}}
+#        run: gradle build
+#
+#      - name: Build development docker image
+#        run: |
+#          docker build . -t pickaxe:devel
+#          docker run -d -p 8080:8080 pickaxe:devel
+#
+#      - name: Save docker image
+#        run: docker save pickaxe > pickaxe_devel.tar
+#
+#      - uses: actions/upload-artifact@v1
+#        with:
+#          name: pickaxe_devel_image
+#          path: ./pickaxe_devel.tar
+#
+#  deploy:
+#    needs: [test, build-image]
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - uses: actions/download-artifact@v1
+#        with:
+#          name: pickaxe_devel_image
+#          path: .
+#
+#      - name: Deploy to development server
+#        run: |
+#          ls -lahtr
+#          ls -lahtr pickaxe_devel.tar
+#          eval `ssh-agent -s`
+#          ssh-add - <<< "${{ secrets.DEVEL_HOST_PRIVATE_KEY }}"
+#          scp -o StrictHostKeyChecking=no pickaxe_devel.tar ${{ secrets.DEVEL_USER }}@${{ secrets.DEVEL_HOST }}:~
+#          ssh -o StrictHostKeyChecking=no ${{ secrets.DEVEL_USER }}@${{ secrets.DEVEL_HOST }} ./deploy.sh

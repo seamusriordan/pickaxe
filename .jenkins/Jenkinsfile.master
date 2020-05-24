@@ -1,0 +1,61 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Tests') {
+            steps {
+                dir('client') {
+                    sh '../gradlew build'
+                    sh '../gradlew test'
+                }
+                sh 'docker-compose -p pickaxe_pipeline up --build -d'
+                sleep(5)
+                dir('server') {
+                    sh '../gradlew build'
+                    sh '../gradlew copy_dependencies'
+                }
+                sh 'docker build . -f e2e/Dockerfile -t pickaxe:pipeline'
+                sh 'docker run -d -p 8080:8080 --net=pickaxe_pipeline_default --name pickaxe_pipeline_1 pickaxe:pipeline'
+                sleep(5)
+                dir('e2e') {
+                    sh 'yarn install'
+                    sh 'yarn run cypress run'
+                }
+            }
+        }
+        stage('Build client for deploy') {
+            environment {
+                REACT_APP_GRAPHQL_SERVER = credientials('react_app_graphql_server')
+                REACT_APP_GRAPHQL_PORT = credientials('react_app_graphql_port')
+                REACT_APP_GRAPHQL_HTTPS = credientials('react_app_graphql_https')
+            }
+            steps {
+                dir('client') {
+                    sh '../gradlew build'
+                }
+            }
+        }
+        stage('Deploy') {
+            withCredentials(bindings: [sshUserPrivateKey(credentialsId: 'pickaxe-server-creds',
+                    keyFileVariable: 'ssh-private-key',
+                    passphraseVariable: '',
+                    usernameVariable: 'username')]) {
+                sh 'docker build . -t pickaxe:devel'
+                sh 'eval `ssh-agent -s`'
+                sh 'ssh-add - <<< "$ssh-private-key"'
+                sh 'ssh -o StrictHostKeyChecking=no $username ./deploy.sh'
+            }
+        }
+    }
+    post {
+        always {
+            sh 'docker stop pickaxe_pipeline_1'
+            sh 'docker rm pickaxe_pipeline_1'
+            sh 'docker image rm pickaxe:pipeline'
+            sh 'docker-compose -p pickaxe_pipeline down'
+            sh 'docker image rm pickaxe_pipeline_postgres'
+            sh 'docker volume rm pickaxe_pipeline_postgres-pipeline-data'
+
+        }
+    }
+}
