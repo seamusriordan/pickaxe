@@ -8,7 +8,7 @@ pipeline {
                     sh '../gradlew build'
                     sh '../gradlew test'
                 }
-                sh 'docker-compose up --build -p pickaxe_pipeline -d'
+                sh 'docker-compose -p pickaxe_pipeline up --build -d'
                 sleep(5)
                 dir('server') {
                     sh '../gradlew build'
