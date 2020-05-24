@@ -36,14 +36,16 @@ pipeline {
             }
         }
         stage('Deploy') {
-            withCredentials(bindings: [sshUserPrivateKey(credentialsId: 'pickaxe-server-creds',
-                    keyFileVariable: 'ssh-private-key',
-                    passphraseVariable: '',
-                    usernameVariable: 'username')]) {
-                sh 'docker build . -t pickaxe:devel'
-                sh 'eval `ssh-agent -s`'
-                sh 'ssh-add - <<< "$ssh-private-key"'
-                sh 'ssh -o StrictHostKeyChecking=no $username ./deploy.sh'
+            steps {
+                withCredentials(bindings: [sshUserPrivateKey(credentialsId: 'pickaxe-server-creds',
+                        keyFileVariable: 'ssh-private-key',
+                        passphraseVariable: '',
+                        usernameVariable: 'username')]) {
+                    sh 'docker build . -t pickaxe:devel'
+                    sh 'eval `ssh-agent -s`'
+                    sh 'ssh-add - <<< "$ssh-private-key"'
+                    sh 'ssh -o StrictHostKeyChecking=no $username ./deploy.sh'
+                }
             }
         }
     }
