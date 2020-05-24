@@ -8,14 +8,14 @@ pipeline {
                     sh '../gradlew build'
                     sh '../gradlew test'
                 }
-                sh 'docker-compose -p pickaxe_pipeline up --build -d'
+                sh 'docker-compose -p pickaxe_deploy up --build -d'
                 sleep(5)
                 dir('server') {
                     sh '../gradlew build'
                     sh '../gradlew copy_dependencies'
                 }
-                sh 'docker build . -f e2e/Dockerfile -t pickaxe:pipeline'
-                sh 'docker run -d -p 8080:8080 --net=pickaxe_pipeline_default --name pickaxe_pipeline_1 pickaxe:pipeline'
+                sh 'docker build . -f e2e/Dockerfile -t pickaxe:deploy'
+                sh 'docker run -d -p 8080:8080 --net=pickaxe_deploy_default --name pickaxe_deploy_1 pickaxe:deploy'
                 sleep(5)
                 dir('e2e') {
                     sh 'yarn install'
@@ -51,12 +51,12 @@ pipeline {
     }
     post {
         always {
-            sh 'docker stop pickaxe_pipeline_1'
-            sh 'docker rm pickaxe_pipeline_1'
-            sh 'docker image rm pickaxe:pipeline'
-            sh 'docker-compose -p pickaxe_pipeline down'
-            sh 'docker image rm pickaxe_pipeline_postgres'
-            sh 'docker volume rm pickaxe_pipeline_postgres-pipeline-data'
+            sh 'docker stop pickaxe_deploy_1'
+            sh 'docker rm pickaxe_deploy_1'
+            sh 'docker image rm pickaxe:deploy'
+            sh 'docker-compose -p pickaxe_deploy down'
+            sh 'docker image rm pickaxe_deploy_postgres'
+            sh 'docker volume rm pickaxe_deploy_postgres-deploy-data'
 
         }
     }
