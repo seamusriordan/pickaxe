@@ -15,7 +15,7 @@ pipeline {
                     sh '../gradlew copy_dependencies'
                 }
                 sh 'docker build . -f e2e/Dockerfile -t pickaxe:pipeline'
-                sh 'docker run -d -p 8080:8080 --net=pickaxe_pipeline_default --name pickaxe_pipeline_1 pickaxe:latest'
+                sh 'docker run -d -p 8080:8080 --net=pickaxe_pipeline_default --name pickaxe_pipeline_1 pickaxe:pipeline'
                 sleep(5)
                 dir('e2e') {
                     sh 'yarn install'
