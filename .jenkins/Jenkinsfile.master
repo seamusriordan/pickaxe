@@ -2,46 +2,49 @@ pipeline {
     agent any
 
     stages {
-        parallel {
-            stage('Build and Test') {
-                steps {
-                    dir('client') {
-                        sh '../gradlew build'
-                        sh '../gradlew test'
-                    }
-                    sh 'docker-compose -p pickaxe_pipeline up --build -d'
-                    sleep(5)
-                    dir('server') {
-                        sh '../gradlew build'
-                        sh '../gradlew copy_dependencies'
-                    }
-                    sh 'docker build . -f e2e/Dockerfile -t pickaxe:pipeline'
-                    sh 'docker run -d -p 8080:8080 --net=pickaxe_pipeline_default --name pickaxe_pipeline_1 pickaxe:pipeline'
-                    sleep(5)
-                    dir('e2e') {
-                        sh 'yarn install'
-                        sh 'yarn run cypress run'
-                    }
+        stage('Tests') {
+            steps {
+                dir('client') {
+                    sh '../gradlew build'
+                    sh '../gradlew test'
+                }
+                sh 'docker-compose -p pickaxe_pipeline up --build -d'
+                sleep(5)
+                dir('server') {
+                    sh '../gradlew build'
+                    sh '../gradlew copy_dependencies'
+                }
+                sh 'docker build . -f e2e/Dockerfile -t pickaxe:pipeline'
+                sh 'docker run -d -p 8080:8080 --net=pickaxe_pipeline_default --name pickaxe_pipeline_1 pickaxe:pipeline'
+                sleep(5)
+                dir('e2e') {
+                    sh 'yarn install'
+                    sh 'yarn run cypress run'
                 }
             }
-            stage('Build Image') {
-                environment {
-                    REACT_APP_GRAPHQL_SERVER = ${{secrets.REACT_APP_GRAPHQL_SERVER}}
-                    REACT_APP_GRAPHQL_PORT = ${{secrets.REACT_APP_GRAPHQL_PORT}}
-                    REACT_APP_GRAPHQL_HTTPS = ${{secrets.REACT_APP_GRAPHQL_HTTPS}}
-                }
-                steps {
-                    dir('client') {
-                        sh '../gradlew build'
-                    }
-                    sh 'docker build . -t pickaxe:devel'
+        }
+        stage('Build client for deploy') {
+            environment {
+                REACT_APP_GRAPHQL_SERVER = credientials('react_app_graphql_server')
+                REACT_APP_GRAPHQL_PORT = credientials('react_app_graphql_port')
+                REACT_APP_GRAPHQL_HTTPS = credientials('react_app_graphql_https')
+            }
+            steps {
+                dir('client') {
+                    sh '../gradlew build'
                 }
             }
         }
         stage('Deploy') {
-            sh 'eval `ssh-agent -s`'
-            sh 'ssh-add - <<< "${{ secrets.DEVEL_HOST_PRIVATE_KEY }}"'
-            sh 'ssh -o StrictHostKeyChecking=no ${{ secrets.DEVEL_USER }}@${{ secrets.DEVEL_HOST }} ./deploy.sh'
+            withCredentials(bindings: [sshUserPrivateKey(credentialsId: 'pickaxe-server-creds',
+                    keyFileVariable: 'ssh-private-key',
+                    passphraseVariable: '',
+                    usernameVariable: 'username')]) {
+                sh 'docker build . -t pickaxe:devel'
+                sh 'eval `ssh-agent -s`'
+                sh 'ssh-add - <<< "$ssh-private-key"'
+                sh 'ssh -o StrictHostKeyChecking=no $username ./deploy.sh'
+            }
         }
     }
     post {
