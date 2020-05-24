@@ -78,5 +78,5 @@ def cleanupDocker() {
     sh('docker-compose -p pickaxe_deploy down')
     sleep(5)
     sh('docker image rm pickaxe_deploy_postgres')
-    sh('docker volume rm pickaxe_pipeline_postgres-pipeline-data')
+    sh('docker volume rm pickaxe_deploy_postgres-pipeline-data')
 }
