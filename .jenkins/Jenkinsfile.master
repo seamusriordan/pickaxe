@@ -9,14 +9,14 @@ pipeline {
                         sh '../gradlew build'
                         sh '../gradlew test'
                     }
-                    sh 'docker-compose up --build -d'
+                    sh 'docker-compose -p pickaxe_pipeline up --build -d'
                     sleep(5)
                     dir('server') {
                         sh '../gradlew build'
                         sh '../gradlew copy_dependencies'
                     }
-                    sh 'docker build . -f e2e/Dockerfile -t pickaxe:latest'
-                    sh 'docker run -d -p 8080:8080 --net=pickaxe_default --name pickaxe_1 pickaxe:latest'
+                    sh 'docker build . -f e2e/Dockerfile -t pickaxe:pipeline'
+                    sh 'docker run -d -p 8080:8080 --net=pickaxe_pipeline_default --name pickaxe_pipeline_1 pickaxe:pipeline'
                     sleep(5)
                     dir('e2e') {
                         sh 'yarn install'
@@ -25,25 +25,34 @@ pipeline {
                 }
             }
             stage('Build Image') {
-                dir('client') {
-                    sh '../gradlew build'
+                environment {
+                    REACT_APP_GRAPHQL_SERVER = ${{secrets.REACT_APP_GRAPHQL_SERVER}}
+                    REACT_APP_GRAPHQL_PORT = ${{secrets.REACT_APP_GRAPHQL_PORT}}
+                    REACT_APP_GRAPHQL_HTTPS = ${{secrets.REACT_APP_GRAPHQL_HTTPS}}
                 }
-                sh 'docker build . -f e2e/Dockerfile -t pickaxe:latest'
-                sh 'docker run -d -p 8080:8080 pickaxe:devel'
-                sh 'docker save pickaxe > pickaxe_devel.tar'
+                steps {
+                    dir('client') {
+                        sh '../gradlew build'
+                    }
+                    sh 'docker build . -t pickaxe:devel'
+                }
             }
         }
         stage('Deploy') {
             sh 'eval `ssh-agent -s`'
             sh 'ssh-add - <<< "${{ secrets.DEVEL_HOST_PRIVATE_KEY }}"'
-            sh 'scp -o StrictHostKeyChecking=no pickaxe_devel.tar ${{ secrets.DEVEL_USER }}@${{ secrets.DEVEL_HOST }}:~'
             sh 'ssh -o StrictHostKeyChecking=no ${{ secrets.DEVEL_USER }}@${{ secrets.DEVEL_HOST }} ./deploy.sh'
         }
     }
     post {
         always {
-            sh 'docker-compose down'
-            sh 'docker volume rm pickaxe_devel_devel_postgres-dev-data'
+            sh 'docker stop pickaxe_pipeline_1'
+            sh 'docker rm pickaxe_pipeline_1'
+            sh 'docker image rm pickaxe:pipeline'
+            sh 'docker-compose -p pickaxe_pipeline down'
+            sh 'docker image rm pickaxe_pipeline_postgres'
+            sh 'docker volume rm pickaxe_pipeline_postgres-pipeline-data'
+
         }
     }
 }
