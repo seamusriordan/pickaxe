@@ -9,6 +9,8 @@ import gql from 'graphql-tag';
 import {assertAllUserPicksMatchCellText, findByClassName} from "../testUtilities/Helpers";
 import PickCell from "./PickCell";
 import {getPickByGame} from "./PickCells";
+import {Leaderboard} from "../leaderboard/Leaderboard";
+import {LeaderboardRow} from "../leaderboard/LeaderboardRow";
 
 
 jest.mock('@apollo/react-hooks');
@@ -306,7 +308,8 @@ describe('PicksGrid', () => {
                     {"name": "Derp"},
                 ],
                 "userTotals":[],
-                "games": []
+                "games": [],
+                "leaders": []
             };
             useQuery.mockReturnValue({loading: false, error: null, data: twoMockUserData});
 
@@ -338,7 +341,8 @@ describe('PicksGrid', () => {
                     {"name": "Someone", "total": 0},
                     {"name": "Derp", "total": 4}
                 ],
-                "games": []
+                "games": [],
+                "leaders": []
             };
             useQuery.mockReturnValue({loading: false, error: null, data: twoMockUserData});
 
@@ -367,6 +371,7 @@ describe('PicksGrid', () => {
                     {"name": "TLH@PCL"},
                 ],
                 "userTotals":[],
+                "leaders": []
             };
             useQuery.mockReturnValue({loading: false, error: null, data: oneMockGameData});
 
@@ -396,6 +401,7 @@ describe('PicksGrid', () => {
                     {"name": "TLH@PCL", "spread": "-20"},
                 ],
                 "userTotals":[],
+                "leaders": []
             };
             useQuery.mockReturnValue({loading: false, error: null, data: oneMockGameData});
 
@@ -423,7 +429,8 @@ describe('PicksGrid', () => {
                 "games": [
                     {"name": "TLH@PCL", "spread": "-20", "result": "PCL"},
                 ],
-                "userTotals":[]
+                "userTotals":[],
+                "leaders": []
             };
             useQuery.mockReturnValue({loading: false, error: null, data: oneMockGameData});
 
@@ -435,6 +442,19 @@ describe('PicksGrid', () => {
                 .toEqual(oneMockGameData.games.map(game => game.result))
         });
 
+    });
+    describe('leaderboard', () => {
+        it('has leaderboard', () => {
+            const leaderboard = grid.findAllByType(Leaderboard)
+
+            expect(leaderboard).toHaveLength(1)
+        })
+
+        it('has row for each leader', () => {
+            const rows = grid.findByType(Leaderboard).findAllByType(LeaderboardRow)
+
+            expect(rows).toHaveLength(mockQueryData.leaders.length)
+        })
     });
 
 });

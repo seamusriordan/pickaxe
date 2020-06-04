@@ -49,5 +49,10 @@ export const mockQueryData = {
         {"name": "0"},
         {"name": "1"},
         {"name": "2"},
+    ],
+    "leaders": [
+        {"name": "DaveBob", "correctWeeks": 1, "correctPicks": 2},
+        {"name": "Luaand", "correctWeeks": 1, "correctPicks": 3},
+        {"name": "Vegas", "correctWeeks": 4, "correctPicks": 4}
     ]
 };

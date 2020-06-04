@@ -13,8 +13,8 @@ fun wiringMap(): HashMap<String, HashMap<String, DataFetcher<*>>> {
     queryFields["games"] = GamesQuery(connection)
     queryFields["userTotals"] = UserWeekTotalQuery(connection)
     queryFields["currentWeek"] = CurrentWeekQuery(WeeksQuery(connection), GamesQuery(connection))
-
     queryFields["userPicks"] = UserPickQuery(connection)
+    queryFields["leaders"] = LeaderQuery(WeeksQuery(connection), GamesQuery(connection), UserWeekTotalQuery(connection))
 
     mutationFields["updatePick"] = UpdatePickMutator(connection)
 

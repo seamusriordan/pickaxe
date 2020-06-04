@@ -11,6 +11,8 @@ type Query {
     weeks: [Week]
     "Current game week"
     currentWeek: Week
+    "Leaders"
+    leaders: [Leader]
 }
 
 type User {
@@ -45,6 +47,12 @@ type Week {
     weekType: String
     weekOrder: Int
     week: Int
+}
+
+type Leader {
+    name: String
+    correctWeeks: Int
+    correctPicks: Int
 }
 
 type Mutation {

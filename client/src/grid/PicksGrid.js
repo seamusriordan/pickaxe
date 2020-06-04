@@ -5,6 +5,7 @@ import {PICKS_QUERY, UPDATE_PICKS_MUTATION} from "../graphqlQueries";
 import PickCells from "./PickCells";
 import LinearCells from "./LinearCells"
 import ChangeWeek from "../ChangeWeek";
+import {Leaderboard} from "../leaderboard/Leaderboard";
 
 function destructureUserData(users) {
     return {
@@ -111,6 +112,7 @@ const PicksGrid = props => {
     return <div>
         { error ? "Error" : !data ? "Waiting for data..." :
             [
+                <Leaderboard key="leaderboard" data={data.leaders}/>,
                 <ChangeWeek key="change-week" id="change-week" week={currentWeek} forward={advanceWeek} back={rewindWeek}/>,
                 <LinearCells key="name-cells" items={users.names} name="name"/>,
                 <LinearCells key="game-cells" id="game-cells" items={games.names} name="game"/>,

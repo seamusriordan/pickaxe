@@ -33,6 +33,12 @@ export const PICKS_QUERY = gql`
             name
             weekOrder
         }
+        
+        leaders {
+            name
+            correctWeeks
+            correctPicks
+        }
     }`;
 
 export const UPDATE_PICKS_MUTATION =
