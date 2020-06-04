@@ -4,27 +4,44 @@ import dto.*
 import io.mockk.every
 import io.mockk.mockkClass
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class LeaderQueryTest {
-    @Test
-    fun oneUserWithAllCorrect() {
-        val week = "Week 1"
-        val user = UserDTO("Daan")
-        val game = GameDTO("GB@CHI", week).apply {
+    private lateinit var mockWeeksQuery: WeeksQuery
+    private lateinit var mockGamesQuery: GamesQuery
+    private lateinit var mockWeekTotalQuery: UserWeekTotalQuery
+    private lateinit var leaderQuery: LeaderQuery
+    private lateinit var defaultGame: GameDTO
+
+    private var defaultWeek = "Week 1"
+
+    @BeforeEach
+    fun setup() {
+        mockWeeksQuery = mockkClass(WeeksQuery::class)
+
+        mockGamesQuery = mockkClass(GamesQuery::class)
+        defaultGame = GameDTO("GB@CHI", defaultWeek).apply {
             result = "CHI"
         }
+        every { mockGamesQuery.getGamesForWeek(defaultWeek) } returns listOf(defaultGame)
 
-        val mockWeeksQuery = mockkClass(WeeksQuery::class)
-        every { mockWeeksQuery.get() } returns listOf(WeekDTO(week))
+        mockWeekTotalQuery = mockkClass(UserWeekTotalQuery::class)
+        leaderQuery = LeaderQuery(mockWeeksQuery, mockGamesQuery, mockWeekTotalQuery)
+    }
 
-        val mockWeekTotalQuery = mockkClass(UserWeekTotalQuery::class)
-        every { mockWeekTotalQuery.get(week) } returns
+    @Test
+    fun oneUserWithAllCorrect() {
+        val user = UserDTO("Daan")
+
+        every { mockWeeksQuery.get() } returns listOf(WeekDTO(defaultWeek))
+        every { mockGamesQuery.getGamesForWeek(defaultWeek) } returns listOf(defaultGame)
+
+        every { mockWeekTotalQuery.get(defaultWeek) } returns
                 listOf(UserWeekTotalDTO(user).apply {
-                    games = mutableListOf(game)
+                    games = mutableListOf(defaultGame)
                 })
 
-        val leaderQuery = LeaderQuery(mockWeeksQuery, mockWeekTotalQuery)
 
         val leader: List<LeaderDTO> = leaderQuery.get()
 
@@ -38,16 +55,13 @@ class LeaderQueryTest {
         val week = "Week 1"
         val user = UserDTO("Daav")
 
-        val mockWeeksQuery = mockkClass(WeeksQuery::class)
         every { mockWeeksQuery.get() } returns listOf(WeekDTO(week))
 
-        val mockWeekTotalQuery = mockkClass(UserWeekTotalQuery::class)
         every { mockWeekTotalQuery.get(week) } returns
                 listOf(UserWeekTotalDTO(user).apply {
                     games = mutableListOf()
                 })
 
-        val leaderQuery = LeaderQuery(mockWeeksQuery, mockWeekTotalQuery)
 
         val leader: List<LeaderDTO> = leaderQuery.get()
 
@@ -58,22 +72,26 @@ class LeaderQueryTest {
 
     @Test
     fun oneUserWithTwoPicksAndOneCorrect() {
-        val week = "Week 1"
         val user = UserDTO("Daav")
+        val games = mutableListOf(
+            GameDTO("GB@CHI", defaultWeek).apply {
+                result = "CHI"
+            },
+            GameDTO("TB@NE", defaultWeek).apply {
+                result = "TB"
+            }
+        )
 
-        val mockWeeksQuery = mockkClass(WeeksQuery::class)
-        every { mockWeeksQuery.get() } returns listOf(WeekDTO(week))
+        every { mockWeeksQuery.get() } returns listOf(WeekDTO(defaultWeek))
+        every { mockGamesQuery.getGamesForWeek(defaultWeek) } returns games
 
-        val mockWeekTotalQuery = mockkClass(UserWeekTotalQuery::class)
-        every { mockWeekTotalQuery.get(week) } returns
+        every { mockWeekTotalQuery.get(defaultWeek) } returns
                 listOf(UserWeekTotalDTO(user).apply {
-                    games = mutableListOf(
-                        GameDTO("GB@CHI", week),
-                        GameDTO("TB@NE", week)
+                   this.games = mutableListOf(
+                        GameDTO("GB@CHI", defaultWeek),
+                        GameDTO("TB@NE", defaultWeek)
                     )
                 })
-
-        val leaderQuery = LeaderQuery(mockWeeksQuery, mockWeekTotalQuery)
 
         val leader: List<LeaderDTO> = leaderQuery.get()
 
@@ -87,16 +105,14 @@ class LeaderQueryTest {
         val week = "Week 2"
         val user = UserDTO("Daav")
 
-        val mockWeeksQuery = mockkClass(WeeksQuery::class)
         every { mockWeeksQuery.get() } returns listOf(WeekDTO(week))
+        every { mockGamesQuery.getGamesForWeek(week) } returns listOf(defaultGame)
 
-        val mockWeekTotalQuery = mockkClass(UserWeekTotalQuery::class)
+
         every { mockWeekTotalQuery.get(week) } returns
                 listOf(UserWeekTotalDTO(user).apply {
                     games = mutableListOf()
                 })
-
-        val leaderQuery = LeaderQuery(mockWeeksQuery, mockWeekTotalQuery)
 
         val leader: List<LeaderDTO> = leaderQuery.get()
 
@@ -110,10 +126,10 @@ class LeaderQueryTest {
         val week = "Week 2"
         val users = listOf(UserDTO("Daav"), UserDTO("Bef"))
 
-        val mockWeeksQuery = mockkClass(WeeksQuery::class)
         every { mockWeeksQuery.get() } returns listOf(WeekDTO(week))
+        every { mockGamesQuery.getGamesForWeek(week) } returns listOf(defaultGame)
 
-        val mockWeekTotalQuery = mockkClass(UserWeekTotalQuery::class)
+
         every { mockWeekTotalQuery.get(week) } returns
                 listOf(
                     UserWeekTotalDTO(users[0]).apply {
@@ -124,7 +140,6 @@ class LeaderQueryTest {
                     }
                 )
 
-        val leaderQuery = LeaderQuery(mockWeeksQuery, mockWeekTotalQuery)
 
         val leaders: List<LeaderDTO> = leaderQuery.get()
 
@@ -139,10 +154,10 @@ class LeaderQueryTest {
         val week = "Week 2"
         val users = listOf(UserDTO("Daav"), UserDTO("Bef"))
 
-        val mockWeeksQuery = mockkClass(WeeksQuery::class)
         every { mockWeeksQuery.get() } returns listOf(WeekDTO(week))
+        every { mockGamesQuery.getGamesForWeek(week) } returns listOf(defaultGame)
 
-        val mockWeekTotalQuery = mockkClass(UserWeekTotalQuery::class)
+
         every { mockWeekTotalQuery.get(week) } returns
                 listOf(
                     UserWeekTotalDTO(users[0]).apply {
@@ -152,8 +167,6 @@ class LeaderQueryTest {
                         games = mutableListOf()
                     }
                 )
-
-        val leaderQuery = LeaderQuery(mockWeeksQuery, mockWeekTotalQuery)
 
         val leaders: List<LeaderDTO> = leaderQuery.get()
 
@@ -176,10 +189,11 @@ class LeaderQueryTest {
             result = "CHI"
         }
 
-        val mockWeeksQuery = mockkClass(WeeksQuery::class)
+        every { mockGamesQuery.getGamesForWeek(weeks[1].name) } returns listOf(defaultGame)
+
+
         every { mockWeeksQuery.get() } returns weeks
 
-        val mockWeekTotalQuery = mockkClass(UserWeekTotalQuery::class)
         every { mockWeekTotalQuery.get(weeks[0].name) } returns
                 listOf(UserWeekTotalDTO(user).apply {
                     games = mutableListOf(game)
@@ -190,12 +204,31 @@ class LeaderQueryTest {
                 })
 
 
-        val leaderQuery = LeaderQuery(mockWeeksQuery, mockWeekTotalQuery)
-
         val leader: List<LeaderDTO> = leaderQuery.get()
 
         assertEquals(user.name, leader.first().name)
         assertEquals(2, leader.first().correctWeeks)
         assertEquals(2, leader.first().correctPicks)
+    }
+
+    @Test
+    fun incompleteWeeksAreNotConsideredForWinning() {
+        val user = UserDTO("Daan")
+        val unfinishedGame = GameDTO("GB@CHI", defaultWeek)
+
+        every { mockWeeksQuery.get() } returns listOf(WeekDTO(defaultWeek))
+        every { mockGamesQuery.getGamesForWeek(defaultWeek) } returns listOf(unfinishedGame)
+
+        every { mockWeekTotalQuery.get(defaultWeek) } returns
+                listOf(UserWeekTotalDTO(user).apply {
+                    games = mutableListOf(defaultGame)
+                })
+
+
+        val leader: List<LeaderDTO> = leaderQuery.get()
+
+        assertEquals(user.name, leader.first().name)
+        assertEquals(0, leader.first().correctWeeks)
+        assertEquals(1, leader.first().correctPicks)
     }
 }
