@@ -18,7 +18,7 @@ class UserPickQuery(private val connection: Connection) : DataFetcher<List<UserP
         return getPicksForWeek(week)
     }
 
-    fun getPicksForWeek(week: String): ArrayList<UserPicksDTO> {
+    fun getPicksForWeek(week: String): List<UserPicksDTO> {
         val statement = connection.createStatement()
         val queryString = "SELECT name, game, pick FROM userpicks WHERE week = '$week'"
         val queryResult = statement.executeQuery(queryString)
