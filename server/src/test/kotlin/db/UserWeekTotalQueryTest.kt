@@ -48,9 +48,27 @@ class UserWeekTotalQueryTest {
     }
 
     @Test
+    fun returnsListWithUsersWhenOneUserInUserFieldWithDifferentWeek() {
+        val week = "Week 4"
+        val env = getEnvForWeek(week)
+        val expectedUsers = arrayListOf(UserDTO("Darve"))
+        val sqlState = SQLState(week).apply {
+            users = expectedUsers
+        }
+        sqlState.mockSQLState(mockStatement)
+
+        val query = UserWeekTotalQuery(mockConnection).get(env)
+
+        assertEquals(
+            expectedUsers.map { user -> user.name },
+            query.map { result -> result.user.name }
+        )
+        assertEquals(expectedUsers.size, query.size)
+    }
+
+    @Test
     fun returnsSameListWithStringArugmentForWeek() {
         val week = "Week 0"
-        getEnvForWeek(week)
         val expectedUsers = arrayListOf(UserDTO("Dave"))
         val sqlState = SQLState(week).apply {
             users = expectedUsers
@@ -69,7 +87,6 @@ class UserWeekTotalQueryTest {
     @Test
     fun oneUserWithOneCorrectPickHasGameAndTotalInResponse() {
         val week = "Week 0"
-        val env = getEnvForWeek(week)
         val gameName = "GB@CHI"
         val pick = "CHI"
         val sqlState = SQLState(week).apply {
@@ -83,7 +100,7 @@ class UserWeekTotalQueryTest {
         }
         sqlState.mockSQLState(mockStatement)
 
-        val query = UserWeekTotalQuery(mockConnection).get(env)
+        val query = UserWeekTotalQuery(mockConnection).get(week)
 
         assertQueryResultIsGameAndWeek(query, gameName, week)
     }
@@ -91,7 +108,6 @@ class UserWeekTotalQueryTest {
     @Test
     fun correctPickWithDifferentCaseSensitivityMatches() {
         val week = "Week 0"
-        val env = getEnvForWeek(week)
         val gameName = "GB@CHI"
         val sqlState = SQLState(week).apply {
             users.add(UserDTO("DaeV"))
@@ -104,7 +120,7 @@ class UserWeekTotalQueryTest {
         }
         sqlState.mockSQLState(mockStatement)
 
-        val query = UserWeekTotalQuery(mockConnection).get(env)
+        val query = UserWeekTotalQuery(mockConnection).get(week)
 
         assertQueryResultIsGameAndWeek(query, gameName, week)
     }
@@ -112,7 +128,6 @@ class UserWeekTotalQueryTest {
     @Test
     fun correctPickWithLeadingWhitespaceMatches() {
         val week = "Week 0"
-        val env = getEnvForWeek(week)
         val gameName = "GB@CHI"
         val sqlState = SQLState(week).apply {
             users.add(UserDTO(" DaeV"))
@@ -125,7 +140,7 @@ class UserWeekTotalQueryTest {
         }
         sqlState.mockSQLState(mockStatement)
 
-        val query = UserWeekTotalQuery(mockConnection).get(env)
+        val query = UserWeekTotalQuery(mockConnection).get(week)
 
         assertQueryResultIsGameAndWeek(query, gameName, week)
     }
@@ -135,7 +150,6 @@ class UserWeekTotalQueryTest {
         val week = "Week 4"
         val gameName = "GB@CHI"
         val pick = "CHI"
-        val env = getEnvForWeek(week)
         val sqlState = SQLState(week).apply {
             users.add(UserDTO("Dave"))
             games.add(GameDTO(gameName, week).apply {
@@ -147,7 +161,7 @@ class UserWeekTotalQueryTest {
         }
         sqlState.mockSQLState(mockStatement)
 
-        val query = UserWeekTotalQuery(mockConnection).get(env)
+        val query = UserWeekTotalQuery(mockConnection).get(week)
 
         assertQueryResultIsGameAndWeek(query, gameName, week)
     }
@@ -155,7 +169,6 @@ class UserWeekTotalQueryTest {
     @Test
     fun oneUserWithWrongPickDoesNotHaveTotalInResponse() {
         val week = "Week 4"
-        val env = getEnvForWeek(week)
         val gameName = "GB@CHI"
         val sqlState = SQLState(week).apply {
             users.add(UserDTO("Dave"))
@@ -168,7 +181,7 @@ class UserWeekTotalQueryTest {
         }
         sqlState.mockSQLState(mockStatement)
 
-        val query = UserWeekTotalQuery(mockConnection).get(env)
+        val query = UserWeekTotalQuery(mockConnection).get(week)
 
         assertEquals(0, query[0].games.size)
     }
@@ -176,7 +189,6 @@ class UserWeekTotalQueryTest {
     @Test
     fun nullResultDoesNotMatchNullPick() {
         val week = "Week 4"
-        val env = getEnvForWeek(week)
         val sqlState = SQLState(week).apply {
             users.add(UserDTO("Dave"))
             games.add(GameDTO("GB@CHI", week))
@@ -184,7 +196,7 @@ class UserWeekTotalQueryTest {
         }
         sqlState.mockSQLState(mockStatement)
 
-        val query = UserWeekTotalQuery(mockConnection).get(env)
+        val query = UserWeekTotalQuery(mockConnection).get(week)
 
         assertEquals(0, query[0].games.size)
     }
@@ -192,14 +204,13 @@ class UserWeekTotalQueryTest {
     @Test
     fun returnsListWithUsersWhenTwoUserInUserField() {
         val week = "Week 0"
-        val env = getEnvForWeek(week)
         val sqlState = SQLState(week).apply {
             users.add(UserDTO("Dave"))
             users.add(UserDTO("Jack"))
         }
         sqlState.mockSQLState(mockStatement)
 
-        val query = UserWeekTotalQuery(mockConnection).get(env)
+        val query = UserWeekTotalQuery(mockConnection).get(week)
 
         assertEquals(
             sqlState.users.map { user -> user.name },

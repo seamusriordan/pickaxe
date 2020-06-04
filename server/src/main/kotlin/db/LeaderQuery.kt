@@ -2,11 +2,13 @@ package db
 
 import dto.LeaderDTO
 
-class LeaderQuery(weekTotalQuery: UserWeekTotalQuery) {
+class LeaderQuery(private var weeksQuery: WeeksQuery, private var weekTotalQuery: UserWeekTotalQuery) {
     fun get(): List<LeaderDTO> {
-        return listOf(LeaderDTO("Daan").apply {
-            correctPicks = 1
-            correctWeeks = 1
+        val week = weeksQuery.get().first().name
+        val firstWeekResult = weekTotalQuery.get(week).first()
+        return listOf(LeaderDTO(firstWeekResult.user.name).apply {
+            correctPicks = firstWeekResult.total
+            correctWeeks = firstWeekResult.total
         })
     }
 }
