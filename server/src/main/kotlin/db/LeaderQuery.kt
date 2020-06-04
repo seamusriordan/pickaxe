@@ -2,7 +2,7 @@ package db
 
 import dto.LeaderDTO
 
-class LeaderQuery(userQuery: UserQuery, weeksQuery: WeeksQuery, userPickQuery: UserPickQuery) {
+class LeaderQuery(weekTotalQuery: UserWeekTotalQuery) {
     fun get(): List<LeaderDTO> {
         return listOf(LeaderDTO("Daan").apply {
             correctPicks = 1

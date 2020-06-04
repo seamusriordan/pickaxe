@@ -8,6 +8,10 @@ import java.sql.Connection
 class UserWeekTotalQuery(val connection: Connection) : DataFetcher<List<UserWeekTotalDTO>> {
     override fun get(environment: DataFetchingEnvironment): List<UserWeekTotalDTO> {
         val week = environment.arguments["week"] as String
+        return get(week)
+    }
+
+    fun get(week: String): List<UserWeekTotalDTO> {
         val users = UserQuery(connection).getActiveUsers()
         val games = GamesQuery(connection).getGamesForWeek(week)
         val allUserPicks = UserPickQuery(connection).getPicksForWeek(week)
@@ -51,4 +55,6 @@ class UserWeekTotalQuery(val connection: Connection) : DataFetcher<List<UserWeek
 
     private fun gameMatchesPick(game: GameDTO?, pick: String) =
         game != null && game.result.equals(pick.trim(), ignoreCase = true)
+
+
 }

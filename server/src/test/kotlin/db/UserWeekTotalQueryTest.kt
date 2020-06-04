@@ -48,6 +48,25 @@ class UserWeekTotalQueryTest {
     }
 
     @Test
+    fun returnsSameListWithStringArugmentForWeek() {
+        val week = "Week 0"
+        getEnvForWeek(week)
+        val expectedUsers = arrayListOf(UserDTO("Dave"))
+        val sqlState = SQLState(week).apply {
+            users = expectedUsers
+        }
+        sqlState.mockSQLState(mockStatement)
+
+        val query = UserWeekTotalQuery(mockConnection).get(week)
+
+        assertEquals(
+            expectedUsers.map { user -> user.name },
+            query.map { result -> result.user.name }
+        )
+        assertEquals(expectedUsers.size, query.size)
+    }
+
+    @Test
     fun oneUserWithOneCorrectPickHasGameAndTotalInResponse() {
         val week = "Week 0"
         val env = getEnvForWeek(week)

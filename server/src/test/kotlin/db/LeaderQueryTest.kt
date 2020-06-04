@@ -15,25 +15,14 @@ class LeaderQueryTest {
             result = "CHI"
         }
 
-        val mockUserQuery = mockkClass(UserQuery::class)
-        every { mockUserQuery.getActiveUsers() } returns listOf(user)
+        val mockWeekTotalQuery = mockkClass(UserWeekTotalQuery::class)
 
-        val mockWeeksQuery = mockkClass(WeeksQuery::class)
-        every { mockWeeksQuery.get() } returns listOf(WeekDTO(week))
+        every { mockWeekTotalQuery.get(week) } returns
+                listOf(UserWeekTotalDTO(user).apply {
+                    games = mutableListOf(game)
+                })
 
-        val mockGamesQuery = mockkClass(GamesQuery::class)
-        every { mockGamesQuery.getGamesForWeek(week) } returns listOf(game)
-
-        val mockPickQuery = mockkClass(UserPickQuery::class)
-        every { mockPickQuery.getPicksForWeek(week) } returns listOf(
-            UserPicksDTO(user).apply {
-                picks.add(
-                    PickDTO(game.name, game.result!!)
-                )
-            }
-        )
-
-        val leaderQuery = LeaderQuery(mockUserQuery, mockWeeksQuery, mockPickQuery)
+        val leaderQuery = LeaderQuery(mockWeekTotalQuery)
 
         val leader: List<LeaderDTO> = leaderQuery.get()
 
