@@ -9,6 +9,7 @@ import gql from 'graphql-tag';
 import {assertAllUserPicksMatchCellText, findByClassName} from "../testUtilities/Helpers";
 import PickCell from "./PickCell";
 import {getPickByGame} from "./PickCells";
+import {Leaderboard} from "../leaderboard/Leaderboard";
 
 
 jest.mock('@apollo/react-hooks');
@@ -435,6 +436,13 @@ describe('PicksGrid', () => {
                 .toEqual(oneMockGameData.games.map(game => game.result))
         });
 
+    });
+    describe('leaderboard', () => {
+        it('has leaderboard', () => {
+            const leaderboard = grid.findAllByType(Leaderboard)
+
+            expect(leaderboard).toHaveLength(1)
+        })
     });
 
 });
