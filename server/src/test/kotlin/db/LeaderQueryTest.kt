@@ -52,8 +52,34 @@ class LeaderQueryTest {
         val leader: List<LeaderDTO> = leaderQuery.get()
 
         assertEquals(user.name, leader.first().name)
-        assertEquals(0, leader.first().correctWeeks)
+        assertEquals(1, leader.first().correctWeeks)
         assertEquals(0, leader.first().correctPicks)
+    }
+
+    @Test
+    fun oneUserWithTwoPicksAndOneCorrect() {
+        val week = "Week 1"
+        val user = UserDTO("Daav")
+
+        val mockWeeksQuery = mockkClass(WeeksQuery::class)
+        every { mockWeeksQuery.get() } returns listOf(WeekDTO(week))
+
+        val mockWeekTotalQuery = mockkClass(UserWeekTotalQuery::class)
+        every { mockWeekTotalQuery.get(week) } returns
+                listOf(UserWeekTotalDTO(user).apply {
+                    games = mutableListOf(
+                        GameDTO("GB@CHI", week),
+                        GameDTO("TB@NE", week)
+                    )
+                })
+
+        val leaderQuery = LeaderQuery(mockWeeksQuery, mockWeekTotalQuery)
+
+        val leader: List<LeaderDTO> = leaderQuery.get()
+
+        assertEquals(user.name, leader.first().name)
+        assertEquals(1, leader.first().correctWeeks)
+        assertEquals(2, leader.first().correctPicks)
     }
 
     @Test
@@ -75,7 +101,7 @@ class LeaderQueryTest {
         val leader: List<LeaderDTO> = leaderQuery.get()
 
         assertEquals(user.name, leader.first().name)
-        assertEquals(0, leader.first().correctWeeks)
+        assertEquals(1, leader.first().correctWeeks)
         assertEquals(0, leader.first().correctPicks)
     }
 
@@ -104,12 +130,12 @@ class LeaderQueryTest {
 
         assertEquals(2, leaders.size)
         assertEquals(users[1].name, leaders[1].name)
-        assertEquals(0, leaders[1].correctWeeks)
+        assertEquals(1, leaders[1].correctWeeks)
         assertEquals(0, leaders[1].correctPicks)
     }
 
     @Test
-    fun twoUsersWithDifferentPicks() {
+    fun twoUsersWithDifferentPicksInOneWeek() {
         val week = "Week 2"
         val users = listOf(UserDTO("Daav"), UserDTO("Bef"))
 

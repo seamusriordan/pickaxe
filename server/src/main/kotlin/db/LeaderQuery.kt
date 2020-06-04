@@ -9,14 +9,17 @@ class LeaderQuery(private var weeksQuery: WeeksQuery, private var weekTotalQuery
             LeaderDTO(it.user.name)
         }
 
-        leaders.forEach { leader ->
-            val sum = weeksQuery.get()
-                .map { week ->
-                    weekTotalQuery.get(week.name).first { it.user.name == leader.name }.total
+        weeksQuery.get().forEach { week ->
+            val weekResults = weekTotalQuery.get(week.name)
+            val mostWon = weekResults.map { results -> results.total }.max()
+
+            leaders.forEach{ leader ->
+                val leaderResult = weekResults.first { it.user.name == leader.name }
+                if(leaderResult.total == mostWon) {
+                    leader.correctWeeks += 1
                 }
-                .reduce { total, weeklyTotal -> total + weeklyTotal }
-            leader.correctWeeks = sum
-            leader.correctPicks = sum
+                leader.correctPicks += leaderResult.total
+            }
         }
         return leaders
     }
