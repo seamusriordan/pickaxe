@@ -1,6 +1,8 @@
 package db
 
+import dto.GameDTO
 import dto.LeaderDTO
+import dto.UserWeekTotalDTO
 import graphql.schema.DataFetcher
 import graphql.schema.DataFetchingEnvironment
 
@@ -18,23 +20,55 @@ class LeaderQuery(
 
         weeksQuery.get().forEach { week ->
             val weekResults = weekTotalQuery.get(week.name)
-            val mostWon = weekResults.map { results -> results.total }.max()
+            val gamesForWeek = gamesQuery.getGamesForWeek(week.name)
 
-            val weekIsComplete =
-                !gamesQuery
-                .getGamesForWeek(week.name)
-                .map { it.result == null }
-                    .contains(true)
-
-            leaders.forEach { leader ->
-                val leaderResult = weekResults.first { it.user.name == leader.name }
-                if (leaderResult.total == mostWon && weekIsComplete) {
-                    leader.correctWeeks += 1
-                }
-                leader.correctPicks += leaderResult.total
-            }
+            tallyResultsForWeek(leaders, gamesForWeek, weekResults)
         }
         return leaders
+    }
+
+    private fun tallyResultsForWeek(
+        leaders: List<LeaderDTO>,
+        gamesForWeek: List<GameDTO>,
+        weekResults: List<UserWeekTotalDTO>
+    ) {
+        leaders.forEach { leader -> tallyResultsForUser(leader, weekResults, gamesForWeek) }
+    }
+
+    private fun tallyResultsForUser(
+        leader: LeaderDTO,
+        weekResults: List<UserWeekTotalDTO>,
+        gamesForWeek: List<GameDTO>
+    ) {
+        val leaderResult = getResultsForLeader(leader, weekResults)
+        if (hasNoIncompleteGames(gamesForWeek) && hasMostCorrectPicks(leaderResult, weekResults)) {
+            leader.correctWeeks += 1
+        }
+        leader.correctPicks += leaderResult.total
+    }
+
+    private fun hasMostCorrectPicks(
+        leaderResult: UserWeekTotalDTO,
+        weekResults: List<UserWeekTotalDTO>
+    ): Boolean {
+        return leaderResult.total == getMostCorrectPicks(weekResults)
+    }
+
+    private fun getMostCorrectPicks(weekResults: List<UserWeekTotalDTO>): Int? {
+        return weekResults.map { results -> results.total }.max()
+    }
+
+    private fun getResultsForLeader(
+        leader: LeaderDTO,
+        weekResults: List<UserWeekTotalDTO>
+    ) = weekResults.first { it.user.name == leader.name }
+
+    private fun hasNoIncompleteGames(games: List<GameDTO>) = !weekHasIncompleteGame(games)
+
+    private fun weekHasIncompleteGame(games: List<GameDTO>): Boolean {
+        return games
+            .map { it.result == null }
+            .contains(true)
     }
 
     override fun get(environment: DataFetchingEnvironment?): List<LeaderDTO> {
