@@ -78,4 +78,36 @@ class LeaderQueryTest {
         assertEquals(0, leader.first().correctWeeks)
         assertEquals(0, leader.first().correctPicks)
     }
+
+    @Test
+    fun oneUserWithCorrectPicksOverTwoWeeks() {
+        val weeks =  listOf(WeekDTO("Week 1"), WeekDTO("Week 2"))
+        val user = UserDTO("Daav")
+
+        val game = GameDTO("GB@CHI", weeks[0].name).apply {
+            result = "CHI"
+        }
+
+        val mockWeeksQuery = mockkClass(WeeksQuery::class)
+        every {mockWeeksQuery.get()} returns weeks
+
+        val mockWeekTotalQuery = mockkClass(UserWeekTotalQuery::class)
+        every { mockWeekTotalQuery.get(weeks[0].name) } returns
+                listOf(UserWeekTotalDTO(user).apply {
+                    games = mutableListOf(game)
+                })
+        every { mockWeekTotalQuery.get(weeks[1].name) } returns
+                listOf(UserWeekTotalDTO(user).apply {
+                    games = mutableListOf(game)
+                })
+
+
+        val leaderQuery = LeaderQuery(mockWeeksQuery, mockWeekTotalQuery)
+
+        val leader: List<LeaderDTO> = leaderQuery.get()
+
+        assertEquals(user.name, leader.first().name)
+        assertEquals(2, leader.first().correctWeeks)
+        assertEquals(2, leader.first().correctPicks)
+    }
 }
