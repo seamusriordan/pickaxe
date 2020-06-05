@@ -25,6 +25,6 @@ describe('leaderboard', () => {
         cy.get("#Seamus-GB\\@CHI")
             .click()
             .type('{backspace}{backspace}')
-            .invoke('blur')
+            .invoke('blur' )
     });
 });
