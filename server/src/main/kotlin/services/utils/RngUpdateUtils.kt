@@ -64,7 +64,5 @@ class RngUpdateUtils {
         private fun isGameAlreadyPicked(game: GameDTO, rngPicks: UserPicksDTO) =
             rngPicks.picks.map { pick -> pick.game }
                 .contains(game.name)
-
-
     }
 }
