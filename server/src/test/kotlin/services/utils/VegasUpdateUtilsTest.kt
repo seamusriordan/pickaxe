@@ -1,12 +1,7 @@
 package services.utils
 
-import db.CurrentWeekQuery
-import db.GameMutator
-import db.GamesQuery
-import db.UpdatePickMutator
-import dto.GameDTO
-import dto.PickWithSpreadDTO
-import dto.WeekDTO
+import db.*
+import dto.*
 import graphql.schema.DataFetchingEnvironment
 import io.mockk.every
 import io.mockk.mockkClass
@@ -19,37 +14,52 @@ import java.util.*
 import kotlin.collections.HashMap
 
 class VegasUpdateUtilsTest {
+    private val mockCurrentWeekQuery = mockkClass(CurrentWeekQuery::class)
+    private val mockPicksQuery = mockkClass(UserPickQuery::class)
+    private val mockGamesQuery = mockkClass(GamesQuery::class)
+    private val mockPickMutator = mockkClass(UpdatePickMutator::class)
+    private val mockGameMutator = mockkClass(GameMutator::class)
+    private val mockVegasPicksApi = mockkClass(VegasPicksApi::class)
 
+
+    private val rngUserName = "RNG"
+    private val defaultWeek = "Week 0"
+    private val defaultGame = "DET@CHI"
+    private val defaultExpectedPick = "CHI"
+    private val defaultSpread = -7.0
+
+    private val defaultGameDTO = GameDTO(defaultGame, defaultWeek).apply {
+        gameTime = OffsetDateTime.now().plusDays(1)
+        id = UUID.randomUUID()
+    }
+
+    private val emptyExistingPicks = UserPicksDTO(UserDTO(rngUserName))
+
+    private val pickMutatorEnvs = mutableListOf<DataFetchingEnvironment>()
+    private val gameMutations = mutableListOf<GameDTO>()
+
+
+    init {
+        every { mockPickMutator.get(capture(pickMutatorEnvs)) } returns true
+        every { mockGameMutator.putInDatabase(capture(gameMutations)) } returns Unit
+
+
+        every { mockCurrentWeekQuery.getCurrentWeek() } returns WeekDTO(defaultWeek)
+        every { mockGamesQuery.getGamesForWeek(defaultWeek) } returns listOf(
+            defaultGameDTO
+        )
+        every { mockPicksQuery.getPicksForWeek(defaultWeek) } returns listOf(
+            emptyExistingPicks
+        )
+
+        every { mockVegasPicksApi.getVegasPicks() } returns listOf(
+            PickWithSpreadDTO(defaultGame, defaultExpectedPick, defaultSpread)
+        )
+    }
 
 
     @Test
     fun oneVegasPickUpdatesPickForCurrentWeek() {
-        val mockCurrentWeekQuery = mockkClass(CurrentWeekQuery::class)
-        val mockGamesQuery = mockkClass(GamesQuery::class)
-        val mockPickMutator = mockkClass(UpdatePickMutator::class)
-        val mockGameMutator = mockkClass(GameMutator::class)
-        val mockVegasPicksApi = mockkClass(VegasPicksApi::class)
-
-        val pickMutatorEnvs = mutableListOf<DataFetchingEnvironment>()
-        val gameMutations = mutableListOf<GameDTO>()
-
-        val week = "Week 0"
-        val game = "DET@CHI"
-        val expectedPick = "CHI"
-        every { mockCurrentWeekQuery.getCurrentWeek() } returns WeekDTO(week)
-        every { mockGamesQuery.getGamesForWeek(week) } returns listOf(
-            GameDTO(game, week).apply {
-                gameTime = OffsetDateTime.now().plusDays(1)
-                id = UUID.randomUUID()
-            }
-        )
-
-        every { mockPickMutator.get(capture(pickMutatorEnvs)) } returns true
-        every { mockGameMutator.putInDatabase(capture(gameMutations)) } returns Unit
-        every { mockVegasPicksApi.getVegasPicks() } returns listOf(
-            PickWithSpreadDTO(game, expectedPick, -7.0)
-        )
-
         updateVegasPicks(
             mockCurrentWeekQuery,
             mockGamesQuery,
@@ -62,37 +72,17 @@ class VegasUpdateUtilsTest {
         val mutatorEnv = pickMutatorEnvs.first()
         Assertions.assertEquals("Vegas", mutatorEnv.arguments["name"])
         val userPick = mutatorEnv.arguments["userPick"] as HashMap<*, *>
-        Assertions.assertEquals(week, userPick["week"])
-        Assertions.assertEquals(game, userPick["game"])
-        Assertions.assertEquals(expectedPick, userPick["pick"]!!)
+        Assertions.assertEquals(defaultWeek, userPick["week"])
+        Assertions.assertEquals(defaultGame, userPick["game"])
+        Assertions.assertEquals(defaultExpectedPick, userPick["pick"]!!)
     }
 
     @Test
     fun oneVegasPickUpdatesWithCurrentWeek() {
-        val mockCurrentWeekQuery = mockkClass(CurrentWeekQuery::class)
-        val mockGamesQuery = mockkClass(GamesQuery::class)
-        val mockPickMutator = mockkClass(UpdatePickMutator::class)
-        val mockGameMutator = mockkClass(GameMutator::class)
-        val mockVegasPicksApi = mockkClass(VegasPicksApi::class)
-
-        val pickMutatorEnvs = mutableListOf<DataFetchingEnvironment>()
-        val gameMutations = mutableListOf<GameDTO>()
-
         val week = "Week 1"
-        val game = "DET@CHI"
-        val expectedPick = "CHI"
         every { mockCurrentWeekQuery.getCurrentWeek() } returns WeekDTO(week)
         every { mockGamesQuery.getGamesForWeek(week) } returns listOf(
-            GameDTO(game, week).apply {
-                gameTime = OffsetDateTime.now().plusDays(1)
-                id = UUID.randomUUID()
-            }
-        )
-
-        every { mockPickMutator.get(capture(pickMutatorEnvs)) } returns true
-        every { mockGameMutator.putInDatabase(capture(gameMutations)) } returns Unit
-        every { mockVegasPicksApi.getVegasPicks() } returns listOf(
-            PickWithSpreadDTO(game, expectedPick, -7.0)
+            defaultGameDTO
         )
 
         updateVegasPicks(
@@ -102,7 +92,6 @@ class VegasUpdateUtilsTest {
             mockPickMutator,
             mockVegasPicksApi
         )
-
 
         val mutatorEnv = pickMutatorEnvs.first()
         val userPick = mutatorEnv.arguments["userPick"] as HashMap<*, *>
@@ -111,30 +100,16 @@ class VegasUpdateUtilsTest {
 
     @Test
     fun oneVegasPickUpdatesPickWithGame() {
-        val mockCurrentWeekQuery = mockkClass(CurrentWeekQuery::class)
-        val mockGamesQuery = mockkClass(GamesQuery::class)
-        val mockPickMutator = mockkClass(UpdatePickMutator::class)
-        val mockGameMutator = mockkClass(GameMutator::class)
-        val mockVegasPicksApi = mockkClass(VegasPicksApi::class)
-
-        val pickMutatorEnvs = mutableListOf<DataFetchingEnvironment>()
-        val gameMutations = mutableListOf<GameDTO>()
-
-        val week = "Week 1"
         val game = "TB@NE"
         val expectedPick = "TB"
-        every { mockCurrentWeekQuery.getCurrentWeek() } returns WeekDTO(week)
-        every { mockGamesQuery.getGamesForWeek(week) } returns listOf(
-            GameDTO(game, week).apply {
+        every { mockGamesQuery.getGamesForWeek(defaultWeek) } returns listOf(
+            GameDTO(game, defaultWeek).apply {
                 gameTime = OffsetDateTime.now().plusDays(1)
                 id = UUID.randomUUID()
             }
         )
-
-        every { mockPickMutator.get(capture(pickMutatorEnvs)) } returns true
-        every { mockGameMutator.putInDatabase(capture(gameMutations)) } returns Unit
         every { mockVegasPicksApi.getVegasPicks() } returns listOf(
-            PickWithSpreadDTO(game, expectedPick, -7.0)
+            PickWithSpreadDTO(game, expectedPick, defaultSpread)
         )
 
         updateVegasPicks(
@@ -144,7 +119,6 @@ class VegasUpdateUtilsTest {
             mockPickMutator,
             mockVegasPicksApi
         )
-
 
         val mutatorEnv = pickMutatorEnvs.first()
         val userPick = mutatorEnv.arguments["userPick"] as HashMap<*, *>
@@ -153,30 +127,16 @@ class VegasUpdateUtilsTest {
 
     @Test
     fun oneVegasPickUpdatesPickWithPick() {
-        val mockCurrentWeekQuery = mockkClass(CurrentWeekQuery::class)
-        val mockGamesQuery = mockkClass(GamesQuery::class)
-        val mockPickMutator = mockkClass(UpdatePickMutator::class)
-        val mockGameMutator = mockkClass(GameMutator::class)
-        val mockVegasPicksApi = mockkClass(VegasPicksApi::class)
-
-        val pickMutatorEnvs = mutableListOf<DataFetchingEnvironment>()
-        val gameMutations = mutableListOf<GameDTO>()
-
-        val week = "Week 1"
         val game = "TB@NE"
         val expectedPick = "TB"
-        every { mockCurrentWeekQuery.getCurrentWeek() } returns WeekDTO(week)
-        every { mockGamesQuery.getGamesForWeek(week) } returns listOf(
-            GameDTO(game, week).apply {
+        every { mockGamesQuery.getGamesForWeek(defaultWeek) } returns listOf(
+            GameDTO(game, defaultWeek).apply {
                 gameTime = OffsetDateTime.now().plusDays(1)
                 id = UUID.randomUUID()
             }
         )
-
-        every { mockPickMutator.get(capture(pickMutatorEnvs)) } returns true
-        every { mockGameMutator.putInDatabase(capture(gameMutations)) } returns Unit
         every { mockVegasPicksApi.getVegasPicks() } returns listOf(
-            PickWithSpreadDTO(game, expectedPick, -7.0)
+            PickWithSpreadDTO(game, expectedPick, defaultSpread)
         )
 
         updateVegasPicks(
@@ -186,7 +146,6 @@ class VegasUpdateUtilsTest {
             mockPickMutator,
             mockVegasPicksApi
         )
-
 
         val mutatorEnv = pickMutatorEnvs.first()
         val userPick = mutatorEnv.arguments["userPick"] as HashMap<*, *>
@@ -195,35 +154,6 @@ class VegasUpdateUtilsTest {
 
     @Test
     fun oneVegasPickUpdatesSpreadForGame() {
-        val mockCurrentWeekQuery = mockkClass(CurrentWeekQuery::class)
-        val mockGamesQuery = mockkClass(GamesQuery::class)
-        val mockPickMutator = mockkClass(UpdatePickMutator::class)
-        val mockGameMutator = mockkClass(GameMutator::class)
-        val mockVegasPicksApi = mockkClass(VegasPicksApi::class)
-
-        val pickMutatorEnvs = mutableListOf<DataFetchingEnvironment>()
-        val gameMutations = mutableListOf<GameDTO>()
-
-        val week = "Week 1"
-        val game = "TB@NE"
-        val expectedPick = "TB"
-        every { mockCurrentWeekQuery.getCurrentWeek() } returns WeekDTO(week)
-        val expectedGameTime = OffsetDateTime.now().plusDays(1)
-        val randomUUID = UUID.randomUUID()
-        every { mockGamesQuery.getGamesForWeek(week) } returns listOf(
-            GameDTO(game, week).apply {
-                gameTime = expectedGameTime
-                id = randomUUID
-            }
-        )
-
-        every { mockPickMutator.get(capture(pickMutatorEnvs)) } returns true
-        every { mockGameMutator.putInDatabase(capture(gameMutations)) } returns Unit
-        val expectedSpread = -7.0
-        every { mockVegasPicksApi.getVegasPicks() } returns listOf(
-            PickWithSpreadDTO(game, expectedPick, expectedSpread)
-        )
-
         updateVegasPicks(
             mockCurrentWeekQuery,
             mockGamesQuery,
@@ -232,44 +162,19 @@ class VegasUpdateUtilsTest {
             mockVegasPicksApi
         )
 
-
         Assertions.assertEquals(1, gameMutations.size)
         val gameMutation = gameMutations.first()
-        Assertions.assertEquals(game, gameMutation.name)
-        Assertions.assertEquals(week, gameMutation.week)
-        Assertions.assertEquals(expectedSpread, gameMutation.spread)
-        Assertions.assertEquals(randomUUID, gameMutation.id)
+        Assertions.assertEquals(defaultGame, gameMutation.name)
+        Assertions.assertEquals(defaultWeek, gameMutation.week)
+        Assertions.assertEquals(defaultSpread, gameMutation.spread)
+        Assertions.assertEquals(defaultGameDTO.id, gameMutation.id)
     }
 
     @Test
     fun oneVegasPickUpdatesSpreadForVaryingSpread() {
-        val mockCurrentWeekQuery = mockkClass(CurrentWeekQuery::class)
-        val mockGamesQuery = mockkClass(GamesQuery::class)
-        val mockPickMutator = mockkClass(UpdatePickMutator::class)
-        val mockGameMutator = mockkClass(GameMutator::class)
-        val mockVegasPicksApi = mockkClass(VegasPicksApi::class)
-
-        val pickMutatorEnvs = mutableListOf<DataFetchingEnvironment>()
-        val gameMutations = mutableListOf<GameDTO>()
-
-        val week = "Week 1"
-        val game = "TB@NE"
-        val expectedPick = "TB"
-        every { mockCurrentWeekQuery.getCurrentWeek() } returns WeekDTO(week)
-        val expectedGameTime = OffsetDateTime.now().plusDays(1)
-        val randomUUID = UUID.randomUUID()
-        every { mockGamesQuery.getGamesForWeek(week) } returns listOf(
-            GameDTO(game, week).apply {
-                gameTime = expectedGameTime
-                id = randomUUID
-            }
-        )
-
-        every { mockPickMutator.get(capture(pickMutatorEnvs)) } returns true
-        every { mockGameMutator.putInDatabase(capture(gameMutations)) } returns Unit
         val expectedSpread = -87.0
         every { mockVegasPicksApi.getVegasPicks() } returns listOf(
-            PickWithSpreadDTO(game, expectedPick, expectedSpread)
+            PickWithSpreadDTO(defaultGame, defaultExpectedPick, expectedSpread)
         )
 
         updateVegasPicks(
@@ -279,7 +184,6 @@ class VegasUpdateUtilsTest {
             mockPickMutator,
             mockVegasPicksApi
         )
-
 
         Assertions.assertEquals(1, gameMutations.size)
         val gameMutation = gameMutations.first()
@@ -288,35 +192,16 @@ class VegasUpdateUtilsTest {
 
     @Test
     fun twoVegasPicksUpdatesPick() {
-        val mockCurrentWeekQuery = mockkClass(CurrentWeekQuery::class)
-        val mockGamesQuery = mockkClass(GamesQuery::class)
-        val mockPickMutator = mockkClass(UpdatePickMutator::class)
-        val mockGameMutator = mockkClass(GameMutator::class)
-        val mockVegasPicksApi = mockkClass(VegasPicksApi::class)
-
-        val pickMutatorEnvs = mutableListOf<DataFetchingEnvironment>()
-        val gameMutations = mutableListOf<GameDTO>()
-
-        val week = "Week 0"
-        val game = "DET@CHI"
-        val expectedPick = "CHI"
-        every { mockCurrentWeekQuery.getCurrentWeek() } returns WeekDTO(week)
-        every { mockGamesQuery.getGamesForWeek(week) } returns listOf(
-            GameDTO("TB@NE", week).apply {
+        every { mockGamesQuery.getGamesForWeek(defaultWeek) } returns listOf(
+            GameDTO("TB@NE", defaultWeek).apply {
                 gameTime = OffsetDateTime.now().plusDays(1)
                 id = UUID.randomUUID()
             },
-            GameDTO(game, week).apply {
-                gameTime = OffsetDateTime.now().plusDays(1)
-                id = UUID.randomUUID()
-            }
+            defaultGameDTO
         )
-
-        every { mockPickMutator.get(capture(pickMutatorEnvs)) } returns true
-        every { mockGameMutator.putInDatabase(capture(gameMutations)) } returns Unit
         every { mockVegasPicksApi.getVegasPicks() } returns listOf(
             PickWithSpreadDTO("TB@NE", "TB", -7.0),
-            PickWithSpreadDTO(game, expectedPick, 3.0)
+            PickWithSpreadDTO(defaultGame, defaultExpectedPick, 3.0)
         )
 
         updateVegasPicks(
@@ -330,32 +215,13 @@ class VegasUpdateUtilsTest {
         Assertions.assertEquals(2, pickMutatorEnvs.size)
         val mutatorEnv = pickMutatorEnvs[1]
         val userPick = mutatorEnv.arguments["userPick"] as HashMap<*, *>
-        Assertions.assertEquals(game, userPick["game"])
-        Assertions.assertEquals(expectedPick, userPick["pick"]!!)
+        Assertions.assertEquals(defaultGame, userPick["game"])
+        Assertions.assertEquals(defaultExpectedPick, userPick["pick"]!!)
     }
 
     @Test
     fun vegasPickWithoutMatchingGameInDbIsNotMade() {
-        val mockCurrentWeekQuery = mockkClass(CurrentWeekQuery::class)
-        val mockGamesQuery = mockkClass(GamesQuery::class)
-        val mockPickMutator = mockkClass(UpdatePickMutator::class)
-        val mockGameMutator = mockkClass(GameMutator::class)
-        val mockVegasPicksApi = mockkClass(VegasPicksApi::class)
-
-        val pickMutatorEnvs = mutableListOf<DataFetchingEnvironment>()
-        val gameMutations = mutableListOf<GameDTO>()
-
-        val week = "Week 0"
-        val game = "DET@CHI"
-        val expectedPick = "CHI"
-        every { mockCurrentWeekQuery.getCurrentWeek() } returns WeekDTO(week)
-        every { mockGamesQuery.getGamesForWeek(week) } returns listOf()
-
-        every { mockPickMutator.get(capture(pickMutatorEnvs)) } returns true
-        every { mockGameMutator.putInDatabase(capture(gameMutations)) } returns Unit
-        every { mockVegasPicksApi.getVegasPicks() } returns listOf(
-            PickWithSpreadDTO(game, expectedPick, 3.0)
-        )
+        every { mockGamesQuery.getGamesForWeek(defaultWeek) } returns listOf()
 
         updateVegasPicks(
             mockCurrentWeekQuery,
@@ -370,31 +236,10 @@ class VegasUpdateUtilsTest {
 
     @Test
     fun vegasPicksForGamesAboutToStartAreNotUpdated() {
-        val mockCurrentWeekQuery = mockkClass(CurrentWeekQuery::class)
-        val mockGamesQuery = mockkClass(GamesQuery::class)
-        val mockPickMutator = mockkClass(UpdatePickMutator::class)
-        val mockGameMutator = mockkClass(GameMutator::class)
-        val mockVegasPicksApi = mockkClass(VegasPicksApi::class)
-
-        val pickMutatorEnvs = mutableListOf<DataFetchingEnvironment>()
-        val gameMutations = mutableListOf<GameDTO>()
-
-        val week = "Week 0"
-        val game = "DET@CHI"
-        val expectedPick = "CHI"
-        every { mockCurrentWeekQuery.getCurrentWeek() } returns WeekDTO(week)
-        every { mockGamesQuery.getGamesForWeek(week) } returns listOf(
-            GameDTO(game, week).apply {
+        every { mockGamesQuery.getGamesForWeek(defaultWeek) } returns listOf(
+            defaultGameDTO.apply {
                 gameTime = OffsetDateTime.now().plusMinutes(14)
-                id = UUID.randomUUID()
             }
-        )
-
-        every { mockPickMutator.get(capture(pickMutatorEnvs)) } returns true
-        every { mockGameMutator.putInDatabase(capture(gameMutations)) } returns Unit
-        every { mockVegasPicksApi.getVegasPicks() } returns listOf(
-            PickWithSpreadDTO("TB@NE", "TB", -7.0),
-            PickWithSpreadDTO(game, expectedPick, 3.0)
         )
 
         updateVegasPicks(
@@ -410,31 +255,10 @@ class VegasUpdateUtilsTest {
 
     @Test
     fun vegasPicksForGamesWithoutGameTimeAreNotUpdated() {
-        val mockCurrentWeekQuery = mockkClass(CurrentWeekQuery::class)
-        val mockGamesQuery = mockkClass(GamesQuery::class)
-        val mockPickMutator = mockkClass(UpdatePickMutator::class)
-        val mockGameMutator = mockkClass(GameMutator::class)
-        val mockVegasPicksApi = mockkClass(VegasPicksApi::class)
-
-        val pickMutatorEnvs = mutableListOf<DataFetchingEnvironment>()
-        val gameMutations = mutableListOf<GameDTO>()
-
-        val week = "Week 0"
-        val game = "DET@CHI"
-        val expectedPick = "CHI"
-        every { mockCurrentWeekQuery.getCurrentWeek() } returns WeekDTO(week)
-        every { mockGamesQuery.getGamesForWeek(week) } returns listOf(
-            GameDTO(game, week).apply {
+        every { mockGamesQuery.getGamesForWeek(defaultWeek) } returns listOf(
+            defaultGameDTO.apply {
                 gameTime = null
-                id = UUID.randomUUID()
             }
-        )
-
-        every { mockPickMutator.get(capture(pickMutatorEnvs)) } returns true
-        every { mockGameMutator.putInDatabase(capture(gameMutations)) } returns Unit
-        every { mockVegasPicksApi.getVegasPicks() } returns listOf(
-            PickWithSpreadDTO("TB@NE", "TB", -7.0),
-            PickWithSpreadDTO(game, expectedPick, 3.0)
         )
 
         updateVegasPicks(
