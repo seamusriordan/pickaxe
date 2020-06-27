@@ -329,7 +329,7 @@ class ServiceRunnerTest {
         every { mockPickMutator.get(capture(mutatorEnvs)) } returns true
         every { mockRandomPickSelector.chooseRandomFor(game) } returns expectedPick
 
-        ServiceRunner.makeRngPicks(
+        ServiceRunner.makeRngPicksForCurrentWeek(
             mockCurrentWeekQuery,
             mockGamesQuery,
             mockPicksQuery,
@@ -372,7 +372,7 @@ class ServiceRunnerTest {
         every { mockPickMutator.get(capture(mutatorEnvs)) } returns true
         every { mockRandomPickSelector.chooseRandomFor(game) } returns expectedPick
 
-        ServiceRunner.makeRngPicks(
+        ServiceRunner.makeRngPicksForCurrentWeek(
             mockCurrentWeekQuery,
             mockGamesQuery,
             mockPicksQuery,
@@ -411,7 +411,7 @@ class ServiceRunnerTest {
         every { mockPickMutator.get(capture(mutatorEnvs)) } returns true
         every { mockRandomPickSelector.chooseRandomFor(game) } returns expectedPick
 
-        ServiceRunner.makeRngPicks(
+        ServiceRunner.makeRngPicksForCurrentWeek(
             mockCurrentWeekQuery,
             mockGamesQuery,
             mockPicksQuery,
@@ -450,7 +450,7 @@ class ServiceRunnerTest {
         every { mockPickMutator.get(capture(mutatorEnvs)) } returns true
         every { mockRandomPickSelector.chooseRandomFor(game) } returns expectedPick
 
-        ServiceRunner.makeRngPicks(
+        ServiceRunner.makeRngPicksForCurrentWeek(
             mockCurrentWeekQuery,
             mockGamesQuery,
             mockPicksQuery,
@@ -494,7 +494,7 @@ class ServiceRunnerTest {
         every { mockRandomPickSelector.chooseRandomFor("TB@NE") } returns "TB"
         every { mockRandomPickSelector.chooseRandomFor(game) } returns expectedPick
 
-        ServiceRunner.makeRngPicks(
+        ServiceRunner.makeRngPicksForCurrentWeek(
             mockCurrentWeekQuery,
             mockGamesQuery,
             mockPicksQuery,
@@ -546,7 +546,7 @@ class ServiceRunnerTest {
         every { mockRandomPickSelector.chooseRandomFor(pickedGame) } returns "TB"
         every { mockRandomPickSelector.chooseRandomFor(game) } returns expectedPick
 
-        ServiceRunner.makeRngPicks(
+        ServiceRunner.makeRngPicksForCurrentWeek(
             mockCurrentWeekQuery,
             mockGamesQuery,
             mockPicksQuery,
@@ -595,7 +595,7 @@ class ServiceRunnerTest {
         every { mockRandomPickSelector.chooseRandomFor(pickedGame) } returns "TB"
         every { mockRandomPickSelector.chooseRandomFor(game) } returns expectedPick
 
-        ServiceRunner.makeRngPicks(
+        ServiceRunner.makeRngPicksForCurrentWeek(
             mockCurrentWeekQuery,
             mockGamesQuery,
             mockPicksQuery,
