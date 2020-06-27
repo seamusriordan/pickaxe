@@ -1,10 +1,11 @@
-package services
+package services.utils
 
 import db.GameMutator
 import db.GamesQuery
 import db.WeeksQuery
 import dto.GameDTO
 import dto.WeekDTO
+import services.NflApi
 import java.io.FileNotFoundException
 
 class GameUpdateUtils {
@@ -37,14 +38,22 @@ class GameUpdateUtils {
             if (UpdateUtils.gameStartedMoreThanXHoursAgo(baseGame.gameTime, 2) &&
                 gameResultNotRecorded(baseGame)
             ) {
-                updateGameDetails(nflApi, baseGame, gameMutator)
+                updateGameDetails(
+                    nflApi,
+                    baseGame,
+                    gameMutator
+                )
             }
         }
 
         fun hasImmanentGamesMissingId(weeksQuery: WeeksQuery, gamesQuery: GamesQuery): Boolean {
             val weeks = weeksQuery.get()
             weeks.forEach { week ->
-                if (weekHasImmanentGamesMissingId(week.name, gamesQuery)) {
+                if (weekHasImmanentGamesMissingId(
+                        week.name,
+                        gamesQuery
+                    )
+                ) {
                     return true
                 }
             }

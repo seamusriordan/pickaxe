@@ -1,11 +1,12 @@
-package services
+package services.utils
 
 import db.CurrentWeekQuery
 import db.GameMutator
 import db.GamesQuery
 import db.UpdatePickMutator
-import services.UpdateUtils.Companion.buildMutatorEnvironment
-import services.UpdateUtils.Companion.hasGameStartInXMinutes
+import services.VegasPicksApi
+import services.utils.UpdateUtils.Companion.buildMutatorEnvironment
+import services.utils.UpdateUtils.Companion.hasGameStartInXMinutes
 
 class VegasUpdateUtils {
     companion object {

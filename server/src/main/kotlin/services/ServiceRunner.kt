@@ -6,9 +6,11 @@ import getEnvOrDefault
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import services.GameUpdateUtils.Companion.hasImmanentGamesMissingId
-import services.GameUpdateUtils.Companion.reloadGamesForWeek
-import services.GameUpdateUtils.Companion.updateDetailsForFinalGame
+import services.utils.GameUpdateUtils.Companion.hasImmanentGamesMissingId
+import services.utils.GameUpdateUtils.Companion.reloadGamesForWeek
+import services.utils.GameUpdateUtils.Companion.updateDetailsForFinalGame
+import services.utils.RngUpdateUtils
+import services.utils.VegasUpdateUtils
 import java.net.URL
 import java.sql.Connection
 

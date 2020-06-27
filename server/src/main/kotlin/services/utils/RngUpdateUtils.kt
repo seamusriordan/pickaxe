@@ -1,10 +1,11 @@
-package services
+package services.utils
 
 import db.*
 import dto.GameDTO
 import dto.UserPicksDTO
 import graphql.schema.DataFetchingEnvironment
-import services.UpdateUtils.Companion.buildMutatorEnvironment
+import services.RandomPickSelector
+import services.utils.UpdateUtils.Companion.buildMutatorEnvironment
 
 
 class RngUpdateUtils {
@@ -17,18 +18,27 @@ class RngUpdateUtils {
             RandomPickSelector: RandomPickSelector
         ) {
             val weekString = currentWeekQuery.getCurrentWeek().name
-            val rngPicks = getRngPicksForWeek(picksQuery, weekString)
+            val rngPicks =
+                getRngPicksForWeek(picksQuery, weekString)
 
             gamesQuery.getGamesForWeek(weekString)
                 .filter { game ->
                     !isGameAlreadyPicked(game, rngPicks)
                 }
                 .filter { game ->
-                    game.gameTime != null && !UpdateUtils.hasGameStartInXMinutes(game.gameTime, 15)
+                    game.gameTime != null && !UpdateUtils.hasGameStartInXMinutes(
+                        game.gameTime,
+                        15
+                    )
                 }
                 .forEach { game ->
                     val randomPick = RandomPickSelector.chooseRandomFor(game.name)
-                    setRandomPickForGame(weekString, game, randomPick, userPickMutator)
+                    setRandomPickForGame(
+                        weekString,
+                        game,
+                        randomPick,
+                        userPickMutator
+                    )
                 }
         }
 
