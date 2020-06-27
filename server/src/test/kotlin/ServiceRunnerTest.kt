@@ -6,10 +6,7 @@ import io.mockk.mockkClass
 import io.mockk.verify
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-import services.NflApi
-import services.RandomPickSelector
-import services.ServiceRunner
-import services.VegasPicksApi
+import services.*
 import java.io.FileNotFoundException
 import java.time.OffsetDateTime
 import java.util.*
@@ -40,7 +37,7 @@ class ServiceRunnerTest {
 
         every { mockMutator.putInDatabase(game = capture(gamesToDb)) } returns Unit
 
-        ServiceRunner.reloadGamesForWeek(week, mockNflApi, mockMutator)
+        GameUpdateUtils.reloadGamesForWeek(week, mockNflApi, mockMutator)
 
         verify(exactly = 1) { mockNflApi.getWeek(week) }
         assertEquals(1, gamesToDb.size)
@@ -69,7 +66,7 @@ class ServiceRunnerTest {
         every { mockNflApi.getWeek(any()) } returns listOf(dbGame1, dbGame2)
         every { mockMutator.putInDatabase(game = capture(gamesToDb)) } returns Unit
 
-        ServiceRunner.reloadGamesForWeek(week, mockNflApi, mockMutator)
+        GameUpdateUtils.reloadGamesForWeek(week, mockNflApi, mockMutator)
 
         verify(exactly = 1) { mockNflApi.getWeek(week) }
         assertEquals(2, gamesToDb.size)
@@ -86,7 +83,7 @@ class ServiceRunnerTest {
         every { mockNflApi.getWeek(any()) } throws FileNotFoundException("Mock failure")
         every { mockMutator.putInDatabase(any()) } returns Unit
 
-        ServiceRunner.reloadGamesForWeek(WeekDTO("Week -1"), mockNflApi, mockMutator)
+        GameUpdateUtils.reloadGamesForWeek(WeekDTO("Week -1"), mockNflApi, mockMutator)
 
         verify(exactly = 0) { mockMutator.putInDatabase(any()) }
     }
@@ -102,7 +99,7 @@ class ServiceRunnerTest {
         every { mockNflApi.getGame(baseGame) } returns defaultGame
         every { mockMutator.putInDatabase(any()) } returns Unit
 
-        ServiceRunner.updateDetailsForFinalGame(baseGame, mockNflApi, mockMutator)
+        GameUpdateUtils.updateDetailsForFinalGame(baseGame, mockNflApi, mockMutator)
 
         verify(exactly = 1) { mockNflApi.getGame(baseGame) }
         verify(exactly = 1) { mockMutator.putInDatabase(defaultGame) }
@@ -119,7 +116,7 @@ class ServiceRunnerTest {
         every { mockNflApi.getGame(any()) } returns defaultGame
         every { mockMutator.putInDatabase(any()) } returns Unit
 
-        ServiceRunner.updateDetailsForFinalGame(baseGame, mockNflApi, mockMutator)
+        GameUpdateUtils.updateDetailsForFinalGame(baseGame, mockNflApi, mockMutator)
 
         verify(exactly = 0) { mockNflApi.getGame(any()) }
         verify(exactly = 0) { mockMutator.putInDatabase(any()) }
@@ -136,7 +133,7 @@ class ServiceRunnerTest {
         every { mockNflApi.getGame(any()) } returns baseGame
         every { mockMutator.putInDatabase(any()) } returns Unit
 
-        ServiceRunner.updateDetailsForFinalGame(baseGame, mockNflApi, mockMutator)
+        GameUpdateUtils.updateDetailsForFinalGame(baseGame, mockNflApi, mockMutator)
 
         verify(exactly = 0) { mockNflApi.getGame(any()) }
         verify(exactly = 0) { mockMutator.putInDatabase(any()) }
@@ -153,7 +150,7 @@ class ServiceRunnerTest {
         every { mockNflApi.getGame(any()) } returns baseGame
         every { mockMutator.putInDatabase(any()) } returns Unit
 
-        ServiceRunner.updateDetailsForFinalGame(baseGame, mockNflApi, mockMutator)
+        GameUpdateUtils.updateDetailsForFinalGame(baseGame, mockNflApi, mockMutator)
 
         verify(exactly = 0) { mockNflApi.getGame(any()) }
         verify(exactly = 0) { mockMutator.putInDatabase(any()) }
@@ -170,7 +167,7 @@ class ServiceRunnerTest {
         every { mockNflApi.getGame(any()) } returns baseGame
         every { mockMutator.putInDatabase(any()) } returns Unit
 
-        ServiceRunner.updateDetailsForFinalGame(baseGame, mockNflApi, mockMutator)
+        GameUpdateUtils.updateDetailsForFinalGame(baseGame, mockNflApi, mockMutator)
 
         verify(exactly = 0) { mockNflApi.getGame(any()) }
         verify(exactly = 0) { mockMutator.putInDatabase(any()) }
@@ -186,7 +183,7 @@ class ServiceRunnerTest {
         }
         every { mockNflApi.getGame(any()) } throws FileNotFoundException("Mock failure")
 
-        ServiceRunner.updateDetailsForFinalGame(baseGame, mockNflApi, mockMutator)
+        GameUpdateUtils.updateDetailsForFinalGame(baseGame, mockNflApi, mockMutator)
 
         verify(exactly = 1) { mockNflApi.getGame(any()) }
         verify(exactly = 0) { mockMutator.putInDatabase(any()) }
@@ -203,7 +200,7 @@ class ServiceRunnerTest {
             }
         )
 
-        val result = ServiceRunner.hasImmanentGamesMissingId(mockWeeksQuery, mockGamesQuery)
+        val result = GameUpdateUtils.hasImmanentGamesMissingId(mockWeeksQuery, mockGamesQuery)
 
         assertFalse(result)
     }
@@ -225,7 +222,7 @@ class ServiceRunnerTest {
             }
         )
 
-        val result = ServiceRunner.hasImmanentGamesMissingId(mockWeeksQuery, mockGamesQuery)
+        val result = GameUpdateUtils.hasImmanentGamesMissingId(mockWeeksQuery, mockGamesQuery)
 
         assertTrue(result)
     }
@@ -241,7 +238,7 @@ class ServiceRunnerTest {
             }
         )
 
-        val result = ServiceRunner.hasImmanentGamesMissingId(mockWeeksQuery, mockGamesQuery)
+        val result = GameUpdateUtils.hasImmanentGamesMissingId(mockWeeksQuery, mockGamesQuery)
 
         assertTrue(result)
     }
@@ -255,7 +252,7 @@ class ServiceRunnerTest {
             GameDTO("GB@CHI", "Week 1")
         )
 
-        val result = ServiceRunner.hasImmanentGamesMissingId(mockWeeksQuery, mockGamesQuery)
+        val result = GameUpdateUtils.hasImmanentGamesMissingId(mockWeeksQuery, mockGamesQuery)
 
         assertFalse(result)
     }
@@ -271,7 +268,7 @@ class ServiceRunnerTest {
             }
         )
 
-        val result = ServiceRunner.hasImmanentGamesMissingId(mockWeeksQuery, mockGamesQuery)
+        val result = GameUpdateUtils.hasImmanentGamesMissingId(mockWeeksQuery, mockGamesQuery)
 
         assertFalse(result)
     }
@@ -298,7 +295,7 @@ class ServiceRunnerTest {
             }
         )
 
-        val result = ServiceRunner.hasImmanentGamesMissingId(mockWeeksQuery, mockGamesQuery)
+        val result = GameUpdateUtils.hasImmanentGamesMissingId(mockWeeksQuery, mockGamesQuery)
 
         assertTrue(result)
     }
@@ -330,7 +327,7 @@ class ServiceRunnerTest {
         every { mockPickMutator.get(capture(mutatorEnvs)) } returns true
         every { mockRandomPickSelector.chooseRandomFor(game) } returns expectedPick
 
-        ServiceRunner.makeRngPicksForCurrentWeek(
+        RngUpdateUtils.makeRngPicksForCurrentWeek(
             mockCurrentWeekQuery,
             mockGamesQuery,
             mockPicksQuery,
@@ -373,7 +370,7 @@ class ServiceRunnerTest {
         every { mockPickMutator.get(capture(mutatorEnvs)) } returns true
         every { mockRandomPickSelector.chooseRandomFor(game) } returns expectedPick
 
-        ServiceRunner.makeRngPicksForCurrentWeek(
+        RngUpdateUtils.makeRngPicksForCurrentWeek(
             mockCurrentWeekQuery,
             mockGamesQuery,
             mockPicksQuery,
@@ -410,7 +407,7 @@ class ServiceRunnerTest {
         every { mockPickMutator.get(capture(mutatorEnvs)) } returns true
         every { mockRandomPickSelector.chooseRandomFor(game) } returns expectedPick
 
-        ServiceRunner.makeRngPicksForCurrentWeek(
+        RngUpdateUtils.makeRngPicksForCurrentWeek(
             mockCurrentWeekQuery,
             mockGamesQuery,
             mockPicksQuery,
@@ -447,7 +444,7 @@ class ServiceRunnerTest {
         every { mockPickMutator.get(capture(mutatorEnvs)) } returns true
         every { mockRandomPickSelector.chooseRandomFor(game) } returns expectedPick
 
-        ServiceRunner.makeRngPicksForCurrentWeek(
+        RngUpdateUtils.makeRngPicksForCurrentWeek(
             mockCurrentWeekQuery,
             mockGamesQuery,
             mockPicksQuery,
@@ -486,7 +483,7 @@ class ServiceRunnerTest {
         every { mockPickMutator.get(capture(mutatorEnvs)) } returns true
         every { mockRandomPickSelector.chooseRandomFor(game) } returns expectedPick
 
-        ServiceRunner.makeRngPicksForCurrentWeek(
+        RngUpdateUtils.makeRngPicksForCurrentWeek(
             mockCurrentWeekQuery,
             mockGamesQuery,
             mockPicksQuery,
@@ -525,7 +522,7 @@ class ServiceRunnerTest {
         every { mockPickMutator.get(capture(mutatorEnvs)) } returns true
         every { mockRandomPickSelector.chooseRandomFor(game) } returns expectedPick
 
-        ServiceRunner.makeRngPicksForCurrentWeek(
+        RngUpdateUtils.makeRngPicksForCurrentWeek(
             mockCurrentWeekQuery,
             mockGamesQuery,
             mockPicksQuery,
@@ -569,7 +566,7 @@ class ServiceRunnerTest {
         every { mockRandomPickSelector.chooseRandomFor("TB@NE") } returns "TB"
         every { mockRandomPickSelector.chooseRandomFor(game) } returns expectedPick
 
-        ServiceRunner.makeRngPicksForCurrentWeek(
+        RngUpdateUtils.makeRngPicksForCurrentWeek(
             mockCurrentWeekQuery,
             mockGamesQuery,
             mockPicksQuery,
@@ -621,7 +618,7 @@ class ServiceRunnerTest {
         every { mockRandomPickSelector.chooseRandomFor(pickedGame) } returns "TB"
         every { mockRandomPickSelector.chooseRandomFor(game) } returns expectedPick
 
-        ServiceRunner.makeRngPicksForCurrentWeek(
+        RngUpdateUtils.makeRngPicksForCurrentWeek(
             mockCurrentWeekQuery,
             mockGamesQuery,
             mockPicksQuery,
@@ -670,7 +667,7 @@ class ServiceRunnerTest {
         every { mockRandomPickSelector.chooseRandomFor(pickedGame) } returns "TB"
         every { mockRandomPickSelector.chooseRandomFor(game) } returns expectedPick
 
-        ServiceRunner.makeRngPicksForCurrentWeek(
+        RngUpdateUtils.makeRngPicksForCurrentWeek(
             mockCurrentWeekQuery,
             mockGamesQuery,
             mockPicksQuery,
@@ -709,7 +706,7 @@ class ServiceRunnerTest {
             PickWithSpreadDTO(game, expectedPick, -7.0)
         )
 
-        ServiceRunner.updateVegasPicks(
+        VegasUpdateUtils.updateVegasPicks(
             mockCurrentWeekQuery,
             mockGamesQuery,
             mockGameMutator,
@@ -754,7 +751,7 @@ class ServiceRunnerTest {
             PickWithSpreadDTO(game, expectedPick, -7.0)
         )
 
-        ServiceRunner.updateVegasPicks(
+        VegasUpdateUtils.updateVegasPicks(
             mockCurrentWeekQuery,
             mockGamesQuery,
             mockGameMutator,
@@ -796,7 +793,7 @@ class ServiceRunnerTest {
             PickWithSpreadDTO(game, expectedPick, -7.0)
         )
 
-        ServiceRunner.updateVegasPicks(
+        VegasUpdateUtils.updateVegasPicks(
             mockCurrentWeekQuery,
             mockGamesQuery,
             mockGameMutator,
@@ -838,7 +835,7 @@ class ServiceRunnerTest {
             PickWithSpreadDTO(game, expectedPick, -7.0)
         )
 
-        ServiceRunner.updateVegasPicks(
+        VegasUpdateUtils.updateVegasPicks(
             mockCurrentWeekQuery,
             mockGamesQuery,
             mockGameMutator,
@@ -883,7 +880,7 @@ class ServiceRunnerTest {
             PickWithSpreadDTO(game, expectedPick, expectedSpread)
         )
 
-        ServiceRunner.updateVegasPicks(
+        VegasUpdateUtils.updateVegasPicks(
             mockCurrentWeekQuery,
             mockGamesQuery,
             mockGameMutator,
@@ -931,7 +928,7 @@ class ServiceRunnerTest {
             PickWithSpreadDTO(game, expectedPick, expectedSpread)
         )
 
-        ServiceRunner.updateVegasPicks(
+        VegasUpdateUtils.updateVegasPicks(
             mockCurrentWeekQuery,
             mockGamesQuery,
             mockGameMutator,
@@ -978,7 +975,7 @@ class ServiceRunnerTest {
             PickWithSpreadDTO(game, expectedPick, 3.0)
         )
 
-        ServiceRunner.updateVegasPicks(
+        VegasUpdateUtils.updateVegasPicks(
             mockCurrentWeekQuery,
             mockGamesQuery,
             mockGameMutator,
@@ -1016,7 +1013,7 @@ class ServiceRunnerTest {
             PickWithSpreadDTO(game, expectedPick, 3.0)
         )
 
-        ServiceRunner.updateVegasPicks(
+        VegasUpdateUtils.updateVegasPicks(
             mockCurrentWeekQuery,
             mockGamesQuery,
             mockGameMutator,
@@ -1056,7 +1053,7 @@ class ServiceRunnerTest {
             PickWithSpreadDTO(game, expectedPick, 3.0)
         )
 
-        ServiceRunner.updateVegasPicks(
+        VegasUpdateUtils.updateVegasPicks(
             mockCurrentWeekQuery,
             mockGamesQuery,
             mockGameMutator,
@@ -1096,7 +1093,7 @@ class ServiceRunnerTest {
             PickWithSpreadDTO(game, expectedPick, 3.0)
         )
 
-        ServiceRunner.updateVegasPicks(
+        VegasUpdateUtils.updateVegasPicks(
             mockCurrentWeekQuery,
             mockGamesQuery,
             mockGameMutator,
