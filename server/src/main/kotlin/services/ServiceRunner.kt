@@ -242,7 +242,7 @@ class ServiceRunner {
 
             val games = gamesQuery.getGamesForWeek(currentWeekString)
             val updatedGame = games.first().apply {
-                spread = -7.0
+                spread = vegasPick.spread
             }
 
             gameMutator.putInDatabase(updatedGame)
