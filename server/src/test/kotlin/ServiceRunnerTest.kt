@@ -319,7 +319,7 @@ class ServiceRunnerTest {
         every { mockCurrentWeekQuery.getCurrentWeek() } returns WeekDTO(week)
         every { mockGamesQuery.getGamesForWeek(week) } returns listOf(
             GameDTO(game, week).apply {
-                gameTime = OffsetDateTime.now().minusDays(1)
+                gameTime = OffsetDateTime.now().plusDays(1)
                 id = UUID.randomUUID()
             }
         )
@@ -347,6 +347,43 @@ class ServiceRunnerTest {
     }
 
     @Test
+    fun randomNumberGeneratorDoesNotMakePicksForGamesBefore15MinutesOfGameStart() {
+        val mockCurrentWeekQuery = mockkClass(CurrentWeekQuery::class)
+        val mockPicksQuery = mockkClass(UserPickQuery::class)
+        val mockGamesQuery = mockkClass(GamesQuery::class)
+        val mockPickMutator = mockkClass(UpdatePickMutator::class)
+        val mockRandomPickSelector = mockkClass(RandomPickSelector::class)
+
+        val mutatorEnvs = mutableListOf<DataFetchingEnvironment>()
+
+        val week = "Week 0"
+        val game = "DET@CHI"
+        val expectedPick = "CHI"
+        every { mockCurrentWeekQuery.getCurrentWeek() } returns WeekDTO(week)
+        every { mockGamesQuery.getGamesForWeek(week) } returns listOf(
+            GameDTO(game, week).apply {
+                gameTime = OffsetDateTime.now().plusMinutes(14)
+                id = UUID.randomUUID()
+            }
+        )
+        every { mockPicksQuery.getPicksForWeek(week) } returns listOf(
+            UserPicksDTO(UserDTO("RNG"))
+        )
+        every { mockPickMutator.get(capture(mutatorEnvs)) } returns true
+        every { mockRandomPickSelector.chooseRandomFor(game) } returns expectedPick
+
+        ServiceRunner.makeRngPicksForCurrentWeek(
+            mockCurrentWeekQuery,
+            mockGamesQuery,
+            mockPicksQuery,
+            mockPickMutator,
+            mockRandomPickSelector
+        )
+
+        assertEquals(0, mutatorEnvs.size)
+    }
+
+    @Test
     fun randomNumberGeneratorPicksUseWeek() {
         val mockCurrentWeekQuery = mockkClass(CurrentWeekQuery::class)
         val mockPicksQuery = mockkClass(UserPickQuery::class)
@@ -362,7 +399,7 @@ class ServiceRunnerTest {
         every { mockCurrentWeekQuery.getCurrentWeek() } returns WeekDTO(week)
         every { mockGamesQuery.getGamesForWeek(week) } returns listOf(
             GameDTO(game, week).apply {
-                gameTime = OffsetDateTime.now().minusDays(1)
+                gameTime = OffsetDateTime.now().plusDays(1)
                 id = UUID.randomUUID()
             }
         )
@@ -401,7 +438,7 @@ class ServiceRunnerTest {
         every { mockCurrentWeekQuery.getCurrentWeek() } returns WeekDTO(week)
         every { mockGamesQuery.getGamesForWeek(week) } returns listOf(
             GameDTO(game, week).apply {
-                gameTime = OffsetDateTime.now().minusDays(1)
+                gameTime = OffsetDateTime.now().plusDays(1)
                 id = UUID.randomUUID()
             }
         )
@@ -440,7 +477,7 @@ class ServiceRunnerTest {
         every { mockCurrentWeekQuery.getCurrentWeek() } returns WeekDTO(week)
         every { mockGamesQuery.getGamesForWeek(week) } returns listOf(
             GameDTO(game, week).apply {
-                gameTime = OffsetDateTime.now().minusDays(1)
+                gameTime = OffsetDateTime.now().plusDays(1)
                 id = UUID.randomUUID()
             }
         )
@@ -479,11 +516,11 @@ class ServiceRunnerTest {
         every { mockCurrentWeekQuery.getCurrentWeek() } returns WeekDTO(week)
         every { mockGamesQuery.getGamesForWeek(week) } returns listOf(
             GameDTO("TB@NE", week).apply {
-                gameTime = OffsetDateTime.now().minusDays(1)
+                gameTime = OffsetDateTime.now().plusDays(1)
                 id = UUID.randomUUID()
             },
             GameDTO(game, week).apply {
-                gameTime = OffsetDateTime.now().minusDays(1)
+                gameTime = OffsetDateTime.now().plusDays(1)
                 id = UUID.randomUUID()
             }
         )
@@ -529,11 +566,11 @@ class ServiceRunnerTest {
         val pickedGame = "TB@NE"
         every { mockGamesQuery.getGamesForWeek(week) } returns listOf(
             GameDTO(game, week).apply {
-                gameTime = OffsetDateTime.now().minusDays(1)
+                gameTime = OffsetDateTime.now().plusDays(1)
                 id = UUID.randomUUID()
             },
             GameDTO(pickedGame, week).apply {
-                gameTime = OffsetDateTime.now().minusDays(1)
+                gameTime = OffsetDateTime.now().plusDays(1)
                 id = UUID.randomUUID()
             }
         )
@@ -577,11 +614,11 @@ class ServiceRunnerTest {
         val pickedGame = "TB@NE"
         every { mockGamesQuery.getGamesForWeek(week) } returns listOf(
             GameDTO(game, week).apply {
-                gameTime = OffsetDateTime.now().minusDays(1)
+                gameTime = OffsetDateTime.now().plusDays(1)
                 id = UUID.randomUUID()
             },
             GameDTO(pickedGame, week).apply {
-                gameTime = OffsetDateTime.now().minusDays(1)
+                gameTime = OffsetDateTime.now().plusDays(1)
                 id = UUID.randomUUID()
             }
         )

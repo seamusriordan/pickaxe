@@ -134,6 +134,9 @@ class ServiceRunner {
                 .filter { game ->
                     !isGameAlreadyPicked(game, rngPicks)
                 }
+                .filter { game ->
+                    game.gameTime!!.isAfter(OffsetDateTime.now().plusMinutes(15))
+                }
                 .forEach { game ->
                     val randomPick = RandomPickSelector.chooseRandomFor(game.name)
                     setRandomPickForGame(weekString, game, randomPick, userPickMutator )
