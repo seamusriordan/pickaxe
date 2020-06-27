@@ -162,23 +162,29 @@ class ServiceRunner {
             randomPick: String,
             userPickMutator: UpdatePickMutator
         ) {
-            val env: DataFetchingEnvironment = buildMutatorEnvironment(weekString, game, randomPick)
+            val env: DataFetchingEnvironment = buildMutatorEnvironment(
+                "RNG",
+                weekString,
+                game,
+                randomPick
+            )
             userPickMutator.get(env)
         }
 
         private fun buildMutatorEnvironment(
+            userName: String,
             weekString: String,
             game: GameDTO,
-            randomPick: String
+            pick: String
         ): DataFetchingEnvironment {
             val arguments = HashMap<String, Any>()
             val userPick = HashMap<String, String>()
-            arguments["name"] = "RNG"
+            arguments["name"] = userName
             arguments["userPick"] = userPick
 
             userPick["week"] = weekString
             userPick["game"] = game.name
-            userPick["pick"] = randomPick
+            userPick["pick"] = pick
 
             return DataFetchingEnvironmentImpl
                 .newDataFetchingEnvironment()
@@ -215,6 +221,22 @@ class ServiceRunner {
 
         private fun hasGameStartInXMinutes(time: OffsetDateTime?, minutes: Long): Boolean {
             return time != null && time.isBefore(OffsetDateTime.now().plusMinutes(minutes))
+        }
+
+        fun updateVegasPicks(
+            currentWeekQuery: CurrentWeekQuery,
+            gamesQuery: GamesQuery,
+            gameMutator: GameMutator,
+            pickMutator: UpdatePickMutator,
+            vegasPicksApi: VegasPicksApi
+        ) {
+            val env = buildMutatorEnvironment(
+                "Vegas",
+                "Week 0",
+                GameDTO("DET@CHI", "Week 0"),
+                "CHI"
+            )
+            pickMutator.get(env)
         }
     }
 }

@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test
 import services.NflApi
 import services.RandomPickSelector
 import services.ServiceRunner
+import services.VegasPicksApi
 import java.io.FileNotFoundException
 import java.time.OffsetDateTime
 import java.util.*
@@ -678,5 +679,50 @@ class ServiceRunnerTest {
         )
 
         assertEquals(2, mutatorEnvs.size)
+    }
+
+    @Test
+    fun oneVegasPickUpdatesPickForCurrentWeek() {
+        val mockCurrentWeekQuery = mockkClass(CurrentWeekQuery::class)
+        val mockGamesQuery = mockkClass(GamesQuery::class)
+        val mockPickMutator = mockkClass(UpdatePickMutator::class)
+        val mockGameMutator = mockkClass(GameMutator::class)
+        val mockVegasPicksApi = mockkClass(VegasPicksApi::class)
+
+        val pickMutatorEnvs = mutableListOf<DataFetchingEnvironment>()
+        val gameMutations = mutableListOf<GameDTO>()
+
+        val week = "Week 0"
+        val game = "DET@CHI"
+        val expectedPick = "CHI"
+        every { mockCurrentWeekQuery.getCurrentWeek() } returns WeekDTO(week)
+        every { mockGamesQuery.getGamesForWeek(week) } returns listOf(
+            GameDTO(game, week).apply {
+                gameTime = OffsetDateTime.now().plusDays(1)
+                id = UUID.randomUUID()
+            }
+        )
+
+        every { mockPickMutator.get(capture(pickMutatorEnvs)) } returns true
+        every { mockGameMutator.putInDatabase(capture(gameMutations)) } returns Unit
+        every { mockVegasPicksApi.getVegasPicks() } returns listOf(
+            PickWithSpreadDTO(game, expectedPick, -7.0)
+        )
+
+        ServiceRunner.updateVegasPicks(
+            mockCurrentWeekQuery,
+            mockGamesQuery,
+            mockGameMutator,
+            mockPickMutator,
+            mockVegasPicksApi
+        )
+
+        assertEquals(1, pickMutatorEnvs.size)
+        val mutatorEnv = pickMutatorEnvs.first()
+        assertEquals("Vegas", mutatorEnv.arguments["name"])
+        val userPick = mutatorEnv.arguments["userPick"] as HashMap<*, *>
+        assertEquals(week, userPick["week"])
+        assertEquals(game, userPick["game"])
+        assertEquals(expectedPick, userPick["pick"]!!)
     }
 }
