@@ -1,12 +1,11 @@
 package services
 
-import db.PickaxeDB
-import db.GameMutator
-import db.GamesQuery
-import db.WeeksQuery
+import db.*
 import dto.GameDTO
 import dto.WeekDTO
 import getEnvOrDefault
+import graphql.schema.DataFetchingEnvironment
+import graphql.schema.DataFetchingEnvironmentImpl
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -29,6 +28,7 @@ class ServiceRunner {
             while (true) {
                 reloadAllWeeks(nflApi, dbConnection)
                 updateGameDetailsForFinalGames(nflApi, dbConnection)
+                makeRngPicks(dbConnection)
                 delay(sixHours)
             }
         }
@@ -64,6 +64,16 @@ class ServiceRunner {
         WeeksQuery(dbConnection).get().forEach { week ->
             reloadGamesForWeek(week, nflApi, GameMutator(dbConnection))
         }
+    }
+
+    private fun makeRngPicks(dbConnection: Connection) {
+        Companion.makeRngPicks(
+            CurrentWeekQuery(WeeksQuery(dbConnection), GamesQuery(dbConnection)),
+            GamesQuery(dbConnection),
+            UserPickQuery(dbConnection),
+            UpdatePickMutator(dbConnection),
+            RandomPickSelector()
+        )
     }
 
     companion object {
@@ -135,6 +145,29 @@ class ServiceRunner {
         private fun hasGameStartInXMinutes(time: OffsetDateTime?, minutes: Long): Boolean {
             return time != null && time.minusMinutes(minutes).isBefore(OffsetDateTime.now())
         }
-    }
 
+        fun makeRngPicks(currentWeekQuery: CurrentWeekQuery,
+                         gamesQuery: GamesQuery,
+                         picksQuery: UserPickQuery,
+                         userPickMutator: UpdatePickMutator,
+                         RandomPickSelector: RandomPickSelector
+        ) {
+            val arguments = HashMap<String, Any>()
+            val userPick = HashMap<String, String>()
+            arguments["name"] = "RNG"
+            arguments["userPick"] = userPick
+
+            userPick["week"] = "Week 0"
+            userPick["game"] = "DET@CHI"
+            userPick["pick"] = "CHI"
+
+            val env: DataFetchingEnvironment = DataFetchingEnvironmentImpl
+                .newDataFetchingEnvironment()
+                .arguments(arguments)
+                .build()
+
+            userPickMutator.get(env)
+
+        }
+    }
 }
