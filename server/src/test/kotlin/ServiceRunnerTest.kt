@@ -851,4 +851,52 @@ class ServiceRunnerTest {
         val userPick = mutatorEnv.arguments["userPick"] as HashMap<*, *>
         assertEquals(expectedPick, userPick["pick"])
     }
+
+    @Test
+    fun oneVegasPickUpdatesSpreadForGame() {
+        val mockCurrentWeekQuery = mockkClass(CurrentWeekQuery::class)
+        val mockGamesQuery = mockkClass(GamesQuery::class)
+        val mockPickMutator = mockkClass(UpdatePickMutator::class)
+        val mockGameMutator = mockkClass(GameMutator::class)
+        val mockVegasPicksApi = mockkClass(VegasPicksApi::class)
+
+        val pickMutatorEnvs = mutableListOf<DataFetchingEnvironment>()
+        val gameMutations = mutableListOf<GameDTO>()
+
+        val week = "Week 1"
+        val game = "TB@NE"
+        val expectedPick = "TB"
+        every { mockCurrentWeekQuery.getCurrentWeek() } returns WeekDTO(week)
+        val expectedGameTime = OffsetDateTime.now().plusDays(1)
+        val randomUUID = UUID.randomUUID()
+        every { mockGamesQuery.getGamesForWeek(week) } returns listOf(
+            GameDTO(game, week).apply {
+                gameTime = expectedGameTime
+                id = randomUUID
+            }
+        )
+
+        every { mockPickMutator.get(capture(pickMutatorEnvs)) } returns true
+        every { mockGameMutator.putInDatabase(capture(gameMutations)) } returns Unit
+        val expectedSpread = -7.0
+        every { mockVegasPicksApi.getVegasPicks() } returns listOf(
+            PickWithSpreadDTO(game, expectedPick, expectedSpread)
+        )
+
+        ServiceRunner.updateVegasPicks(
+            mockCurrentWeekQuery,
+            mockGamesQuery,
+            mockGameMutator,
+            mockPickMutator,
+            mockVegasPicksApi
+        )
+
+
+        assertEquals(1, gameMutations.size)
+        val gameMutation = gameMutations.first()
+        assertEquals(game, gameMutation.name)
+        assertEquals(week, gameMutation.week)
+        assertEquals(expectedSpread, gameMutation.spread)
+        assertEquals(randomUUID, gameMutation.id)
+    }
 }

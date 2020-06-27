@@ -231,13 +231,21 @@ class ServiceRunner {
             vegasPicksApi: VegasPicksApi
         ) {
             val currentWeekString = currentWeekQuery.getCurrentWeek().name
+            val vegasPick = vegasPicksApi.getVegasPicks().first()
             val env = buildMutatorEnvironment(
                 "Vegas",
                 currentWeekString,
                 gamesQuery.getGamesForWeek(currentWeekString).first().name,
-                vegasPicksApi.getVegasPicks().first().pick
+                vegasPick.pick
             )
             pickMutator.get(env)
+
+            val games = gamesQuery.getGamesForWeek(currentWeekString)
+            val updatedGame = games.first().apply {
+                spread = -7.0
+            }
+
+            gameMutator.putInDatabase(updatedGame)
         }
     }
 }
