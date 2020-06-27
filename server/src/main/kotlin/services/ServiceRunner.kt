@@ -165,7 +165,7 @@ class ServiceRunner {
             val env: DataFetchingEnvironment = buildMutatorEnvironment(
                 "RNG",
                 weekString,
-                game,
+                game.name,
                 randomPick
             )
             userPickMutator.get(env)
@@ -174,7 +174,7 @@ class ServiceRunner {
         private fun buildMutatorEnvironment(
             userName: String,
             weekString: String,
-            game: GameDTO,
+            game: String,
             pick: String
         ): DataFetchingEnvironment {
             val arguments = HashMap<String, Any>()
@@ -183,7 +183,7 @@ class ServiceRunner {
             arguments["userPick"] = userPick
 
             userPick["week"] = weekString
-            userPick["game"] = game.name
+            userPick["game"] = game
             userPick["pick"] = pick
 
             return DataFetchingEnvironmentImpl
@@ -230,11 +230,12 @@ class ServiceRunner {
             pickMutator: UpdatePickMutator,
             vegasPicksApi: VegasPicksApi
         ) {
+            val currentWeekString = currentWeekQuery.getCurrentWeek().name
             val env = buildMutatorEnvironment(
                 "Vegas",
-                "Week 0",
-                GameDTO("DET@CHI", "Week 0"),
-                "CHI"
+                currentWeekString,
+                gamesQuery.getGamesForWeek(currentWeekString).first().name,
+                vegasPicksApi.getVegasPicks().first().pick
             )
             pickMutator.get(env)
         }
