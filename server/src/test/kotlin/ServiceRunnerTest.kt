@@ -384,6 +384,43 @@ class ServiceRunnerTest {
     }
 
     @Test
+    fun randomNumberGeneratorDoesNotMakePicksForGamesWithoutGametime() {
+        val mockCurrentWeekQuery = mockkClass(CurrentWeekQuery::class)
+        val mockPicksQuery = mockkClass(UserPickQuery::class)
+        val mockGamesQuery = mockkClass(GamesQuery::class)
+        val mockPickMutator = mockkClass(UpdatePickMutator::class)
+        val mockRandomPickSelector = mockkClass(RandomPickSelector::class)
+
+        val mutatorEnvs = mutableListOf<DataFetchingEnvironment>()
+
+        val week = "Week 0"
+        val game = "DET@CHI"
+        val expectedPick = "CHI"
+        every { mockCurrentWeekQuery.getCurrentWeek() } returns WeekDTO(week)
+        every { mockGamesQuery.getGamesForWeek(week) } returns listOf(
+            GameDTO(game, week).apply {
+                gameTime = null
+                id = UUID.randomUUID()
+            }
+        )
+        every { mockPicksQuery.getPicksForWeek(week) } returns listOf(
+            UserPicksDTO(UserDTO("RNG"))
+        )
+        every { mockPickMutator.get(capture(mutatorEnvs)) } returns true
+        every { mockRandomPickSelector.chooseRandomFor(game) } returns expectedPick
+
+        ServiceRunner.makeRngPicksForCurrentWeek(
+            mockCurrentWeekQuery,
+            mockGamesQuery,
+            mockPicksQuery,
+            mockPickMutator,
+            mockRandomPickSelector
+        )
+
+        assertEquals(0, mutatorEnvs.size)
+    }
+
+    @Test
     fun randomNumberGeneratorPicksUseWeek() {
         val mockCurrentWeekQuery = mockkClass(CurrentWeekQuery::class)
         val mockPicksQuery = mockkClass(UserPickQuery::class)

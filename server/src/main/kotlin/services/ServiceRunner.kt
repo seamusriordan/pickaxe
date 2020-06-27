@@ -135,12 +135,19 @@ class ServiceRunner {
                     !isGameAlreadyPicked(game, rngPicks)
                 }
                 .filter { game ->
-                    game.gameTime!!.isAfter(OffsetDateTime.now().plusMinutes(15))
+                    game.gameTime != null && !hasGameStartInXMinutes(game.gameTime, 15)
                 }
                 .forEach { game ->
                     val randomPick = RandomPickSelector.chooseRandomFor(game.name)
-                    setRandomPickForGame(weekString, game, randomPick, userPickMutator )
+                    setRandomPickForGame(weekString, game, randomPick, userPickMutator)
                 }
+        }
+
+        private fun gameIsMoreThan15MinutesInFuture(game: GameDTO): Boolean {
+            return if (game.gameTime != null)
+                game.gameTime!!.isAfter(OffsetDateTime.now().plusMinutes(15))
+            else
+                false
         }
 
         private fun getRngPicksForWeek(picksQuery: UserPickQuery, weekString: String): UserPicksDTO {
@@ -207,7 +214,7 @@ class ServiceRunner {
         }
 
         private fun hasGameStartInXMinutes(time: OffsetDateTime?, minutes: Long): Boolean {
-            return time != null && time.minusMinutes(minutes).isBefore(OffsetDateTime.now())
+            return time != null && time.isBefore(OffsetDateTime.now().plusMinutes(minutes))
         }
     }
 }
