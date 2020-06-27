@@ -1,12 +1,12 @@
 package services
 
-import db.PickaxeDB
-import db.GameMutator
-import db.GamesQuery
-import db.WeeksQuery
+import db.*
 import dto.GameDTO
+import dto.UserPicksDTO
 import dto.WeekDTO
 import getEnvOrDefault
+import graphql.schema.DataFetchingEnvironment
+import graphql.schema.DataFetchingEnvironmentImpl
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -29,6 +29,7 @@ class ServiceRunner {
             while (true) {
                 reloadAllWeeks(nflApi, dbConnection)
                 updateGameDetailsForFinalGames(nflApi, dbConnection)
+                makeRngPicksForCurrentWeek(dbConnection)
                 delay(sixHours)
             }
         }
@@ -36,7 +37,7 @@ class ServiceRunner {
         GlobalScope.launch {
             while (true) {
                 delay(fiveMinutes)
-                if(hasImmanentGamesMissingId(WeeksQuery(dbConnection), GamesQuery(dbConnection))){
+                if (hasImmanentGamesMissingId(WeeksQuery(dbConnection), GamesQuery(dbConnection))) {
                     reloadAllWeeks(nflApi, dbConnection)
                 }
                 updateGameDetailsForFinalGames(nflApi, dbConnection)
@@ -64,6 +65,16 @@ class ServiceRunner {
         WeeksQuery(dbConnection).get().forEach { week ->
             reloadGamesForWeek(week, nflApi, GameMutator(dbConnection))
         }
+    }
+
+    private fun makeRngPicksForCurrentWeek(dbConnection: Connection) {
+        Companion.makeRngPicksForCurrentWeek(
+            CurrentWeekQuery(WeeksQuery(dbConnection), GamesQuery(dbConnection)),
+            GamesQuery(dbConnection),
+            UserPickQuery(dbConnection),
+            UpdatePickMutator(dbConnection),
+            RandomPickSelector()
+        )
     }
 
     companion object {
@@ -109,6 +120,76 @@ class ServiceRunner {
             return false
         }
 
+        fun makeRngPicksForCurrentWeek(
+            currentWeekQuery: CurrentWeekQuery,
+            gamesQuery: GamesQuery,
+            picksQuery: UserPickQuery,
+            userPickMutator: UpdatePickMutator,
+            RandomPickSelector: RandomPickSelector
+        ) {
+            val weekString = currentWeekQuery.getCurrentWeek().name
+            val rngPicks = getRngPicksForWeek(picksQuery, weekString)
+
+            gamesQuery.getGamesForWeek(weekString)
+                .filter { game ->
+                    !isGameAlreadyPicked(game, rngPicks)
+                }
+                .filter { game ->
+                    game.gameTime != null && !hasGameStartInXMinutes(game.gameTime, 15)
+                }
+                .forEach { game ->
+                    val randomPick = RandomPickSelector.chooseRandomFor(game.name)
+                    setRandomPickForGame(weekString, game, randomPick, userPickMutator)
+                }
+        }
+
+        private fun gameIsMoreThan15MinutesInFuture(game: GameDTO): Boolean {
+            return if (game.gameTime != null)
+                game.gameTime!!.isAfter(OffsetDateTime.now().plusMinutes(15))
+            else
+                false
+        }
+
+        private fun getRngPicksForWeek(picksQuery: UserPickQuery, weekString: String): UserPicksDTO {
+            return picksQuery
+                .getPicksForWeek(weekString)
+                .first { userPicks -> userPicks.user.name == "RNG" }
+        }
+
+        private fun setRandomPickForGame(
+            weekString: String,
+            game: GameDTO,
+            randomPick: String,
+            userPickMutator: UpdatePickMutator
+        ) {
+            val env: DataFetchingEnvironment = buildMutatorEnvironment(weekString, game, randomPick)
+            userPickMutator.get(env)
+        }
+
+        private fun buildMutatorEnvironment(
+            weekString: String,
+            game: GameDTO,
+            randomPick: String
+        ): DataFetchingEnvironment {
+            val arguments = HashMap<String, Any>()
+            val userPick = HashMap<String, String>()
+            arguments["name"] = "RNG"
+            arguments["userPick"] = userPick
+
+            userPick["week"] = weekString
+            userPick["game"] = game.name
+            userPick["pick"] = randomPick
+
+            return DataFetchingEnvironmentImpl
+                .newDataFetchingEnvironment()
+                .arguments(arguments)
+                .build()
+        }
+
+        private fun isGameAlreadyPicked(game: GameDTO, rngPicks: UserPicksDTO) =
+            rngPicks.picks.map { pick -> pick.game }
+                .contains(game.name)
+
         private fun gameResultNotRecorded(baseGame: GameDTO) = baseGame.result == null
 
         private fun updateGameDetails(nflApi: NflApi, baseGame: GameDTO, gameMutator: GameMutator) {
@@ -133,8 +214,7 @@ class ServiceRunner {
         }
 
         private fun hasGameStartInXMinutes(time: OffsetDateTime?, minutes: Long): Boolean {
-            return time != null && time.minusMinutes(minutes).isBefore(OffsetDateTime.now())
+            return time != null && time.isBefore(OffsetDateTime.now().plusMinutes(minutes))
         }
     }
-
 }

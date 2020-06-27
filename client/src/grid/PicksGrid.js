@@ -91,7 +91,7 @@ const PicksGrid = props => {
     const [currentWeek, updateWeek] = useState(defaultWeek);
     const {error, data, refetch} = useQuery(PICKS_QUERY, {
         variables: {week: defaultWeek},
-        pollInterval: 600000
+        pollInterval: 150000
     });
     const [sendData] = useMutation(UPDATE_PICKS_MUTATION);
 

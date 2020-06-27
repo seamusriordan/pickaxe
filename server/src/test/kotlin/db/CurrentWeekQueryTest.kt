@@ -24,7 +24,7 @@ class CurrentWeekQueryTest {
     }
 
     @Test
-    fun getReturnsCurrentWeek0WhenOnlyWeekIs0() {
+    fun getWithEnvReturnsCurrentWeek0WhenOnlyWeekIs0() {
         val expectedWeek = WeekDTO("0")
         every {mockWeeksQuery.get()} returns listOf(expectedWeek)
         every { mockGamesQuery.getGamesForWeek(expectedWeek.name)} returns listOf(
@@ -39,6 +39,21 @@ class CurrentWeekQueryTest {
     }
 
     @Test
+    fun getReturnsCurrentWeek0WhenOnlyWeekIs0() {
+        val expectedWeek = WeekDTO("0")
+        every {mockWeeksQuery.get()} returns listOf(expectedWeek)
+        every { mockGamesQuery.getGamesForWeek(expectedWeek.name)} returns listOf(
+            GameDTO("GB@CHI", expectedWeek.name).apply {
+                gameTime = OffsetDateTime.now().plusDays(1)
+            }
+        )
+
+        val results = CurrentWeekQuery(mockWeeksQuery, mockGamesQuery).getCurrentWeek()
+
+        Assertions.assertEquals(expectedWeek.name, results.name)
+    }
+
+    @Test
     fun getReturnsCurrentWeek0WhenOnlyWeekIs0AndNoGameTimes() {
         val expectedWeek = WeekDTO("0")
         every {mockWeeksQuery.get()} returns listOf(expectedWeek)
@@ -46,7 +61,7 @@ class CurrentWeekQueryTest {
             GameDTO("GB@CHI", expectedWeek.name)
         )
 
-        val results = CurrentWeekQuery(mockWeeksQuery, mockGamesQuery).get(env)
+        val results = CurrentWeekQuery(mockWeeksQuery, mockGamesQuery).getCurrentWeek()
 
         Assertions.assertEquals(expectedWeek.name, results.name)
     }
@@ -65,7 +80,7 @@ class CurrentWeekQueryTest {
             }
         )
 
-        val results = CurrentWeekQuery(mockWeeksQuery, mockGamesQuery).get(env)
+        val results = CurrentWeekQuery(mockWeeksQuery, mockGamesQuery).getCurrentWeek()
 
         Assertions.assertEquals(expectedWeek.name, results.name)
     }
@@ -86,7 +101,7 @@ class CurrentWeekQueryTest {
             }
         )
 
-        val results = CurrentWeekQuery(mockWeeksQuery, mockGamesQuery).get(env)
+        val results = CurrentWeekQuery(mockWeeksQuery, mockGamesQuery).getCurrentWeek()
 
         Assertions.assertEquals(expectedWeek.name, results.name)
     }
@@ -106,7 +121,7 @@ class CurrentWeekQueryTest {
             }
         )
 
-        val results = CurrentWeekQuery(mockWeeksQuery, mockGamesQuery).get(env)
+        val results = CurrentWeekQuery(mockWeeksQuery, mockGamesQuery).getCurrentWeek()
 
         Assertions.assertEquals(expectedWeek.name, results.name)
     }
@@ -127,7 +142,7 @@ class CurrentWeekQueryTest {
             }
         )
 
-        val results = CurrentWeekQuery(mockWeeksQuery, mockGamesQuery).get(env)
+        val results = CurrentWeekQuery(mockWeeksQuery, mockGamesQuery).getCurrentWeek()
 
         Assertions.assertEquals(expectedWeek.name, results.name)
     }
@@ -151,7 +166,7 @@ class CurrentWeekQueryTest {
             }
         )
 
-        val results = CurrentWeekQuery(mockWeeksQuery, mockGamesQuery).get(env)
+        val results = CurrentWeekQuery(mockWeeksQuery, mockGamesQuery).getCurrentWeek()
 
         Assertions.assertEquals(expectedWeek.name, results.name)
     }

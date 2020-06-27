@@ -7,6 +7,10 @@ import java.time.OffsetDateTime
 
 class CurrentWeekQuery(private val weeksQuery: WeeksQuery, private val gamesQuery: GamesQuery) : DataFetcher<WeekDTO> {
     override fun get(environment: DataFetchingEnvironment?): WeekDTO {
+        return getCurrentWeek()
+    }
+
+    fun getCurrentWeek(): WeekDTO {
         val sortedWeeks = weeksQuery.get()
             .filter { hasNonnullGameTime(it.name, gamesQuery) }
             .sortedBy { firstNonnullGameTime(it.name, gamesQuery) }
@@ -18,7 +22,7 @@ class CurrentWeekQuery(private val weeksQuery: WeeksQuery, private val gamesQuer
 
         try {
             weeksWithGamesLessThanSeveralHoursAgo.add(sortedWeeks.last())
-        } catch(e: NoSuchElementException) {
+        } catch (e: NoSuchElementException) {
             weeksWithGamesLessThanSeveralHoursAgo.add(weeksQuery.get().first())
         }
         return weeksWithGamesLessThanSeveralHoursAgo.first()
