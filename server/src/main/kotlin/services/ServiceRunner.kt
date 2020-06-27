@@ -161,7 +161,7 @@ class ServiceRunner {
 
             gamesQuery.getGamesForWeek(weekString)
                 .filter { game ->
-                    !pickedWeeks.first().picks.map { pick -> pick.game }
+                    !pickedWeeks.first{userPicks -> userPicks.user.name == "RNG"}.picks.map { pick -> pick.game }
                         .contains(game.name)
                 }
                 .forEach { game ->
