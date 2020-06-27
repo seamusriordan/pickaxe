@@ -157,9 +157,11 @@ class ServiceRunner {
             arguments["name"] = "RNG"
             arguments["userPick"] = userPick
 
-            userPick["week"] = "Week 0"
-            userPick["game"] = "DET@CHI"
-            userPick["pick"] = "CHI"
+            val weekString = currentWeekQuery.getCurrentWeek().name
+            userPick["week"] = weekString
+            val gameString = gamesQuery.getGamesForWeek(weekString).first().name
+            userPick["game"] = gameString
+            userPick["pick"] = RandomPickSelector.chooseRandomFor(gameString)
 
             val env: DataFetchingEnvironment = DataFetchingEnvironmentImpl
                 .newDataFetchingEnvironment()
