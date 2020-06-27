@@ -36,7 +36,7 @@ class ServiceRunner {
         GlobalScope.launch {
             while (true) {
                 delay(fiveMinutes)
-                if(hasImmanentGamesMissingId(WeeksQuery(dbConnection), GamesQuery(dbConnection))){
+                if (hasImmanentGamesMissingId(WeeksQuery(dbConnection), GamesQuery(dbConnection))) {
                     reloadAllWeeks(nflApi, dbConnection)
                 }
                 updateGameDetailsForFinalGames(nflApi, dbConnection)
@@ -146,29 +146,42 @@ class ServiceRunner {
             return time != null && time.minusMinutes(minutes).isBefore(OffsetDateTime.now())
         }
 
-        fun makeRngPicks(currentWeekQuery: CurrentWeekQuery,
-                         gamesQuery: GamesQuery,
-                         picksQuery: UserPickQuery,
-                         userPickMutator: UpdatePickMutator,
-                         RandomPickSelector: RandomPickSelector
+        fun makeRngPicks(
+            currentWeekQuery: CurrentWeekQuery,
+            gamesQuery: GamesQuery,
+            picksQuery: UserPickQuery,
+            userPickMutator: UpdatePickMutator,
+            RandomPickSelector: RandomPickSelector
         ) {
-            val arguments = HashMap<String, Any>()
-            val userPick = HashMap<String, String>()
-            arguments["name"] = "RNG"
-            arguments["userPick"] = userPick
+
 
             val weekString = currentWeekQuery.getCurrentWeek().name
-            userPick["week"] = weekString
-            val gameString = gamesQuery.getGamesForWeek(weekString).first().name
-            userPick["game"] = gameString
-            userPick["pick"] = RandomPickSelector.chooseRandomFor(gameString)
 
-            val env: DataFetchingEnvironment = DataFetchingEnvironmentImpl
-                .newDataFetchingEnvironment()
-                .arguments(arguments)
-                .build()
+            val pickedWeeks = picksQuery.getPicksForWeek(weekString)
 
-            userPickMutator.get(env)
+            gamesQuery.getGamesForWeek(weekString)
+                .filter { game ->
+                    !pickedWeeks.first().picks.map { pick -> pick.game }
+                        .contains(game.name)
+                }
+                .forEach { game ->
+                    val gameString = game.name
+
+                    val arguments = HashMap<String, Any>()
+                    val userPick = HashMap<String, String>()
+                    userPick["week"] = weekString
+                    arguments["name"] = "RNG"
+                    arguments["userPick"] = userPick
+                    userPick["game"] = gameString
+                    userPick["pick"] = RandomPickSelector.chooseRandomFor(gameString)
+
+                    val env: DataFetchingEnvironment = DataFetchingEnvironmentImpl
+                        .newDataFetchingEnvironment()
+                        .arguments(arguments)
+                        .build()
+
+                    userPickMutator.get(env)
+                }
 
         }
     }

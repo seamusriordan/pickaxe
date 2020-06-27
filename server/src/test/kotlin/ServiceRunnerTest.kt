@@ -1,8 +1,5 @@
 import db.*
-import dto.GameDTO
-import dto.UserDTO
-import dto.UserPicksDTO
-import dto.WeekDTO
+import dto.*
 import graphql.schema.DataFetchingEnvironment
 import io.mockk.every
 import io.mockk.mockkClass
@@ -466,4 +463,100 @@ class ServiceRunnerTest {
         assertEquals(expectedPick, userPick["pick"])
     }
 
+    @Test
+    fun randomNumberGeneratorGamesAreMakeForCurrentWeekWithTwoGamesWhenNotDoneAlready() {
+        val mockCurrentWeekQuery = mockkClass(CurrentWeekQuery::class)
+        val mockPicksQuery = mockkClass(UserPickQuery::class)
+        val mockGamesQuery = mockkClass(GamesQuery::class)
+        val mockPickMutator = mockkClass(UpdatePickMutator::class)
+        val mockRandomPickSelector = mockkClass(RandomPickSelector::class)
+
+        val mutatorEnvs = mutableListOf<DataFetchingEnvironment>()
+
+        val week = "Week 0"
+        val game = "DET@CHI"
+        val expectedPick = "CHI"
+        every { mockCurrentWeekQuery.getCurrentWeek() } returns WeekDTO(week)
+        every { mockGamesQuery.getGamesForWeek(week) } returns listOf(
+            GameDTO("TB@NE", week).apply {
+                gameTime = OffsetDateTime.now().minusDays(1)
+                id = UUID.randomUUID()
+            },
+            GameDTO(game, week).apply {
+                gameTime = OffsetDateTime.now().minusDays(1)
+                id = UUID.randomUUID()
+            }
+        )
+        every { mockPicksQuery.getPicksForWeek(week) } returns listOf(
+            UserPicksDTO(UserDTO("RNG"))
+        )
+        every { mockPickMutator.get(capture(mutatorEnvs)) } returns true
+        every { mockRandomPickSelector.chooseRandomFor("TB@NE") } returns "TB"
+        every { mockRandomPickSelector.chooseRandomFor(game) } returns expectedPick
+
+        ServiceRunner.makeRngPicks(
+            mockCurrentWeekQuery,
+            mockGamesQuery,
+            mockPicksQuery,
+            mockPickMutator,
+            mockRandomPickSelector
+        )
+
+        assertEquals(2, mutatorEnvs.size)
+        val mutatorEnv = mutatorEnvs[1]
+        assertEquals("RNG", mutatorEnv.arguments["name"])
+        val userPick = mutatorEnv.arguments["userPick"] as HashMap<*, *>
+        assertEquals(week, userPick["week"])
+        assertEquals(game, userPick["game"])
+        assertEquals(expectedPick, userPick["pick"]!!)
+    }
+
+
+    @Test
+    fun randomNumberGeneratorSkipsPicksThatAreAlreadyMade() {
+        val mockCurrentWeekQuery = mockkClass(CurrentWeekQuery::class)
+        val mockPicksQuery = mockkClass(UserPickQuery::class)
+        val mockGamesQuery = mockkClass(GamesQuery::class)
+        val mockPickMutator = mockkClass(UpdatePickMutator::class)
+        val mockRandomPickSelector = mockkClass(RandomPickSelector::class)
+
+        val mutatorEnvs = mutableListOf<DataFetchingEnvironment>()
+
+        val week = "Week 0"
+        val game = "DET@CHI"
+        val expectedPick = "CHI"
+        every { mockCurrentWeekQuery.getCurrentWeek() } returns WeekDTO(week)
+        val pickedGame = "TB@NE"
+        every { mockGamesQuery.getGamesForWeek(week) } returns listOf(
+            GameDTO(game, week).apply {
+                gameTime = OffsetDateTime.now().minusDays(1)
+                id = UUID.randomUUID()
+            },
+            GameDTO(pickedGame, week).apply {
+                gameTime = OffsetDateTime.now().minusDays(1)
+                id = UUID.randomUUID()
+            }
+        )
+        every { mockPicksQuery.getPicksForWeek(week) } returns listOf(
+            UserPicksDTO(UserDTO("RNG")).apply {
+                picks = arrayListOf(PickDTO(pickedGame, "NE"))
+            }
+        )
+        every { mockPickMutator.get(capture(mutatorEnvs)) } returns true
+        every { mockRandomPickSelector.chooseRandomFor(pickedGame) } returns "TB"
+        every { mockRandomPickSelector.chooseRandomFor(game) } returns expectedPick
+
+        ServiceRunner.makeRngPicks(
+            mockCurrentWeekQuery,
+            mockGamesQuery,
+            mockPicksQuery,
+            mockPickMutator,
+            mockRandomPickSelector
+        )
+
+        assertEquals(1, mutatorEnvs.size)
+        val mutatorEnv = mutatorEnvs.first()
+        val userPick = mutatorEnv.arguments["userPick"] as HashMap<*, *>
+        assertEquals(game, userPick["game"])
+    }
 }
