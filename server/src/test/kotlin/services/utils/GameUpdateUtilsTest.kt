@@ -15,6 +15,7 @@ import services.utils.GameUpdateUtils.Companion.hasImmanentGamesMissingId
 import services.utils.GameUpdateUtils.Companion.reloadGamesForWeek
 import services.utils.GameUpdateUtils.Companion.updateDetailsForFinalGame
 import java.io.FileNotFoundException
+import java.io.IOException
 import java.time.OffsetDateTime
 import java.util.*
 
@@ -85,7 +86,17 @@ class GameUpdateUtilsTest {
 
     @Test
     fun loadInfoForWeekAndFileNotFoundDoesNothing() {
-        every { mockNflApi.getWeek(any()) } throws FileNotFoundException("Mock failure")
+        every { mockNflApi.getWeek(any()) } throws FileNotFoundException("Mock file not found exception")
+        every { mockMutator.putInDatabase(any()) } returns Unit
+
+        reloadGamesForWeek(WeekDTO("Week -1"), mockNflApi, mockMutator)
+
+        verify(exactly = 0) { mockMutator.putInDatabase(any()) }
+    }
+
+    @Test
+    fun loadInfoForWeekAndIOExceptionDoesNothing() {
+        every { mockNflApi.getWeek(any()) } throws IOException("Mock io exception")
         every { mockMutator.putInDatabase(any()) } returns Unit
 
         reloadGamesForWeek(WeekDTO("Week -1"), mockNflApi, mockMutator)

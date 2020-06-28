@@ -7,6 +7,7 @@ import dto.GameDTO
 import dto.WeekDTO
 import services.NflApi
 import java.io.FileNotFoundException
+import java.io.IOException
 
 class GameUpdateUtils {
     companion object {
@@ -20,7 +21,10 @@ class GameUpdateUtils {
                 games = nflApi.getWeek(week)
             } catch (e: FileNotFoundException) {
                 println("Week ${week.name} could not be fetched - ${e.message}")
+            } catch (e: IOException) {
+                println("Week ${week.name} could not be fetched - ${e.message}")
             }
+
             games.forEach { baseGame ->
                 gameMutator.putInDatabase(baseGame)
             }
