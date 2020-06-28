@@ -8,7 +8,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 class VegasPicksApiTest {
-    val sampleRow = "<tr>\n" +
+    private val sampleRowPitAtDal = "<tr>\n" +
             "    <td class=\"viCellBg1 cellTextNorm cellBorderL1 gameCell\">\n" +
             "        <span class=\"cellTextHot\">08/06  8:00 PM</span><br>\n" +
             "        <a class=\"tabletext\">Pittsburgh</a>\n" +
@@ -46,26 +46,26 @@ class VegasPicksApiTest {
         assertEquals(0, picks.size)
     }
 
-//    @Test
-//    fun getVegasPickWithSampleRowReturnsGame() {
-//        val handler = MockURLStreamHandler
-//        val picksUrl = URL("https://picksendpoint")
-//        val mockPicksConnection = mockkClass(HttpURLConnection::class)
-//
-//        handler.setConnection(picksUrl, mockPicksConnection)
-//
-//        every { mockPicksConnection.requestMethod = "GET" } returns Unit
-//        every { mockPicksConnection.doOutput = true } returns Unit
-//        every { mockPicksConnection.inputStream } returns sampleRow.byteInputStream()
-//
-//        val picksApi = VegasPicksApi(picksUrl)
-//
-//        val picks = picksApi.getVegasPicks()
-//
-//        assertEquals(1, picks.size)
-//        val pick = picks.first()
-//        assertEquals("PIT@DAL", pick.game)
-//        assertEquals("DAL", pick.pick)
-//        assertEquals(-1.5, pick.spread)
-//    }
+    @Test
+    fun getVegasPickWithSampleRowReturnsGame() {
+        val handler = MockURLStreamHandler
+        val picksUrl = URL("https://picksendpoint")
+        val mockPicksConnection = mockkClass(HttpURLConnection::class)
+
+        handler.setConnection(picksUrl, mockPicksConnection)
+
+        every { mockPicksConnection.requestMethod = "GET" } returns Unit
+        every { mockPicksConnection.doOutput = true } returns Unit
+        every { mockPicksConnection.inputStream } returns sampleRowPitAtDal.byteInputStream()
+
+        val picksApi = VegasPicksApi(picksUrl)
+
+        val picks = picksApi.getVegasPicks()
+
+        assertEquals(1, picks.size)
+        val pick = picks.first()
+        assertEquals("PIT@DAL", pick.game)
+        assertEquals("DAL", pick.pick)
+        assertEquals(-1.5, pick.spread)
+    }
 }
