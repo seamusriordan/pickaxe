@@ -92,6 +92,24 @@ class VegasPicksApiTest {
     }
 
     @Test
+    fun getVegasPickWithPositiveSpreadHasAwayTeamAsWinner() {
+        every { mockPicksConnection.inputStream } returns buildSampleRow(
+            VegasData(
+                "Pittsburgh",
+                "Dallas",
+                "&nbsp;<br>-1&nbsp;-10<br>49u-10"
+            )).byteInputStream()
+
+        val picks = VegasPicksApi(picksUrl).getVegasPicks()
+
+        assertEquals(1, picks.size)
+        val pick = picks.first()
+        assertEquals("PIT@DAL", pick.game)
+        assertEquals("PIT", pick.pick)
+        assertEquals(1.0, pick.spread)
+    }
+
+    @Test
     fun getVegasPickWithSampleRowHouAtKcReturnsGame() {
         every { mockPicksConnection.inputStream } returns buildSampleRow(
             VegasData(
@@ -107,8 +125,9 @@ class VegasPicksApiTest {
         val pick = picks.first()
         assertEquals("HOU@KC", pick.game)
         assertEquals("KC", pick.pick)
-        assertEquals(-10.5, pick.spread)
+        assertEquals(-10.0, pick.spread)
     }
+
 
     private inner class VegasData(val awayTeam: String, val homeTeam: String, val spread: String)
 

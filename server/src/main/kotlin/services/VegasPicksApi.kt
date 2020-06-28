@@ -31,8 +31,13 @@ class VegasPicksApi(private val url: URL) {
 
             val spread = parseSpread(oddsString)
 
+            var pick = teams[1]
+            if(spread > 0){
+                pick = teams[0]
+            }
+
             vegasData.add(
-                PickWithSpreadDTO(teams[0] + "@" + teams[1], teams[1], spread)
+                PickWithSpreadDTO("${teams[0]}@${teams[1]}", pick, spread)
             )
 
         }
@@ -41,7 +46,19 @@ class VegasPicksApi(private val url: URL) {
     }
 
     private fun parseSpread(oddsString: String): Double {
-        return -1.5
+        val tokens = oddsString.split(Regex("\\s"))
+
+        val uPosition = tokens.indexOfFirst { it.contains('u') }
+
+        if(uPosition == 0){
+            val spreadToken = tokens[1]
+            if(spreadToken.contains('½')){
+                return spreadToken.substringBefore('½').toDouble() - 0.5
+            }
+            return tokens[1].toDouble()
+        }
+
+        return 1.0
     }
 
     private fun translateToTeamAbbrev(longTeamName: String): String {
