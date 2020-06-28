@@ -20,7 +20,7 @@ services:
       java -cp /var/wiremock/lib/*:/var/wiremock/extensions/*
       com.github.tomakehurst.wiremock.standalone.WireMockServerRunner
       --root-dir=mappings
-#      --proxy-all="https://api.nfl.com/"
+#      --proxy-all="https://www.vegasinsider.com/"
 #      --record-mappings
 
 volumes:

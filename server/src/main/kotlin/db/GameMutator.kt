@@ -11,14 +11,22 @@ class GameMutator(private var connection: Connection) {
 
 
         if (game.id != null) {
-            if (game.result != null) {
-                insertOrUpdateStatement = buildInsertOrUpdateWithResult(game)
+            insertOrUpdateStatement = if (game.result != null && game.result != "") {
+                buildInsertOrUpdateWithResult(game)
             } else {
-                insertOrUpdateStatement = buildInsertOrUpdateWithoutResult(game)
+                buildWithoutResult(game)
             }
         }
 
         statement.executeUpdate(insertOrUpdateStatement)
+    }
+
+    private fun buildWithoutResult(game: GameDTO): String {
+        return if (game.spread == null) {
+            buildInsertOrUpdateWithoutResult(game)
+        } else {
+            buildInsertOrUpdateWithSpreadAndWithoutResult(game)
+        }
     }
 
     private fun buildInsertOrUpdateWithoutID(game: GameDTO) =
@@ -29,6 +37,10 @@ class GameMutator(private var connection: Connection) {
     private fun buildInsertOrUpdateWithoutResult(game: GameDTO) =
         "INSERT INTO games(game, week, gametime, final, id) VALUES ('${game.name}', '${game.week}', '${game.gameTime}', false, '${game.id}') " +
                 "ON CONFLICT (game, week) DO UPDATE SET (gametime, final, id) = ('${game.gameTime}', false, '${game.id}')"
+
+    private fun buildInsertOrUpdateWithSpreadAndWithoutResult(game: GameDTO) =
+        "INSERT INTO games(game, week, gametime, final, spread, id) VALUES ('${game.name}', '${game.week}', '${game.gameTime}', false, '${game.spread}', '${game.id}') " +
+                "ON CONFLICT (game, week) DO UPDATE SET (gametime, final, spread, id) = ('${game.gameTime}', false, '${game.spread}', '${game.id}')"
 
 
     private fun buildInsertOrUpdateWithResult(game: GameDTO) =

@@ -1,3 +1,3 @@
 package dto
 
-class PickDTO(var game: String, var pick: String)
+open class PickDTO(var game: String, var pick: String)

@@ -6,6 +6,7 @@ import io.mockk.every
 import io.mockk.mockkClass
 import io.mockk.slot
 import io.mockk.verify
+import org.eclipse.jetty.websocket.api.Session
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.util.concurrent.Future
@@ -117,7 +118,7 @@ class HttpHandlersTest {
     }
 
     @Test
-    fun nullOperationNameDoesntCrashServer(){
+    fun nullOperationNameDoesntCrashServer() {
         val mockContext = createMockNullOpContext()
 
         postHandler(sampleGraphQL(), ArrayList(0))(mockContext)
@@ -125,6 +126,7 @@ class HttpHandlersTest {
 
     @Test
     fun postHandlerWithOneOpenContextSendsMessage() {
+        System.setProperty("skip_ws_session_null_check", "true")
         val mockContext = createMockMutationContext()
 
         val wsContexts = ArrayList<WsContext>(0)
@@ -162,6 +164,7 @@ class HttpHandlersTest {
 
     @Test
     fun postHandlerForMutationWithTwoOpenContextSendsMessageToEach() {
+        System.setProperty("skip_ws_session_null_check", "true")
         val mockContext = createMockMutationContext()
 
         val wsContexts = ArrayList<WsContext>(0)
@@ -191,7 +194,6 @@ class HttpHandlersTest {
         verify(exactly = 0) { openWsContext1.send(any<String>()) }
         verify(exactly = 0) { openWsContext2.send(any<String>()) }
     }
-
 
 
     interface FutureVoid : Future<Void>

@@ -1,0 +1,21 @@
+{
+  "id" : "51a69f91-de45-3661-badf-22a889afc6d9",
+  "request" : {
+    "url" : "/nfl/odds/las-vegas/",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-nfl-odds-las-vegas-EBqyb.txt",
+    "headers" : {
+      "Content-Type" : "text/html;charset=UTF-8",
+      "Server" : "",
+      "Set-Cookie" : [ "JSESSIONID=5E69B7A6273DCA8BB667A1FAB4C5C4B7.VI-3.4; Path=/; Secure; HttpOnly", "CFID=Z5h5stx0cv267g6tg2zzzt9jhkr399x861u1ep3hwjn5chqxhkx-4693115; Domain=.vegasinsider.com; Expires=Tue, 21-Jun-2050 15:22:49 GMT; Path=/; HttpOnly", "CFTOKEN=Z5h5stx0cv267g6tg2zzzt9jhkr399x861u1ep3hwjn5chqxhkx-47d8740e0ec8532%2DD30545EF%2DF540%2DB78F%2DCE59FB39C33C51C6; Domain=.vegasinsider.com; Expires=Tue, 21-Jun-2050 15:22:49 GMT; Path=/; HttpOnly", "SITE_ID=%28%5DFBB%2D%2E%2F%2C%3A9%40%20; Domain=.vegasinsider.com; Expires=Sat, 26-Sep-2020 15:22:49 GMT; Path=/; Secure; HttpOnly" ],
+      "X-Content-Type-Options" : "nosniff",
+      "X-XSS-Protection" : "1",
+      "X-Frame-Options" : "SAMEORIGIN",
+      "Date" : "Sun, 28 Jun 2020 15:22:48 GMT"
+    }
+  },
+  "uuid" : "51a69f91-de45-3661-badf-22a889afc6d9"
+}
