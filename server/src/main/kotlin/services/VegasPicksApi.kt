@@ -46,9 +46,11 @@ class VegasPicksApi(private val url: URL) {
     }
 
     private fun parseSpread(oddsString: String): Double {
+        if(oddsString.contains("PK")) return 0.0
+
         val tokens = oddsString.split(Regex("\\s"))
 
-        val uPosition = tokens.indexOfFirst { it.contains('u') }
+        val uPosition = tokens.indexOfFirst { it.contains('u') or  it.contains('o')}
 
         if(uPosition == 0){
             val spreadToken = tokens[1]

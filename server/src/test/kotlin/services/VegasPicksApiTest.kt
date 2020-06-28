@@ -155,6 +155,36 @@ class VegasPicksApiTest {
         assertEquals(-10.0, pick.spread)
     }
 
+    @Test
+    fun pickTokenWithOverParsesCorrectly() {
+        every { mockPicksConnection.inputStream } returns buildSampleRow(
+            VegasData(
+                "Houston",
+                "Kansas City",
+                "&nbsp;<br>41&frac12;o-15<br>-1&frac12;&nbsp;-15"
+            )
+        ).byteInputStream()
+
+        val picks = VegasPicksApi(picksUrl).getVegasPicks()
+
+        assertEquals(-1.5, picks.first().spread)
+    }
+
+    @Test
+    fun pickTokenWithPKReturnsSpread0() {
+        every { mockPicksConnection.inputStream } returns buildSampleRow(
+            VegasData(
+                "Houston",
+                "Kansas City",
+                "&nbsp;<br>46&frac12;u-10<br>PK&nbsp;-10"
+            )
+        ).byteInputStream()
+
+        val picks = VegasPicksApi(picksUrl).getVegasPicks()
+
+        assertEquals(0.0, picks.first().spread)
+    }
+
 
     private inner class VegasData(val awayTeam: String, val homeTeam: String, val spread: String)
 
