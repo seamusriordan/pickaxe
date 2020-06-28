@@ -200,6 +200,21 @@ class VegasPicksApiTest {
         assertEquals("TIE", picks.first().pick)
     }
 
+    @Test
+    fun emptyPickCellDoesNotYieldPick() {
+        every { mockPicksConnection.inputStream } returns buildSampleRow(
+            VegasData(
+                "Houston",
+                "Kansas City",
+                ""
+            )
+        ).byteInputStream()
+
+        val picks = VegasPicksApi(picksUrl).getVegasPicks()
+
+        assertEquals(0, picks.size)
+    }
+
 
     private inner class VegasData(val awayTeam: String, val homeTeam: String, val spread: String)
 

@@ -2,6 +2,8 @@ package services
 
 import dto.PickWithSpreadDTO
 import org.jsoup.Jsoup
+import org.jsoup.nodes.Element
+import org.jsoup.select.Elements
 import java.io.InputStreamReader
 import java.net.URL
 import java.util.stream.IntStream.range
@@ -17,54 +19,72 @@ class VegasPicksApi(private val url: URL) {
 
     private fun parseResponseToGames(response: String): List<PickWithSpreadDTO> {
         val document = Jsoup.parse(response)
-
         val gameCells = document.select("td.gameCell")
         val oddsCells = document.select("td.gameCell + td.oddsCell + td.oddsCell")
 
+        return buildVegasData(gameCells, oddsCells)
+    }
+
+    private fun buildVegasData(
+        gameCells: Elements,
+        oddsCells: Elements
+    ): MutableList<PickWithSpreadDTO> {
         val vegasData = mutableListOf<PickWithSpreadDTO>()
         for (i in range(0, gameCells.size)) {
-            val gameCell = gameCells[i]
-            val oddsCell = oddsCells[i]
-
-            val teams = gameCell.select(".tabletext").map { cell -> translateToTeamAbbrev(cell.text()) }
-            val oddsString = oddsCell.text()
-
-            val spread = parseSpread(oddsString)
-
-            var pick = "TIE"
-            if(spread > 0){
-                pick = teams[0]
-            }
-            if(spread < 0){
-                pick = teams[1]
-            }
-
-            vegasData.add(
-                PickWithSpreadDTO("${teams[0]}@${teams[1]}", pick, spread)
-            )
-
+            addValidPickToData(vegasData, gameCells[i], oddsCells[i])
         }
-
         return vegasData
     }
 
+    private fun addValidPickToData(
+        vegasData: MutableList<PickWithSpreadDTO>,
+        gameCell: Element,
+        oddsCell: Element
+    ) {
+        val teams = gameCell.select(".tabletext").map { cell -> translateToTeamAbbrev(cell.text()) }
+        val oddsString = oddsCell.text()
+
+        if (oddsString.contains(Regex("[ou]"))) {
+            addPickToData(vegasData, teams, oddsString)
+        }
+    }
+
+    private fun addPickToData(
+        vegasData: MutableList<PickWithSpreadDTO>,
+        teams: List<String>,
+        oddsString: String
+    ) {
+        val game = "${teams[0]}@${teams[1]}"
+        val spread = parseSpread(oddsString)
+        val chosenPick = choosePick(spread, teams)
+        vegasData.add(PickWithSpreadDTO(game, chosenPick, spread))
+    }
+
+    private fun choosePick(spread: Double, teams: List<String>): String {
+        var pick = "TIE"
+        if (spread > 0) {
+            pick = teams[0]
+        }
+        if (spread < 0) {
+            pick = teams[1]
+        }
+        return pick
+    }
+
     private fun parseSpread(oddsString: String): Double {
-        if(oddsString.contains("PK")) return 0.0
+        if (oddsString.contains("PK")) return 0.0
 
         val tokens = oddsString.split(Regex("\\s"))
-
-        val uPosition = tokens.indexOfFirst { it.contains('u') or  it.contains('o')}
-
-        if(uPosition == 0){
+        val uPosition = tokens.indexOfFirst { it.contains(Regex("[ou]")) }
+        if (uPosition == 0) {
             val spreadToken = tokens[1]
             return parseSpreadToken(spreadToken)
         }
-        if(uPosition == 2){
+        if (uPosition == 2) {
             val spreadToken = tokens[0]
             return -parseSpreadToken(spreadToken)
         }
-
-        return 1.0
+        return 0.0
     }
 
     private fun parseSpreadToken(spreadToken: String): Double {
