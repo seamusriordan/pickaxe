@@ -11,7 +11,7 @@ class GameMutator(private var connection: Connection) {
 
 
         if (game.id != null) {
-            insertOrUpdateStatement = if (game.result != null) {
+            insertOrUpdateStatement = if (game.result != null && game.result != "") {
                 buildInsertOrUpdateWithResult(game)
             } else {
                 buildWithoutResult(game)

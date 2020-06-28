@@ -166,6 +166,23 @@ class GameMutatorTest {
     }
 
     @Test
+    fun emptyStringResultIsNotFinal() {
+        val game = GameDTO("BAL@CIN", "Week 12").apply {
+            id = UUID.randomUUID()
+            result = ""
+            gameTime = OffsetDateTime.now()
+        }
+        val expectedQuery = buildInsertStringNoResult(game)
+
+        gameMutator.putInDatabase(game)
+
+        verify {
+            mockStatement.executeUpdate(expectedQuery)
+        }
+    }
+
+
+    @Test
     fun updateWithoutGameDetailsId() {
         val game = GameDTO("BAL@CIN", "Week 12").apply {
             id = null
