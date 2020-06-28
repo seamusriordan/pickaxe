@@ -149,6 +149,21 @@ class GameMutatorTest {
         }
     }
 
+    @Test
+    fun updateUnfinishedGameWithSpreadPutsInDatabase() {
+        val game = GameDTO("TB@NE", "Week 4").apply {
+            id = UUID.randomUUID()
+            gameTime = OffsetDateTime.now()
+            spread = -7.0
+        }
+        val expectedQuery = buildInsertStringSpreadAndNoResult(game)
+
+        gameMutator.putInDatabase(game)
+
+        verify {
+            mockStatement.executeUpdate(expectedQuery)
+        }
+    }
 
     @Test
     fun updateWithoutGameDetailsId() {
@@ -165,6 +180,7 @@ class GameMutatorTest {
         }
     }
 
+
     private fun buildInsertStringWithFinalResult(
         game: GameDTO
     ): String {
@@ -177,6 +193,13 @@ class GameMutatorTest {
     ): String {
         return "INSERT INTO games(game, week, gametime, final, id) VALUES ('${game.name}', '${game.week}', '${game.gameTime}', false, '${game.id}') " +
                 "ON CONFLICT (game, week) DO UPDATE SET (gametime, final, id) = ('${game.gameTime}', false, '${game.id}')"
+    }
+
+    private fun buildInsertStringSpreadAndNoResult(
+        game: GameDTO
+    ): String {
+        return "INSERT INTO games(game, week, gametime, final, spread, id) VALUES ('${game.name}', '${game.week}', '${game.gameTime}', false, '${game.spread}', '${game.id}') " +
+                "ON CONFLICT (game, week) DO UPDATE SET (gametime, final, spread, id) = ('${game.gameTime}', false, '${game.spread}', '${game.id}')"
     }
 
     private fun buildInsertStringNoID(
