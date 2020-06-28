@@ -22,6 +22,10 @@ class ServiceRunner {
     fun start() {
         val nflApiRoot = getEnvOrDefault("NFL_API_ROOT", "http://nfl-wiremock:8080")
         val nflApi = NflApi(URL("${nflApiRoot}/v1/reroute"), URL(nflApiRoot))
+
+        val vegasPicksApiRoot = getEnvOrDefault("VEGAS_PICKS_URL", "http://nfl-wiremock:8080/nfl/odds/las-vegas/")
+        val vegasPicksApi = VegasPicksApi(URL(vegasPicksApiRoot))
+
         val dbConnection = PickaxeDB().getDBConnection()
 
         GlobalScope.launch {
@@ -29,7 +33,7 @@ class ServiceRunner {
                 reloadAllWeeks(nflApi, dbConnection)
                 updateGameDetailsForFinalGames(nflApi, dbConnection)
                 makeRngPicksForCurrentWeek(dbConnection)
-                updateVegasPicksForCurrentWeek(dbConnection)
+                updateVegasPicksForCurrentWeek(dbConnection, vegasPicksApi)
                 delay(sixHours)
             }
         }
@@ -77,13 +81,13 @@ class ServiceRunner {
         )
     }
 
-    private fun updateVegasPicksForCurrentWeek(dbConnection: Connection) {
+    private fun updateVegasPicksForCurrentWeek(dbConnection: Connection, vegasPicksApi: VegasPicksApi) {
         VegasUpdateUtils.updateVegasPicks(
             CurrentWeekQuery(WeeksQuery(dbConnection), GamesQuery(dbConnection)),
             GamesQuery(dbConnection),
             GameMutator(dbConnection),
             UpdatePickMutator(dbConnection),
-            VegasPicksApi()
+            vegasPicksApi
         )
     }
 }
