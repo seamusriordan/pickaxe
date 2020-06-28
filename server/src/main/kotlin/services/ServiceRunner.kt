@@ -20,10 +20,16 @@ class ServiceRunner {
     private val fiveMinutes = 5 * 60 * 1000L
 
     fun start() {
-        val nflApiRoot = getEnvOrDefault("NFL_API_ROOT", "http://nfl-wiremock:8080")
+        val nflApiRoot = getEnvOrDefault(
+            "NFL_API_ROOT",
+            "http://nfl-wiremock:8080"
+        )
         val nflApi = NflApi(URL("${nflApiRoot}/v1/reroute"), URL(nflApiRoot))
 
-        val vegasPicksApiRoot = getEnvOrDefault("VEGAS_PICKS_URL", "http://nfl-wiremock:8080/nfl/odds/las-vegas/")
+        val vegasPicksApiRoot = getEnvOrDefault(
+            "VEGAS_PICKS_URL",
+            "http://nfl-wiremock:8080/nfl/odds/las-vegas/"
+        )
         val vegasPicksApi = VegasPicksApi(URL(vegasPicksApiRoot))
 
         val dbConnection = PickaxeDB().getDBConnection()

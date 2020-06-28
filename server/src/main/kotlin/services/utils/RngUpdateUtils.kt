@@ -22,28 +22,30 @@ class RngUpdateUtils {
             val weekString = currentWeekQuery.getCurrentWeek().name
             val rngPicks = getRngPicksForWeek(picksQuery, weekString)
 
-            gamesQuery.getGamesForWeek(weekString)
-                .filter { game ->
-                    !isGameAlreadyPicked(game, rngPicks) && gameTimeIsNotSoon(game)
-                }
-                .forEach { game ->
-                    setRandomPickForGame(
-                        weekString,
-                        game,
-                        RandomPickSelector.chooseRandomFor(game.name),
-                        userPickMutator
-                    )
-                }
+            if(rngPicks != null) {
+                gamesQuery.getGamesForWeek(weekString)
+                    .filter { game ->
+                        !isGameAlreadyPicked(game, rngPicks) && gameTimeIsNotSoon(game)
+                    }
+                    .forEach { game ->
+                        setRandomPickForGame(
+                            weekString,
+                            game,
+                            RandomPickSelector.chooseRandomFor(game.name),
+                            userPickMutator
+                        )
+                    }
+            }
         }
 
         private fun gameTimeIsNotSoon(game: GameDTO): Boolean {
             return game.gameTime != null && !UpdateUtils.hasGameStartInXMinutes(game.gameTime, 15)
         }
 
-        private fun getRngPicksForWeek(picksQuery: UserPickQuery, weekString: String): UserPicksDTO {
+        private fun getRngPicksForWeek(picksQuery: UserPickQuery, weekString: String): UserPicksDTO? {
             return picksQuery
                 .getPicksForWeek(weekString)
-                .first { userPicks -> userPicks.user.name == rngUserName }
+                .firstOrNull { userPicks -> userPicks.user.name == rngUserName }
         }
 
         private fun setRandomPickForGame(

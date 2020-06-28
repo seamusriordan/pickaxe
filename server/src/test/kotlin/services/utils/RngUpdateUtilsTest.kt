@@ -51,6 +51,21 @@ class RngUpdateUtilsTest {
     }
 
     @Test
+    fun noRngUserMakesNoPicks() {
+        every { mockPicksQuery.getPicksForWeek(defaultWeek) } returns listOf()
+
+        makeRngPicksForCurrentWeek(
+            mockCurrentWeekQuery,
+            mockGamesQuery,
+            mockPicksQuery,
+            mockPickMutator,
+            mockRandomPickSelector
+        )
+
+        Assertions.assertEquals(0, mutatorEnvs.size)
+    }
+
+    @Test
     fun randomNumberGeneratorGamesAreMakeForCurrentWeekWhenNotDoneAlready() {
         makeRngPicksForCurrentWeek(
             mockCurrentWeekQuery,
