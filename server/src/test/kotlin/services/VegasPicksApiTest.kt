@@ -4,6 +4,7 @@ import io.mockk.every
 import io.mockk.mockkClass
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -26,6 +27,27 @@ class VegasPicksApiTest {
 
         every { mockPicksConnection.requestMethod = "GET" } returns Unit
         every { mockPicksConnection.doOutput = true } returns Unit
+    }
+
+    @Test
+    fun urlOpenConnectionIOExceptionReturnsNoPicks() {
+        val mockUrl = mockkClass(URL::class)
+        every {mockUrl.openConnection()} throws IOException("Mock io exception")
+        val picksApi = VegasPicksApi(mockUrl)
+
+        val picks = picksApi.getVegasPicks()
+
+        assertEquals(0, picks.size)
+    }
+
+    @Test
+    fun getInputStreamIOExceptionReturnsNoPicks() {
+        every {mockPicksConnection.inputStream } throws IOException("Mock io exception")
+        val picksApi = VegasPicksApi(picksUrl)
+
+        val picks = picksApi.getVegasPicks()
+
+        assertEquals(0, picks.size)
     }
 
     @Test

@@ -4,15 +4,21 @@ import dto.PickWithSpreadDTO
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
+import java.io.IOException
 import java.io.InputStreamReader
 import java.net.URL
 import java.util.stream.IntStream.range
 
 class VegasPicksApi(private val url: URL) {
     fun getVegasPicks(): List<PickWithSpreadDTO> {
-        val connection = url.openConnection()
-        val stream = connection.getInputStream()
-        val response = InputStreamReader(stream).readText()
+        val response: String
+        try {
+            val connection = url.openConnection()
+            val stream = connection.getInputStream()
+            response = InputStreamReader(stream).readText()
+        } catch (e: IOException){
+            return listOf()
+        }
 
         return parseResponseToGames(response)
     }
