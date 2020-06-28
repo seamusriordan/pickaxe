@@ -118,18 +118,20 @@ class HttpHandlersTest {
     }
 
     @Test
-    fun nullOperationNameDoesntCrashServer(){
+    fun nullOperationNameDoesntCrashServer() {
         val mockContext = createMockNullOpContext()
 
         postHandler(sampleGraphQL(), ArrayList(0))(mockContext)
     }
 
-//    @Test
+    @Test
     fun postHandlerWithOneOpenContextSendsMessage() {
+        System.setProperty("skip_ws_session_null_check", "true")
         val mockContext = createMockMutationContext()
 
         val wsContexts = ArrayList<WsContext>(0)
         val openWsContext = createWsContext()
+        wsContexts.add(openWsContext)
 
         postHandler(sampleGraphQL(), wsContexts)(mockContext)
 
@@ -160,8 +162,9 @@ class HttpHandlersTest {
         return mockContext
     }
 
-//    @Test
+    @Test
     fun postHandlerForMutationWithTwoOpenContextSendsMessageToEach() {
+        System.setProperty("skip_ws_session_null_check", "true")
         val mockContext = createMockMutationContext()
 
         val wsContexts = ArrayList<WsContext>(0)
@@ -191,7 +194,6 @@ class HttpHandlersTest {
         verify(exactly = 0) { openWsContext1.send(any<String>()) }
         verify(exactly = 0) { openWsContext2.send(any<String>()) }
     }
-
 
 
     interface FutureVoid : Future<Void>
