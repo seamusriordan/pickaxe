@@ -21,7 +21,7 @@ class VegasPicksApi(private val url: URL) {
         val gameCells = document.select("td.gameCell")
         val oddsCells = document.select("td.gameCell + td.oddsCell + td.oddsCell")
 
-        val picks = mutableListOf<PickWithSpreadDTO>()
+        val vegasData = mutableListOf<PickWithSpreadDTO>()
         for (i in range(0, gameCells.size)) {
             val gameCell = gameCells[i]
             val oddsCell = oddsCells[i]
@@ -29,13 +29,19 @@ class VegasPicksApi(private val url: URL) {
             val teams = gameCell.select(".tabletext").map { cell -> translateToTeamAbbrev(cell.text()) }
             val oddsString = oddsCell.text()
 
-            picks.add(
-                PickWithSpreadDTO(teams[0] + "@" + teams[1], "CHI", -10.5)
+            val spread = parseSpread(oddsString)
+
+            vegasData.add(
+                PickWithSpreadDTO(teams[0] + "@" + teams[1], teams[1], spread)
             )
 
         }
 
-        return picks
+        return vegasData
+    }
+
+    private fun parseSpread(oddsString: String): Double {
+        return -1.5
     }
 
     private fun translateToTeamAbbrev(longTeamName: String): String {
