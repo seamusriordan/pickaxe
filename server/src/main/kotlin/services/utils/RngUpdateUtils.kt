@@ -2,6 +2,7 @@ package services.utils
 
 import db.*
 import dto.GameDTO
+import dto.UserDTO
 import dto.UserPicksDTO
 import graphql.schema.DataFetchingEnvironment
 import services.RandomPickSelector
@@ -22,30 +23,29 @@ class RngUpdateUtils {
             val weekString = currentWeekQuery.getCurrentWeek().name
             val rngPicks = getRngPicksForWeek(picksQuery, weekString)
 
-            if(rngPicks != null) {
-                gamesQuery.getGamesForWeek(weekString)
-                    .filter { game ->
-                        !isGameAlreadyPicked(game, rngPicks) && gameTimeIsNotSoon(game)
-                    }
-                    .forEach { game ->
-                        setRandomPickForGame(
-                            weekString,
-                            game,
-                            RandomPickSelector.chooseRandomFor(game.name),
-                            userPickMutator
-                        )
-                    }
-            }
+            gamesQuery.getGamesForWeek(weekString)
+                .filter { game ->
+                    !isGameAlreadyPicked(game, rngPicks) && gameTimeIsNotSoon(game)
+                }
+                .forEach { game ->
+                    setRandomPickForGame(
+                        weekString,
+                        game,
+                        RandomPickSelector.chooseRandomFor(game.name),
+                        userPickMutator
+                    )
+                }
         }
 
         private fun gameTimeIsNotSoon(game: GameDTO): Boolean {
             return game.gameTime != null && !UpdateUtils.hasGameStartInXMinutes(game.gameTime, 15)
         }
 
-        private fun getRngPicksForWeek(picksQuery: UserPickQuery, weekString: String): UserPicksDTO? {
-            return picksQuery
-                .getPicksForWeek(weekString)
-                .firstOrNull { userPicks -> userPicks.user.name == rngUserName }
+        private fun getRngPicksForWeek(picksQuery: UserPickQuery, weekString: String): UserPicksDTO {
+            return picksQuery.getPicksForWeek(weekString)
+                .firstOrNull { userPicks ->
+                    userPicks.user.name == rngUserName
+                } ?: UserPicksDTO(UserDTO(rngUserName))
         }
 
         private fun setRandomPickForGame(

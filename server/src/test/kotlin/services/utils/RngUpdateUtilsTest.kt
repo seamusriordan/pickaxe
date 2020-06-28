@@ -51,7 +51,7 @@ class RngUpdateUtilsTest {
     }
 
     @Test
-    fun noRngUserMakesNoPicks() {
+    fun noRngPicksStillMakesPicks() {
         every { mockPicksQuery.getPicksForWeek(defaultWeek) } returns listOf()
 
         makeRngPicksForCurrentWeek(
@@ -62,7 +62,7 @@ class RngUpdateUtilsTest {
             mockRandomPickSelector
         )
 
-        Assertions.assertEquals(0, mutatorEnvs.size)
+        Assertions.assertEquals(1, mutatorEnvs.size)
     }
 
     @Test
