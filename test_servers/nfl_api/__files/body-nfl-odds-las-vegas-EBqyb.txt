@@ -1,0 +1,2738 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"> 
+<html xmlns:fb="http://www.facebook.com/2008/fbml" xmlns:og="http://opengraphprotocol.org/schema/" lang="en">
+<head>
+
+        <title>NFL Las Vegas Odds - Live Pro Football Betting Lines</title>
+        <meta http-equiv="x-ua-compatible" 	content="IE=edge">
+        <meta name="Keywords" 				content="comparison nfl odds,football odds,nfl odds,odds football,las vegas nfl odds,las vegas football line,las vegas nfl line,las vegas football lines,las vegas nfl lines,las vegas nfl spread,las vegas football spread,las vegas nfl spreads,las vegas football spreads,las vegas football money line,las vegas nfl money line,las vegas football odds,las vegas odds football,football betting odds,las vegas football odds,football playoff odds,nfl playoff spread,football playoff spread,nfl playoff spreads,football playoff spreads,las vegas odds football,football parlay odds,nfl odds,pro football odds,football odds,nfl line,pro football line,football line,nfl lines,pro football lines,football lines,nfl spread,pro football spread,football spread,nfl spreads,pro football spreads,football spreads,major leauge football spreads,nfl money line,pro football money line,football money line,nfl money lines,pro football money lines,football money lines,nfl first half lines,pro football first half lines,football first half lines">
+        <meta name="Description" 			content="Find NFL Las Vegas Sportsbook Odds, Betting Lines and Point Spreads for the 2019-20 football season provided by VegasInsider">
+        <meta name="robots" 				content="index,follow">
+        <meta http-equiv="Content-Type" 	content="text/html; charset=ISO-8859-1">
+        <meta name="viewport" 				content="width=device-width, initial-scale=1.0">
+    
+<LINK REL="Stylesheet" TYPE="TEXT/CSS" HREF="/include/default.css?v=1">
+<LINK REL="Stylesheet" TYPE="TEXT/CSS" HREF="/include/scratchpad.css?v=1">
+<LINK REL="Stylesheet" TYPE="TEXT/CSS" HREF="/include/sitespec.css?v=1">
+
+            
+            <link rel="stylesheet" type="text/css" href="/include/flat_files/page_css/page_css_54.css?v=1">
+        
+
+
+<script>
+var ua = navigator.userAgent;
+
+function between(x, min, max) {
+    return x >= min && x <= max;
+}
+
+if( ua.indexOf("Android") >= 0 )
+{
+    var androidversion = parseFloat(ua.slice(ua.indexOf("Android")+8));
+    if (!between(androidversion, 4.0, 4.9))
+    {
+        document.querySelector('head').innerHTML += '<link rel="stylesheet" href="/include/VIgeneral.css?v=1" type="text/css"/>';
+    }
+} else
+{ document.querySelector('head').innerHTML += '<link rel="stylesheet" href="/include/VIgeneral.css?v=1" type="text/css"/>'; }
+</script>
+
+
+        <script type="text/javascript">
+        vTag = "nfl;arena=nfl;feat=odds_vegas;type=psa";
+        vArena = "nfl";
+        </script>
+            
+        
+        
+    <script>
+		( function() {
+			var gads 		= document.createElement( 'script' );
+				gads.async 	= true;
+				gads.type 	= 'text/javascript';
+
+			var useSSL 	 = 'https:' == document.location.protocol;
+				gads.src = ( useSSL ? 'https:' : 'http:' ) + '//www.googletagservices.com/tag/js/gpt.js';
+
+			var node = document.getElementsByTagName( 'script' )[0];
+				node.parentNode.insertBefore( gads, node );
+		} )();
+    </script>
+    <script>
+        var googletag 	  = googletag || {};
+        	googletag.cmd = googletag.cmd || [];
+    </script>
+	
+<script>
+googletag.cmd.push( function() {
+	googletag.pubads().setTargeting( "site", 		"vegasinsider" );
+	googletag.pubads().setTargeting( "arena", 		"nfl" );
+	googletag.pubads().setTargeting( "feature", 	"odds" );
+	googletag.pubads().setTargeting( "subfeature", 	"lasvegas" );
+	googletag.pubads().setTargeting( "page", 		"notset" );
+
+	// Define a size mapping object. The first parameter to addSize is
+	// a viewport size, while the second is a list of allowed ad sizes.
+	var bannertop = googletag.sizeMapping()
+	.addSize([1024, 0], [728, 90])
+	.addSize([840, 0], [728, 90])
+	.addSize([740, 0], [728, 90])
+	.addSize([360, 0], [300, 250])
+	.addSize([0, 0], [300, 250])
+	.build();
+
+	var bannerbot = googletag.sizeMapping()
+	.addSize([1024, 0], [728, 90])
+	.addSize([840, 0], [728, 90])
+	.addSize([740, 0], [728, 90])
+	.addSize([360, 0], [300, 250])
+	.addSize([0, 0], [300, 250])
+	.build();
+
+	var imu = googletag.sizeMapping()
+	.addSize([1024, 0], [300, 250])
+	.addSize([840, 0], [300, 250])
+	.addSize([740, 0], [300, 250])
+	.addSize([360, 0], [0, 0])
+	.addSize([0, 0], [0, 0])
+	.build();
+
+	var skyscraperrail = googletag.sizeMapping()
+	.addSize([1024, 0], [120, 600])
+	.addSize([840, 0], [120, 600])
+	.addSize([740, 0], [120, 600])
+	.addSize([360, 0], [0, 0])
+	.addSize([0, 0], [0, 0])
+	.build();
+
+	var storyad = googletag.sizeMapping()
+	.addSize([1024, 0], [250, 250])
+	.addSize([840, 0], [250, 250])
+	.addSize([740, 0], [250, 250])
+	.addSize([360, 0], [300, 250])
+	.addSize([0, 0], [300, 250])
+	.build();
+	
+	var dynamicpageimu = googletag.sizeMapping()
+	.addSize([1024, 0], [0, 0])
+	.addSize([840, 0], [0, 0])
+	.addSize([740, 0], [0, 0])
+	.addSize([360, 0], [300, 250])
+	.addSize([0, 0], [300, 250])
+	.build();
+
+	var homepagetop = googletag.sizeMapping()
+	.addSize([1024, 0], [300, 250])
+	.addSize([840, 0], [300, 250])
+	.addSize([740, 0], [300, 250])
+	.addSize([360, 0], [320, 50])
+	.addSize([0, 0], [320, 50])
+	.build();
+	
+
+			googletag.defineSlot( '/6755291/ros_top_banner_728x90', [ [728, 90], [300,250] ], 'div-gpt-ad-ros_top_banner_728x90' ).defineSizeMapping( bannertop ).addService( googletag.pubads() );
+		
+			googletag.defineSlot( '/6755291/ros_rightrail_skyscraper_120x600', [ [120, 600], [0,0] ],'div-gpt-ad-ros_rightrail_skyscraper_120x600' ).defineSizeMapping( skyscraperrail ).addService( googletag.pubads() );
+		
+			googletag.defineSlot( '/6755291/ros_bot_banner_728x90', [ [728, 90], [300,250] ], 'div-gpt-ad-ros_bot_banner_728x90' ).defineSizeMapping( bannerbot ).addService( googletag.pubads() );
+		
+			googletag.defineSlot( '/6755291/ros_mobile_dynamicpage_300x250', [ [300, 250], [0,0] ], 'div-gpt-ad-ros_mobile_dynamicpage_300x250' ).defineSizeMapping( dynamicpageimu ).addService( googletag.pubads() );
+		
+
+googletag.enableServices();
+} );
+</script>
+
+
+<link rel="apple-touch-icon" 			href="/apple-touch-icon.png">
+<link rel="apple-touch-startup-image" 	href="/startup.png">
+<link rel="icon" 						href="/favicon.ico" TYPE="image/x-icon">
+<link rel="shortcut icon" 				href="/favicon.ico" TYPE="image/x-icon">
+<link rel="image_src" 					href="/vi-fb-logo-200.png">
+
+<meta property="og:image" 				content="/vi-fb-logo-200.png">
+<meta property="fb:app_id" 		        content="147365918655652">
+<meta property="og:title" 		        content="Sports Betting News and Vegas Odds">
+<meta property="og:type" 		        content="website">
+<meta property="og:site_name" 	        content="VegasInsider.com">
+<meta property="og:description"         content="A Leading Provider of Sports Betting News, Vegas Odds, and Winning Sports Picks">
+<meta name="verify-v1" 			        content="i9haI/ujcrjj6cGyOHg551z2AP9WlC02f0fgVW32vnE=">
+
+
+    <script type="text/javascript">
+        // get y offset of page and refresh url with that data
+        function refreshPage() {
+            var Ypos = (window.pageYOffset?window.pageYOffset:window.document.body.scrollTop);
+            var tmp = window.location.href;
+                tmp = tmp.substring(0, tmp.indexOf('?s=') >= 0 ? tmp.indexOf('?s=') : tmp.indexOf('&s=') >= 0 ? tmp.indexOf('&s=') : tmp.length);
+            if (Ypos > 0) {
+                var mark = tmp.indexOf('?') >= 0 ? '&' : '?';
+                tmp = tmp + mark + 's='+Ypos;
+            }
+            window.location.replace(tmp);
+        }
+
+        // get page url and scroll to yposition at "url?s=scrollloc
+        function OnLoadScroll() {
+            externalLinks();
+            if (window.location.search.length > 1) {
+                var tmp = window.location.search;
+                var pos = tmp.indexOf('?s=') >= 0 ? tmp.indexOf('?s=') : tmp.indexOf('&s=') >= 0 ? tmp.indexOf('&s=') : -1;
+                if (pos >= 0) {
+                    var Ypos = parseInt(tmp.substring(pos+3));
+                    window.scrollTo(0,Ypos);
+                }
+            }
+        }
+        var refrate = 600000;
+        setTimeout(function(){ refreshPage() }, refrate);
+    </script>
+
+<script type="text/javascript" src="/scripts/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" src="/include/modernizr.custom.360.js"></script>
+<script type="text/javascript" src="/scripts/jquery.rwdImageMaps.js"></script>
+
+<script type="text/javascript" src="/include/menu_items.js"></script>
+<script type="text/javascript" src="/include/pd.js?v=1"></script>
+<script type="text/javascript" src="/include/handicapper_dd.js"></script>
+<script type="text/javascript" src="/scripts/bc-cookie-notice-s.js"></script>
+
+	<script async src="https://powerad.ai/script.js"></script>
+
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-KTRZZQB');</script>
+<!-- End Google Tag Manager -->
+
+
+	<!--[if IE]>
+	<style>
+		div.topNavLinkJDB {padding: 2px 7px;}
+	</style>
+	<![endif]-->
+
+
+<!--[if lt IE 9]>
+<style type="text/css">
+#tertiaryNav ul {float:left; color: #c48f1b; font-size:8px; list-style-type:disc; margin:0; padding:0; width:100%;}
+#tertiaryNav li {float:left; margin:0 20px 0 0; text-indent:-3px;}
+</style>
+<![endif]-->
+
+<style type="text/css">
+	body {
+		background-attachment:fixed; 
+		background-color:#513d1f; 
+		background-image: url('/graphics/vi-lowerlevel-background-2.jpg');
+		background-repeat: no-repeat; 
+		background-position:center top; 
+		margin:0;
+		text-align:center;
+	}
+</style>	
+
+<!-- Start VWO Smartcode (Asynchronous) -->
+<script type="text/javascript">
+var _vwo_code=(function(){
+var account_id=7151,
+settings_tolerance=2000,
+library_tolerance=2500,
+use_existing_jquery=false,
+/* DO NOT EDIT BELOW THIS LINE */
+f=false,d=document;return{use_existing_jquery:function(){return use_existing_jquery;},library_tolerance:function(){return library_tolerance;},finish:function(){if(!f){f=true;var a=d.getElementById('_vis_opt_path_hides');if(a)a.parentNode.removeChild(a);}},finished:function(){return f;},load:function(a){var b=d.createElement('script');b.src=a;b.type='text/javascript';b.innerText;b.onerror=function(){_vwo_code.finish();};d.getElementsByTagName('head')[0].appendChild(b);},init:function(){settings_timer=setTimeout('_vwo_code.finish()',settings_tolerance);var a=d.createElement('style'),b='body{opacity:0 !important;filter:alpha(opacity=0) !important;background:none !important;}',h=d.getElementsByTagName('head')[0];a.setAttribute('id','_vis_opt_path_hides');a.setAttribute('type','text/css');if(a.styleSheet)a.styleSheet.cssText=b;else a.appendChild(d.createTextNode(b));h.appendChild(a);this.load('//dev.visualwebsiteoptimizer.com/j.php?a='+account_id+'&u='+encodeURIComponent(d.URL)+'&r='+Math.random());return settings_timer;}};}());_vwo_settings_timer=_vwo_code.init();
+</script>
+<!-- End VWO Smartcode (Asynchronous) --> 
+</head>
+
+<body onload="OnLoadScroll();">
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KTRZZQB" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+<div id="wrapper" class="OddsPage">
+
+
+
+<div id="div-gpt-ad-ros_top_banner_728x90" style="height: 90px; margin: 0 auto; border-collaspe: collapse; clear: both; margin: 8px 0px 0px 0px;">
+<script>
+googletag.cmd.push( function(){ 
+googletag.display( "div-gpt-ad-ros_top_banner_728x90" );
+} );
+</script>
+</div>
+<div class="adlabel-head">Advertisement</div>
+
+	<form name="topNav_Logout_Form" action="https://register.vegasinsider.com/login/" method="post">
+		<script type="text/javascript">
+			document.write('<input type="hidden" name="new_path_info" value="' + location.pathname + '">');
+		</script>
+		<div><input type="hidden" name="logout" value="1"></div>
+	</form>
+	<div id="LoginBox" class="topNavLoginBox">
+		<div class="topNavLoginBox_Bg">
+			<form name="topNavLoginForm" action="https://register.vegasinsider.com/login/" method="post" id="topNavLoginForm">
+				<script type="text/javascript">
+					document.write('<input type="hidden" name="new_path_info" value="' + location.pathname + '">');
+				</script>
+				
+			</form>
+		</div>
+	</div>
+	<div class="topNavSpacer"></div>
+
+<div class="topNavJDB">
+	<div class="logo-container">
+		<a  href	= "https://www.vegasinsider.com" 
+			title	= "Sports Betting at VegasInsider.com">
+			<img src	= "/graphics/vi-wlogo.gif" 
+				alt		= "Sports Betting at VegasInsider.com" 
+				width	= "220" 
+				height	= "39" 
+				title	= "Sports Betting at VegasInsider.com">
+		</a>
+	</div>
+	
+		<div class="sm-container">
+			<span class="be-social-container">
+				<img src="/graphics/be-social.png" alt="Be Social" class="be-social">
+				<a href="https://twitter.com/TwitVI" title="Follow Us on Twitter" class="sm-tw-icon" target="_blank"></a>
+			</span>
+		</div>
+		<div class="affiliate-marketing-note">
+			<a href="/about/affiliate-marketing-disclosure/" title="This site contains commercial content."><img src="https://www.vegasinsider.com/graphics/affiliate-marketing-disclaimer.png"></a>
+		</div>
+		<div class="topNavLoginJDB">
+			<script type="text/javascript">
+				if (username) {
+					document.write('<span class="topNavLoginGreeting">Hi ' + username + '<\/span> <a href="javascript: document.topNav_Logout_Form.submit();" class="topNavLoginJDB" title="Sign Out">Sign Out<\/a> <a class="topNavLoginJDB">|<\/a> <a href="https://register.vegasinsider.com/my-insider/" class="topNavLoginJDB" title="My Insider">My Insider<\/a>');
+				} else {
+					document.write('<a href="javascript:void(0);" class="topNavLoginJDB"  title="Sign In" onclick="javascript: document.topNavLoginForm.submit();">Sign In<\/a> <a class="topNavLoginJDB">|<\/a> <a href="https://www.vegasinsider.com/membership/signup/" class="topNavLoginJDB" title="Register">Register<\/a>');
+				}
+			</script>
+		</div>
+	
+</div>
+
+	<div class="topNavJDB topNavPlayNowJDB">
+		<div class="topNavPlayNowLinks">
+
+<a class="topNavPlayNowLinks" href="/sportsbook-directory/" onmouseout="className='topNavPlayNowLinks';" onmouseover="className='topNavPlayNowLinksHover';" title="Legal Online Sportsbooks">Sportsbooks</a> 
+
+<a class="topNavPlayNowLinks">&middot;</a> 
+
+<a class="topNavPlayNowLinks" href="/casino-directory/" onmouseout="className='topNavPlayNowLinks';" onmouseover="className='topNavPlayNowLinksHover';" title="Legal Online Casinos">Casinos</a>
+
+<a class="topNavPlayNowLinks">&middot;</a> 
+
+<a class="topNavPlayNowLinks" href="https://www.vegasinsider.com/link_hitcount.cfm?LTid=11104" target="_blank" rel="nofollow" onmouseout="className='topNavPlayNowLinks';" onmouseover="className='topNavPlayNowLinksHover';" title="FanDuel Offer">Get a Risk-Free Bet up to $500 with FanDuel </a> <span style="font-family: Arial; font-size:8px; color:white;">T&Cs, 21+, NJ/PA/IN/WV/CO</span>
+</div>
+		<div class="topNavEarmark"> <div style="padding-right:10px;"><!--140x25 placeholder -->
+<a href="https://www.youtube.com/channel/UCwADmt8f0TRGMrw7dIz471Q" rel="nofollow" title="VegasInsider.com on Youtube!"><img alt="VegasInsider.com on Youtube" src="/graphics/ut/youtube-homepage.png" width="60" height="17" style="padding-right:35px; padding-bottom:5px;"></a>
+<a href="/partners/bumper.cfm/brand/generic" rel="nofollow" title="Bet Now"><img alt="Bet Now" src="/graphics/ut/betnow-button-trans.png" width="97" height="27"></a>
+</div>
+</div>
+	</div>
+	<div style="clear: both;"></div>
+
+	<div class="topNavJDB">
+		<div class="topNavFreePicksJDB">
+			<div class="topNavFreePicksBox topNavFreePicksBox1">
+				<a 	href 		= "https://www.vegasinsider.com/picks/"
+					class 		= "topNavFreePicksJDB">
+					FREE PICK</a>
+			</div>
+			<div class="topNavFreePicksBox topNavFreePicksBox2">
+				<a 	href 		= "https://www.vegasinsider.com/odds/"
+					class 		= "topNavFreePicksJDB">
+					VEGAS ODDS</a>
+			</div>
+			<div class="topNavFreePicksBox topNavFreePicksBox3">
+				<a 	href 		 = ""
+					class 		 = "topNavFreePicksJDB touchClickMenu"
+					id 			 = "gnddhcDivA" 
+					data-tags 	 = "true"
+					data-menuid  = "gnddhcDiv"
+					data-linkurl = "">
+					VI EXPERTS</a>
+			</div>
+		</div>
+		<div class="topNavMOD">
+			<div class="center_text" data-btsrc="1">
+				
+						<map name="headermap">
+							
+									<area shape="rect" alt="" coords="28,10,113,74" href="/nfl/">
+								
+								<area shape="rect" alt="" coords="133,10,453,74" href="/link_hitcount.cfm?LTid=11103" target="_blank" >
+							
+						</map>
+						<img src="https://www.vegasinsider.com/graphics/headers/nfl-arena-draftkings.png" usemap="#headermap" alt="" height="80" width="764">
+					
+			</div>
+		</div>
+	</div>
+
+	<div style="clear: both;"></div>
+
+	<div class="topNavLinkBG">
+		<div class="topNavLinkJDB header-yellow-gradient-nav topNavFloatL">
+			<a 	href 		= "https://www.vegasinsider.com/"
+				class 		= "topNavJDB" 
+				onmouseover = "className='topNavHoverJDB';" 
+				onmouseout 	= "className='topNavJDB';">Home</a>
+		</div>
+		<!-- <div class="topNavLinkJDB-eventButtonLeft topNavLinkBgJDB topNavFloatL">
+<a href="https://www.vegasinsider.com/horse-racing/picks/" title="Belmont Stakes Expert Picks">
+<img src="https://www.vegasinsider.com/graphics/marketingads/horses/belmont/belmot-stakes_red.png" title="Belmont Stakes Expert Picks" 
+onmouseover = "this.src='https://www.vegasinsider.com/graphics/marketingads/horses/belmont/belmot-stakes_green.png';" 
+onmouseout	= "this.src='https://www.vegasinsider.com/graphics/marketingads/horses/belmont/belmot-stakes_red.png'">
+</a>
+</div>-->
+
+
+<!--<div class="topNavLinkJDB-eventButtonLeft topNavLinkBgJDB topNavFloatL">
+<a href="https://www.vegasinsider.com/golf/picks/" title="Golf Expert Picks">
+<img src="https://www.vegasinsider.com/graphics/marketingads/golf/golfpicks-white.png" title="Golf Expert Picks" 
+onmouseover = "this.src='https://www.vegasinsider.com/graphics/marketingads/golf/golfpicks-yellow.png';" 
+onmouseout	= "this.src='https://www.vegasinsider.com/graphics/marketingads/golf/golfpicks-white.png'">
+</a>
+</div>-->
+
+
+<!--<div class="topNavLinkJDB-eventButtonLeft topNavLinkBgJDB topNavFloatL">
+<a href="https://www.vegasinsider.com/auto-racing/picks/" title="NASCAR Auto Racing Expert Picks">
+<img src="https://www.vegasinsider.com/graphics/marketingads/auto/autopicks-white.png" title="NASCAR Auto Racing Expert Picks" 
+onmouseover = "this.src='https://www.vegasinsider.com/graphics/marketingads/auto/autopicks-yellow.png';" 
+onmouseout	= "this.src='https://www.vegasinsider.com/graphics/marketingads/auto/autopicks-white.png'">
+</a>
+</div>-->
+
+
+<!--<div class="topNavLinkJDB-eventButtonLeft topNavLinkBgJDB topNavFloatL">
+<a href="https://www.vegasinsider.com/boxing/picks/" title="UFC Fight Night Picks">
+<img src="https://www.vegasinsider.com/graphics/ut/UFCPICKS.png" title="UFC Fight Night Picks" 
+onmouseover = "this.src='https://www.vegasinsider.com/graphics/ut/UFCPICKS2.png';" 
+onmouseout	= "this.src='https://www.vegasinsider.com/graphics/ut/UFCPICKS.png'">
+</a>
+</div>-->
+
+
+
+<!--<div class="topNavLinkJDB-eventButtonLeft topNavLinkBgJDB topNavFloatL">
+	<a href="https://www.vegasinsider.com/nfl/odds/draft/day-2/" title="2020 NFL Draft Odds"><img src="https://www.vegasinsider.com/graphics/nfl-draft.png" title="2020 NFL Draft Odds" 
+	onmouseover = "this.src='https://www.vegasinsider.com/graphics/nfl-draft-rollover.png';" 
+	onmouseout	= "this.src='https://www.vegasinsider.com/graphics/nfl-draft.png'"></a>
+</div>--> 
+				<div class="topNavLinkJDB header-yellow-gradient-nav topNavFloatL">
+					<a 	href 		 = "https://www.vegasinsider.com/horse-racing/" 
+						id 			 = "gndd6A" 
+						class 		 = "topNavJDB touchClickMenu" 
+						data-tags 	 = "true"
+						data-menuid  = "gndd6"
+						data-linkurl = "https://www.vegasinsider.com/horse-racing/" />
+						Horses</a></div>
+			
+				<div class="topNavLinkJDB header-yellow-gradient-nav topNavFloatL">
+					<a 	href 		 = "https://www.vegasinsider.com/auto-racing/" 
+						id 			 = "gndd47A" 
+						class 		 = "topNavJDB touchClickMenu" 
+						data-tags 	 = "true"
+						data-menuid  = "gndd47"
+						data-linkurl = "https://www.vegasinsider.com/auto-racing/" />
+						Auto</a></div>
+			
+				<div class="topNavLinkJDB header-yellow-gradient-nav topNavFloatL">
+					<a 	href 		 = "https://www.vegasinsider.com/nba/" 
+						id 			 = "gndd3A" 
+						class 		 = "topNavJDB touchClickMenu" 
+						data-tags 	 = "true"
+						data-menuid  = "gndd3"
+						data-linkurl = "https://www.vegasinsider.com/nba/" />
+						NBA</a></div>
+			
+				<div class="topNavLinkJDB header-yellow-gradient-nav topNavFloatL">
+					<a 	href 		 = "https://www.vegasinsider.com/boxing/" 
+						id 			 = "gndd49A" 
+						class 		 = "topNavJDB touchClickMenu" 
+						data-tags 	 = "true"
+						data-menuid  = "gndd49"
+						data-linkurl = "https://www.vegasinsider.com/boxing/" />
+						UFC</a></div>
+			
+				<div class="topNavLinkJDB header-yellow-gradient-nav topNavFloatL">
+					<a 	href 		 = "https://www.vegasinsider.com/mlb/" 
+						id 			 = "gndd4A" 
+						class 		 = "topNavJDB touchClickMenu" 
+						data-tags 	 = "true"
+						data-menuid  = "gndd4"
+						data-linkurl = "https://www.vegasinsider.com/mlb/" />
+						MLB</a></div>
+			
+				<div class="topNavLinkJDB header-yellow-gradient-nav topNavFloatL">
+					<a 	href 		 = "https://www.vegasinsider.com/soccer/" 
+						id 			 = "gndd126A" 
+						class 		 = "topNavJDB touchClickMenu" 
+						data-tags 	 = "true"
+						data-menuid  = "gndd126"
+						data-linkurl = "https://www.vegasinsider.com/soccer/" />
+						Soccer</a></div>
+			
+				<div class="topNavLinkJDB header-yellow-gradient-nav topNavFloatL">
+					<a 	href 		 = "https://www.vegasinsider.com/golf/" 
+						id 			 = "gndd45A" 
+						class 		 = "topNavJDB touchClickMenu" 
+						data-tags 	 = "true"
+						data-menuid  = "gndd45"
+						data-linkurl = "https://www.vegasinsider.com/golf/" />
+						Golf</a></div>
+			
+				<div class="topNavLinkJDBSel topNavFloatL">
+					<a 	href 		 = "https://www.vegasinsider.com/nfl/" 
+						id 			 = "gndd2A" 
+						class 		 = "topNavHoverJDB touchClickMenu" 
+						data-tags 	 = "true"
+						data-menuid  = "gndd2"
+						data-linkurl = "https://www.vegasinsider.com/nfl/" />
+						NFL </a></div>
+			
+				<div class="topNavLinkJDB header-yellow-gradient-nav topNavFloatL">
+					<a 	href 		 = "https://www.vegasinsider.com/casino/casino-directory" 
+						id 			 = "gndd527A" 
+						class 		 = "topNavJDB touchClickMenu" 
+						data-tags 	 = "true"
+						data-menuid  = "gndd527"
+						data-linkurl = "https://www.vegasinsider.com/casino/casino-directory" />
+						Casinos</a></div>
+			
+				<div class="topNavLinkJDB header-yellow-gradient-nav topNavFloatL">
+					<a 	href 		 = "https://www.vegasinsider.com/sportsbook-directory/" 
+						id 			 = "gndd491A" 
+						class 		 = "topNavJDB touchClickMenu" 
+						data-tags 	 = "true"
+						data-menuid  = "gndd491"
+						data-linkurl = "https://www.vegasinsider.com/sportsbook-directory/" />
+						Sports Betting</a></div>
+			
+		<div class="topNavLinkJDB header-yellow-gradient-nav topNavFloatL">
+			<a href			= "javascript: clickLayer('gnddmore', null, '');"
+				id			= "gnddmoreA"
+				class		= "topNavJDB" 
+				onmouseover	= "ShowLayer('gnddmore', event); className='topNavHoverJDB';" 
+				onmouseout	= "OutLayer(); className='topNavJDB';" />
+				More</a>
+		</div>
+		
+		<div class="topNavLinkJDB header-yellow-gradient-nav topNavAlignR">
+			<a 	href		= "javascript: clickLayer('gndd991', null, '');"
+				id			= "gndd991A" 
+				class		= "topNavJDB" 
+				onmouseover	= "ShowLayer('gndd991', event); className='topNavHoverJDB';" 
+				onmouseout	= "OutLayer(); className='topNavJDB';">
+				Betting Tools</a>
+		</div>
+	</div>
+
+	<script type="text/javascript" src="https://www.vegasinsider.com/include/sub_menu_items.js"></script>
+<div class="subNavLinkBG">
+<div class="subNavLink"><a class="subNavLinkOn" href="https://www.vegasinsider.com/nfl/">NFL  Home</a></div><div class="subNavLink"><a class="subNavLinkOff" href="https://www.vegasinsider.com/nfl/scoreboard/">Scores</a></div>
+<div class="subNavLink"><a class="subNavLinkOff" href="https://www.vegasinsider.com/nfl/matchups/">Matchups</a></div>
+<div class="subNavLink"><a class="subNavLinkOff" href="https://www.vegasinsider.com/nfl/teams/">Teams</a></div>
+<div class="subNavLink"><a class="subNavLinkOff" href="https://www.vegasinsider.com/nfl/standings/">Standings</a></div>
+<div class="subNavLink"><a class="subNavLinkOff" id="subnav2249A" href="https://www.vegasinsider.com/nfl/schedules/playoffs/" onMouseOver="showSubMenu('subnav2249');" onMouseOut="hideSubMenu('subnav2249');">Schedules</a></div>
+<div class="subNavLink"><a class="subNavLinkOff" href="https://www.vegasinsider.com/nfl/injuries/">Injuries</a></div>
+<div class="subNavLink"><a class="subNavLinkOff" id="subnav2369A" href="https://www.vegasinsider.com/nfl/headlines/" onMouseOver="showSubMenu('subnav2369');" onMouseOut="hideSubMenu('subnav2369');">News</a></div>
+<div class="subNavLink"><a class="subNavLinkOff" href="https://www.vegasinsider.com/nfl/picks/">Buy Picks</a></div>
+<div class="subNavLink"><a class="subNavLinkOn" id="subnav222A" href="https://www.vegasinsider.com/nfl/odds/las-vegas/" onMouseOver="showSubMenu('subnav222');" onMouseOut="hideSubMenu('subnav222');">Odds</a></div>
+<div class="subNavLink"><a class="subNavLinkOff" id="subnav2203A" href="https://www.vegasinsider.com/nfl/odds/futures/" onMouseOver="showSubMenu('subnav2203');" onMouseOut="hideSubMenu('subnav2203');">Futures Market</a></div>
+<div class="subNavLink"><a class="subNavLinkOff" href="https://www.vegasinsider.com/nfl/season-predictions/">Predictions</a></div>
+</div>
+<div class="cmMat" id="subnav2249" onMouseOver="showSubMenu('subnav2249');" onMouseOut="hideSubMenu('subnav2249');"> &nbsp;<table cellspacing=0 cellpadding=2 border=0><tr valign=top><td valign="top" class=NavTbl_dropdown><table cellspacing=0 cellpadding=3 width="100%" border=0><tr valign=top><td class=cmLff style="text-align: left;">&nbsp;&#183;&nbsp;<a class="cmLff" style="font-size: 11px;" href="https://www.vegasinsider.com/nfl/schedules/" title="Regular Season">Regular Season</a><br>&nbsp;&#183;&nbsp;<a class="cmLff" style="font-size: 11px;" href="https://www.vegasinsider.com/nfl/schedules/sunday-night/" title="Sunday Night Football">Sunday Night Football</a><br>&nbsp;&#183;&nbsp;<a class="cmLff" style="font-size: 11px;" href="https://www.vegasinsider.com/nfl/schedules/monday-night/" title="Monday Night Football">Monday Night Football</a><br>&nbsp;&#183;&nbsp;<a class="cmLff" style="font-size: 11px;" href="https://www.vegasinsider.com/nfl/schedules/thursday-night/" title="Thursday Night Football">Thursday Night Football</a><br>&nbsp;&#183;&nbsp;<a class="cmLff" style="font-size: 11px;" href="https://www.vegasinsider.com/nfl/schedules/preseason/" title="Preseason">Preseason</a><br>&nbsp;&#183;&nbsp;<a class="cmLff" style="font-size: 11px;" href="https://www.vegasinsider.com/nfl/schedules/playoffs/" title="Playoffs">Playoffs</a><br></td></tr></table></td></tr></table></div>
+<div class="cmMat" id="subnav2369" onMouseOver="showSubMenu('subnav2369');" onMouseOut="hideSubMenu('subnav2369');"> &nbsp;<table cellspacing=0 cellpadding=2 border=0><tr valign=top><td valign="top" class=NavTbl_dropdown><table cellspacing=0 cellpadding=3 width="100%" border=0><tr valign=top><td class=cmLff style="text-align: left;">&nbsp;&#183;&nbsp;<a class="cmLff" style="font-size: 11px;" href="https://www.vegasinsider.com/nfl/headlines/" title="Latest news">Latest News</a><br></td></tr></table></td></tr></table></div>
+<div class="cmMat" id="subnav222" onMouseOver="showSubMenu('subnav222');" onMouseOut="hideSubMenu('subnav222');"> &nbsp;<table cellspacing=0 cellpadding=2 border=0><tr valign=top><td valign="top" class=NavTbl_dropdown><table cellspacing=0 cellpadding=3 width="100%" border=0><tr valign=top><td class=cmLff style="text-align: left;">&nbsp;&#183;&nbsp;<a class="cmLff" style="font-size: 11px;" href="/nfl/odds/las-vegas/" title="Vegas Sports Book NFL Odds">Vegas Odds</a><br>&nbsp;&#183;&nbsp;<a class="cmLff" style="font-size: 11px;" href="/nfl/odds/global/" title="Global Sports Book NFL Odds">Global Odds</a><br>&nbsp;&#183;&nbsp;<a class="cmLff" style="font-size: 11px;" href="/nfl/odds/futures/" title="Future NFL Odds">Future Odds</a><br></td></tr></table></td></tr></table></div>
+<div class="cmMat" id="subnav2203" onMouseOver="showSubMenu('subnav2203');" onMouseOut="hideSubMenu('subnav2203');"> &nbsp;<table cellspacing=0 cellpadding=2 border=0><tr valign=top><td valign="top" class=NavTbl_dropdown><table cellspacing=0 cellpadding=3 width="100%" border=0><tr valign=top><td class=cmLff style="text-align: left;">&nbsp;&#183;&nbsp;<a class="cmLff" style="font-size: 11px;" href="/nfl/odds/win-totals/">Win Totals</a><br>&nbsp;&#183;&nbsp;<a class="cmLff" style="font-size: 11px;" href="/nfl/odds/game-of-the-year/">Game of the Year</a><br>&nbsp;&#183;&nbsp;<a class="cmLff" style="font-size: 11px;" href="/nfl/odds/playoff-prop/">Playoff Prop</a><br>&nbsp;&#183;&nbsp;<a class="cmLff" style="font-size: 11px;" href="/nfl/odds/mvp/">MVP</a><br>&nbsp;&#183;&nbsp;<a class="cmLff" style="font-size: 11px;" href="/nfl/odds/rookie-of-the-year/">Rookie</a><br>&nbsp;&#183;&nbsp;<a class="cmLff" style="font-size: 11px;" href="/nfl/odds/draft/">Draft</a><br></td></tr></table></td></tr></table></div>
+
+
+
+<table class="viBodyContainerTble" cellpadding="0">
+<tr>
+    
+		<td class="spacerwidth5"></td>
+	
+	
+	<td class="main-content-cell" >
+		
+<table class="page_title_table">
+<tr>
+	<td>&nbsp;<h1 class="page_title">NFL Las Vegas Odds</h1></td>
+	
+		<td class="page_title_sponsor">&nbsp;
+	
+	</td>
+</tr>
+</table>
+
+				<div class=spacerAfterRuler></div>
+				
+
+<table id="frodds-nav">
+<tbody>
+<tr>
+	<td>
+		<form action="index.cfm" method="post">
+		
+			Las Vegas Odds
+		
+		<span class="navMidDot">&nbsp;&middot;</span>
+		
+			<a 	href  = "https://www.vegasinsider.com/nfl/odds/global/" 
+				title = " NFL betting odds from the Global Sportbooks">
+				Global Odds</a>
+		
+		<span class="navMidDot">&nbsp;&middot;</span>
+		
+		
+			<a 	href  = "https://www.vegasinsider.com/nfl/odds/futures/" 
+				title = " NFL Future betting odds">
+				Future Odds</a><span class="navMidDot">&nbsp;&middot;</span>
+		
+			<a 	href  = "https://www.vegasinsider.com/live-odds/line-originator/nevada/" 
+				title = "US Sportsbooks and their Line Originators by state">
+				Line Originators</a><span class="navMidDot">&nbsp;&middot;</span>
+		
+		<span class="navMidDot">More Odds</span>
+		
+		
+		<select name 	 = "league_sel" 
+				onChange = "location.href='https://www.vegasinsider.com/'+this[this.selectedIndex].value+'/odds/las-vegas/'">
+			<option value="nfl" selected>NFL
+			<option value="mlb" >MLB
+			<option value="nba" >NBA
+			<option value="nhl" >NHL
+			<option value="college-football" >NCAA FB
+			<option value="college-basketball" >NCAA BK
+			<option value="cfl" >CFL
+			<option value="wnba" >WNBA
+			<option value="soccer" >Soccer
+		</select>
+		</form>
+	</td>
+</tr>
+
+<tr>
+	<td>
+		
+				Spread
+			
+			<span class="navMidDot">&nbsp;&middot;</span>
+			
+				<a 	href  = "https://www.vegasinsider.com/nfl/odds/las-vegas/money"
+					title = " NFL Money Line Odds">
+					Money Line</a>
+			
+			<span class="navMidDot">&nbsp;&middot;</span>
+		
+			<a 	href  = "https://www.vegasinsider.com/nfl/odds/las-vegas/first-half"
+				title = "">1st Half</a>
+		
+	</td>
+</tr>
+<tr>
+	<td>
+		
+			Page 1
+		
+		<span class="navMidDot">&nbsp;&middot;</span>
+		
+			<a href="2/">Page 2</a>
+		
+	</td>	
+</tr>
+</tbody>
+</table>
+
+				<div class=spacer12></div>
+			<map name="oddsMap"><area shape="poly" coords="163,96,259,0,318,0,222,96" title="Consists of the first betting line received from one of our Las Vegas or Global Sportsbooks." ><area shape="poly" coords="0,0,160,0,160,96,0,96" title="Las Vegas Sportsbook Sports Betting Lines for NFL"><area shape="poly" coords="224,96,320,0,379,0,283,96" title="Consists of the current betting line which occurs most frequently among our list of Las Vegas and Global Sportsbooks." ><area shape="poly" coords="0,0,160,0,160,96,0,96" title="Las Vegas Sportsbook Sports Betting Lines for NFL"><area shape="poly" coords="285,96,381,0,440,0,344,96" title="Westgate Las Vegas Race and Sports SuperBook Odds and Betting Lines" ><area shape="poly" coords="0,0,160,0,160,96,0,96" title="Las Vegas Sportsbook Sports Betting Lines for NFL"><area shape="poly" coords="346,96,442,0,501,0,405,96" title="DraftKings Sportsbook Odds and Betting Lines" href="https://www.vegasinsider.com/link_hitcount.cfm?LTid=11170" target="_blank"><area shape="poly" coords="0,0,160,0,160,96,0,96" title="Las Vegas Sportsbook Sports Betting Lines for NFL"><area shape="poly" coords="407,96,503,0,562,0,466,96" title="Circa Sports Race & Sports Book Odds and Betting Lines" href="https://www.vegasinsider.com/link_hitcount.cfm?LTid=11329" target="_blank"><area shape="poly" coords="0,0,160,0,160,96,0,96" title="Las Vegas Sportsbook Sports Betting Lines for NFL"><area shape="poly" coords="468,96,564,0,623,0,527,96" title="William Hill Race and Sports Book Odds and Betting Lines" href="https://www.vegasinsider.com/link_hitcount.cfm?LTid=11329" target="_blank"><area shape="poly" coords="0,0,160,0,160,96,0,96" title="Las Vegas Sportsbook Sports Betting Lines for NFL"><area shape="poly" coords="529,96,625,0,684,0,588,96" title="FanDuel Sportsbook Odds and Betting Lines" href="https://www.vegasinsider.com/link_hitcount.cfm?LTid=11169" target="_blank"><area shape="poly" coords="0,0,160,0,160,96,0,96" title="Las Vegas Sportsbook Sports Betting Lines for NFL"><area shape="poly" coords="590,96,686,0,745,0,649,96" title="betMGM Online Sportsbook Odds and Betting Lines" href="https://www.vegasinsider.com/link_hitcount.cfm?LTid=10965" target="_blank"><area shape="poly" coords="0,0,160,0,160,96,0,96" title="Las Vegas Sportsbook Sports Betting Lines for NFL"><area shape="poly" coords="651,96,747,0,806,0,710,96" title="Station Casinos Race & Sports Book Odds and Betting Lines" ><area shape="poly" coords="0,0,160,0,160,96,0,96" title="Las Vegas Sportsbook Sports Betting Lines for NFL"></map>
+	<table class='frodds-tbl-container'>
+		<tr><td class='viHeaderNorm'>NFL SPREAD</td></tr>
+		<tr>
+			<td class='viBodyBorderNorm'>
+				<table cellSpacing=0 cellPadding=0 border=0>
+				<tr>
+					<td class='cellBorderR2 frodds-imgMapCell'><img src='https://www.vegasinsider.com/images/freeodds/freeodds_hdr_vegas1_nfl.gif?v=10' usemap='#oddsMap' border='0'></td>
+				</tr>
+				</table>
+				<table class='frodds-data-tbl'>
+					<col class='gameCell'>
+					<col class='oddsCell'>
+					<col class='oddsCell'>
+					<col class='oddsCell'>
+					<col class='oddsCell'>
+					<col class='oddsCell'>
+					<col class='oddsCell'>
+					<col class='oddsCell'>
+					<col class='oddsCell'>
+					<col class='oddsCell'>
+		<tr>
+			<td class="viCellBg1 cellTextNorm cellBorderL1 gameCell" nowrap>
+				<span class="cellTextHot">08/06  8:00 PM</span><br>
+				241&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/steelers" title="Pittsburgh Team Schedule and ATS Results" class="tabletext">Pittsburgh</a></b><br>
+				242&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/cowboys" title="Dallas Team Schedule and ATS Results" class="tabletext">Dallas</a></b>
+			</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/steelers-@-cowboys.cfm/date/08-06-20#BT" target="_blank">
+							&nbsp;<br>-3&nbsp;-10<br>40u-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/steelers-@-cowboys.cfm/date/08-06-20#BT" target="_blank">
+							&nbsp;<br>34u-10<br>-1&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/steelers-@-cowboys.cfm/date/08-06-20#J" target="_blank">
+							&nbsp;<br>XX<br>XX
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/steelers-@-cowboys.cfm/date/08-06-20#L" target="_blank">
+							&nbsp;<br>34u-10<br>XX
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td><td class="cellBorderLR1 lastColSpacer">&nbsp;</td></tr><tr><td class="viCellBg1 cellBorderR1 nowrap frodd-betpick-links" colspan="11"><a href="/partners/bumper.cfm/brand/generic" title="Bet Now!" target="_blank">Bet Now</a></td></tr>
+		<tr>
+			<td class="viCellBg2 cellTextNorm cellBorderL1 gameCell" nowrap>
+				<span class="cellTextHot">09/10  8:20 PM</span><br>
+				451&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/texans" title="Houston Team Schedule and ATS Results" class="tabletext">Houston</a></b><br>
+				452&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/chiefs" title="Kansas City Team Schedule and ATS Results" class="tabletext">Kansas City</a></b>
+			</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/texans-@-chiefs.cfm/date/09-10-20#BT" target="_blank">
+							&nbsp;<br>56&frac12;u-10<br>-10&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/texans-@-chiefs.cfm/date/09-10-20#BT" target="_blank">
+							&nbsp;<br>55&frac12;u-10<br>-10&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/texans-@-chiefs.cfm/date/09-10-20#J" target="_blank">
+							&nbsp;<br>55&frac12;u-10<br>-10&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/texans-@-chiefs.cfm/date/09-10-20#CQ" target="_blank">
+							&nbsp;<br>55u-10<br>-10&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/texans-@-chiefs.cfm/date/09-10-20#L" target="_blank">
+							&nbsp;<br>55&frac12;u-10<br>-10&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/texans-@-chiefs.cfm/date/09-10-20#CV" target="_blank">
+							&nbsp;<br>54&frac12;u-10<br>-10&nbsp;-05
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/texans-@-chiefs.cfm/date/09-10-20#CS" target="_blank">
+							&nbsp;<br>55&frac12;u-10<br>-10&nbsp;-15
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/texans-@-chiefs.cfm/date/09-10-20#X" target="_blank">
+							&nbsp;<br>55u-10<br>-10&frac12;&nbsp;-10
+							</a>
+						</td><td class="cellBorderLR1 lastColSpacer">&nbsp;</td></tr><tr><td class="viCellBg2 cellBorderR1 nowrap frodd-betpick-links" colspan="11"><a href="/partners/bumper.cfm/brand/generic" title="Bet Now!" target="_blank">Bet Now</a></td></tr>
+		<tr>
+			<td class="viCellBg1 cellTextNorm cellBorderL1 gameCell" nowrap>
+				<span class="cellTextHot">09/13  1:00 PM</span><br>
+				453&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/dolphins" title="Miami Team Schedule and ATS Results" class="tabletext">Miami</a></b><br>
+				454&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/patriots" title="New England Team Schedule and ATS Results" class="tabletext">New England</a></b>
+			</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/dolphins-@-patriots.cfm/date/09-13-20#BT" target="_blank">
+							&nbsp;<br>43&frac12;u-10<br>-5&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/dolphins-@-patriots.cfm/date/09-13-20#BT" target="_blank">
+							&nbsp;<br>43&frac12;u-10<br>-6&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/dolphins-@-patriots.cfm/date/09-13-20#J" target="_blank">
+							&nbsp;<br>43&frac12;u-10<br>-6&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/dolphins-@-patriots.cfm/date/09-13-20#CQ" target="_blank">
+							&nbsp;<br>43&frac12;u-10<br>-6&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/dolphins-@-patriots.cfm/date/09-13-20#L" target="_blank">
+							&nbsp;<br>43&frac12;u-10<br>-6&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/dolphins-@-patriots.cfm/date/09-13-20#CV" target="_blank">
+							&nbsp;<br>43&frac12;u-10<br>-6&frac12;&nbsp;-15
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/dolphins-@-patriots.cfm/date/09-13-20#X" target="_blank">
+							&nbsp;<br>43&frac12;u-10<br>-6&frac12;&nbsp;-10
+							</a>
+						</td><td class="cellBorderLR1 lastColSpacer">&nbsp;</td></tr><tr><td class="viCellBg1 cellBorderR1 nowrap frodd-betpick-links" colspan="11"><a href="/partners/bumper.cfm/brand/generic" title="Bet Now!" target="_blank">Bet Now</a></td></tr>
+		<tr>
+			<td class="viCellBg2 cellTextNorm cellBorderL1 gameCell" nowrap>
+				<span class="cellTextHot">09/13  1:00 PM</span><br>
+				455&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/browns" title="Cleveland Team Schedule and ATS Results" class="tabletext">Cleveland</a></b><br>
+				456&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/ravens" title="Baltimore Team Schedule and ATS Results" class="tabletext">Baltimore</a></b>
+			</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/browns-@-ravens.cfm/date/09-13-20#BT" target="_blank">
+							&nbsp;<br>48&frac12;u-10<br>-9&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/browns-@-ravens.cfm/date/09-13-20#BT" target="_blank">
+							&nbsp;<br>48&frac12;u-10<br>-8&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/browns-@-ravens.cfm/date/09-13-20#J" target="_blank">
+							&nbsp;<br>49u-10<br>-8&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/browns-@-ravens.cfm/date/09-13-20#CQ" target="_blank">
+							&nbsp;<br>49u-10<br>-8&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/browns-@-ravens.cfm/date/09-13-20#L" target="_blank">
+							&nbsp;<br>48&frac12;u-10<br>-9&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/browns-@-ravens.cfm/date/09-13-20#CV" target="_blank">
+							&nbsp;<br>48u-10<br>-8&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/browns-@-ravens.cfm/date/09-13-20#X" target="_blank">
+							&nbsp;<br>48&frac12;u-10<br>-9&nbsp;-10
+							</a>
+						</td><td class="cellBorderLR1 lastColSpacer">&nbsp;</td></tr><tr><td class="viCellBg2 cellBorderR1 nowrap frodd-betpick-links" colspan="11"><a href="/partners/bumper.cfm/brand/generic" title="Bet Now!" target="_blank">Bet Now</a></td></tr>
+		<tr>
+			<td class="viCellBg1 cellTextNorm cellBorderL1 gameCell" nowrap>
+				<span class="cellTextHot">09/13  1:00 PM</span><br>
+				457&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/jets" title="N.Y. Jets Team Schedule and ATS Results" class="tabletext">N.Y. Jets</a></b><br>
+				458&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/bills" title="Buffalo Team Schedule and ATS Results" class="tabletext">Buffalo</a></b>
+			</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/jets-@-bills.cfm/date/09-13-20#BT" target="_blank">
+							&nbsp;<br>40u-10<br>-5&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/jets-@-bills.cfm/date/09-13-20#BT" target="_blank">
+							&nbsp;<br>40u-10<br>-6&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/jets-@-bills.cfm/date/09-13-20#J" target="_blank">
+							&nbsp;<br>40u-10<br>-6&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/jets-@-bills.cfm/date/09-13-20#CR" target="_blank">
+							&nbsp;<br>40&frac12;u-10<br>-6&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/jets-@-bills.cfm/date/09-13-20#CQ" target="_blank">
+							&nbsp;<br>40&frac12;u-10<br>-6&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/jets-@-bills.cfm/date/09-13-20#L" target="_blank">
+							&nbsp;<br>40u-10<br>-6&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/jets-@-bills.cfm/date/09-13-20#CV" target="_blank">
+							&nbsp;<br>40u-10<br>-6&frac12;&nbsp;EV
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/jets-@-bills.cfm/date/09-13-20#X" target="_blank">
+							&nbsp;<br>40u-10<br>-6&nbsp;-10
+							</a>
+						</td><td class="cellBorderLR1 lastColSpacer">&nbsp;</td></tr><tr><td class="viCellBg1 cellBorderR1 nowrap frodd-betpick-links" colspan="11"><a href="/partners/bumper.cfm/brand/generic" title="Bet Now!" target="_blank">Bet Now</a></td></tr>
+		<tr>
+			<td class="viCellBg2 cellTextNorm cellBorderL1 gameCell" nowrap>
+				<span class="cellTextHot">09/13  1:00 PM</span><br>
+				459&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/raiders" title="Las Vegas Team Schedule and ATS Results" class="tabletext">Las Vegas</a></b><br>
+				460&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/panthers" title="Carolina Team Schedule and ATS Results" class="tabletext">Carolina</a></b>
+			</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/raiders-@-panthers.cfm/date/09-13-20#BT" target="_blank">
+							&nbsp;<br>46&frac12;u-10<br>PK&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/raiders-@-panthers.cfm/date/09-13-20#BT" target="_blank">
+							&nbsp;<br>-1&nbsp;-10<br>47u-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/raiders-@-panthers.cfm/date/09-13-20#J" target="_blank">
+							&nbsp;<br>47u-10<br>PK&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/raiders-@-panthers.cfm/date/09-13-20#CQ" target="_blank">
+							&nbsp;<br>46&frac12;u-10<br>PK&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/raiders-@-panthers.cfm/date/09-13-20#L" target="_blank">
+							&nbsp;<br>-1&nbsp;-10<br>47u-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/raiders-@-panthers.cfm/date/09-13-20#CV" target="_blank">
+							&nbsp;<br>-1&nbsp;-10<br>46&frac12;u-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/raiders-@-panthers.cfm/date/09-13-20#X" target="_blank">
+							&nbsp;<br>-1&nbsp;-10<br>47u-10
+							</a>
+						</td><td class="cellBorderLR1 lastColSpacer">&nbsp;</td></tr><tr><td class="viCellBg2 cellBorderR1 nowrap frodd-betpick-links" colspan="11"><a href="/partners/bumper.cfm/brand/generic" title="Bet Now!" target="_blank">Bet Now</a></td></tr>
+		<tr>
+			<td class="viCellBg1 cellTextNorm cellBorderL1 gameCell" nowrap>
+				<span class="cellTextHot">09/13  1:00 PM</span><br>
+				461&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/seahawks" title="Seattle Team Schedule and ATS Results" class="tabletext">Seattle</a></b><br>
+				462&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/falcons" title="Atlanta Team Schedule and ATS Results" class="tabletext">Atlanta</a></b>
+			</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/seahawks-@-falcons.cfm/date/09-13-20#BT" target="_blank">
+							&nbsp;<br>-1&nbsp;-10<br>48&frac12;u-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/seahawks-@-falcons.cfm/date/09-13-20#BT" target="_blank">
+							&nbsp;<br>-1&nbsp;-10<br>49u-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/seahawks-@-falcons.cfm/date/09-13-20#J" target="_blank">
+							&nbsp;<br>-1&nbsp;-10<br>49u-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/seahawks-@-falcons.cfm/date/09-13-20#CQ" target="_blank">
+							&nbsp;<br>-1&nbsp;-10<br>49u-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/seahawks-@-falcons.cfm/date/09-13-20#L" target="_blank">
+							&nbsp;<br>-1&nbsp;-10<br>49u-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/seahawks-@-falcons.cfm/date/09-13-20#CV" target="_blank">
+							&nbsp;<br>-1&nbsp;-10<br>49&frac12;u-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/seahawks-@-falcons.cfm/date/09-13-20#X" target="_blank">
+							&nbsp;<br>-1&nbsp;-10<br>49u-10
+							</a>
+						</td><td class="cellBorderLR1 lastColSpacer">&nbsp;</td></tr><tr><td class="viCellBg1 cellBorderR1 nowrap frodd-betpick-links" colspan="11"><a href="/partners/bumper.cfm/brand/generic" title="Bet Now!" target="_blank">Bet Now</a></td></tr>
+		<tr>
+			<td class="viCellBg2 cellTextNorm cellBorderL1 gameCell" nowrap>
+				<span class="cellTextHot">09/13  1:00 PM</span><br>
+				463&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/eagles" title="Philadelphia Team Schedule and ATS Results" class="tabletext">Philadelphia</a></b><br>
+				464&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/redskins" title="Washington Team Schedule and ATS Results" class="tabletext">Washington</a></b>
+			</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/eagles-@-redskins.cfm/date/09-13-20#BT" target="_blank">
+							&nbsp;<br>-5&frac12;&nbsp;-10<br>45&frac12;u-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/eagles-@-redskins.cfm/date/09-13-20#BT" target="_blank">
+							&nbsp;<br>-6&nbsp;-10<br>45u-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/eagles-@-redskins.cfm/date/09-13-20#J" target="_blank">
+							&nbsp;<br>-6&nbsp;-10<br>45u-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/eagles-@-redskins.cfm/date/09-13-20#CQ" target="_blank">
+							&nbsp;<br>-6&nbsp;-10<br>45u-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/eagles-@-redskins.cfm/date/09-13-20#L" target="_blank">
+							&nbsp;<br>-6&nbsp;-10<br>45u-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/eagles-@-redskins.cfm/date/09-13-20#CV" target="_blank">
+							&nbsp;<br>-6&frac12;&nbsp;-15<br>44&frac12;o-15
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/eagles-@-redskins.cfm/date/09-13-20#X" target="_blank">
+							&nbsp;<br>-6&frac12;&nbsp;-10<br>45u-10
+							</a>
+						</td><td class="cellBorderLR1 lastColSpacer">&nbsp;</td></tr><tr><td class="viCellBg2 cellBorderR1 nowrap frodd-betpick-links" colspan="11"><a href="/partners/bumper.cfm/brand/generic" title="Bet Now!" target="_blank">Bet Now</a></td></tr>
+		<tr>
+			<td class="viCellBg1 cellTextNorm cellBorderL1 gameCell" nowrap>
+				<span class="cellTextHot">09/13  1:00 PM</span><br>
+				465&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/bears" title="Chicago Team Schedule and ATS Results" class="tabletext">Chicago</a></b><br>
+				466&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/lions" title="Detroit Team Schedule and ATS Results" class="tabletext">Detroit</a></b>
+			</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/bears-@-lions.cfm/date/09-13-20#BT" target="_blank">
+							&nbsp;<br>44u-10<br>PK&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/bears-@-lions.cfm/date/09-13-20#BT" target="_blank">
+							&nbsp;<br>44u-10<br>-1&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/bears-@-lions.cfm/date/09-13-20#J" target="_blank">
+							&nbsp;<br>44u-10<br>-1&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/bears-@-lions.cfm/date/09-13-20#CR" target="_blank">
+							&nbsp;<br>44&frac12;u-10<br>-1&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/bears-@-lions.cfm/date/09-13-20#CQ" target="_blank">
+							&nbsp;<br>44&frac12;u-10<br>-1&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/bears-@-lions.cfm/date/09-13-20#L" target="_blank">
+							&nbsp;<br>44u-10<br>-1&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/bears-@-lions.cfm/date/09-13-20#CV" target="_blank">
+							&nbsp;<br>43&frac12;u-10<br>-2&frac12;&nbsp;EV
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/bears-@-lions.cfm/date/09-13-20#X" target="_blank">
+							&nbsp;<br>44u-10<br>-1&frac12;&nbsp;-10
+							</a>
+						</td><td class="cellBorderLR1 lastColSpacer">&nbsp;</td></tr><tr><td class="viCellBg1 cellBorderR1 nowrap frodd-betpick-links" colspan="11"><a href="/partners/bumper.cfm/brand/generic" title="Bet Now!" target="_blank">Bet Now</a></td></tr>
+		<tr>
+			<td class="viCellBg2 cellTextNorm cellBorderL1 gameCell" nowrap>
+				<span class="cellTextHot">09/13  1:00 PM</span><br>
+				467&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/colts" title="Indianapolis Team Schedule and ATS Results" class="tabletext">Indianapolis</a></b><br>
+				468&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/jaguars" title="Jacksonville Team Schedule and ATS Results" class="tabletext">Jacksonville</a></b>
+			</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/colts-@-jaguars.cfm/date/09-13-20#BT" target="_blank">
+							&nbsp;<br>-7&nbsp;-10<br>46u-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/colts-@-jaguars.cfm/date/09-13-20#BT" target="_blank">
+							&nbsp;<br>-7&nbsp;-10<br>46u-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/colts-@-jaguars.cfm/date/09-13-20#J" target="_blank">
+							&nbsp;<br>-7&frac12;&nbsp;EV<br>46u-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/colts-@-jaguars.cfm/date/09-13-20#CR" target="_blank">
+							&nbsp;<br>-7&nbsp;-10<br>46&frac12;u-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/colts-@-jaguars.cfm/date/09-13-20#CQ" target="_blank">
+							&nbsp;<br>-7&nbsp;-10<br>46&frac12;u-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/colts-@-jaguars.cfm/date/09-13-20#L" target="_blank">
+							&nbsp;<br>-7&nbsp;-10<br>46u-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/colts-@-jaguars.cfm/date/09-13-20#CV" target="_blank">
+							&nbsp;<br>-7&nbsp;-10<br>46u-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/colts-@-jaguars.cfm/date/09-13-20#X" target="_blank">
+							&nbsp;<br>-7&nbsp;-10<br>46u-10
+							</a>
+						</td><td class="cellBorderLR1 lastColSpacer">&nbsp;</td></tr><tr><td class="viCellBg2 cellBorderR1 nowrap frodd-betpick-links" colspan="11"><a href="/partners/bumper.cfm/brand/generic" title="Bet Now!" target="_blank">Bet Now</a></td></tr>
+		<tr>
+			<td class="viCellBg1 cellTextNorm cellBorderL1 gameCell" nowrap>
+				<span class="cellTextHot">09/13  1:00 PM</span><br>
+				469&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/packers" title="Green Bay Team Schedule and ATS Results" class="tabletext">Derbtroit</a></b><br>
+				470&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/vikings" title="Minnesota Team Schedule and ATS Results" class="tabletext">Green Bay</a></b>
+			</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/packers-@-vikings.cfm/date/09-13-20#BT" target="_blank">
+							&nbsp;<br>46&frac12;u-10<br>-3&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/packers-@-vikings.cfm/date/09-13-20#BT" target="_blank">
+							&nbsp;<br>46&frac12;u-10<br>-3&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/packers-@-vikings.cfm/date/09-13-20#J" target="_blank">
+							&nbsp;<br>46&frac12;u-10<br>-3&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/packers-@-vikings.cfm/date/09-13-20#CR" target="_blank">
+							&nbsp;<br>46&frac12;u-10<br>-3&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/packers-@-vikings.cfm/date/09-13-20#CQ" target="_blank">
+							&nbsp;<br>47u-10<br>-3&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/packers-@-vikings.cfm/date/09-13-20#L" target="_blank">
+							&nbsp;<br>46&frac12;u-10<br>-3&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/packers-@-vikings.cfm/date/09-13-20#CV" target="_blank">
+							&nbsp;<br>46&frac12;u-10<br>-3&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/packers-@-vikings.cfm/date/09-13-20#X" target="_blank">
+							&nbsp;<br>46&frac12;u-10<br>-3&frac12;&nbsp;-10
+							</a>
+						</td><td class="cellBorderLR1 lastColSpacer">&nbsp;</td></tr><tr><td class="viCellBg1 cellBorderR1 nowrap frodd-betpick-links" colspan="11"><a href="/partners/bumper.cfm/brand/generic" title="Bet Now!" target="_blank">Bet Now</a></td></tr>
+		<tr>
+			<td class="viCellBg2 cellTextNorm cellBorderL1 gameCell" nowrap>
+				<span class="cellTextHot">09/13  4:05 PM</span><br>
+				471&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/chargers" title="L.A. Chargers Team Schedule and ATS Results" class="tabletext">L.A. Chargers</a></b><br>
+				472&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/bengals" title="Cincinnati Team Schedule and ATS Results" class="tabletext">Cincinnati</a></b>
+			</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/chargers-@-bengals.cfm/date/09-13-20#BT" target="_blank">
+							&nbsp;<br>-3&frac12;&nbsp;-10<br>46&frac12;u-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/chargers-@-bengals.cfm/date/09-13-20#BT" target="_blank">
+							&nbsp;<br>-3&frac12;&nbsp;-10<br>44&frac12;u-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/chargers-@-bengals.cfm/date/09-13-20#J" target="_blank">
+							&nbsp;<br>-3&frac12;&nbsp;-10<br>44&frac12;u-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/chargers-@-bengals.cfm/date/09-13-20#CR" target="_blank">
+							&nbsp;<br>-3&frac12;&nbsp;-10<br>44&frac12;u-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/chargers-@-bengals.cfm/date/09-13-20#CQ" target="_blank">
+							&nbsp;<br>-3&nbsp;-15<br>45u-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/chargers-@-bengals.cfm/date/09-13-20#L" target="_blank">
+							&nbsp;<br>-3&frac12;&nbsp;-10<br>44&frac12;u-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/chargers-@-bengals.cfm/date/09-13-20#CV" target="_blank">
+							&nbsp;<br>-3&frac12;&nbsp;-05<br>44&frac12;u-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/chargers-@-bengals.cfm/date/09-13-20#X" target="_blank">
+							&nbsp;<br>-3&frac12;&nbsp;-10<br>44&frac12;u-10
+							</a>
+						</td><td class="cellBorderLR1 lastColSpacer">&nbsp;</td></tr><tr><td class="viCellBg2 cellBorderR1 nowrap frodd-betpick-links" colspan="11"><a href="/partners/bumper.cfm/brand/generic" title="Bet Now!" target="_blank">Bet Now</a></td></tr>
+		<tr>
+			<td class="viCellBg1 cellTextNorm cellBorderL1 gameCell" nowrap>
+				<span class="cellTextHot">09/13  4:25 PM</span><br>
+				473&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/cardinals" title="Arizona Team Schedule and ATS Results" class="tabletext">Arizona</a></b><br>
+				474&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/49ers" title="San Francisco Team Schedule and ATS Results" class="tabletext">San Francisco</a></b>
+			</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/cardinals-@-49ers.cfm/date/09-13-20#BT" target="_blank">
+							&nbsp;<br>45&frac12;u-10<br>-7&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/cardinals-@-49ers.cfm/date/09-13-20#BT" target="_blank">
+							&nbsp;<br>46u-10<br>-7&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/cardinals-@-49ers.cfm/date/09-13-20#J" target="_blank">
+							&nbsp;<br>46&frac12;u-10<br>-7&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/cardinals-@-49ers.cfm/date/09-13-20#CR" target="_blank">
+							&nbsp;<br>46&frac12;u-10<br>-8&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/cardinals-@-49ers.cfm/date/09-13-20#CQ" target="_blank">
+							&nbsp;<br>45&frac12;u-10<br>-7&nbsp;-05
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/cardinals-@-49ers.cfm/date/09-13-20#L" target="_blank">
+							&nbsp;<br>46u-10<br>-7&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/cardinals-@-49ers.cfm/date/09-13-20#CV" target="_blank">
+							&nbsp;<br>46u-10<br>-8&frac12;&nbsp;-05
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/cardinals-@-49ers.cfm/date/09-13-20#X" target="_blank">
+							&nbsp;<br>46u-10<br>-7&frac12;&nbsp;-10
+							</a>
+						</td><td class="cellBorderLR1 lastColSpacer">&nbsp;</td></tr><tr><td class="viCellBg1 cellBorderR1 nowrap frodd-betpick-links" colspan="11"><a href="/partners/bumper.cfm/brand/generic" title="Bet Now!" target="_blank">Bet Now</a></td></tr>
+		<tr>
+			<td class="viCellBg2 cellTextNorm cellBorderL1 gameCell" nowrap>
+				<span class="cellTextHot">09/13  4:25 PM</span><br>
+				475&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/buccaneers" title="Tampa Bay Team Schedule and ATS Results" class="tabletext">Tampa Bay</a></b><br>
+				476&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/saints" title="New Orleans Team Schedule and ATS Results" class="tabletext">New Orleans</a></b>
+			</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/buccaneers-@-saints.cfm/date/09-13-20#BT" target="_blank">
+							&nbsp;<br>50&frac12;u-10<br>-4&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/buccaneers-@-saints.cfm/date/09-13-20#BT" target="_blank">
+							&nbsp;<br>49&frac12;u-10<br>-4&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/buccaneers-@-saints.cfm/date/09-13-20#J" target="_blank">
+							&nbsp;<br>49&frac12;u-10<br>-4&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/buccaneers-@-saints.cfm/date/09-13-20#CQ" target="_blank">
+							&nbsp;<br>49&frac12;u-10<br>-4&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/buccaneers-@-saints.cfm/date/09-13-20#L" target="_blank">
+							&nbsp;<br>49&frac12;u-10<br>-4&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/buccaneers-@-saints.cfm/date/09-13-20#CV" target="_blank">
+							&nbsp;<br>49&frac12;u-10<br>-4&frac12;&nbsp;-05
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/buccaneers-@-saints.cfm/date/09-13-20#X" target="_blank">
+							&nbsp;<br>50u-10<br>-4&nbsp;-10
+							</a>
+						</td><td class="cellBorderLR1 lastColSpacer">&nbsp;</td></tr><tr><td class="viCellBg2 cellBorderR1 nowrap frodd-betpick-links" colspan="11"><a href="/partners/bumper.cfm/brand/generic" title="Bet Now!" target="_blank">Bet Now</a></td></tr>
+		<tr>
+			<td class="viCellBg1 cellTextNorm cellBorderL1 gameCell" nowrap>
+				<span class="cellTextHot">09/13  8:20 PM</span><br>
+				477&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/cowboys" title="Dallas Team Schedule and ATS Results" class="tabletext">Dallas</a></b><br>
+				478&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/rams" title="L.A. Rams Team Schedule and ATS Results" class="tabletext">L.A. Rams</a></b>
+			</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/cowboys-@-rams.cfm/date/09-13-20#BT" target="_blank">
+							&nbsp;<br>-2&frac12;&nbsp;-10<br>50&frac12;u-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/cowboys-@-rams.cfm/date/09-13-20#BT" target="_blank">
+							&nbsp;<br>-2&frac12;&nbsp;-10<br>50u-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/cowboys-@-rams.cfm/date/09-13-20#J" target="_blank">
+							&nbsp;<br>-2&frac12;&nbsp;-10<br>50u-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/cowboys-@-rams.cfm/date/09-13-20#CQ" target="_blank">
+							&nbsp;<br>-3&nbsp;EV<br>50u-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/cowboys-@-rams.cfm/date/09-13-20#L" target="_blank">
+							&nbsp;<br>-2&frac12;&nbsp;-10<br>50&frac12;u-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/cowboys-@-rams.cfm/date/09-13-20#CV" target="_blank">
+							&nbsp;<br>-2&frac12;&nbsp;-05<br>49&frac12;u-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/cowboys-@-rams.cfm/date/09-13-20#X" target="_blank">
+							&nbsp;<br>-2&frac12;&nbsp;-10<br>50u-10
+							</a>
+						</td><td class="cellBorderLR1 lastColSpacer">&nbsp;</td></tr><tr><td class="viCellBg1 cellBorderR1 nowrap frodd-betpick-links" colspan="11"><a href="/partners/bumper.cfm/brand/generic" title="Bet Now!" target="_blank">Bet Now</a></td></tr>
+		<tr>
+			<td class="viCellBg2 cellTextNorm cellBorderL1 gameCell" nowrap>
+				<span class="cellTextHot">09/14  7:15 PM</span><br>
+				479&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/steelers" title="Pittsburgh Team Schedule and ATS Results" class="tabletext">Pittsburgh</a></b><br>
+				480&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/giants" title="N.Y. Giants Team Schedule and ATS Results" class="tabletext">N.Y. Giants</a></b>
+			</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/steelers-@-giants.cfm/date/09-14-20#BT" target="_blank">
+							&nbsp;<br>-3&nbsp;-10<br>48u-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/steelers-@-giants.cfm/date/09-14-20#BT" target="_blank">
+							&nbsp;<br>-3&frac12;&nbsp;-10<br>48u-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/steelers-@-giants.cfm/date/09-14-20#J" target="_blank">
+							&nbsp;<br>-3&frac12;&nbsp;-10<br>48&frac12;u-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/steelers-@-giants.cfm/date/09-14-20#CR" target="_blank">
+							&nbsp;<br>-4&nbsp;-10<br>47&frac12;u-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/steelers-@-giants.cfm/date/09-14-20#CQ" target="_blank">
+							&nbsp;<br>-4&nbsp;-10<br>48&frac12;u-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/steelers-@-giants.cfm/date/09-14-20#L" target="_blank">
+							&nbsp;<br>-3&frac12;&nbsp;-10<br>48u-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/steelers-@-giants.cfm/date/09-14-20#CV" target="_blank">
+							&nbsp;<br>-4&nbsp;-10<br>47u-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/steelers-@-giants.cfm/date/09-14-20#X" target="_blank">
+							&nbsp;<br>-3&frac12;&nbsp;-10<br>48u-10
+							</a>
+						</td><td class="cellBorderLR1 lastColSpacer">&nbsp;</td></tr><tr><td class="viCellBg2 cellBorderR1 nowrap frodd-betpick-links" colspan="11"><a href="/partners/bumper.cfm/brand/generic" title="Bet Now!" target="_blank">Bet Now</a></td></tr>
+		<tr>
+			<td class="viCellBg1 cellTextNorm cellBorderL1 gameCell" nowrap>
+				<span class="cellTextHot">09/14  10:10 PM</span><br>
+				481&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/titans" title="Tennessee Team Schedule and ATS Results" class="tabletext">Tennessee</a></b><br>
+				482&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/broncos" title="Denver Team Schedule and ATS Results" class="tabletext">Denver</a></b>
+			</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/titans-@-broncos.cfm/date/09-14-20#BT" target="_blank">
+							&nbsp;<br>42&frac12;u-10<br>-1&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/titans-@-broncos.cfm/date/09-14-20#BT" target="_blank">
+							&nbsp;<br>42u-10<br>-2&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/titans-@-broncos.cfm/date/09-14-20#J" target="_blank">
+							&nbsp;<br>42u-10<br>-2&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/titans-@-broncos.cfm/date/09-14-20#CR" target="_blank">
+							&nbsp;<br>42&frac12;u-10<br>-1&frac12;&nbsp;-07
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/titans-@-broncos.cfm/date/09-14-20#CQ" target="_blank">
+							&nbsp;<br>42&frac12;u-10<br>-2&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/titans-@-broncos.cfm/date/09-14-20#L" target="_blank">
+							&nbsp;<br>42u-10<br>-2&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/titans-@-broncos.cfm/date/09-14-20#CV" target="_blank">
+							&nbsp;<br>41&frac12;o-15<br>-1&frac12;&nbsp;-15
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/titans-@-broncos.cfm/date/09-14-20#X" target="_blank">
+							&nbsp;<br>42u-10<br>-2&nbsp;-10
+							</a>
+						</td><td class="cellBorderLR1 lastColSpacer">&nbsp;</td></tr><tr><td class="viCellBg1 cellBorderR1 nowrap frodd-betpick-links" colspan="11"><a href="/partners/bumper.cfm/brand/generic" title="Bet Now!" target="_blank">Bet Now</a></td></tr>
+		<tr>
+			<td class="viCellBg2 cellTextNorm cellBorderL1 gameCell" nowrap>
+				<span class="cellTextHot">09/17  8:20 PM</span><br>
+				101&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/bengals" title="Cincinnati Team Schedule and ATS Results" class="tabletext">Cincinnati</a></b><br>
+				102&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/browns" title="Cleveland Team Schedule and ATS Results" class="tabletext">Cleveland</a></b>
+			</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/bengals-@-browns.cfm/date/09-17-20#BT" target="_blank">
+							&nbsp;<br>46u-10<br>-8&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/bengals-@-browns.cfm/date/09-17-20#BT" target="_blank">
+							&nbsp;<br>46u-10<br>-7&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/bengals-@-browns.cfm/date/09-17-20#J" target="_blank">
+							&nbsp;<br>46u-10<br>-7&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/bengals-@-browns.cfm/date/09-17-20#CR" target="_blank">
+							&nbsp;<br>46u-10<br>-7&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/bengals-@-browns.cfm/date/09-17-20#L" target="_blank">
+							&nbsp;<br>46u-10<br>-7&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td><td class="cellBorderLR1 lastColSpacer">&nbsp;</td></tr><tr><td class="viCellBg2 cellBorderR1 nowrap frodd-betpick-links" colspan="11"><a href="/partners/bumper.cfm/brand/generic" title="Bet Now!" target="_blank">Bet Now</a></td></tr>
+		<tr>
+			<td class="viCellBg1 cellTextNorm cellBorderL1 gameCell" nowrap>
+				<span class="cellTextHot">09/20  1:00 PM</span><br>
+				261&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/rams" title="L.A. Rams Team Schedule and ATS Results" class="tabletext">L.A. Rams</a></b><br>
+				262&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/eagles" title="Philadelphia Team Schedule and ATS Results" class="tabletext">Philadelphia</a></b>
+			</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/rams-@-eagles.cfm/date/09-20-20#BT" target="_blank">
+							&nbsp;<br>49u-10<br>-4&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/rams-@-eagles.cfm/date/09-20-20#BT" target="_blank">
+							&nbsp;<br>49u-10<br>-4&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/rams-@-eagles.cfm/date/09-20-20#J" target="_blank">
+							&nbsp;<br>49u-10<br>-4&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/rams-@-eagles.cfm/date/09-20-20#CR" target="_blank">
+							&nbsp;<br>49u-10<br>-4&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/rams-@-eagles.cfm/date/09-20-20#L" target="_blank">
+							&nbsp;<br>49u-10<br>-4&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td><td class="cellBorderLR1 lastColSpacer">&nbsp;</td></tr><tr><td class="viCellBg1 cellBorderR1 nowrap frodd-betpick-links" colspan="11"><a href="/partners/bumper.cfm/brand/generic" title="Bet Now!" target="_blank">Bet Now</a></td></tr>
+		<tr>
+			<td class="viCellBg2 cellTextNorm cellBorderL1 gameCell" nowrap>
+				<span class="cellTextHot">09/20  1:00 PM</span><br>
+				263&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/panthers" title="Carolina Team Schedule and ATS Results" class="tabletext">Carolina</a></b><br>
+				264&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/buccaneers" title="Tampa Bay Team Schedule and ATS Results" class="tabletext">Tampa Bay</a></b>
+			</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/panthers-@-buccaneers.cfm/date/09-20-20#BT" target="_blank">
+							&nbsp;<br>48u-10<br>-8&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/panthers-@-buccaneers.cfm/date/09-20-20#BT" target="_blank">
+							&nbsp;<br>48&frac12;u-10<br>-8&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/panthers-@-buccaneers.cfm/date/09-20-20#J" target="_blank">
+							&nbsp;<br>48&frac12;u-10<br>-8&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/panthers-@-buccaneers.cfm/date/09-20-20#L" target="_blank">
+							&nbsp;<br>48&frac12;u-10<br>-8&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td><td class="cellBorderLR1 lastColSpacer">&nbsp;</td></tr><tr><td class="viCellBg2 cellBorderR1 nowrap frodd-betpick-links" colspan="11"><a href="/partners/bumper.cfm/brand/generic" title="Bet Now!" target="_blank">Bet Now</a></td></tr>
+		<tr>
+			<td class="viCellBg1 cellTextNorm cellBorderL1 gameCell" nowrap>
+				<span class="cellTextHot">09/20  1:00 PM</span><br>
+				265&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/broncos" title="Denver Team Schedule and ATS Results" class="tabletext">Denver</a></b><br>
+				266&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/steelers" title="Pittsburgh Team Schedule and ATS Results" class="tabletext">Pittsburgh</a></b>
+			</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/broncos-@-steelers.cfm/date/09-20-20#BT" target="_blank">
+							&nbsp;<br>44u-10<br>-5&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/broncos-@-steelers.cfm/date/09-20-20#BT" target="_blank">
+							&nbsp;<br>43&frac12;u-10<br>-5&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/broncos-@-steelers.cfm/date/09-20-20#J" target="_blank">
+							&nbsp;<br>43&frac12;u-10<br>-5&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/broncos-@-steelers.cfm/date/09-20-20#CR" target="_blank">
+							&nbsp;<br>43u-10<br>-5&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/broncos-@-steelers.cfm/date/09-20-20#L" target="_blank">
+							&nbsp;<br>43&frac12;u-10<br>-5&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td><td class="cellBorderLR1 lastColSpacer">&nbsp;</td></tr><tr><td class="viCellBg1 cellBorderR1 nowrap frodd-betpick-links" colspan="11"><a href="/partners/bumper.cfm/brand/generic" title="Bet Now!" target="_blank">Bet Now</a></td></tr>
+		<tr>
+			<td class="viCellBg2 cellTextNorm cellBorderL1 gameCell" nowrap>
+				<span class="cellTextHot">09/20  1:00 PM</span><br>
+				267&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/falcons" title="Atlanta Team Schedule and ATS Results" class="tabletext">Atlanta</a></b><br>
+				268&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/cowboys" title="Dallas Team Schedule and ATS Results" class="tabletext">Dallas</a></b>
+			</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/falcons-@-cowboys.cfm/date/09-20-20#BT" target="_blank">
+							&nbsp;<br>50u-10<br>-7&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/falcons-@-cowboys.cfm/date/09-20-20#BT" target="_blank">
+							&nbsp;<br>50u-10<br>-7&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/falcons-@-cowboys.cfm/date/09-20-20#J" target="_blank">
+							&nbsp;<br>50u-10<br>-7&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/falcons-@-cowboys.cfm/date/09-20-20#L" target="_blank">
+							&nbsp;<br>50&frac12;u-10<br>-7&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td><td class="cellBorderLR1 lastColSpacer">&nbsp;</td></tr><tr><td class="viCellBg2 cellBorderR1 nowrap frodd-betpick-links" colspan="11"><a href="/partners/bumper.cfm/brand/generic" title="Bet Now!" target="_blank">Bet Now</a></td></tr>
+		<tr>
+			<td class="viCellBg1 cellTextNorm cellBorderL1 gameCell" nowrap>
+				<span class="cellTextHot">09/20  1:00 PM</span><br>
+				269&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/49ers" title="San Francisco Team Schedule and ATS Results" class="tabletext">San Francisco</a></b><br>
+				270&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/jets" title="N.Y. Jets Team Schedule and ATS Results" class="tabletext">N.Y. Jets</a></b>
+			</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/49ers-@-jets.cfm/date/09-20-20#BT" target="_blank">
+							&nbsp;<br>-4&nbsp;-10<br>43&frac12;u-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/49ers-@-jets.cfm/date/09-20-20#BT" target="_blank">
+							&nbsp;<br>-5&frac12;&nbsp;-10<br>43&frac12;u-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/49ers-@-jets.cfm/date/09-20-20#J" target="_blank">
+							&nbsp;<br>-5&nbsp;-10<br>43&frac12;u-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/49ers-@-jets.cfm/date/09-20-20#CR" target="_blank">
+							&nbsp;<br>-5&frac12;&nbsp;-10<br>43&frac12;u-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/49ers-@-jets.cfm/date/09-20-20#L" target="_blank">
+							&nbsp;<br>-5&frac12;&nbsp;-10<br>43&frac12;u-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td><td class="cellBorderLR1 lastColSpacer">&nbsp;</td></tr><tr><td class="viCellBg1 cellBorderR1 nowrap frodd-betpick-links" colspan="11"><a href="/partners/bumper.cfm/brand/generic" title="Bet Now!" target="_blank">Bet Now</a></td></tr>
+		<tr>
+			<td class="viCellBg2 cellTextNorm cellBorderL1 gameCell" nowrap>
+				<span class="cellTextHot">09/20  1:00 PM</span><br>
+				271&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/bills" title="Buffalo Team Schedule and ATS Results" class="tabletext">Buffalo</a></b><br>
+				272&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/dolphins" title="Miami Team Schedule and ATS Results" class="tabletext">Miami</a></b>
+			</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/bills-@-dolphins.cfm/date/09-20-20#BT" target="_blank">
+							&nbsp;<br>-3&nbsp;-10<br>43u-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/bills-@-dolphins.cfm/date/09-20-20#BT" target="_blank">
+							&nbsp;<br>-3&nbsp;-10<br>43u-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/bills-@-dolphins.cfm/date/09-20-20#J" target="_blank">
+							&nbsp;<br>-3&nbsp;-10<br>43u-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/bills-@-dolphins.cfm/date/09-20-20#CR" target="_blank">
+							&nbsp;<br>-3&nbsp;-10<br>43u-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/bills-@-dolphins.cfm/date/09-20-20#L" target="_blank">
+							&nbsp;<br>-3&nbsp;-10<br>43u-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td><td class="cellBorderLR1 lastColSpacer">&nbsp;</td></tr><tr><td class="viCellBg2 cellBorderR1 nowrap frodd-betpick-links" colspan="11"><a href="/partners/bumper.cfm/brand/generic" title="Bet Now!" target="_blank">Bet Now</a></td></tr>
+		<tr>
+			<td class="viCellBg1 cellTextNorm cellBorderL1 gameCell" nowrap>
+				<span class="cellTextHot">09/20  1:00 PM</span><br>
+				273&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/vikings" title="Minnesota Team Schedule and ATS Results" class="tabletext">Minnesota</a></b><br>
+				274&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/colts" title="Indianapolis Team Schedule and ATS Results" class="tabletext">Indianapolis</a></b>
+			</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/vikings-@-colts.cfm/date/09-20-20#BT" target="_blank">
+							&nbsp;<br>47u-10<br>-3&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/vikings-@-colts.cfm/date/09-20-20#BT" target="_blank">
+							&nbsp;<br>46&frac12;u-10<br>-3&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/vikings-@-colts.cfm/date/09-20-20#J" target="_blank">
+							&nbsp;<br>46&frac12;u-10<br>-3&nbsp;EV
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/vikings-@-colts.cfm/date/09-20-20#CR" target="_blank">
+							&nbsp;<br>46u-10<br>-3&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/vikings-@-colts.cfm/date/09-20-20#L" target="_blank">
+							&nbsp;<br>46&frac12;u-10<br>-2&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td><td class="cellBorderLR1 lastColSpacer">&nbsp;</td></tr><tr><td class="viCellBg1 cellBorderR1 nowrap frodd-betpick-links" colspan="11"><a href="/partners/bumper.cfm/brand/generic" title="Bet Now!" target="_blank">Bet Now</a></td></tr>
+		<tr>
+			<td class="viCellBg2 cellTextNorm cellBorderL1 gameCell" nowrap>
+				<span class="cellTextHot">09/20  1:00 PM</span><br>
+				275&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/lions" title="Detroit Team Schedule and ATS Results" class="tabletext">Detroit</a></b><br>
+				276&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/packers" title="Green Bay Team Schedule and ATS Results" class="tabletext">Green Bay</a></b>
+			</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/lions-@-packers.cfm/date/09-20-20#BT" target="_blank">
+							&nbsp;<br>46u-10<br>-6&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/lions-@-packers.cfm/date/09-20-20#BT" target="_blank">
+							&nbsp;<br>46u-10<br>-6&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/lions-@-packers.cfm/date/09-20-20#J" target="_blank">
+							&nbsp;<br>46u-10<br>-6&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/lions-@-packers.cfm/date/09-20-20#CR" target="_blank">
+							&nbsp;<br>46u-10<br>-6&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/lions-@-packers.cfm/date/09-20-20#L" target="_blank">
+							&nbsp;<br>46u-10<br>-6&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td><td class="cellBorderLR1 lastColSpacer">&nbsp;</td></tr><tr><td class="viCellBg2 cellBorderR1 nowrap frodd-betpick-links" colspan="11"><a href="/partners/bumper.cfm/brand/generic" title="Bet Now!" target="_blank">Bet Now</a></td></tr>
+		<tr>
+			<td class="viCellBg1 cellTextNorm cellBorderL1 gameCell" nowrap>
+				<span class="cellTextHot">09/20  1:00 PM</span><br>
+				277&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/giants" title="N.Y. Giants Team Schedule and ATS Results" class="tabletext">N.Y. Giants</a></b><br>
+				278&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/bears" title="Chicago Team Schedule and ATS Results" class="tabletext">Chicago</a></b>
+			</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/giants-@-bears.cfm/date/09-20-20#BT" target="_blank">
+							&nbsp;<br>43&frac12;u-10<br>-5&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/giants-@-bears.cfm/date/09-20-20#BT" target="_blank">
+							&nbsp;<br>43u-10<br>-5&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/giants-@-bears.cfm/date/09-20-20#J" target="_blank">
+							&nbsp;<br>43u-10<br>-5&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/giants-@-bears.cfm/date/09-20-20#CR" target="_blank">
+							&nbsp;<br>43u-10<br>-5&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/giants-@-bears.cfm/date/09-20-20#L" target="_blank">
+							&nbsp;<br>43u-10<br>-5&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td><td class="cellBorderLR1 lastColSpacer">&nbsp;</td></tr><tr><td class="viCellBg1 cellBorderR1 nowrap frodd-betpick-links" colspan="11"><a href="/partners/bumper.cfm/brand/generic" title="Bet Now!" target="_blank">Bet Now</a></td></tr>
+		<tr>
+			<td class="viCellBg2 cellTextNorm cellBorderL1 gameCell" nowrap>
+				<span class="cellTextHot">09/20  1:00 PM</span><br>
+				279&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/jaguars" title="Jacksonville Team Schedule and ATS Results" class="tabletext">Jacksonville</a></b><br>
+				280&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/titans" title="Tennessee Team Schedule and ATS Results" class="tabletext">Tennessee</a></b>
+			</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/jaguars-@-titans.cfm/date/09-20-20#BT" target="_blank">
+							&nbsp;<br>42&frac12;u-10<br>-11&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/jaguars-@-titans.cfm/date/09-20-20#BT" target="_blank">
+							&nbsp;<br>43u-10<br>-11&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/jaguars-@-titans.cfm/date/09-20-20#J" target="_blank">
+							&nbsp;<br>43u-10<br>-11&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/jaguars-@-titans.cfm/date/09-20-20#CR" target="_blank">
+							&nbsp;<br>43u-10<br>-10&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/jaguars-@-titans.cfm/date/09-20-20#L" target="_blank">
+							&nbsp;<br>43u-10<br>-11&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td><td class="cellBorderLR1 lastColSpacer">&nbsp;</td></tr><tr><td class="viCellBg2 cellBorderR1 nowrap frodd-betpick-links" colspan="11"><a href="/partners/bumper.cfm/brand/generic" title="Bet Now!" target="_blank">Bet Now</a></td></tr>
+		<tr>
+			<td class="viCellBg1 cellTextNorm cellBorderL1 gameCell" nowrap>
+				<span class="cellTextHot">09/20  4:05 PM</span><br>
+				281&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/redskins" title="Washington Team Schedule and ATS Results" class="tabletext">Washington</a></b><br>
+				282&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/cardinals" title="Arizona Team Schedule and ATS Results" class="tabletext">Arizona</a></b>
+			</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/redskins-@-cardinals.cfm/date/09-20-20#BT" target="_blank">
+							&nbsp;<br>45&frac12;u-10<br>-7&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/redskins-@-cardinals.cfm/date/09-20-20#BT" target="_blank">
+							&nbsp;<br>46u-10<br>-6&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/redskins-@-cardinals.cfm/date/09-20-20#J" target="_blank">
+							&nbsp;<br>46u-10<br>-6&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/redskins-@-cardinals.cfm/date/09-20-20#L" target="_blank">
+							&nbsp;<br>46u-10<br>-7&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td><td class="cellBorderLR1 lastColSpacer">&nbsp;</td></tr><tr><td class="viCellBg1 cellBorderR1 nowrap frodd-betpick-links" colspan="11"><a href="/partners/bumper.cfm/brand/generic" title="Bet Now!" target="_blank">Bet Now</a></td></tr>
+		<tr>
+			<td class="viCellBg2 cellTextNorm cellBorderL1 gameCell" nowrap>
+				<span class="cellTextHot">09/20  4:25 PM</span><br>
+				283&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/ravens" title="Baltimore Team Schedule and ATS Results" class="tabletext">Baltimore</a></b><br>
+				284&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/texans" title="Houston Team Schedule and ATS Results" class="tabletext">Houston</a></b>
+			</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/ravens-@-texans.cfm/date/09-20-20#BT" target="_blank">
+							&nbsp;<br>-6&nbsp;-10<br>54&frac12;u-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/ravens-@-texans.cfm/date/09-20-20#BT" target="_blank">
+							&nbsp;<br>-6&nbsp;-10<br>54&frac12;u-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/ravens-@-texans.cfm/date/09-20-20#J" target="_blank">
+							&nbsp;<br>-6&nbsp;-10<br>54&frac12;u-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/ravens-@-texans.cfm/date/09-20-20#L" target="_blank">
+							&nbsp;<br>-6&nbsp;-10<br>54&frac12;u-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td><td class="cellBorderLR1 lastColSpacer">&nbsp;</td></tr><tr><td class="viCellBg2 cellBorderR1 nowrap frodd-betpick-links" colspan="11"><a href="/partners/bumper.cfm/brand/generic" title="Bet Now!" target="_blank">Bet Now</a></td></tr>
+		<tr>
+			<td class="viCellBg1 cellTextNorm cellBorderL1 gameCell" nowrap>
+				<span class="cellTextHot">09/20  4:25 PM</span><br>
+				285&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/chiefs" title="Kansas City Team Schedule and ATS Results" class="tabletext">Kansas City</a></b><br>
+				286&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/chargers" title="L.A. Chargers Team Schedule and ATS Results" class="tabletext">L.A. Chargers</a></b>
+			</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/chiefs-@-chargers.cfm/date/09-20-20#BT" target="_blank">
+							&nbsp;<br>-5&frac12;&nbsp;-10<br>51&frac12;u-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/chiefs-@-chargers.cfm/date/09-20-20#BT" target="_blank">
+							&nbsp;<br>-6&frac12;&nbsp;-10<br>51u-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/chiefs-@-chargers.cfm/date/09-20-20#J" target="_blank">
+							&nbsp;<br>-6&frac12;&nbsp;-10<br>51u-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/chiefs-@-chargers.cfm/date/09-20-20#CR" target="_blank">
+							&nbsp;<br>-6&frac12;&nbsp;-10<br>50&frac12;u-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/chiefs-@-chargers.cfm/date/09-20-20#L" target="_blank">
+							&nbsp;<br>-6&frac12;&nbsp;-10<br>51u-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td><td class="cellBorderLR1 lastColSpacer">&nbsp;</td></tr><tr><td class="viCellBg1 cellBorderR1 nowrap frodd-betpick-links" colspan="11"><a href="/partners/bumper.cfm/brand/generic" title="Bet Now!" target="_blank">Bet Now</a></td></tr>
+		<tr>
+			<td class="viCellBg2 cellTextNorm cellBorderL1 gameCell" nowrap>
+				<span class="cellTextHot">09/20  8:20 PM</span><br>
+				287&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/patriots" title="New England Team Schedule and ATS Results" class="tabletext">New England</a></b><br>
+				288&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/seahawks" title="Seattle Team Schedule and ATS Results" class="tabletext">Seattle</a></b>
+			</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/patriots-@-seahawks.cfm/date/09-20-20#BT" target="_blank">
+							&nbsp;<br>44u-10<br>-3&frac12;&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/patriots-@-seahawks.cfm/date/09-20-20#BT" target="_blank">
+							&nbsp;<br>44u-10<br>-4&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/patriots-@-seahawks.cfm/date/09-20-20#J" target="_blank">
+							&nbsp;<br>44u-10<br>-4&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/patriots-@-seahawks.cfm/date/09-20-20#L" target="_blank">
+							&nbsp;<br>44u-10<br>-4&nbsp;-10
+							</a>
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg2 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td><td class="cellBorderLR1 lastColSpacer">&nbsp;</td></tr><tr><td class="viCellBg2 cellBorderR1 nowrap frodd-betpick-links" colspan="11"><a href="/partners/bumper.cfm/brand/generic" title="Bet Now!" target="_blank">Bet Now</a></td></tr>
+		<tr>
+			<td class="viCellBg1 cellTextNorm cellBorderL1 gameCell" nowrap>
+				<span class="cellTextHot">09/21  8:15 PM</span><br>
+				289&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/saints" title="New Orleans Team Schedule and ATS Results" class="tabletext">New Orleans</a></b><br>
+				290&nbsp;<b><a href="/nfl/teams/team-page.cfm/team/raiders" title="Las Vegas Team Schedule and ATS Results" class="tabletext">Las Vegas</a></b>
+			</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/saints-@-raiders.cfm/date/09-21-20#BT" target="_blank">
+							&nbsp;<br>-5&nbsp;-10<br>51u-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/saints-@-raiders.cfm/date/09-21-20#BT" target="_blank">
+							&nbsp;<br>-4&frac12;&nbsp;-10<br>50&frac12;u-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/saints-@-raiders.cfm/date/09-21-20#J" target="_blank">
+							&nbsp;<br>-4&frac12;&nbsp;-10<br>50&frac12;u-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							<a class="cellTextNorm" href="/nfl/odds/las-vegas/line-movement/saints-@-raiders.cfm/date/09-21-20#L" target="_blank">
+							&nbsp;<br>-4&frac12;&nbsp;-10<br>50&frac12;u-10
+							</a>
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td>
+						<td class="viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell">
+							
+							&nbsp;<br>&nbsp;<br>&nbsp;
+							
+						</td><td class="cellBorderLR1 lastColSpacer">&nbsp;</td></tr><tr><td class="viCellBg1 cellBorderR1 nowrap frodd-betpick-links" colspan="11"><a href="/partners/bumper.cfm/brand/generic" title="Bet Now!" target="_blank">Bet Now</a></td></tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+	<div class=spacer10>&nbsp;</div>
+	<table border=0 cellpadding=2 cellspacing=2 width=751>
+		<tr><td class='a1 text-left'>Updated: Sun, Jun 28  11:22 AM EDT</td></tr>
+		<tr><td class='a1 text-left'><b>NOTES:</b></td></tr>
+		<tr><td class='a1 text-left'>
+			<ul>
+				<li><b>Open Line:</b> Consists of the first betting line received from one of our Las Vegas or Global sportsbooks.</li>
+				<li><b>VI Consensus:</b>  Consists of the current betting line which occurs most frequently among our list of Las Vegas and Global sportsbooks.</li>
+				<li>All Game Times are Eastern Standard Time.</li>
+			</ul>
+		</td></tr>
+	</table>
+	<div class=spacer10>&nbsp;</div><div id="div-gpt-ad-ros_mobile_dynamicpage_300x250" style="text-align: center; height: auto;">
+<script>
+googletag.cmd.push( function(){ 
+googletag.display( "div-gpt-ad-ros_mobile_dynamicpage_300x250" );
+} );
+</script>
+</div>
+
+<span style="font-size:12px; font-family:arial;">
+<div id="tertiaryNav">
+<ul>
+<li><span class="tertiarySelected">Where to Bet:</span></li>
+<li><a href="/sportsbook-directory/fanduel/" title="FanDuel Sportsbook">FanDuel</a></li>
+<li><a href="/sportsbook-directory/betmgm/" title="BetMGM Sportsbook">BetMGM</a></li>
+<li><a href="/sportsbook-directory/draftkings/" title="DraftKings Sportsbook">DraftKings</a></li>
+<li><a href="/sportsbook-directory/foxbet/" title="Fox Bet Sportsbook">Fox Bet</a></li>
+<li><a href="/sportsbook-directory/bet365/" title="Bet365 Sportsbook">Bet365</a></li>
+<li><a href="/sportsbook-directory/pointsbet/" title="PointsBet Sportsbook">PointsBet</a></li>
+<li><a href="/sportsbook-directory/unibet/" title="Unibet Sportsbook">Unibet</a></li>
+<li><a href="/sportsbook-directory/betrivers/" title="BetRivers Sportsbook">BetRivers</a></li>
+<li><a href="/sportsbook-directory/" title="All Sportsbooks">All</a></li>
+</ul>
+</div>
+<h2>NFL Week 1 Opening Las Vegas Odds</h2>
+
+<p>The 2020 NFL regular season scheduled was released on May 7, 2020 and <a href="https://www.vegasinsider.com/sportsbook-directory/">legal sportsbooks</a> started to post the opening odds.</p> Check out the latest <a href="https://www.vegasinsider.com/nfl/story.cfm/story/2009963">Week 1 Betting Outlook</a> for the opening weekend, which is scheduled to take place on Thursday, Sept. 10 between the Kansas City Chiefs (-10.5) and Houston Texans.</p> 
+
+<h3>Thursday, Sept. 10</h3>
+<ul>
+<li>Houston at Kansas City (-10.5)</li>
+</ul>
+<h3>Sunday, Sept 13, 2020 </h3>
+<ul>
+<li>Miami at New England (-6.5) </li>
+<li>Cleveland at Baltimore (-8.5) </li>
+<li>N.Y. Jets at Buffalo (-5.5)</li>
+<li>Las Vegas at Carolina (PK)</li>
+<li>Seattle (-1) at Atlanta </li>
+<li>Philadelphia (-6) at Washington </li>
+<li>Chicago at Detroit (-1.5) </li>
+<li>Indianapolis (-8.5) at Jacksonville </li>
+<li>Green Bay at Minnesota -3.5</li>
+<li>L.A. Chargers (-3.5) at Cincinnati</li>
+<li>Arizona at San Francisco (-8)</li>
+<li>Tampa Bay at New Orleans (-4) </li>
+<li>Dallas (-3) at L.A. Rams </li>
+</ul>
+
+<h3>Monday, Sept. 14, 2020 </h3>
+<ul>
+<li>Pittsburgh (-3.5) at N.Y. Giants</li> 
+<li>Tennessee at Denver (-3)</li>
+</ul>
+
+<h2>How to read NFL Las Vegas Odds</h2>
+
+<p>The point-spread was developed to provide a balance for both teams involved in a contest to entice bettors to potentially back the weaker team and receive points. The two squads in a game are listed with a title, either a favorite or an underdog. The favorite is usually the perceived better team in the game, as backing them means giving up several points.</p> 
+
+<p>The favorite is always listed with a <strong>minus (-)</strong> sign before the point-spread while the underdog is labeled with a <strong>plus (+)</strong> label.</p> 
+
+<h3>Ex. Favorite -10, Underdog +10</h3>
+
+<p>On the VegasInsider.com odds page, there is another number associated with the favorite and its listed as <strong>-10</strong>. This number is simply defined as <strong>“vig”</strong> or what many in the sports betting industry call <strong>vigorish</strong>. Another common term is called <strong>“juice”</strong> and it’s technically the price the bettor has to pay on a straight wager.</p> 
+
+<h3>Ex. Bet $110 to win $100 (10% juice)<br>
+Ex. Bet $100 to win $91.91 (10% juice)
+</h3>
+
+<p>It's not uncommon to see other values posted other than -10. Examples seen on the NFL Vegas Odds pages could include <strong>-08</strong>, <strong>-12</strong>, <strong>-15</strong> and <strong>-20</strong>. The -10 price is the most common value in the industry while many books offer reduced 'juice odds' and that would fall into the -08 category.</p>
+
+<p>The <strong>lower-juice sportsbooks</strong> are normally found outside of the state Nevada. If you are in a state where sports betting is legal, please check out our <a class="newstext" href="https://www.vegasinsider.com/sportsbook-directory/">online sportsbook directory</a> to find the best and most secure places to make NFL bets.</p>
+
+<p>Another number that’s posted on the NFL Las Vegas is the <strong>total</strong> or <strong>‘over/under’</strong> for the specific matchup. If the favorite is designated as the home team, then the total will be listed above and vice versa if the visitors are favorites.</p> 
+
+<p>All of the above numbers are listed next to the teams, and before each matchup is a <strong>Rotation</strong> number. The NFL Las Vegas Odds are listed in order of rotation and those numbers are generated and produced by the sportsbooks. Above each matchup and rotation is the <strong>Time</strong> of the game, which is subject to change. All game times are Eastern Standard Time.
+
+<!--<div class="spacer5"></div>
+<div style="text-align:center"><a class="button" href="https://www.vegasinsider.com/boxing/picks/" alt="Buy UFC 249 Expert Picks" title="Buy UFC 249 Expert Picks">Buy UFC 249 Expert Picks</a></div>
+<div class="spacer5"></div>-->
+
+<h2>NFL Open Line</h2>
+
+<p>One of the best features on the NFL Vegas Odds is the Open Line. This numbers consists of the first betting line received from one of our Las Vegas or <a class="newstext" href="https://www.vegasinsider.com/nfl/odds/global/">Global Sportsbooks</a>. The opening line varies depending on the sportsbook but it provides a clear-cut rating that the oddsmakers use. If you’re betting on the NFL or any other sport, it’s a great idea to view the open line first.</p> 
+
+<h2>VI Consensus NFL Line</h2>
+
+<p>The VegasInsider.com Consensus NFL Line is just as important as the Open Line and also a key resource on odds platform. The Consensus column could be called a <strong>“Median Line”</strong> since it shows the most consistent number provided by the sportsbooks on VegasInsider.com. The consensus line will be the same as the open line but once the wagers start coming in, this number is often different than the openers.</p>
+
+<h2>How do I bet on the Super Bowl?</h2>
+
+<p>We know that you can <a href="https://www.vegasinsider.com/nfl/odds/futures/">bet on the Super Bowl and all of NFL Futures</a> or <a href="https://www.vegasinsider.com/nfl/odds/draft/">bet on the NFL Draft</a> at any time of the year, but what’s the process? The future wager or the <strong>“Odds to Win”</strong> bet on the Super Bowl is correctly selecting a team to win an event that takes place at a later time. A bettor will have his wagered money tied up until there is an outcome and bettors will receive fixed odds when they place the wager. In the case of the Super Bowl, you’re not a winner or loser until you see zeros on the clock in the final game.</p>
+
+<p>Most sportsbooks offer different ways to read to Super Bowl Odds. In the fractional NFL Futures Odds format below, you simply take the odds and multiply by the amount wagered.</p> 
+<h3>Ex. Green Bay (8/1) to win the Super Bowl</h3>
+
+<p>The Packers are listed as an 8/1 betting choice to win the Super Bowl. If you wager $100 on Green Bay to win the NFC and they capture the championship, then you would win $800 (8 ÷ 1 x 100). Your online betting account would then credit your account $900, which includes your win and stake ($100). </p>
+
+<p>The <strong>American Format</strong> would see Green Bay listed at +800 and for the <strong>Decimal Format</strong>, the Packers would be 9.00.</p> 
+
+<p>If you are in a state where online betting is legal, we encourage you to check out our <a href="https://www.vegasinsider.com/sportsbook-directory/">sportsbook directory</a> to find the most trustworthy and reputable sites and mobile apps to place your Super Bowl bets.</p>
+
+</span>
+<div style="height:12px;"></div>
+
+		
+		
+		</td>
+		
+			<!-- FLAT RIGHT NAV STARTS	 -->
+			
+<td class="spacer10">&nbsp;&nbsp;</td>
+<td class="viRtRailContent">
+	<div class="viRtRailSpacer5 spacer5"></div>
+	<div class="skyscraper130-top"><img src="https://www.vegasinsider.com/graphics/corner_left.gif" width="5" title="corner graphic" alt="corner graphic"></div>
+	
+	<div class="skyscraper130-ads">
+		<div id="marketing-rail" style="margin: 10px 0 10px 0;">
+
+<A title="Where is Sports Betting Legal?" href="/sportsbook-directory/">
+<IMG height="182" src="/graphics/ut/legalUsButton-120x182.png" width="120" border="0" alt="Where is Sports Betting Legal?"></A>
+
+</div>
+
+<div id="marketing-rail" style="margin: 10px 0 10px 0;">
+
+<A title="Legal Online Sportsbooks by States" href="/sportsbook-directory/reviews/">
+<IMG height="182" src="/graphics/ut/freeonline2-120x182.png" width="120" border="0" alt="Legal Online Sportsbooks by States"></A>
+
+</div>
+
+
+<!-- 
+
+
+<A title="VI Gold Membership" href="/membership/signup/">
+<IMG height="182" src="/visports/images/marketing/memberships/mem-topright.png" width="120" border="0" alt="VI Gold Membership"></A>
+
+
+--> 
+<div class="spacer5"></div>
+<div id="div-gpt-ad-ros_rightrail_skyscraper_120x600" style="height: 600px;">
+<script>
+googletag.cmd.push( function(){ 
+googletag.display( "div-gpt-ad-ros_rightrail_skyscraper_120x600" );
+} );
+</script>
+</div>
+<div class="adlabel-rr">Advertisement</div>
+<div class="spacer10"></div>
+
+	</div>
+	<div class="spacer10"></div>
+</td>
+
+	</tr>
+</table>
+
+
+<div class="FooterTbl_bottom"><div class="FooterTbl_bottom" id="globalfooter" style="background-color: #F6EBD6; margin: 0px auto; width: 900px; float: left">
+<div class="footerbar"></div>
+
+<div id="div-gpt-ad-ros_bot_banner_728x90" class="footerbanner" style="height: 90px; overflow: hidden;">
+<script>
+googletag.cmd.push( function(){ 
+googletag.display( "div-gpt-ad-ros_bot_banner_728x90" );
+} );
+</script>
+</div>
+<div class="adlabel-foot">Advertisement</div>
+
+<div id="footerlinks">
+
+<div class="footerlinks" id="footerlinks_NFL" style="width: 113px; margin-left: 30px">
+<a class="footer_txt_title" href="/nfl/" title="NFL Pro Football News and Sports Betting">NFL</a><br>
+<a class="footer_txt_link" href="/nfl/picks/" title="NFL Expert Picks">NFL Expert Picks</a><br>
+<a class="footer_txt_link" href="/nfl/odds/las-vegas/" title="NFL Las Vegas Sports Book Betting Odds">NFL Vegas Odds</a><br>
+<a class="footer_txt_link" href="/nfl/odds/global/" title="NFL Global Sportsbook Betting Odds">NFL Global Odds</a><br>
+<a class="footer_txt_link" href="/nfl/matchups/" title="NFL Matchups and Analysis">NFL Matchups</a><br>
+<a class="footer_txt_link" href="/nfl/scoreboard/" title="NFL Scores and ATS Results">NFL Scores</a></div>
+
+<div class="footerlinks" id="footerlinks_MLB" style="width: 133px">
+<a class="footer_txt_title" href="/mlb/" title="MLB Pro Baseball News and Sports Betting">MLB</a><br>
+<a class="footer_txt_link" href="/mlb/picks/" title="MLB Expert Picks">MLB Expert Picks</a><br>
+<a class="footer_txt_link" href="/mlb/odds/las-vegas/" title="MLB Las Vegas Sports Book Betting Odds">MLB Vegas Odds</a><br>
+<a class="footer_txt_link" href="/mlb/odds/global/" title="MLB Global Sportsbook Betting Odds">MLB Global Odds</a><br>
+<a class="footer_txt_link" href="/mlb/matchups/" title="MLB Matchups and Analysis">MLB Matchups</a><br>
+<a class="footer_txt_link" href="/mlb/scoreboard/" title="MLB Scores and ATS Results">MLB Scores</a></div>
+
+<div class="footerlinks" id="footerlinks_NBA" style="width: 160px">
+<a class="footer_txt_title" href="/nba/" title="NBA Pro Basketball News and Sports Betting">NBA</a><br>
+<a class="footer_txt_link" href="/nba/picks/" title="NBA Expert Picks">NBA Expert Picks</a><br>
+<a class="footer_txt_link" href="/nba/odds/las-vegas/" title="NBA Las Vegas Sports Book Betting Odds">NBA Vegas Odds</a><br>
+<a class="footer_txt_link" href="/nba/odds/global/" title="NBA Global Sportbook Betting Odds">NBA Global Odds</a><br>
+<a class="footer_txt_link" href="/nba/matchups/" title="NBA Matchups and Analysis">NBA Matchups</a><br>
+<a class="footer_txt_link" href="/nba/scoreboard/" title="NBA Scores and ATS Results">NBA Scores</a></div>
+
+<div class="footerlinks" id="footerlinks_NHL" style="width: 130px">
+<a class="footer_txt_title" href="/nhl/" title="NHL Pro Hockey News and Sports Betting">NHL</a><br>
+<a class="footer_txt_link" href="/nhl/picks/" title="NHL Expert Picks">NHL Expert Picks</a><br>
+<a class="footer_txt_link" href="/nhl/odds/las-vegas/" title="NHL Las Vegas Sports Book Betting Odds">NHL Vegas Odds</a><br>
+<a class="footer_txt_link" href="/nhl/odds/global/" title="NHL Global Sportsbook Betting Odds">NHL Global Odds</a><br>
+<a class="footer_txt_link" href="/nhl/matchups/" title="NHL Matchups and Analysis">NHL Matchups</a><br>
+<a class="footer_txt_link" href="/nhl/scoreboard/" title="NHL Scores and ATS Results">NHL Scores</a></div>
+
+<div class="footerlinks" id="footerlinks_COLLEGEFOOTBALL" style="width: 159px">
+<a class="footer_txt_title" href="/college-football/" title="College Football News and Sports Betting">College Football</a><br>
+<a class="footer_txt_link" href="/college-football/picks/" title="College Football Expert Picks">NCAA FB Expert Picks</a><br>
+<a class="footer_txt_link" href="/college-football/odds/las-vegas/" title="College Football Las Vegas Sports Book Betting Odds">NCAA FB Vegas Odds</a><br>
+<a class="footer_txt_link" href="/college-football/odds/global/" title="College Football Global Sportsbook Betting Odds">NCAA FB Global Odds</a><br>
+<a class="footer_txt_link" href="/college-football/matchups/" title="College Football Matchups and Analysis">NCAA FB Matchups</a><br>
+<a class="footer_txt_link" href="/college-football/scoreboard/" title="College Football Scores and ATS Results">NCAA FB Scores</a></div>
+
+<div class="footerlinks" id="footerlinks_COLLEGEBASKETBALL" style="width: 163px">
+<a class="footer_txt_title" href="/college-basketball/" title="College Basketball News and Sports Betting">College Basketball</a><br>
+<a class="footer_txt_link" href="/college-basketball/picks/" title="College Basketball Expert Picks">NCAA BK Expert Picks</a><br>
+<a class="footer_txt_link" href="/college-basketball/odds/las-vegas/" title="College Basketball Las Vegas Sports Book Betting Odds">NCAA BK Vegas Odds</a><br>
+<a class="footer_txt_link" href="/college-basketball/odds/global/" title="College Basketball Global Sportsbook Betting Odds">NCAA BK Global Odds</a><br>
+<a class="footer_txt_link" href="/college-basketball/matchups/" title="College Basketball Matchups and Analysis">NCAA BK Matchups</a><br>
+<a class="footer_txt_link" href="/college-basketball/scoreboard/" title="College Basketball Scores and ATS Results">NCAA BK Scores</a></div>
+
+<div class="footerlinks" id="footerlinks_MORESPORTS" style="margin: 16px 0px 30px 30px; width: 113px; height: 115px">
+<span class="footer_txt_title">More Sports</span><br>
+<a class="footer_txt_link" href="/auto-racing/" title="Auto Racing NASCAR Betting News">Auto Racing</a><br>
+<a class="footer_txt_link" href="/boxing/" title="Boxing, MMA, and UFC Betting News">Boxing</a><br>
+<a class="footer_txt_link" href="/cfl/" title="Canadian Football Betting News">Canadian Football</a><br>
+<a class="footer_txt_link" href="/golf/" title="Golf Betting News">Golf</a><br>
+<a class="footer_txt_link" href="/horse-racing/" title="Horse Racing Betting News">Horse Racing</a><br>
+<a class="footer_txt_link" href="/soccer/" title="Soccer Betting News">Soccer</a><br>
+<a class="footer_txt_link" href="/wnba/" title="WNBA Betting News">WNBA</a></div>
+
+<div class="footerlinks" id="footerlinks_FEATURES" style="margin: 16px 0px 15px; width: 133px; height: 115px">
+<span class="footer_txt_title">Features</span><br>
+<a class="footer_txt_link" href="/picks/" title="Free Pick">Free Pick</a><br>
+<a class="footer_txt_link" href="/odds/" title="Free Las Vegas and Global Sportbook Betting Odds">Free Odds Comparison</a><br>
+<a class="footer_txt_link" href="/las-vegas-travel/" title="Top Las Vegas Travel Destinations">Las Vegas Travel</a><br>
+<a class="footer_txt_link" href="/tv-listing/" title="TV Sports Listings">TV Listings</a><br>
+<a class="footer_txt_link" href="/sportsbook-directory/" title="Online Sportsbook Listing and Reviews">Sportsbook Reviews</a><br>
+<a class="footer_txt_link" href="/newsletter/" title="Daily Editorial Newsletter Sign Up">Newsletters</a>
+</div>
+
+<div class="footerlinks" id="footerlinks_BETTINGTOOLS" style="margin: 16px 0px 15px; width: 160px; height: 115px">
+<span class="footer_txt_title">Sports Betting Tools</span><br>
+<a class="footer_txt_link" href="/parlay-calculator/" title="Free Parlay Odds Calculator">Parlay Calculator</a><br>
+<a class="footer_txt_link" href="/gaming-terms/" title="Sports Betting Terminology">Gaming Terms</a><br>
+<a class="footer_txt_link" href="/picks/records/" title="Handicapper Sports Picks Records">Handicapper Records</a><br>
+</div>
+
+
+<div class="footerlinks" id="footerlinks_INFO" style="margin: 16px 0px 15px; width: 130px; height: 115px">
+<span class="footer_txt_title">VegasInsider Info</span><br>
+<a class="footer_txt_link" href="/about/" title="About VegasInsider.com Inc.">About Us</a><br>
+<a class="footer_txt_link" href="/member-services/">Help Center</a><br>
+<a class="footer_txt_link" href="/about/privacy-policy/">Privacy Policy</a><br>
+<a class="footer_txt_link" href="/about/terms-of-use/">Terms of Use</a><br>
+<a class="footer_txt_link" href="/about/refund-policy/">Refund Policy</a><br>
+<a class="footer_txt_link" href="/about/delivery-policy/">Delivery Policy</a><br>
+<a class="footer_txt_link" href="/about/cookie-policy/">Cookie Policy</a><br>
+<a class="footer_txt_link" href="/member-services/contacts/">Contact Us</a></div>
+
+
+
+<div class="footerlinks" id="footerlinks_SOCIAL" style="line-height: 13px; margin: 16px 0px 15px; width: 159px; height: 115px">
+<div><span class="footer_txt_title">Social</span><br>
+<a class="footer_txt_link" href="https://twitter.com/TwitVI" rel="external" title="VegasInsider.com Twitter">Follow us on Twitter</a><br>
+</div>
+<div style="padding-top:10px; paddng-bottom: 10px;">
+<!--
+<a class="footer_txt_title" href="/sportsbook-directory/" title="Recommended Sportsbooks">Popular Sportsbooks</a><br>
+-->
+
+</div>
+</div>
+
+<!--ROT SCHEDULES -->
+<!--<div class="footerlinks" id="footerlinks_ROTATIONS" style="margin: 16px 0px 15px 0px; width: 168px; height: 115px;">
+<div class="footer_txt_title" style="width: 168px; float: left;">Rotation Schedules</div>-->
+
+
+<!--Football
+<div style="float:left; width:168px;">
+<div class="footer_txt_title_sm" style="width: 68px; float: left;">Football:</div>
+<div style="line-height: 9pt; width: 100px; float: left;">
+<a class="footer_txt_link" href="/rotation-schedule/2019-football-1031-0125.pdf" title="Printable NFL and College Football Rotation Schedule Download">Oct 31 - Feb 02</a>
+</div>
+</div>-->
+
+
+<!-- Baseball 
+<div style="float:left; width:168px;">
+<div class="footer_txt_title_sm" style="width: 68px; float: left;">Baseball:</div>
+<div style="line-height: 9pt; width: 100px; float: left;">
+<a class="footer_txt_link" href="/rotation-schedule/2019-baseball-0803-0929.pdf" title="Printable MLB Baseball Rotation Schedule Download">Aug 03 - Sept 29</a>
+</div>
+</div>-->
+
+
+<!--Hockey
+<div style="float:left; width:168px;">
+<div class="footer_txt_title_sm" style="width: 68px; float: left;">Hockey:</div>
+<div style="line-height: 9pt; width: 100px; float: left;">
+<a class="footer_txt_link" href="/rotation-schedule/2020-hockey-0309-0404.pdf" title="Printable NHL Hockey Rotation Schedule Download">Mar 09 - Apr 04</a><br>
+</div>
+</div>-->
+
+
+
+<!-- Basketball 
+<div style="float:left; width:168px;">
+<div class="footer_txt_title_sm" style="width: 68px; float: left;">Basketball:</div>
+<div style="line-height: 9pt; width: 100px; float: left;">
+<a class="footer_txt_link" href="/rotation-schedule/2020-basketball-0309-0415.pdf" title="Printable NBA and College Basketball Rotation Schedule Download">Mar 09 - Apr 15</a><br>
+</div>
+</div>-->
+
+</div>
+				<!--Start Play Responsibly --> 
+		
+<div style="float:left; width:100%; disply:block; text-align: center; padding: 13px 20px 0px 20px;">
+	
+<img style="padding-left:15px; padding:20px 20px 12px 20px;" title="21 Play Responsibly" alt="21 Play Responsibly Now" border="0" src="/graphics/ut/21PlusPlay.png">
+	
+<a href="https://www.ncpgambling.org" target="_blank"><img style="padding-left:15px; padding:20px 20px 12px 20px;" title="National Council on Problem Gambling" alt="National Council on Problem Gambling" border="0" src="/graphics/ut/NCPG.png" width="140px"></a>
+	
+	
+<a href="https://www.nj.gov/oag/ge/responsiblegaming.html" target="_blank"><img style="padding:20px 20px 12px 20px;" src="/graphics/ads/njrg_50x50.png" class="img-fluid" title="Responsible Gaming" alt="Responsible Gaming" border="0"></a>
+	
+<a href="https://responsibleplay.pa.gov/" target="_blank"><img style="padding:20px 20px 12px 20px;" src="/graphics/ads/PGCB2.png" class="img-fluid" title="Pennsylvania Responsible Gaming" alt="Pennsylvania Responsible Gaming" border="0"></a>
+</div>
+		
+<div style="float:left; width:100%; disply:block; text-align: center; padding:10px 20px 12px 20px;">
+<div class="footercopyright" style="font-size:11px; font-family: Arial, sans-serif; line-height:14px;">
+
+<p>(CO) Gambling problem? <a href="http://www.problemgamblingcolorado.org/" target="_blank">Call 1-800-522-4700</a>.</p>
+<p>(IA) If you or someone you know has a gambling problem and wants help, <a href="https://yourlifeiowa.org/gambling" target="_blank">call 1-800-BETS-OFF</a>.</p>
+<p>(IN) If you or someone you know has a gambling problem and wants help, <a href="https://www.in.gov/igc/problemgamblinghelp/" target="_blank">call 1-800-9-WITH-IT</a>.<br><a href="https://www.in.gov/igc/files/signup.pdf" target="_blank">Indiana Self-Restriction Program</a></p>
+<p>(NJ) Bet with your head, not over it! Gambling Problem? <a href="https://800gambler.org/" target="_blank" rel=nofollow>Call 1-800-Gambler</a>.</p>
+<p>(NV) If your gambling is no longer fun, don’t wait for the problem to get worse. Contact<br>the <a href="https://www.nevadacouncil.org/" target="_blank">Nevada Council</a> on Problem Gambling or call 1-800-522-4700.</p>
+<p>(PA) If you or someone you know has a gambling problem, help is available, <a href="https://responsibleplay.pa.gov/" target="_blank">call 1-800-Gambler</a>.</p>
+<p>(WV) If you or someone you know has a gambling problem and wants help, <a href="https://www.1800gambler.net/treatment" target="_blank">call 1-800-GAMBLER</a>.</p></div>
+</div>
+
+
+
+<div class="footercopyright" style="float:left; disply:block; width:100%; padding: 10px 0px 80px 0px;">Copyright &copy; 1997-2020, VegasInsider.com<br>
+  The Global Leader In Sports Gaming Information. All rights reserved.</div>
+</div>
+<div class="footerbar"></div>
+	<!--End Play Responsibly -->
+</div>
+</div></div>
+
+</div>
+
+<script type="text/javascript">
+$( document ).ready( function( e ) {
+    $( "img[ usemap ]" ).rwdImageMaps();
+} );
+</script>
+	
+</body>
+</html>
+

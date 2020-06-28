@@ -20,8 +20,8 @@ services:
       java -cp /var/wiremock/lib/*:/var/wiremock/extensions/*
       com.github.tomakehurst.wiremock.standalone.WireMockServerRunner
       --root-dir=mappings
-      --proxy-all="https://www.vegasinsider.com/"
-      --record-mappings
+#      --proxy-all="https://www.vegasinsider.com/"
+#      --record-mappings
 
 volumes:
   postgres-pipeline-data:
