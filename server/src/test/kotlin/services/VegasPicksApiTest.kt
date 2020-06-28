@@ -102,11 +102,38 @@ class VegasPicksApiTest {
 
         val picks = VegasPicksApi(picksUrl).getVegasPicks()
 
-        assertEquals(1, picks.size)
         val pick = picks.first()
-        assertEquals("PIT@DAL", pick.game)
         assertEquals("PIT", pick.pick)
+    }
+
+    @Test
+    fun getVegasPickParsesWithPositiveSpread1() {
+        every { mockPicksConnection.inputStream } returns buildSampleRow(
+            VegasData(
+                "Pittsburgh",
+                "Dallas",
+                "&nbsp;<br>-1&nbsp;-10<br>49u-10"
+            )).byteInputStream()
+
+        val picks = VegasPicksApi(picksUrl).getVegasPicks()
+
+        val pick = picks.first()
         assertEquals(1.0, pick.spread)
+    }
+
+    @Test
+    fun getVegasPickWithPositiveSpreadReturnsValueWithSpread() {
+        every { mockPicksConnection.inputStream } returns buildSampleRow(
+            VegasData(
+                "Pittsburgh",
+                "Dallas",
+                "&nbsp;<br>-3&frac12&nbsp;-10<br>49u-10"
+            )).byteInputStream()
+
+        val picks = VegasPicksApi(picksUrl).getVegasPicks()
+
+        val pick = picks.first()
+        assertEquals(3.5, pick.spread)
     }
 
     @Test

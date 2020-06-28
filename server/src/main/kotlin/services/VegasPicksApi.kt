@@ -52,13 +52,21 @@ class VegasPicksApi(private val url: URL) {
 
         if(uPosition == 0){
             val spreadToken = tokens[1]
-            if(spreadToken.contains('½')){
-                return spreadToken.substringBefore('½').toDouble() - 0.5
-            }
-            return tokens[1].toDouble()
+            return parseSpreadToken(spreadToken)
+        }
+        if(uPosition == 2){
+            val spreadToken = tokens[0]
+            return -parseSpreadToken(spreadToken)
         }
 
         return 1.0
+    }
+
+    private fun parseSpreadToken(spreadToken: String): Double {
+        if (spreadToken.contains('½')) {
+            return spreadToken.substringBefore('½').toDouble() - 0.5
+        }
+        return spreadToken.toDouble()
     }
 
     private fun translateToTeamAbbrev(longTeamName: String): String {
