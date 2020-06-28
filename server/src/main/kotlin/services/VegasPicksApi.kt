@@ -31,9 +31,12 @@ class VegasPicksApi(private val url: URL) {
 
             val spread = parseSpread(oddsString)
 
-            var pick = teams[1]
+            var pick = "TIE"
             if(spread > 0){
                 pick = teams[0]
+            }
+            if(spread < 0){
+                pick = teams[1]
             }
 
             vegasData.add(

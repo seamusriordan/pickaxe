@@ -185,6 +185,21 @@ class VegasPicksApiTest {
         assertEquals(0.0, picks.first().spread)
     }
 
+    @Test
+    fun pickTokenWithPKReturnsPickTIE() {
+        every { mockPicksConnection.inputStream } returns buildSampleRow(
+            VegasData(
+                "Houston",
+                "Kansas City",
+                "&nbsp;<br>46&frac12;u-10<br>PK&nbsp;-10"
+            )
+        ).byteInputStream()
+
+        val picks = VegasPicksApi(picksUrl).getVegasPicks()
+
+        assertEquals("TIE", picks.first().pick)
+    }
+
 
     private inner class VegasData(val awayTeam: String, val homeTeam: String, val spread: String)
 
