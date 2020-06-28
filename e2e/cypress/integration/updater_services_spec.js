@@ -2,7 +2,7 @@ describe('updater services', () => {
     it('RNG has picked a game', () => {
         cy.visit('localhost:8080/pickaxe')
             .get('#RNG-DET\\@GB')
-            .contains(/'GB|DET'/);
+            .contains(/GB|DET/);
     });
 
     it('Vegas has picked a game', () => {
@@ -12,10 +12,10 @@ describe('updater services', () => {
     });
     it('Vegas has updated spread', () => {
         cy.visit('localhost:8080/pickaxe')
-            .get('.spread-cell')
+            .get('.game-cell')
             .then(findIndexOfGame("DET@GB"))
             .then(i =>
-                cy.get(`#spread-${i}`).should("-7.5")
+                cy.get(`#spread-${i}`).contains("-6.5")
             )
     });
 });
