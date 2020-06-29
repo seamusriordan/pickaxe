@@ -85,6 +85,44 @@ class RngUpdateUtilsTest {
     }
 
     @Test
+    fun randomNumberGeneratorGamesAreMakeForCurrentWeekWhenPickIsBlank() {
+        every { mockPicksQuery.getPicksForWeek(defaultWeek) } returns listOf(
+            UserPicksDTO(UserDTO(rngUserName)).apply {
+                picks = arrayListOf(PickDTO(defaultGame, ""))
+            }
+        )
+
+        makeRngPicksForCurrentWeek(
+            mockCurrentWeekQuery,
+            mockGamesQuery,
+            mockPicksQuery,
+            mockPickMutator,
+            mockRandomPickSelector
+        )
+
+        Assertions.assertEquals(1, mutatorEnvs.size)
+    }
+
+    @Test
+    fun randomNumberGeneratorGamesAreMakeForCurrentWeekWhenPickIsNotOneOfTheTeams() {
+        every { mockPicksQuery.getPicksForWeek(defaultWeek) } returns listOf(
+            UserPicksDTO(UserDTO(rngUserName)).apply {
+                picks = arrayListOf(PickDTO(defaultGame, "SLDKJFLKw"))
+            }
+        )
+
+        makeRngPicksForCurrentWeek(
+            mockCurrentWeekQuery,
+            mockGamesQuery,
+            mockPicksQuery,
+            mockPickMutator,
+            mockRandomPickSelector
+        )
+
+        Assertions.assertEquals(1, mutatorEnvs.size)
+    }
+
+    @Test
     fun randomNumberGeneratorDoesNotMakePicksForGamesBefore15MinutesOfGameStart() {
         every { mockGamesQuery.getGamesForWeek(defaultWeek) } returns listOf(
             defaultGameDTO.apply {
@@ -235,7 +273,7 @@ class RngUpdateUtilsTest {
             }
         )
         every { mockPicksQuery.getPicksForWeek(defaultWeek) } returns listOf(
-            UserPicksDTO(UserDTO("RNG")).apply {
+            UserPicksDTO(UserDTO(rngUserName)).apply {
                 picks = arrayListOf(PickDTO(pickedGame, "NE"))
             }
         )

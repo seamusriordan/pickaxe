@@ -2,6 +2,7 @@ package services.utils
 
 import db.*
 import dto.GameDTO
+import dto.PickDTO
 import dto.UserDTO
 import dto.UserPicksDTO
 import graphql.schema.DataFetchingEnvironment
@@ -63,8 +64,14 @@ class RngUpdateUtils {
             userPickMutator.get(env)
         }
 
-        private fun isGameAlreadyPicked(game: GameDTO, rngPicks: UserPicksDTO) =
-            rngPicks.picks.map { pick -> pick.game }
-                .contains(game.name)
+        private fun isGameAlreadyPicked(game: GameDTO, rngPicks: UserPicksDTO): Boolean {
+            val pickForGame = rngPicks.picks.firstOrNull { pick -> pick.game == game.name }
+            return pickForGame != null && containsOneOfTheTeams(pickForGame.pick, game.name)
+        }
+
+        private fun containsOneOfTheTeams(pickForGame: String, game: String): Boolean {
+            val teams = game.split("@")
+            return teams.map { pickForGame.contains(it) }.contains(true)
+        }
     }
 }
