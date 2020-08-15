@@ -1,13 +1,11 @@
 package services.utils
 
-import db.*
-import dto.GameDTO
-import dto.PickDTO
-import dto.UserDTO
-import dto.UserPicksDTO
-import graphql.schema.DataFetchingEnvironment
+import db.CurrentWeekQuery
+import db.GamesQuery
+import db.UpdatePickMutator
+import db.UserPickQuery
+import dto.*
 import services.RandomPickSelector
-import services.utils.UpdateUtils.Companion.buildMutatorEnvironment
 
 
 class RngUpdateUtils {
@@ -55,13 +53,11 @@ class RngUpdateUtils {
             randomPick: String,
             userPickMutator: UpdatePickMutator
         ) {
-            val env: DataFetchingEnvironment = buildMutatorEnvironment(
-                rngUserName,
-                weekString,
-                game.name,
-                randomPick
+            userPickMutator.updatePick(
+                UserDTO(rngUserName),
+                WeekDTO(weekString),
+                PickDTO(game.name, randomPick)
             )
-            userPickMutator.get(env)
         }
 
         private fun isGameAlreadyPicked(game: GameDTO, rngPicks: UserPicksDTO): Boolean {
