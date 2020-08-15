@@ -4,10 +4,8 @@ import db.CurrentWeekQuery
 import db.GameMutator
 import db.GamesQuery
 import db.UpdatePickMutator
-import dto.GameDTO
-import dto.PickWithSpreadDTO
+import dto.*
 import services.VegasPicksApi
-import services.utils.UpdateUtils.Companion.buildMutatorEnvironment
 import services.utils.UpdateUtils.Companion.hasGameStartInXMinutes
 
 class VegasUpdateUtils {
@@ -62,13 +60,11 @@ class VegasUpdateUtils {
             game: String,
             vegasPick: String
         ) {
-            val env = buildMutatorEnvironment(
-                vegasUserName,
-                currentWeekString,
-                game,
-                vegasPick
+            pickMutator.updatePick(
+                UserDTO(vegasUserName),
+                WeekDTO(currentWeekString),
+                PickDTO(game, vegasPick)
             )
-            pickMutator.get(env)
         }
 
         private fun findMatchingGameInDb(

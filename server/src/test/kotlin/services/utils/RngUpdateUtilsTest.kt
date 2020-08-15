@@ -35,11 +35,11 @@ class RngUpdateUtilsTest {
 
     private val emptyExistingPicks = UserPicksDTO(UserDTO(rngUserName))
 
-    private val mutatorEnvs = mutableListOf<DataFetchingEnvironment>()
+    private val mutatorUser = mutableListOf<UserDTO>()
+    private val mutatorWeek = mutableListOf<WeekDTO>()
+    private val mutatorPick = mutableListOf<PickDTO>()
 
     init {
-        every { mockPickMutator.get(capture(mutatorEnvs)) } returns true
-
         every { mockCurrentWeekQuery.getCurrentWeek() } returns WeekDTO(defaultWeek)
         every { mockGamesQuery.getGamesForWeek(defaultWeek) } returns listOf(
             defaultGameDTO
@@ -48,6 +48,13 @@ class RngUpdateUtilsTest {
             emptyExistingPicks
         )
         every { mockRandomPickSelector.chooseRandomFor(defaultGame) } returns defaultExpectedPick
+
+
+        every { mockPickMutator.updatePick(
+            capture(mutatorUser),
+            capture(mutatorWeek),
+            capture(mutatorPick)
+        )} returns true
     }
 
     @Test
@@ -62,7 +69,7 @@ class RngUpdateUtilsTest {
             mockRandomPickSelector
         )
 
-        Assertions.assertEquals(1, mutatorEnvs.size)
+        Assertions.assertEquals(1, mutatorUser.size)
     }
 
     @Test
@@ -75,13 +82,49 @@ class RngUpdateUtilsTest {
             mockRandomPickSelector
         )
 
-        Assertions.assertEquals(1, mutatorEnvs.size)
-        val mutatorEnv = mutatorEnvs.first()
-        Assertions.assertEquals(rngUserName, mutatorEnv.arguments["name"])
-        val userPick = mutatorEnv.arguments["userPick"] as HashMap<*, *>
-        Assertions.assertEquals(defaultWeek, userPick["week"])
-        Assertions.assertEquals(defaultGame, userPick["game"])
-        Assertions.assertEquals(defaultExpectedPick, userPick["pick"]!!)
+        Assertions.assertEquals(1, mutatorUser.size)
+        Assertions.assertEquals(rngUserName, mutatorUser.first().name)
+        Assertions.assertEquals(defaultWeek, mutatorWeek.first().name)
+        Assertions.assertEquals(defaultGame, mutatorPick.first().game)
+        Assertions.assertEquals(defaultExpectedPick, mutatorPick.first().pick)
+    }
+
+    @Test
+    fun randomNumberGeneratorGamesAreMakeForCurrentWeekWhenPickIsBlank() {
+        every { mockPicksQuery.getPicksForWeek(defaultWeek) } returns listOf(
+            UserPicksDTO(UserDTO(rngUserName)).apply {
+                picks = arrayListOf(PickDTO(defaultGame, ""))
+            }
+        )
+
+        makeRngPicksForCurrentWeek(
+            mockCurrentWeekQuery,
+            mockGamesQuery,
+            mockPicksQuery,
+            mockPickMutator,
+            mockRandomPickSelector
+        )
+
+        Assertions.assertEquals(1, mutatorUser.size)
+    }
+
+    @Test
+    fun randomNumberGeneratorGamesAreMakeForCurrentWeekWhenPickIsNotOneOfTheTeams() {
+        every { mockPicksQuery.getPicksForWeek(defaultWeek) } returns listOf(
+            UserPicksDTO(UserDTO(rngUserName)).apply {
+                picks = arrayListOf(PickDTO(defaultGame, "SLDKJFLKw"))
+            }
+        )
+
+        makeRngPicksForCurrentWeek(
+            mockCurrentWeekQuery,
+            mockGamesQuery,
+            mockPicksQuery,
+            mockPickMutator,
+            mockRandomPickSelector
+        )
+
+        Assertions.assertEquals(1, mutatorUser.size)
     }
 
     @Test
@@ -100,7 +143,7 @@ class RngUpdateUtilsTest {
             mockRandomPickSelector
         )
 
-        Assertions.assertEquals(0, mutatorEnvs.size)
+        Assertions.assertEquals(0, mutatorUser.size)
     }
 
     @Test
@@ -119,7 +162,7 @@ class RngUpdateUtilsTest {
             mockRandomPickSelector
         )
 
-        Assertions.assertEquals(0, mutatorEnvs.size)
+        Assertions.assertEquals(0, mutatorUser.size)
     }
 
     @Test
@@ -144,9 +187,7 @@ class RngUpdateUtilsTest {
             mockRandomPickSelector
         )
 
-        val mutatorEnv = mutatorEnvs.first()
-        val userPick = mutatorEnv.arguments["userPick"] as HashMap<*, *>
-        Assertions.assertEquals(week, userPick["week"])
+        Assertions.assertEquals(week, mutatorWeek.first().name)
     }
 
     @Test
@@ -169,9 +210,7 @@ class RngUpdateUtilsTest {
             mockRandomPickSelector
         )
 
-        val mutatorEnv = mutatorEnvs.first()
-        val userPick = mutatorEnv.arguments["userPick"] as HashMap<*, *>
-        Assertions.assertEquals(game, userPick["game"])
+        Assertions.assertEquals(game, mutatorPick.first().game)
     }
 
     @Test
@@ -187,9 +226,7 @@ class RngUpdateUtilsTest {
             mockRandomPickSelector
         )
 
-        val mutatorEnv = mutatorEnvs.first()
-        val userPick = mutatorEnv.arguments["userPick"] as HashMap<*, *>
-        Assertions.assertEquals(expectedPick, userPick["pick"])
+        Assertions.assertEquals(expectedPick, mutatorPick.first().pick)
     }
 
     @Test
@@ -215,12 +252,10 @@ class RngUpdateUtilsTest {
             mockRandomPickSelector
         )
 
-        Assertions.assertEquals(2, mutatorEnvs.size)
-        val mutatorEnv = mutatorEnvs[1]
-        Assertions.assertEquals("RNG", mutatorEnv.arguments["name"])
-        val userPick = mutatorEnv.arguments["userPick"] as HashMap<*, *>
-        Assertions.assertEquals(defaultGame, userPick["game"])
-        Assertions.assertEquals(defaultExpectedPick, userPick["pick"]!!)
+        Assertions.assertEquals(2, mutatorUser.size)
+        Assertions.assertEquals("RNG", mutatorUser[1].name)
+        Assertions.assertEquals(defaultGame, mutatorPick[1].game)
+        Assertions.assertEquals(defaultExpectedPick, mutatorPick[1].pick)
     }
 
 
@@ -235,7 +270,7 @@ class RngUpdateUtilsTest {
             }
         )
         every { mockPicksQuery.getPicksForWeek(defaultWeek) } returns listOf(
-            UserPicksDTO(UserDTO("RNG")).apply {
+            UserPicksDTO(UserDTO(rngUserName)).apply {
                 picks = arrayListOf(PickDTO(pickedGame, "NE"))
             }
         )
@@ -249,10 +284,8 @@ class RngUpdateUtilsTest {
             mockRandomPickSelector
         )
 
-        Assertions.assertEquals(1, mutatorEnvs.size)
-        val mutatorEnv = mutatorEnvs.first()
-        val userPick = mutatorEnv.arguments["userPick"] as HashMap<*, *>
-        Assertions.assertEquals(defaultGame, userPick["game"])
+        Assertions.assertEquals(1, mutatorUser.size)
+        Assertions.assertEquals(defaultGame, mutatorPick.first().game)
     }
 
     @Test
@@ -281,7 +314,7 @@ class RngUpdateUtilsTest {
             mockRandomPickSelector
         )
 
-        Assertions.assertEquals(2, mutatorEnvs.size)
+        Assertions.assertEquals(2, mutatorUser.size)
     }
 
 }

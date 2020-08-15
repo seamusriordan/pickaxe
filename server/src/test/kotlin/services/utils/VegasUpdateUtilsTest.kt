@@ -2,7 +2,6 @@ package services.utils
 
 import db.*
 import dto.*
-import graphql.schema.DataFetchingEnvironment
 import io.mockk.every
 import io.mockk.mockkClass
 import org.junit.jupiter.api.Assertions
@@ -11,7 +10,6 @@ import services.VegasPicksApi
 import services.utils.VegasUpdateUtils.Companion.updateVegasPicks
 import java.time.OffsetDateTime
 import java.util.*
-import kotlin.collections.HashMap
 
 class VegasUpdateUtilsTest {
     private val mockCurrentWeekQuery = mockkClass(CurrentWeekQuery::class)
@@ -21,6 +19,9 @@ class VegasUpdateUtilsTest {
     private val mockGameMutator = mockkClass(GameMutator::class)
     private val mockVegasPicksApi = mockkClass(VegasPicksApi::class)
 
+    private val mutatorUser = mutableListOf<UserDTO>()
+    private val mutatorWeek = mutableListOf<WeekDTO>()
+    private val mutatorPick = mutableListOf<PickDTO>()
 
     private val rngUserName = "RNG"
     private val defaultWeek = "Week 0"
@@ -35,12 +36,16 @@ class VegasUpdateUtilsTest {
 
     private val emptyExistingPicks = UserPicksDTO(UserDTO(rngUserName))
 
-    private val pickMutatorEnvs = mutableListOf<DataFetchingEnvironment>()
     private val gameMutations = mutableListOf<GameDTO>()
 
 
     init {
-        every { mockPickMutator.get(capture(pickMutatorEnvs)) } returns true
+        every { mockPickMutator.updatePick(
+            capture(mutatorUser),
+            capture(mutatorWeek),
+            capture(mutatorPick)
+        )} returns true
+
         every { mockGameMutator.putInDatabase(capture(gameMutations)) } returns Unit
 
 
@@ -68,13 +73,12 @@ class VegasUpdateUtilsTest {
             mockVegasPicksApi
         )
 
-        Assertions.assertEquals(1, pickMutatorEnvs.size)
-        val mutatorEnv = pickMutatorEnvs.first()
-        Assertions.assertEquals("Vegas", mutatorEnv.arguments["name"])
-        val userPick = mutatorEnv.arguments["userPick"] as HashMap<*, *>
-        Assertions.assertEquals(defaultWeek, userPick["week"])
-        Assertions.assertEquals(defaultGame, userPick["game"])
-        Assertions.assertEquals(defaultExpectedPick, userPick["pick"]!!)
+
+        Assertions.assertEquals(1, mutatorUser.size)
+        Assertions.assertEquals("Vegas", mutatorUser.first().name)
+        Assertions.assertEquals(defaultWeek, mutatorWeek.first().name)
+        Assertions.assertEquals(defaultGame, mutatorPick.first().game)
+        Assertions.assertEquals(defaultExpectedPick, mutatorPick.first().pick)
     }
 
     @Test
@@ -93,9 +97,7 @@ class VegasUpdateUtilsTest {
             mockVegasPicksApi
         )
 
-        val mutatorEnv = pickMutatorEnvs.first()
-        val userPick = mutatorEnv.arguments["userPick"] as HashMap<*, *>
-        Assertions.assertEquals(week, userPick["week"])
+        Assertions.assertEquals(week, mutatorWeek.first().name)
     }
 
     @Test
@@ -120,9 +122,7 @@ class VegasUpdateUtilsTest {
             mockVegasPicksApi
         )
 
-        val mutatorEnv = pickMutatorEnvs.first()
-        val userPick = mutatorEnv.arguments["userPick"] as HashMap<*, *>
-        Assertions.assertEquals(game, userPick["game"])
+        Assertions.assertEquals(game, mutatorPick.first().game)
     }
 
     @Test
@@ -147,9 +147,7 @@ class VegasUpdateUtilsTest {
             mockVegasPicksApi
         )
 
-        val mutatorEnv = pickMutatorEnvs.first()
-        val userPick = mutatorEnv.arguments["userPick"] as HashMap<*, *>
-        Assertions.assertEquals(expectedPick, userPick["pick"])
+        Assertions.assertEquals(expectedPick, mutatorPick.first().pick)
     }
 
     @Test
@@ -212,11 +210,10 @@ class VegasUpdateUtilsTest {
             mockVegasPicksApi
         )
 
-        Assertions.assertEquals(2, pickMutatorEnvs.size)
-        val mutatorEnv = pickMutatorEnvs[1]
-        val userPick = mutatorEnv.arguments["userPick"] as HashMap<*, *>
-        Assertions.assertEquals(defaultGame, userPick["game"])
-        Assertions.assertEquals(defaultExpectedPick, userPick["pick"]!!)
+        Assertions.assertEquals(2, mutatorUser.size)
+        Assertions.assertEquals("Vegas", mutatorUser[1].name)
+        Assertions.assertEquals(defaultGame, mutatorPick[1].game)
+        Assertions.assertEquals(defaultExpectedPick, mutatorPick[1].pick)
     }
 
     @Test
@@ -231,7 +228,7 @@ class VegasUpdateUtilsTest {
             mockVegasPicksApi
         )
 
-        Assertions.assertEquals(0, pickMutatorEnvs.size)
+        Assertions.assertEquals(0, mutatorUser.size)
     }
 
     @Test
@@ -250,7 +247,7 @@ class VegasUpdateUtilsTest {
             mockVegasPicksApi
         )
 
-        Assertions.assertEquals(0, pickMutatorEnvs.size)
+        Assertions.assertEquals(0, mutatorUser.size)
     }
 
     @Test
@@ -269,6 +266,6 @@ class VegasUpdateUtilsTest {
             mockVegasPicksApi
         )
 
-        Assertions.assertEquals(0, pickMutatorEnvs.size)
+        Assertions.assertEquals(0, mutatorUser.size)
     }
 }

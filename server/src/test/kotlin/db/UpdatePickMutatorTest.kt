@@ -2,12 +2,13 @@
 
 package db
 
+import dto.PickDTO
+import dto.UserDTO
+import dto.WeekDTO
 import graphql.schema.DataFetchingEnvironment
 import graphql.schema.DataFetchingEnvironmentImpl
-import io.mockk.every
-import io.mockk.mockkClass
-import io.mockk.mockkStatic
-import io.mockk.verify
+import io.mockk.*
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -52,6 +53,28 @@ class UpdatePickMutatorTest {
     }
 
     @Test
+    fun pickForFirstGameCanBeSet() {
+        val expectedName = "Person"
+        val expectedWeek = "0"
+        val expectedGame = "GB@CHI"
+        val expectedPick = "Different"
+        val passedArguments
+                = generatePickArguments(expectedName, expectedWeek, expectedGame, expectedPick)
+        val userPick = passedArguments["userPick"] as HashMap<String, String>
+        val expectedQuery =
+            buildInsertString(passedArguments, userPick)
+
+        val result = updatePickMutator.updatePick(
+            UserDTO(expectedName),
+            WeekDTO(expectedWeek),
+            PickDTO(expectedGame, expectedPick)
+        )
+
+        verify { mockStatement.executeUpdate(expectedQuery) }
+        assertTrue(result)
+    }
+
+    @Test
     fun pickForSecondGameCanBeSetByFetchingEnvironment() {
         val passedArguments
                 = generatePickArguments("Person", "0", "BUF@NE", "Very Different")
@@ -78,6 +101,34 @@ class UpdatePickMutatorTest {
 
         verify { mockStatement.executeUpdate(expectedQuery) }
         assertTrue(result)
+    }
+
+    @Test
+    fun pickForRngCannotBeSetByFetchingEnvironment() {
+        val passedArguments
+                = generatePickArguments("RNG", "4", "SEA@PHI", "PHI")
+        val userPick = passedArguments["userPick"] as HashMap<String, String>
+        val env = buildEnvForArguments(passedArguments)
+        val expectedQuery =
+            buildInsertString(passedArguments, userPick)
+        val result = updatePickMutator.get(env)
+
+        verify(inverse = true) { mockStatement.executeUpdate(expectedQuery)}
+        assertFalse(result)
+    }
+
+    @Test
+    fun pickForVegasCannotBeSetByFetchingEnvironment() {
+        val passedArguments
+                = generatePickArguments("Vegas", "4", "SEA@PHI", "PHI")
+        val userPick = passedArguments["userPick"] as HashMap<String, String>
+        val env = buildEnvForArguments(passedArguments)
+        val expectedQuery =
+            buildInsertString(passedArguments, userPick)
+        val result = updatePickMutator.get(env)
+
+        verify(inverse = true) { mockStatement.executeUpdate(expectedQuery)}
+        assertFalse(result)
     }
 
     private fun buildInsertString(

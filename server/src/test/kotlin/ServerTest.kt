@@ -90,7 +90,7 @@ internal class ServerTest {
 
     @Test
     fun websocketHandlerAddsContextToPassedListOnConnect() {
-        val contextList = ArrayList<WsContext>(0)
+        val contextList = ArrayList<WsContext?>(0)
         addNotificationWebSocket(serverSpy, contextList)
 
         val wsHandlerConsumer = slot<Consumer<WsHandler>>()
@@ -110,7 +110,7 @@ internal class ServerTest {
 
     @Test
     fun websocketHandlerRemovesContextToPassedListOnClose() {
-        val contextList = ArrayList<WsContext>(0)
+        val contextList = ArrayList<WsContext?>(0)
         val mockContext = mockkClass(WsCloseContext::class)
         contextList.add(mockContext)
 
@@ -131,8 +131,31 @@ internal class ServerTest {
     }
 
     @Test
+    fun websocketHandlerRemovesNullsListOnClose() {
+        val contextList = ArrayList<WsContext?>(0)
+        val mockContext = mockkClass(WsCloseContext::class)
+        contextList.add(null)
+        contextList.add(mockContext)
+
+        addNotificationWebSocket(serverSpy, contextList)
+
+        val wsHandlerConsumer = slot<Consumer<WsHandler>>()
+        verify { serverSpy.ws("/pickaxe/updateNotification", capture(wsHandlerConsumer)) }
+
+        val wsHandler = stubWsHandler()
+        wsHandlerConsumer.captured.accept(wsHandler)
+
+        val closeHandler = slot<WsCloseHandler>()
+        verify { wsHandler.onClose(capture(closeHandler)) }
+
+        closeHandler.captured.handleClose(mockContext)
+
+        assertEquals(0, contextList.size)
+    }
+
+    @Test
     fun websocketHandlerRemovesSpecificContextToPassedListOnClose() {
-        val contextList = ArrayList<WsContext>(0)
+        val contextList = ArrayList<WsContext?>(0)
         val mockContext1 = mockkClass(WsCloseContext::class)
         val mockContext2 = mockkClass(WsCloseContext::class)
         contextList.add(mockContext1)
@@ -159,7 +182,7 @@ internal class ServerTest {
     fun addGraphQLPostServePassesWsContextToHandler() {
         val graphQLMock = mockkClass(GraphQL::class)
 
-        val listWithContext = ArrayList<WsContext>(0)
+        val listWithContext = ArrayList<WsContext?>(0)
         listWithContext.add(mockkClass(WsContext::class))
 
         addGraphQLPostServe(serverSpy, graphQLMock, listWithContext)

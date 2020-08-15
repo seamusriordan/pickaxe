@@ -6,13 +6,18 @@ import graphql.schema.idl.TypeDefinitionRegistry
 import io.javalin.Javalin
 import io.javalin.http.staticfiles.Location
 import io.javalin.websocket.WsContext
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import services.ServiceRunner
 import java.io.File
-
 
 const val graphqlURI = "/pickaxe/graphql/"
 const val staticFilesPath = "html"
 const val schemaPath = "src/main/resources/schema.graphql"
+
+val wsContexts = ArrayList<WsContext?>(0)
+
+val logger: Logger = LoggerFactory.getLogger("dev.revived.pickaxe-server.Server")
 
 fun main(args: Array<String>) {
 
@@ -25,13 +30,12 @@ fun main(args: Array<String>) {
 
     val server = Javalin.create()
     addStaticFileServing(server)
-    val wsContexts = ArrayList<WsContext>(0)
     addGraphQLPostServe(server, graphQL, wsContexts)
     addGraphQLOptionServe(server)
     addNotificationWebSocket(server, wsContexts)
 
     var port = System.getenv("PICKAXE_PORT")
-    if(port == null) {
+    if (port == null) {
         port = "8080"
     }
     server.start(port.toInt())
@@ -49,7 +53,7 @@ fun addStaticFileServing(server: Javalin) {
     return
 }
 
-fun addGraphQLPostServe(server: Javalin, graphQL: GraphQL, wsContexts: ArrayList<WsContext>) {
+fun addGraphQLPostServe(server: Javalin, graphQL: GraphQL, wsContexts: ArrayList<WsContext?>) {
     server.post(graphqlURI, postHandler(graphQL, wsContexts))
     return
 }
@@ -59,14 +63,19 @@ fun addGraphQLOptionServe(server: Javalin) {
     return
 }
 
-fun addNotificationWebSocket(server: Javalin, wsContexts: ArrayList<WsContext>) {
+fun addNotificationWebSocket(server: Javalin, wsContexts: ArrayList<WsContext?>) {
     server.ws("/pickaxe/updateNotification") { ws ->
         ws.onConnect { ctx ->
             wsContexts.add(ctx)
         }
 
         ws.onClose { ctx ->
-            wsContexts.remove(ctx)
+            wsContexts.removeAll { it == null }
+            try {
+                wsContexts.remove(ctx)
+            } catch (e: TypeCastException) {
+                logger.warn("Nulls in websocket contexts")
+            }
         }
     }
 }

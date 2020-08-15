@@ -129,7 +129,7 @@ class HttpHandlersTest {
         System.setProperty("skip_ws_session_null_check", "true")
         val mockContext = createMockMutationContext()
 
-        val wsContexts = ArrayList<WsContext>(0)
+        val wsContexts = ArrayList<WsContext?>(0)
         val openWsContext = createWsContext()
         wsContexts.add(openWsContext)
 
@@ -167,7 +167,7 @@ class HttpHandlersTest {
         System.setProperty("skip_ws_session_null_check", "true")
         val mockContext = createMockMutationContext()
 
-        val wsContexts = ArrayList<WsContext>(0)
+        val wsContexts = ArrayList<WsContext?>(0)
         val openWsContext1 = createWsContext()
         val openWsContext2 = createWsContext()
         wsContexts.add(openWsContext1)
@@ -183,7 +183,7 @@ class HttpHandlersTest {
     fun postHandlerForQueryWithTwoOpenContextSendsNoMessage() {
         val mockContext = createMockQueryContext()
 
-        val wsContexts = ArrayList<WsContext>(0)
+        val wsContexts = ArrayList<WsContext?>(0)
         val openWsContext1 = createWsContext()
         val openWsContext2 = createWsContext()
         wsContexts.add(openWsContext1)

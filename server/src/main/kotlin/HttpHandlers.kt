@@ -8,7 +8,7 @@ import io.javalin.http.Context
 import io.javalin.plugin.json.JavalinJson
 import io.javalin.websocket.WsContext
 
-fun postHandler(graphQL: GraphQL, wsContexts: ArrayList<WsContext>): (Context) -> Unit {
+fun postHandler(graphQL: GraphQL, wsContexts: ArrayList<WsContext?>): (Context) -> Unit {
     return { ctx ->
         val executionInput = extractExecutionInputFromContext(ctx)
         val executionResult = graphQL.execute(executionInput)
@@ -22,10 +22,10 @@ fun postHandler(graphQL: GraphQL, wsContexts: ArrayList<WsContext>): (Context) -
         ) {
             wsContexts.toMutableList().map {
                 @Suppress("SENSELESS_COMPARISON")
-                if ((it.session != null && it.session.isOpen)
+                if ((it?.session != null && it.session.isOpen)
                     || System.getProperty("skip_ws_session_null_check") != null
                 )
-                    it.send("Hi")
+                    it?.send("Hi")
             }
         }
     }
