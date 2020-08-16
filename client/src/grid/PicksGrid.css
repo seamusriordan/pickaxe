@@ -8,13 +8,19 @@
 }
 
 .grid-cell {
-    width: 6em;
+    width: 96px;
     height: 20px;
     border-left: white 1px solid;
     border-bottom: white 1px solid;
     margin: 0 -1px -1px 0;
-    padding-top: 5px;
-    padding-left: 4px;
+    padding-top: 4px;
+    padding-left: 6px;
+    padding-right: 6px;
+    text-align: right;
+}
+
+.game-cell {
+    text-align: left;
 }
 
 .border-cell {

@@ -123,9 +123,9 @@ const PicksGrid = props => {
         {error ? "Error" : !data ? "Waiting for data..." :
             [
                 <div key="grid-leaders" id="grid-leaders">
-                    <div className="grid-cell leader-cell border-bottom"/>
-                    <div className="grid-cell border-bottom leader-cell">Weeks Won</div>
-                    <div className="grid-cell border-bottom leader-cell">Total Correct</div>
+                    <div className="grid-cell leader-cell border-bottom leader-name">Leaders</div>
+                    <div className="grid-cell border-bottom leader-cell leader-numerical">Weeks Won</div>
+                    <div className="grid-cell border-bottom leader-cell leader-numerical">Total Correct</div>
                     <Leaderboard key="leaderboard" data={data.leaders}/>
                 </div>,
                 <div className="change-week" key="grid-change-week">
