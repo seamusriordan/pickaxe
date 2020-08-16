@@ -11,8 +11,8 @@
 .grid-cell {
     width: 96px;
     height: 20px;
-    border-left: #fbfffa 1px solid;
-    border-bottom: #fbfffa 1px solid;
+    border-left: #fefffe 1px solid;
+    border-bottom: #fefffe 1px solid;
     margin: 0 -1px -1px 0;
     padding-top: 4px;
     padding-left: 6px;
@@ -49,10 +49,10 @@
 }
 
 .change-week {
+    margin-left: 216px;
     display: inline-block;
     margin-top: 16px;
-    margin-bottom: 16px;
-    margin-left: 304px;
+    margin-bottom: 8px;
     text-align: center;
 }
 
