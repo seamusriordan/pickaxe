@@ -5,7 +5,7 @@ const PickCells = props => {
     const {data, sendData, currentWeek} = props;
     return (!data.users || !data.games) ? undefined :
         data.users.map((user, index1) => {
-            return data.games.map((game, index2) => {
+            const column = data.games.map((game, index2) => {
                 let pickSet = getPicksForUser(data.userPicks, user.name);
                 let thisPick = getPickByGame(pickSet, game.name);
 
@@ -19,9 +19,8 @@ const PickCells = props => {
                         }
                     });
                 };
-
                 return <PickCell
-                    className="pick-cell"
+                    className="pick-cell grid-cell"
                     id={`${user.name}-${game.name}`}
                     key={`${index1}-${index2}`}
                     game={game.name}
@@ -30,6 +29,7 @@ const PickCells = props => {
                     sendData={sendDataCallback}
                 />
             });
+            return <div className='grid-column' key={`grid-column-${index1}`}>{column}</div>;
         });
 }
 

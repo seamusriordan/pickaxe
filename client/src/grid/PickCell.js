@@ -28,5 +28,6 @@ export default function PickCell(props) {
                 onBlur={callbackWrapper}
                 suppressContentEditableWarning="true"
                 id={props.id}
+                className='grid-cell border-cell'
     >{innerText}</div>
 }

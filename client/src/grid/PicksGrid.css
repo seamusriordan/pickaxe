@@ -1,0 +1,38 @@
+.grid-column, .name-cell, .total-cell, .top-padding-cell {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.grid-cell {
+    width: 6em;
+    height: 20px;
+    border-left: white 1px solid;
+    border-bottom: white 1px solid;
+    margin: 0 -1px -1px 0;
+    padding-top: 4px;
+    padding-left: 4px;
+}
+
+.border-cell {
+    border-left: black 1px solid;
+    border-bottom: black 1px solid;
+}
+
+.border-bottom {
+    border-bottom: black 1px solid;
+}
+
+.border-left {
+    border-left: black 1px solid;
+}
+
+.top-padding-cell {
+    border-left: white 1px solid;
+    height: 0;
+    vertical-align: bottom;
+}
+
+.right-padding-cell {
+    border-bottom: white 1px solid;
+    width: 0;
+}
