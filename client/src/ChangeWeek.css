@@ -1,0 +1,17 @@
+.change-week-element {
+    display: inline-block;
+    text-align: center;
+    height: 32px;
+}
+
+.change-week-week {
+    width: 6em;
+    font-weight: bold;
+    vertical-align: top;
+    padding-top: 5px;
+    font-size: 24px;
+}
+
+#changeWeek-back {
+    transform: rotate(180deg);
+}

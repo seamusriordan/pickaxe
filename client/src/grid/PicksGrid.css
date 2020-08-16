@@ -1,5 +1,6 @@
 .picks-grid {
-    margin: 16px;
+    margin: 32px 16px;
+    white-space: nowrap;
 }
 
 .grid-column, .name-cell, .total-cell, .top-padding-cell, .leader-cell {
@@ -10,8 +11,8 @@
 .grid-cell {
     width: 96px;
     height: 20px;
-    border-left: white 1px solid;
-    border-bottom: white 1px solid;
+    border-left: #fbfffa 1px solid;
+    border-bottom: #fbfffa 1px solid;
     margin: 0 -1px -1px 0;
     padding-top: 4px;
     padding-left: 6px;
@@ -48,7 +49,11 @@
 }
 
 .change-week {
-    border: black 1px solid;
+    display: inline-block;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    margin-left: 304px;
+    text-align: center;
 }
 
 #grid-leaders {

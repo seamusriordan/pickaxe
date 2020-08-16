@@ -24,7 +24,7 @@ function App() {
                     href="https://www.possum.best"
                     target="_blank"
                     rel="noopener noreferrer"
-                >Pickaxe</a>
+                >UMass Memorial Football Picks League</a>
             </header>
             <ApolloProvider client={apolloClient}><PicksLoader/></ApolloProvider>
         </div>

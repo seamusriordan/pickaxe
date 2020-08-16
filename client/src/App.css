@@ -1,3 +1,15 @@
 .App {
     font-family: sans-serif;
 }
+
+.App-header {
+    text-align: center;
+    font-size: 32px;
+}
+
+.App-header a {
+    color: #0e2f09;
+    text-decoration: none;
+    font-family: Impact, sans-serif;
+    font-size: 40px;
+}
