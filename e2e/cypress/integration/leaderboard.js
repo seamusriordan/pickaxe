@@ -4,7 +4,7 @@ describe('leaderboard', () => {
     })
 
     it('has starting picks', () => {
-        cy.get(".leader-name").first().should('contain', 'Seamus');
+        cy.get(".leader-element-name").first().should('contain', 'Seamus');
         cy.get(".leader-correct-weeks").first().should('contain', '1');
         cy.get(".leader-correct-picks").first().should('contain', '2');
     });
@@ -16,11 +16,11 @@ describe('leaderboard', () => {
             .type('go')
             .invoke('blur')
 
-        cy.get(".leader-name").first().should('contain', 'Sereres');
+        cy.get(".leader-element-name").first().should('contain', 'Sereres');
 
-        cy.get(":nth-child(4) > .leader-name").should('contain', 'Seamus');
-        cy.get(":nth-child(4) > .leader-correct-weeks").should('contain', '0');
-        cy.get(":nth-child(4) > .leader-correct-picks").should('contain', '1');
+        cy.get(":nth-child(7) > .leader-element-name").should('contain', 'Seamus');
+        cy.get(":nth-child(7) > .leader-correct-weeks").should('contain', '0');
+        cy.get(":nth-child(7) > .leader-correct-picks").should('contain', '1');
 
         cy.get("#Seamus-GB\\@CHI")
             .click()

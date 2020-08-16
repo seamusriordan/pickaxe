@@ -16,17 +16,17 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
-DROP DATABASE IF EXISTS pickaxe_prod;
+DROP DATABASE IF EXISTS pickaxe_dev;
 --
--- Name: pickaxe_prod; Type: DATABASE; Schema: -; Owner: postgres
+-- Name: pickaxe_dev; Type: DATABASE; Schema: -; Owner: postgres
 --
 
-CREATE DATABASE pickaxe_prod WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'en_US.utf8' LC_CTYPE = 'en_US.utf8';
+CREATE DATABASE pickaxe_dev WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'en_US.utf8' LC_CTYPE = 'en_US.utf8';
 
 
-ALTER DATABASE pickaxe_prod OWNER TO postgres;
+ALTER DATABASE pickaxe_dev OWNER TO postgres;
 
-\connect pickaxe_prod
+\connect pickaxe_dev
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
