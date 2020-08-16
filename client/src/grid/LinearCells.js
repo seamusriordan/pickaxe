@@ -3,7 +3,7 @@ import React from "react";
 const LinearCells = props => {
     const {items, name} = props;
     let cells = items.map((item, index) => {
-        let cssClass = `${name}-cell grid-cell border-cell`
+        let cssClass = `${name}-cell ${name}-linear-cell grid-cell border-cell`
 
         return <div
             className={cssClass}
