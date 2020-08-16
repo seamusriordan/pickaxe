@@ -1,0 +1,61 @@
+.picks-grid {
+    margin: 32px 16px;
+    white-space: nowrap;
+}
+
+.grid-column, .name-cell, .total-cell, .top-padding-cell, .leader-cell {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.grid-cell {
+    width: 96px;
+    height: 20px;
+    border-left: #fefffe 1px solid;
+    border-bottom: #fefffe 1px solid;
+    margin: 0 -1px -1px 0;
+    padding-top: 4px;
+    padding-left: 6px;
+    padding-right: 6px;
+    text-align: right;
+}
+
+.game-cell {
+    text-align: left;
+}
+
+.border-cell {
+    border-left: black 1px solid;
+    border-bottom: black 1px solid;
+}
+
+.border-bottom {
+    border-bottom: black 1px solid;
+}
+
+.border-left {
+    border-left: black 1px solid;
+}
+
+.top-padding-cell {
+    border-left: white 1px solid;
+    height: 0;
+    vertical-align: bottom;
+}
+
+.right-padding-cell {
+    border-bottom: white 1px solid;
+    width: 0;
+}
+
+.change-week {
+    margin-left: 216px;
+    display: inline-block;
+    margin-top: 16px;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+#grid-leaders {
+    margin-bottom: 16px;
+}

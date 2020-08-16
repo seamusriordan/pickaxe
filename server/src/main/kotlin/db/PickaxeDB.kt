@@ -18,9 +18,10 @@ class PickaxeDB {
 
         val port = getEnvOrDefault("POSTGRES_PORT", "5432")
         val host = getEnvOrDefault("POSTGRES_HOST", "postgres")
+        val dbname = getEnvOrDefault("POSTGRES_DB", "pickaxe_dev")
 
-        return DriverManager.getConnection(generateDbUrl(host, port), properties)
+        return DriverManager.getConnection(generateDbUrl(host, port, dbname), properties)
     }
 
-    private fun generateDbUrl(host: String, port: String) = "jdbc:postgresql://$host:$port/pickaxe_dev"
+    private fun generateDbUrl(host: String, port: String, dbname: String) = "jdbc:postgresql://$host:$port/$dbname"
 }

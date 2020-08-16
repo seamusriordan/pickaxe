@@ -294,7 +294,7 @@ describe('PicksGrid', () => {
     describe('rendered users cells', () => {
 
         it('Renders three id cells when there are three users in data response', () => {
-            const nameCells = findByClassName(grid, 'name-cell');
+            const nameCells = findByClassName(grid, 'name-linear-cell');
 
             expect(nameCells.length).toBe(mockQueryData.users.length);
             expect(nameCells.map(cell => cell.props.children))
@@ -314,7 +314,7 @@ describe('PicksGrid', () => {
             useQuery.mockReturnValue({loading: false, error: null, data: twoMockUserData});
 
             const grid = create(<PicksGrid/>).root;
-            const nameCells = findByClassName(grid, 'name-cell');
+            const nameCells = findByClassName(grid, 'name-linear-cell');
 
             expect(nameCells.length).toBe(twoMockUserData.users.length);
             expect(nameCells.map(cell => cell.props.children))
@@ -324,7 +324,7 @@ describe('PicksGrid', () => {
 
     describe('rendered totals cells', () => {
         it('Renders three total cells when there are three users in data response', () => {
-            const totalCells = findByClassName(grid, 'total-cell');
+            const totalCells = findByClassName(grid, 'total-linear-cell');
 
             expect(totalCells.length).toBe(mockQueryData.users.length);
             expect(totalCells.map(cell => cell.props.children))
@@ -347,7 +347,7 @@ describe('PicksGrid', () => {
             useQuery.mockReturnValue({loading: false, error: null, data: twoMockUserData});
 
             const grid = create(<PicksGrid/>).root;
-            const totalCells = findByClassName(grid, 'total-cell');
+            const totalCells = findByClassName(grid, 'total-linear-cell');
 
             expect(totalCells.length).toBe(twoMockUserData.users.length);
             expect(totalCells.map(cell => cell.props.children))

@@ -1,7 +1,7 @@
 export function findByClassName(grid, className) {
     return grid.findAll(
         el => {
-            return el.props.className === className
+            return el.props.className?.split(" ").includes(className)
         });
 }
 

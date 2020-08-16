@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from "react";
+import './PicksGrid.css'
 import {useMutation, useQuery} from "@apollo/react-hooks";
 import {buildWebsocketUri} from "../helpers";
 import {PICKS_QUERY, UPDATE_PICKS_MUTATION} from "../graphqlQueries";
@@ -12,6 +13,7 @@ function destructureUserData(users) {
         names: users?.map(user => user.name),
     };
 }
+
 function destructureTotalData(totals) {
     return {
         total: totals?.map(total => total.total),
@@ -86,6 +88,14 @@ function generateUseEffectCleanupCallback(webSocket) {
     };
 }
 
+function blankCells(size) {
+    let blankArray = []
+    for (let i = 0; i < size; i++) {
+        blankArray.push("")
+    }
+    return blankArray
+}
+
 const PicksGrid = props => {
     const {defaultWeek} = props;
     const [currentWeek, updateWeek] = useState(defaultWeek);
@@ -109,17 +119,71 @@ const PicksGrid = props => {
     const advanceWeek = generateAdvanceWeekCallback(data, currentWeek, updateWeek, refetch);
     const rewindWeek = generateRewindWeekCallback(data, currentWeek, updateWeek, refetch);
 
-    return <div>
-        { error ? "Error" : !data ? "Waiting for data..." :
+    return <div className='picks-grid'>
+        {error ? "Error" : !data ? "Waiting for data..." :
             [
-                <Leaderboard key="leaderboard" data={data.leaders}/>,
-                <ChangeWeek key="change-week" id="change-week" week={currentWeek} forward={advanceWeek} back={rewindWeek}/>,
-                <LinearCells key="name-cells" items={users.names} name="name"/>,
-                <LinearCells key="game-cells" id="game-cells" items={games.names} name="game"/>,
-                <LinearCells key="spread-cells" items={games.spreads} name="spread"/>,
-                <PickCells key="pick-cells" id="pick-cells" data={data} sendData={sendData} currentWeek={currentWeek}/>,
-                <LinearCells key="result-cells" items={games.results} name="result"/>,
-                <LinearCells key="total-cells" items={totals.total} name="total"/>
+                <div key="grid-leaders" id="grid-leaders">
+                    <div className="grid-cell leader-cell border-bottom leader-name">Leaders</div>
+                    <div className="grid-cell border-bottom leader-cell leader-numerical">Weeks Won</div>
+                    <div className="grid-cell border-bottom leader-cell leader-numerical">Total Correct</div>
+                    <Leaderboard key="leaderboard" data={data.leaders}/>
+                </div>,
+                <div className="change-week" key="grid-change-week">
+                    <ChangeWeek key="change-week" id="change-week"
+                                week={currentWeek} forward={advanceWeek}
+                                back={rewindWeek}/>
+                </div>,
+                <div key="grid-top-padding">
+                    <div className='grid-cell name-cell top-padding-cell'/>
+                    <div className='grid-cell name-cell top-padding-cell'/>
+                    <LinearCells key="name-cells"
+                                 items={blankCells(4)} name="top-padding"
+                    />
+                    <div className='grid-cell name-cell top-padding-cell'/>
+                </div>,
+                <div key="grid-names">
+                    <div className='grid-cell name-cell border-bottom'/>
+                    <div className='grid-cell name-cell border-bottom'>Spread</div>
+                    <LinearCells key="name-cells"
+                                 items={users.names} name="name"
+                    />
+                    <div className='grid-cell name-cell border-cell'>Result</div>
+                </div>,
+                <div className='grid-column' key="grid-games">
+                    <LinearCells key="game-cells" id="game-cells"
+                                 items={games.names} name="game"
+                    />
+                </div>,
+                <div className='grid-column' key="grid-spreads">
+                    <LinearCells key="spread-cells"
+                                 items={games.spreads} name="spread"
+                    />
+                </div>,
+                <div className='grid-column' key="grid-picks">
+                    <PickCells id="pick-cells" key="pick-cells"
+                               data={data}
+                               sendData={sendData}
+                               currentWeek={currentWeek}
+                    />
+                </div>,
+                <div className='grid-column' key="grid-results">
+                    <LinearCells key="result-cells"
+                                 items={games.results} name="result"
+                    />
+                </div>,
+                <div className='grid-column' key="grid-right-padding">
+                    <LinearCells key="right-padding-cells"
+                                 items={blankCells(games.results.length)} name="right-padding"
+                    />
+                </div>,
+                <div key="grid-totals">
+                    <div className='grid-cell name-cell'/>
+                    <div className='grid-cell name-cell'/>
+                    <LinearCells key="total-cells"
+                                 items={totals.total} name="total"
+                    />
+                    <div className='grid-cell border-left total-cell'/>
+                </div>
             ]
         }
     </div>

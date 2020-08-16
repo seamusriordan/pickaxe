@@ -2,10 +2,17 @@ import React from "react";
 
 const LinearCells = props => {
     const {items, name} = props;
-    return !items ? undefined :
-        items.map((item, index) => {
-            return <div className={`${name}-cell`} key={`${name}-${index}`} id={`${name}-${index}`}>{item}</div>
-        });
+    let cells = items.map((item, index) => {
+        let cssClass = `${name}-cell ${name}-linear-cell grid-cell border-cell`
+
+        return <div
+            className={cssClass}
+            key={`${name}-${index}`}
+            id={`${name}-${index}`}>
+            {item}
+        </div>
+    });
+    return !items ? undefined : cells;
 }
 
 export default LinearCells
