@@ -1,0 +1,78 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Test client') {
+            steps {
+                dir('client') {
+                    sh 'gradle build'
+                    sh 'gradle test'
+                }
+            }
+        }
+        stage('Test server and e2e') {
+            steps{
+                lock('pickaxe-pipeline') {
+                    dir('server') {
+                        sh 'gradle build'
+                        sh 'gradle copy_dependencies'
+                    }
+                    sh 'docker build . -f e2e/Dockerfile -t pickaxe:deploy'
+                    sh 'docker-compose -p pickaxe_deploy up --build -d'
+                    sleep(5)
+                    sh 'docker run -d -p 8080:8080 --net=pickaxe_deploy_default --name pickaxe_deploy_1 pickaxe:deploy'
+                    sleep(5)
+                    dir('e2e') {
+                        sh 'yarn install'
+                        sh 'yarn run cypress run'
+                    }
+                    cleanupDocker()
+                }
+            }
+        }
+        stage('Build client for deploy') {
+            environment {
+                REACT_APP_GRAPHQL_SERVER = credentials('react_app_graphql_prod_server')
+                REACT_APP_GRAPHQL_PORT = credentials('react_app_graphql_port')
+                REACT_APP_GRAPHQL_HTTPS = credentials('react_app_graphql_https')
+            }
+            steps {
+                dir('client') {
+                    sh 'gradle build'
+                }
+            }
+        }
+        stage('Build deploy docker image') {
+            steps {
+                sh 'docker build . -t pickaxe:prod'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                withCredentials(bindings: [sshUserPrivateKey(credentialsId: 'pickaxe-server-creds',
+                        keyFileVariable: '',
+                        passphraseVariable: '',
+                        usernameVariable: 'username')]) {
+                    sshagent(credentials: ['pickaxe-server-creds']) {
+                        sh 'ssh -o StrictHostKeyChecking=no $username ./deploy.sh'
+                    }
+                }
+            }
+        }
+    }
+    post {
+        failure {
+            cleanupDocker()
+        }
+    }
+}
+
+def cleanupDocker() {
+    sh('docker stop pickaxe_deploy_1')
+    sh('docker rm pickaxe_deploy_1')
+    sh('docker image rm pickaxe:deploy')
+    sh('docker-compose -p pickaxe_deploy down')
+    sleep(5)
+    sh('docker image rm pickaxe_deploy_postgres')
+    sh('docker volume rm pickaxe_deploy_postgres-pipeline-data')
+}
