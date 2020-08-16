@@ -88,9 +88,9 @@ function generateUseEffectCleanupCallback(webSocket) {
     };
 }
 
-function blankCells(size){
+function blankCells(size) {
     let blankArray = []
-    for(let i = 0; i < size; i++ ){
+    for (let i = 0; i < size; i++) {
         blankArray.push("")
     }
     return blankArray
@@ -119,12 +119,20 @@ const PicksGrid = props => {
     const advanceWeek = generateAdvanceWeekCallback(data, currentWeek, updateWeek, refetch);
     const rewindWeek = generateRewindWeekCallback(data, currentWeek, updateWeek, refetch);
 
-    return <div>
+    return <div className='picks-grid'>
         {error ? "Error" : !data ? "Waiting for data..." :
             [
-                <Leaderboard key="leaderboard" data={data.leaders}/>,
-                <ChangeWeek key="change-week" id="change-week" week={currentWeek} forward={advanceWeek}
-                            back={rewindWeek}/>,
+                <div key="grid-leaders" id="grid-leaders">
+                    <div className="grid-cell leader-cell border-bottom"/>
+                    <div className="grid-cell border-bottom leader-cell">Weeks Won</div>
+                    <div className="grid-cell border-bottom leader-cell">Total Correct</div>
+                    <Leaderboard key="leaderboard" data={data.leaders}/>
+                </div>,
+                <div className="change-week" key="grid-change-week">
+                    <ChangeWeek key="change-week" id="change-week"
+                                week={currentWeek} forward={advanceWeek}
+                                back={rewindWeek}/>
+                </div>,
                 <div key="grid-top-padding">
                     <div className='grid-cell name-cell top-padding-cell'/>
                     <div className='grid-cell name-cell top-padding-cell'/>

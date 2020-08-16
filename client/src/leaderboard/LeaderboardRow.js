@@ -2,8 +2,9 @@ import React from "react";
 
 export function LeaderboardRow(props) {
     return <div>
-        <span className="leader-name">{props.name}</span>
-        <span className="leader-correct-weeks">{props.weeks}</span>
-        <span className="leader-correct-picks">{props.picks}</span>
+        <div className="leader-name grid-cell border-cell leader-cell">{props.name}</div>
+        <div className="leader-correct-weeks grid-cell border-cell leader-cell">{props.weeks}</div>
+        <div className="leader-correct-picks grid-cell border-cell leader-cell">{props.picks}</div>
+        <div className="leader-cell grid-cell border-cell right-padding-cell"/>
     </div>
 }

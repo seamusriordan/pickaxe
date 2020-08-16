@@ -1,4 +1,8 @@
-.grid-column, .name-cell, .total-cell, .top-padding-cell {
+.picks-grid {
+    margin: 16px;
+}
+
+.grid-column, .name-cell, .total-cell, .top-padding-cell, .leader-cell {
     display: inline-block;
     vertical-align: top;
 }
@@ -9,7 +13,7 @@
     border-left: white 1px solid;
     border-bottom: white 1px solid;
     margin: 0 -1px -1px 0;
-    padding-top: 4px;
+    padding-top: 5px;
     padding-left: 4px;
 }
 
@@ -35,4 +39,12 @@
 .right-padding-cell {
     border-bottom: white 1px solid;
     width: 0;
+}
+
+.change-week {
+    border: black 1px solid;
+}
+
+#grid-leaders {
+    margin-bottom: 16px;
 }
