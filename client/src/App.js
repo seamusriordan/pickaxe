@@ -1,4 +1,5 @@
 import React from 'react';
+import './App.css'
 import {ApolloProvider} from '@apollo/react-hooks'
 import ApolloClient from "apollo-client";
 import {InMemoryCache} from 'apollo-cache-inmemory';
@@ -19,14 +20,11 @@ function App() {
     return (
         <div className="App">
             <header className="App-header">
-                <a
-                    className="App-link"
+                <a className="App-link"
                     href="https://www.possum.best"
                     target="_blank"
                     rel="noopener noreferrer"
-                >Make a pick</a>
-
-                Also we have a new pipeline!
+                >Pickaxe</a>
             </header>
             <ApolloProvider client={apolloClient}><PicksLoader/></ApolloProvider>
         </div>
