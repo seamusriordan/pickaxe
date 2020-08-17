@@ -137,7 +137,7 @@ const PicksGrid = props => {
                     <div className='grid-cell name-cell top-padding-cell'/>
                     <div className='grid-cell name-cell top-padding-cell'/>
                     <LinearCells key="name-cells"
-                                 items={blankCells(4)} name="top-padding"
+                                 items={blankCells(users.names.length)} name="top-padding"
                     />
                     <div className='grid-cell name-cell top-padding-cell'/>
                 </div>,
