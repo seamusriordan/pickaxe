@@ -2,6 +2,7 @@ package services
 
 import io.mockk.every
 import io.mockk.mockkClass
+import io.mockk.slot
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.io.IOException
@@ -21,18 +22,20 @@ class VegasPicksApiTest {
     private val handler = MockURLStreamHandler
     private val picksUrl = URL("https://picksendpoint")
     private val mockPicksConnection = mockkClass(HttpURLConnection::class)
+    private val userAgentSlot = slot<String>()
 
     init {
         handler.setConnection(picksUrl, mockPicksConnection)
 
         every { mockPicksConnection.requestMethod = "GET" } returns Unit
         every { mockPicksConnection.doOutput = true } returns Unit
+        every { mockPicksConnection.setRequestProperty("user-agent", capture(userAgentSlot)) } returns Unit
     }
 
     @Test
     fun urlOpenConnectionIOExceptionReturnsNoPicks() {
         val mockUrl = mockkClass(URL::class)
-        every {mockUrl.openConnection()} throws IOException("Mock io exception")
+        every { mockUrl.openConnection() } throws IOException("Mock io exception")
         val picksApi = VegasPicksApi(mockUrl)
 
         val picks = picksApi.getVegasPicks()
@@ -41,8 +44,21 @@ class VegasPicksApiTest {
     }
 
     @Test
+    fun `getVegasPicks uses user agent`() {
+        every { mockPicksConnection.inputStream } returns "".byteInputStream()
+        val picksApi = VegasPicksApi(picksUrl)
+
+        picksApi.getVegasPicks()
+
+        assertEquals(
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36",
+            userAgentSlot.captured
+        )
+    }
+
+    @Test
     fun getInputStreamIOExceptionReturnsNoPicks() {
-        every {mockPicksConnection.inputStream } throws IOException("Mock io exception")
+        every { mockPicksConnection.inputStream } throws IOException("Mock io exception")
         val picksApi = VegasPicksApi(picksUrl)
 
         val picks = picksApi.getVegasPicks()
@@ -120,7 +136,8 @@ class VegasPicksApiTest {
                 "Pittsburgh",
                 "Dallas",
                 "&nbsp;<br>-1&nbsp;-10<br>49u-10"
-            )).byteInputStream()
+            )
+        ).byteInputStream()
 
         val picks = VegasPicksApi(picksUrl).getVegasPicks()
 
@@ -135,7 +152,8 @@ class VegasPicksApiTest {
                 "Pittsburgh",
                 "Dallas",
                 "&nbsp;<br>-1&nbsp;-10<br>49u-10"
-            )).byteInputStream()
+            )
+        ).byteInputStream()
 
         val picks = VegasPicksApi(picksUrl).getVegasPicks()
 
@@ -150,7 +168,8 @@ class VegasPicksApiTest {
                 "Pittsburgh",
                 "Dallas",
                 "&nbsp;<br>-3&frac12&nbsp;-10<br>49u-10"
-            )).byteInputStream()
+            )
+        ).byteInputStream()
 
         val picks = VegasPicksApi(picksUrl).getVegasPicks()
 

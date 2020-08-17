@@ -5,11 +5,16 @@ import db.GameMutator
 import db.GamesQuery
 import db.UpdatePickMutator
 import dto.*
+import org.slf4j.LoggerFactory
 import services.VegasPicksApi
 import services.utils.UpdateUtils.Companion.hasGameStartInXMinutes
 
 class VegasUpdateUtils {
     companion object {
+
+        private val logger: org.slf4j.Logger = LoggerFactory.getLogger(VegasUpdateUtils::class.toString())
+
+
         private const val vegasUserName = "Vegas"
 
         fun updateVegasPicks(
@@ -22,6 +27,7 @@ class VegasUpdateUtils {
             val currentWeekString = currentWeekQuery.getCurrentWeek().name
 
             vegasPicksApi.getVegasPicks().forEach { vegasPick ->
+                logger.info("[updateVegasPicks] ${vegasPick.game} ${vegasPick.pick} ${vegasPick.spread}")
                 updateVegasPickData(
                     currentWeekString,
                     gamesQuery,
