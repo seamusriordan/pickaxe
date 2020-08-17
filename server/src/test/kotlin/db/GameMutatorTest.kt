@@ -197,6 +197,22 @@ class GameMutatorTest {
         }
     }
 
+    @Test
+    fun `will update spread without id`() {
+        val game = GameDTO("BAL@CIN", "Week 12").apply {
+            id = null
+            gameTime = OffsetDateTime.now()
+            spread = -7.0
+        }
+        val expectedQuery = buildInsertStringNoIDButWithSpread(game)
+
+        gameMutator.putInDatabase(game)
+
+        verify {
+            mockStatement.executeUpdate(expectedQuery)
+        }
+    }
+
 
     private fun buildInsertStringWithFinalResult(
         game: GameDTO
@@ -224,5 +240,12 @@ class GameMutatorTest {
     ): String {
         return "INSERT INTO games(game, week, gametime, final) VALUES ('${game.name}', '${game.week}', '${game.gameTime}', false) " +
                 "ON CONFLICT (game, week) DO UPDATE SET (gametime, final) = ('${game.gameTime}', false)"
+    }
+
+    private fun buildInsertStringNoIDButWithSpread(
+        game: GameDTO
+    ): String {
+        return "INSERT INTO games(game, week, gametime, final, spread) VALUES ('${game.name}', '${game.week}', '${game.gameTime}', false, '${game.spread}') " +
+                "ON CONFLICT (game, week) DO UPDATE SET (gametime, final, spread) = ('${game.gameTime}', false, '${game.spread}')"
     }
 }
