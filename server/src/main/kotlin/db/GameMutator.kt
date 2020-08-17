@@ -16,6 +16,8 @@ class GameMutator(private var connection: Connection) {
             } else {
                 buildWithoutResult(game)
             }
+        } else if (game.spread != null ){
+            insertOrUpdateStatement = buildInsertOrUpdateWithoutIDButWithSpread(game)
         }
 
         statement.executeUpdate(insertOrUpdateStatement)
@@ -33,6 +35,9 @@ class GameMutator(private var connection: Connection) {
         "INSERT INTO games(game, week, gametime, final) VALUES ('${game.name}', '${game.week}', '${game.gameTime}', false) " +
                 "ON CONFLICT (game, week) DO UPDATE SET (gametime, final) = ('${game.gameTime}', false)"
 
+    private fun buildInsertOrUpdateWithoutIDButWithSpread(game: GameDTO) =
+            "INSERT INTO games(game, week, gametime, final, spread) VALUES ('${game.name}', '${game.week}', '${game.gameTime}', false, '${game.spread}') " +
+                    "ON CONFLICT (game, week) DO UPDATE SET (gametime, final, spread) = ('${game.gameTime}', false, '${game.spread}')"
 
     private fun buildInsertOrUpdateWithoutResult(game: GameDTO) =
         "INSERT INTO games(game, week, gametime, final, id) VALUES ('${game.name}', '${game.week}', '${game.gameTime}', false, '${game.id}') " +
