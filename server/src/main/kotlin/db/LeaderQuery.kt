@@ -41,10 +41,14 @@ class LeaderQuery(
         gamesForWeek: List<GameDTO>
     ) {
         val leaderResult = getResultsForLeader(leader, weekResults)
-        if (hasNoIncompleteGames(gamesForWeek) && hasMostCorrectPicks(leaderResult, weekResults)) {
+        if (weekIsComplete(gamesForWeek) && hasMostCorrectPicks(leaderResult, weekResults)) {
             leader.correctWeeks += 1
         }
         leader.correctPicks += leaderResult.total
+    }
+
+    private fun weekIsComplete(gamesForWeek: List<GameDTO>): Boolean {
+        return gamesForWeek.isNotEmpty() && hasNoIncompleteGames(gamesForWeek)
     }
 
     private fun hasMostCorrectPicks(
