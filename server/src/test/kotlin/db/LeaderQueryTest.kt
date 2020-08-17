@@ -231,4 +231,23 @@ class LeaderQueryTest {
         assertEquals(0, leader.first().correctWeeks)
         assertEquals(1, leader.first().correctPicks)
     }
+
+    @Test
+    fun `Weeks with no games are not considered for winning`() {
+        val user = UserDTO("Daan")
+
+        every { mockWeeksQuery.get() } returns listOf(WeekDTO(defaultWeek))
+        every { mockGamesQuery.getGamesForWeek(defaultWeek) } returns listOf()
+
+        every { mockWeekTotalQuery.get(defaultWeek) } returns
+                listOf(UserWeekTotalDTO(user).apply {
+                    games = mutableListOf(defaultGame)
+                })
+
+
+        val leader: List<LeaderDTO> = leaderQuery.get()
+
+        assertEquals(user.name, leader.first().name)
+        assertEquals(0, leader.first().correctWeeks)
+    }
 }
