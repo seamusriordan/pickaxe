@@ -130,12 +130,7 @@ const WeeklyGamesGrid = props => {
     return <div className='weekly-games-grid'>
         {error ? "Error" : !data ? "Waiting for data..." :
             [
-                <div key="grid-leaders" id="grid-leaders">
-                    <div className="grid-cell leader-cell border-bottom leader-name">Leaders</div>
-                    <div className="grid-cell border-bottom leader-cell leader-numerical">Weeks Won</div>
-                    <div className="grid-cell border-bottom leader-cell leader-numerical">Total Correct</div>
-                    <Leaderboard key="leaderboard" data={data.leaders}/>
-                </div>,
+                <Leaderboard key="leaderboard" data={data.leaders}/>,
                 <div className="change-week" key="grid-change-week">
                     <ChangeWeek key="change-week" id="change-week"
                                 week={currentWeek} forward={advanceWeek}
