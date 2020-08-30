@@ -1,4 +1,3 @@
-import PickCell from "./PickCell";
 import React from "react";
 import UserPickColumn from "./UserPickColumn";
 
@@ -10,10 +9,10 @@ const UserPicksGrid = props => {
                 <UserPickColumn
                     user={user}
                     userIndex={userIndex}
-                    games={data.games}
-                    userPicks={data.userPicks}
-                    sendData={sendData}
                     currentWeek={currentWeek}
+                    games={data.games}
+                    pickSet={getPicksForUser(data.userPicks, user.name)}
+                    sendData={sendData}
                 /></div>
         });
 }
