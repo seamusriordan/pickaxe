@@ -6,3 +6,12 @@
 .grid__cell--game {
     text-align: left;
 }
+
+.grid__cell--correct {
+    background-color: #4adb2a;
+    border-top: solid 1px;
+    border-right: solid 1px;
+    height: 19px;
+    width: 95px;
+    line-height: 14px;
+}

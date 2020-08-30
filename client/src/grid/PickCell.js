@@ -23,11 +23,13 @@ export default function PickCell(props) {
         setInnerText(updatedPick)
     };
 
+    let cssClass = 'grid__cell grid__cell--border'.concat( props.correct ? ' grid__cell--correct' : '')
+
     return <div contentEditable={true}
                 spellCheck={false}
                 onBlur={callbackWrapper}
                 suppressContentEditableWarning="true"
                 id={props.id}
-                className='grid__cell grid__cell--border'
+                className={cssClass}
     >{innerText}</div>
 }

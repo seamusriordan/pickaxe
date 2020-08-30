@@ -13,6 +13,7 @@
     padding-left: 6px;
     padding-right: 6px;
     text-align: right;
+    line-height: 17px;
 }
 
 .grid__column, .grid__cell--top-padding {

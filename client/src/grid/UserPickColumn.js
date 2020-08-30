@@ -15,6 +15,7 @@ const UserPickColumn = props => {
             game={game.name}
             pick={thisPick}
             user={props.user.name}
+            correct={!!thisPick && thisPick?.toLowerCase() === game.result?.toLowerCase()}
             sendData={sendDataCallback}
         />
     });

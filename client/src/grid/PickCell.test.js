@@ -64,5 +64,26 @@ describe('PickCell', () => {
         expect(lostFocus).toBeTruthy();
     });
 
+    it('is correct has grid__cell--correct class', () => {
+        let cellRenderer = null;
+        act(() => {
+            cellRenderer = create(<PickCell user="Some user" game="GB@CHI" pick="CHI" correct={true}/>)
+        });
+
+        const cell = cellRenderer.root;
+        const div = cell.children[0];
+        expect(div.props.className).toContain("grid__cell--correct")
+    });
+
+    it('is not correct does not have grid__cell--correct class', () => {
+        let cellRenderer = null;
+        act(() => {
+            cellRenderer = create(<PickCell user="Some user" game="GB@CHI" pick="CHI" correct={false}/>)
+        });
+
+        const cell = cellRenderer.root;
+        const div = cell.children[0];
+        expect(div.props.className).not.toContain("grid__cell--correct")
+    });
 
 });
