@@ -120,7 +120,7 @@ describe('WeeklyViewApp', () => {
         });
 
         it('on week 0 updates displayed week', () => {
-            const displayedWeek = week0Change.findByProps({id: "changeWeek-week"})
+            const displayedWeek = week0Change.findByProps({id: "change-week--week"})
 
             act(() => {
                 week0Change.props.forward();
@@ -187,7 +187,7 @@ describe('WeeklyViewApp', () => {
         });
 
         it('on week 2 updates displayed week', () => {
-            const displayedWeek = week2Change.findByProps({id: "changeWeek-week"})
+            const displayedWeek = week2Change.findByProps({id: "change-week--week"})
 
             act(() => {
                 week2Change.props.back();
@@ -348,7 +348,7 @@ describe('WeeklyViewApp', () => {
 
     describe('rendered games cells', () => {
         it('Renders four game cells when there are four games in data response', () => {
-            const gameCells = findByClassName(grid, 'game-cell');
+            const gameCells = findByClassName(grid, 'grid__cell--game');
 
             expect(gameCells.length).toBe(mockQueryData.games.length);
             expect(gameCells.map(cell => cell.props.children))
@@ -367,7 +367,7 @@ describe('WeeklyViewApp', () => {
             useQuery.mockReturnValue({loading: false, error: null, data: oneMockGameData});
 
             const grid = create(<WeeklyViewApp/>).root;
-            const gameCells = findByClassName(grid, 'game-cell');
+            const gameCells = findByClassName(grid, 'grid__cell--game');
 
             expect(gameCells.length).toBe(oneMockGameData.games.length);
             expect(gameCells.map(cell => cell.props.children))
@@ -378,7 +378,7 @@ describe('WeeklyViewApp', () => {
 
     describe('rendered spread cells', () => {
         it('Renders four spread cells when there are four games in data response', () => {
-            const spreadCells = findByClassName(grid, 'spread-cell');
+            const spreadCells = findByClassName(grid, 'grid__cell--spread');
 
             expect(spreadCells.length).toBe(mockQueryData.games.length);
             expect(spreadCells.map(cell => cell.props.children))
@@ -397,7 +397,7 @@ describe('WeeklyViewApp', () => {
             useQuery.mockReturnValue({loading: false, error: null, data: oneMockGameData});
 
             const grid = create(<WeeklyViewApp/>).root;
-            const spreadCells = findByClassName(grid, 'spread-cell');
+            const spreadCells = findByClassName(grid, 'grid__cell--spread');
 
             expect(spreadCells.length).toBe(oneMockGameData.games.length);
             expect(spreadCells.map(cell => cell.props.children))
@@ -407,7 +407,7 @@ describe('WeeklyViewApp', () => {
 
     describe('rendered result cells', () => {
         it('Renders four result cells when there are four games in data response', () => {
-            const resultCells = findByClassName(grid, 'result-cell');
+            const resultCells = findByClassName(grid, 'grid__cell--result');
 
             expect(resultCells.length).toBe(mockQueryData.games.length);
             expect(resultCells.map(cell => cell.props.children))
@@ -426,7 +426,7 @@ describe('WeeklyViewApp', () => {
             useQuery.mockReturnValue({loading: false, error: null, data: oneMockGameData});
 
             const grid = create(<WeeklyViewApp/>).root;
-            const resultCells = findByClassName(grid, 'result-cell');
+            const resultCells = findByClassName(grid, 'grid__cell--result');
 
             expect(resultCells.length).toBe(oneMockGameData.games.length);
             expect(resultCells.map(cell => cell.props.children))

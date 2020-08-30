@@ -12,7 +12,6 @@ function indexIsPastEndOfData(index, data) {
 }
 
 
-
 function generateAdvanceWeekCallback(data, currentWeek, updateWeek, refetch) {
     return () => {
         const index = data.weeks.findIndex(week => week.name === currentWeek)
@@ -95,11 +94,10 @@ const WeeklyViewApp = props => {
         {error ? "Error" : !data ? "Waiting for data..." :
             [
                 <Leaderboard key="leaderboard" data={data.leaders}/>,
-                <div className="change-week" key="grid-change-week">
-                    <ChangeWeek key="change-week" id="change-week"
-                                week={currentWeek} forward={advanceWeek}
-                                back={rewindWeek}/>
-                </div>,
+                <ChangeWeek key="change-week"
+                            id="change-week"
+                            week={currentWeek} forward={advanceWeek}
+                            back={rewindWeek}/>,
                 <WeeklyGamesGrid
                     key="weekly-games-grid"
                     currentWeek={currentWeek}

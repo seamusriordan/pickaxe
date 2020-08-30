@@ -1,15 +1,15 @@
 describe('games comes from api', () => {
     beforeEach(() => {
         cy.visit('localhost:8080/pickaxe')
-        cy.get('#changeWeek-forward').click().click()
+        cy.get('#change-week--forward').click().click()
     })
 
     it('gets a set of games from the api', () => {
-        cy.get('.game-cell').should("have.length", 14)
+        cy.get('.grid__cell--game').should("have.length", 14)
     });
 
     it('completed game is set', () => {
-        cy.get('.game-cell')
+        cy.get('.grid__cell--game')
             .then(findIndexOfGame("NYG@NE"))
             .then(i =>
                 cy.get(`#result-${i}`).contains("NE")
@@ -17,7 +17,7 @@ describe('games comes from api', () => {
     });
 
     it('incomplete game is not set', () => {
-        cy.get('.game-cell')
+        cy.get('.grid__cell--game')
             .then(findIndexOfGame("CAR@TB"))
             .then(i =>
                 cy.get(`#result-${i}`).should("be.empty")
@@ -25,7 +25,7 @@ describe('games comes from api', () => {
     });
 
     it('game without game details id is not set', () => {
-        cy.get('.game-cell')
+        cy.get('.grid__cell--game')
             .then(findIndexOfGame("CIN@BAL"))
             .then(i =>
                 cy.get(`#result-${i}`).should("be.empty")

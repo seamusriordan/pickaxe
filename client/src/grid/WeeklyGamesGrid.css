@@ -1,0 +1,8 @@
+.grid__cell--name, .grid__cell--total {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.grid__cell--game {
+    text-align: left;
+}

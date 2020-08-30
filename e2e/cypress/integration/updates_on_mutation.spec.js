@@ -4,7 +4,7 @@ describe('Mutation response update', () => {
 
     beforeEach(() => {
         cy.visit('localhost:8080/pickaxe')
-            .get('#changeWeek-back').click().click()
+            .get('#change-week--back').click().click()
             .wait(500);
     });
 
@@ -16,7 +16,7 @@ describe('Mutation response update', () => {
             .contains("DERP", {timeout: 10000})
             .request('POST', 'localhost:8080/pickaxe/graphql', graphqlRevertBody)
         cy.visit('localhost:8080/pickaxe')
-            .get('#changeWeek-back').click().click()
+            .get('#change-week--back').click().click()
             .get('#Seamus-SEA\\@PHI')
             .contains("SEA")
     });
@@ -36,7 +36,7 @@ describe('Mutation response update', () => {
             .invoke('blur')
         cy.request('POST', 'localhost:8080/pickaxe/graphql', graphqlRevertBody)
         cy.visit('localhost:8080/pickaxe')
-            .get('#changeWeek-back').click().click()
+            .get('#change-week--back').click().click()
             .get('#Seamus-SEA\\@PHI')
             .contains("SEA")
     });

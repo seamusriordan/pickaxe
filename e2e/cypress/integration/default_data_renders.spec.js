@@ -2,12 +2,12 @@ describe('Default data renders', () => {
 
     it('starts on week 6', () => {
         cy.visit('localhost:8080/pickaxe');
-        cy.get('#changeWeek-week').contains("Week 6");
+        cy.get('#change-week--week').contains("Week 6");
     });
 
     it('has users', () => {
         cy.visit('localhost:8080/pickaxe')
-            .get('#changeWeek-back')
+            .get('#change-week--back')
             .click().click();
         cy.get('#name-0').contains("Seamus");
         cy.get('#name-1').contains("Sereres");
@@ -17,7 +17,7 @@ describe('Default data renders', () => {
 
     it('has games', () => {
         cy.visit('localhost:8080/pickaxe')
-            .get('#changeWeek-back')
+            .get('#change-week--back')
             .click().click();
         cy.get('#game-0').contains("GB@CHI");
         cy.get('#game-1').contains("BUF@NE");

@@ -1,10 +1,18 @@
-.change-week-element {
+.change-week {
+    margin-left: 216px;
+    display: inline-block;
+    margin-top: 16px;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.change-week__element {
     display: inline-block;
     text-align: center;
     height: 32px;
 }
 
-.change-week-week {
+.change-week__element--week {
     width: 6em;
     font-weight: bold;
     vertical-align: top;
@@ -13,6 +21,6 @@
     font-family: sans-serif;
 }
 
-#changeWeek-back {
+.change-week__element--back {
     transform: rotate(180deg);
 }
