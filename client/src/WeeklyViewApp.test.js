@@ -51,9 +51,7 @@ describe('WeeklyViewApp', () => {
         expect(useQuery.mock.calls[0][1].variables.week).toEqual(defaultWeek)
     });
 
-    it('calls useMutation', () => {
-        expect(useMutation).toBeCalled()
-    });
+
 
     it('Renders error when error from query is truthy', () => {
         useQuery.mockReturnValue({
@@ -74,17 +72,6 @@ describe('WeeklyViewApp', () => {
 
         expect(grid.findAll(el => el.props.children === 'Waiting for data...').length).toEqual(1);
     });
-
-    it('useMutation is called with pick updating query', () => {
-        const updatingQuery =
-        gql`mutation Mutation($name: String!, $week: String!, $game: String!, $pick: String!)
-        { updatePick(name: $name, userPick: { week: $week, game: $game, pick: $pick })
-        }`;
-
-        expect(useMutation.mock.calls[0][0]).toBe(updatingQuery);
-    });
-
-
 
     describe('advance week', () => {
         let week0Change;

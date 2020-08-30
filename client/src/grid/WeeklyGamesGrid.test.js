@@ -5,6 +5,7 @@ import PickCell from "./PickCell";
 import React from "react";
 import WeeklyGamesGrid from "./WeeklyGamesGrid";
 import {useMutation} from '@apollo/react-hooks';
+import gql from "graphql-tag";
 
 jest.mock('@apollo/react-hooks');
 
@@ -24,6 +25,19 @@ describe('WeeklyGamesGrid', () => {
             userPicks={mockQueryData.userPicks}
             totals={mockQueryData.userTotals}/>);
         grid = renderer.root;
+    });
+
+    it('calls useMutation', () => {
+        expect(useMutation).toBeCalled()
+    });
+
+    it('useMutation is called with pick updating query', () => {
+        const updatingQuery =
+        gql`mutation Mutation($name: String!, $week: String!, $game: String!, $pick: String!)
+        { updatePick(name: $name, userPick: { week: $week, game: $game, pick: $pick })
+        }`;
+
+        expect(useMutation.mock.calls[0][0]).toBe(updatingQuery);
     });
 
     describe('rendered picks cells', () => {
