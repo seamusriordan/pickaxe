@@ -9,7 +9,6 @@ import gql from "graphql-tag";
 
 jest.mock('@apollo/react-hooks');
 
-
 describe('WeeklyGamesGrid', () => {
     let grid, renderer;
 

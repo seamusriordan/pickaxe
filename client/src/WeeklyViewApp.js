@@ -100,6 +100,7 @@ const WeeklyViewApp = props => {
                             back={rewindWeek}/>,
                 <WeeklyGamesGrid
                     key="weekly-games-grid"
+                    data-testid="weekly-games-grid"
                     currentWeek={currentWeek}
                     users={data?.users}
                     games={data?.games}
