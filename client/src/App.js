@@ -20,11 +20,7 @@ function App() {
     return (
         <div className="App">
             <header className="App-header">
-                <a className="App-link"
-                    href="https://www.possum.best"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >UMass Memorial Football Picks League</a>
+                UMass Memorial Football Picks League
             </header>
             <ApolloProvider client={apolloClient}><AppLoader/></ApolloProvider>
         </div>

@@ -4,13 +4,13 @@
 
 .App-header {
     text-align: center;
-    font-size: 32px;
-    margin-top: 16px;
-}
-
-.App-header a {
+    padding-top: 16px;
+    padding-bottom: 16px;
+    margin-bottom: 16px;
     color: #0e2f09;
     text-decoration: none;
     font-family: Impact, sans-serif;
     font-size: 40px;
+    background-color: #3ecf39;
+    box-shadow: 0 2px 5px #0e2f09;
 }
