@@ -48,12 +48,12 @@ fun mockNextReturnTimes(mockResultSet: ResultSet, times: Int) {
 }
 
 fun mockStatementToReturnUserResultSet(statement: Statement, results: ResultSet) {
-    val queryString = "SELECT name FROM users WHERE active = TRUE"
+    val queryString = "SELECT name FROM users WHERE active = TRUE ORDER BY id"
     every { statement.executeQuery(queryString) } returns results
 }
 
 fun mockStatementToReturnGameResultSet(statement: Statement, results: ResultSet, week: String) {
-    val queryString = "SELECT game, week, id, gametime, result, spread FROM games WHERE week = '$week'"
+    val queryString = "SELECT game, week, id, gametime, result, spread FROM games WHERE week = '$week' ORDER BY gametime"
     every { statement.executeQuery(queryString) } returns results
 }
 
@@ -63,7 +63,7 @@ fun mockStatementToReturnPickResultSet(statement: Statement, results: ResultSet,
 }
 
 fun mockStatementToReturnWeekResultSet(statement: Statement, results: ResultSet) {
-    every { statement.executeQuery("SELECT name, week_type, week, week_order FROM weeks") } returns results
+    every { statement.executeQuery("SELECT name, week_type, week, week_order FROM weeks ORDER BY week_order") } returns results
 
 }
 

@@ -9,7 +9,7 @@ class WeeksQuery(private val connection: Connection) :DataFetcher<List<WeekDTO>>
     fun get(): List<WeekDTO> {
         val statement = connection.createStatement()
 
-        val resultSet = statement.executeQuery("SELECT name, week_type, week, week_order FROM weeks")
+        val resultSet = statement.executeQuery("SELECT name, week_type, week, week_order FROM weeks ORDER BY week_order")
 
         val results = ArrayList<WeekDTO>(0)
         while(resultSet.next()){
