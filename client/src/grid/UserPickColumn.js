@@ -22,7 +22,7 @@ const UserPickColumn = props => {
 
 export default UserPickColumn
 
-export function getPickByGame(passedPicks, gameName) {
+function getPickByGame(passedPicks, gameName) {
     if (!passedPicks || passedPicks.size === 0) return null;
     const firstMatchingPick = passedPicks.filter(pick => pick["game"] === gameName)[0];
 

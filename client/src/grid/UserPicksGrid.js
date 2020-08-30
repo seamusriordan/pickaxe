@@ -18,7 +18,7 @@ const UserPicksGrid = props => {
 export default UserPicksGrid
 
 
-export function getPicksForUser(passedPicks, userName) {
+function getPicksForUser(passedPicks, userName) {
     if (!passedPicks || passedPicks.size === 0) return null;
     const firstMatchingPick = passedPicks.filter(pickSet => pickSet.user.name === userName)[0];
 
