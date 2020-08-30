@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from "react";
 import './WeeklyViewApp.css'
 import {useQuery} from "@apollo/react-hooks";
-import {buildWebsocketUri} from "../helpers";
-import {PICKS_QUERY} from "../graphqlQueries";
-import ChangeWeek from "../ChangeWeek";
-import {Leaderboard} from "../leaderboard/Leaderboard";
-import WeeklyGamesGrid from "./WeeklyGamesGrid";
+import {buildWebsocketUri} from "./helpers";
+import {PICKS_QUERY} from "./graphqlQueries";
+import ChangeWeek from "./ChangeWeek";
+import {Leaderboard} from "./leaderboard/Leaderboard";
+import WeeklyGamesGrid from "./grid/WeeklyGamesGrid";
 
 function indexIsPastEndOfData(index, data) {
     return index >= data.weeks.length - 1;

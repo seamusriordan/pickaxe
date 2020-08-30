@@ -12,7 +12,7 @@ describe('updater services', () => {
     });
     it('Vegas has updated spread', () => {
         cy.visit('localhost:8080/pickaxe')
-            .get('.game-cell')
+            .get('.grid__cell--game')
             .then(findIndexOfGame("DET@GB"))
             .then(i =>
                 cy.get(`#spread-${i}`).contains("-6.5")

@@ -1,5 +1,5 @@
 import WS from "jest-websocket-mock";
-import WeeklyViewApp from "./WeeklyViewApp";
+import WeeklyViewApp from "../WeeklyViewApp";
 
 import {create, act} from "react-test-renderer";
 import React from "react";

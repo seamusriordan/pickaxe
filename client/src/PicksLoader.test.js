@@ -1,4 +1,4 @@
-import WeeklyViewApp from "./grid/WeeklyViewApp";
+import WeeklyViewApp from "./WeeklyViewApp";
 import {create} from "react-test-renderer";
 import AppLoader from "./AppLoader";
 import React from "react";
