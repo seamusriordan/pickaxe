@@ -1,35 +1,20 @@
 import PickCell from "./PickCell";
 import React from "react";
+import UserPickColumn from "./UserPickColumn";
 
 const UserPicksGrid = props => {
     const {data, sendData, currentWeek} = props;
     return (!data.users || !data.games) ? undefined :
         data.users.map((user, userIndex) => {
-            const column = data.games.map((game, gameIndex) => {
-                let pickSet = getPicksForUser(data.userPicks, user.name);
-                let thisPick = getPickByGame(pickSet, game.name);
-
-                const sendDataCallback = (event, updatedPick) => {
-                    sendData({
-                        variables: {
-                            name: user.name,
-                            week: currentWeek,
-                            game: game.name,
-                            pick: updatedPick,
-                        }
-                    });
-                };
-                return <PickCell
-                    className="pick-cell grid-cell"
-                    id={`${user.name}-${game.name}`}
-                    key={`${userIndex}-${gameIndex}`}
-                    game={game.name}
-                    pick={thisPick}
-                    user={user.name}
-                    sendData={sendDataCallback}
-                />
-            });
-            return <div className='grid-column' key={`grid-column-${userIndex}`}>{column}</div>;
+            return <div className='grid-column' key={`grid-column-${userIndex}`}>
+                <UserPickColumn
+                    user={user}
+                    userIndex={userIndex}
+                    games={data.games}
+                    userPicks={data.userPicks}
+                    sendData={sendData}
+                    currentWeek={currentWeek}
+                /></div>
         });
 }
 
