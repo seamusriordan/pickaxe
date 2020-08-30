@@ -7,14 +7,7 @@ const UserPickColumn = props => {
         let thisPick = getPickByGame(props.pickSet, game.name);
 
         const sendDataCallback = (event, updatedPick) => {
-            props.sendData({
-                variables: {
-                    name: props.user.name,
-                    week: props.currentWeek,
-                    game: game.name,
-                    pick: updatedPick,
-                }
-            });
+            props.sendData(props.user.name, game.name, updatedPick)
         };
         return <PickCell
             className="pick-cell grid-cell"

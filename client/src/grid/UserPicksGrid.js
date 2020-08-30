@@ -2,14 +2,13 @@ import React from "react";
 import UserPickColumn from "./UserPickColumn";
 
 const UserPicksGrid = props => {
-    const {data, sendData, currentWeek} = props;
+    const {data, sendData} = props;
     return (!data.users || !data.games) ? undefined :
         data.users.map((user, userIndex) => {
             return <div className='grid-column' key={`grid-column-${userIndex}`}>
                 <UserPickColumn
                     user={user}
                     userIndex={userIndex}
-                    currentWeek={currentWeek}
                     games={data.games}
                     pickSet={getPicksForUser(data.userPicks, user.name)}
                     sendData={sendData}

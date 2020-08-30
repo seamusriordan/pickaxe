@@ -106,14 +106,6 @@ describe('WeeklyGamesGrid', () => {
             })
         });
 
-        it('changes pick cells to advanced week', () => {
-            act(() => {
-                week0Change.props.forward();
-            })
-
-            const cell = grid.findByProps({id: "pick-cells"});
-            expect(cell.props.currentWeek).toBe(mockQueryData.weeks[1].name);
-        });
 
         it('twice on week 0 refetches with week 2', () => {
             act(() => {
@@ -240,23 +232,23 @@ describe('WeeklyGamesGrid', () => {
             grid = renderer.root;
         });
 
-        it('PickCells is given sendData callback', () => {
+        it('WeeklyGamesGrid is given sendData callback', () => {
             let grid = null;
+            let isCalled = false;
             const callback = () => {
+                isCalled = true;
             };
             useMutation.mockReturnValue([callback]);
             act(() => {
                 grid = create(<WeeklyGamesGrid defaultWeek="0"/>)
             });
+            const cell = grid.root.find(el => el.props.id === "user-picks-grid");
 
-            const cell = grid.root.find(el => el.props.id === "pick-cells");
-            expect(cell.props.sendData).toBe(callback);
+            cell.props.sendData("name", "game", "pick");
+
+            expect(isCalled).toBe(true)
         });
 
-        it('PickCells is given default week on initialization', () => {
-            const cell = grid.findByProps({id: "pick-cells"});
-            expect(cell.props.currentWeek).toBe(grid.props.defaultWeek);
-        });
 
         it('Renders twelve pick cells when there are three users and four games in data response', () => {
             const pickCells = findByClassName(grid, 'pick-cell');

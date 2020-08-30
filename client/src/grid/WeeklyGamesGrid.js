@@ -119,7 +119,15 @@ const WeeklyGamesGrid = props => {
     const advanceWeek = generateAdvanceWeekCallback(data, currentWeek, updateWeek, refetch);
     const rewindWeek = generateRewindWeekCallback(data, currentWeek, updateWeek, refetch);
 
-    return <div className='picks-grid'>
+    const sendDataForWeek = (userName, gameName, updatedPick) => sendData({
+        variables: {
+            name: userName,
+            week: currentWeek,
+            game: gameName,
+            pick: updatedPick,
+        }
+    });
+    return <div className='weekly-games-grid'>
         {error ? "Error" : !data ? "Waiting for data..." :
             [
                 <div key="grid-leaders" id="grid-leaders">
@@ -160,10 +168,9 @@ const WeeklyGamesGrid = props => {
                     />
                 </div>,
                 <div className='grid-column' key="grid-picks">
-                    <UserPicksGrid id="pick-cells" key="pick-cells"
+                    <UserPicksGrid id="user-picks-grid" key="user-picks-grid"
                                    data={data}
-                                   sendData={sendData}
-                                   currentWeek={currentWeek}
+                                   sendData={sendDataForWeek}
                     />
                 </div>,
                 <div className='grid-column' key="grid-results">
