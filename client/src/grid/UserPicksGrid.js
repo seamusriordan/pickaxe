@@ -6,7 +6,7 @@ const UserPicksGrid = props => {
     return (!users || !games) ? undefined :
         users.map(user => {
             return <UserPickColumn
-                className='grid-column' key={`grid-column-${user.name}`}
+                className='grid__column' key={`grid-column-${user.name}`}
                 user={user}
                 games={games}
                 pickSet={getPicksForUser(userPicks, user.name)}

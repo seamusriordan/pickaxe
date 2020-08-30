@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 12.2 (Debian 12.2-2.pgdg100+1)
+-- Dumped from database version 12.3 (Debian 12.3-1.pgdg100+1)
 -- Dumped by pg_dump version 12.2
 
 SET statement_timeout = 0;
@@ -81,7 +81,8 @@ ALTER TABLE public.userpicks OWNER TO postgres;
 CREATE TABLE public.users (
     name character varying NOT NULL,
     active boolean DEFAULT true,
-    email character varying
+    email character varying,
+    id integer NOT NULL
 );
 
 
@@ -170,11 +171,11 @@ Vegas	Week 1	NE@TB	TB
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.users (name, active, email) FROM stdin;
-Seamus	t	\N
-Sereres	t	\N
-RNG	t	\N
-Vegas	t	\N
+COPY public.users (name, active, email, id) FROM stdin;
+Seamus	t	\N	1
+Vegas	t	\N	99
+Sereres	t	\N	2
+RNG	t	\N	98
 \.
 
 
@@ -226,6 +227,13 @@ ALTER TABLE ONLY public.users
 
 ALTER TABLE ONLY public.weeks
     ADD CONSTRAINT weeks_pk PRIMARY KEY (name);
+
+
+--
+-- Name: users_id_uindex; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE UNIQUE INDEX users_id_uindex ON public.users USING btree (id);
 
 
 --

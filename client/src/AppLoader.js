@@ -1,5 +1,5 @@
 import React from "react";
-import WeeklyViewApp from "./grid/WeeklyViewApp";
+import WeeklyViewApp from "./WeeklyViewApp";
 import {useQuery} from "@apollo/react-hooks";
 import {WEEKS_QUERY} from "./graphqlQueries";
 

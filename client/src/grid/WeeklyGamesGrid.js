@@ -3,6 +3,7 @@ import UserPicksGrid from "./UserPicksGrid";
 import React from "react";
 import {useMutation} from "@apollo/react-hooks";
 import {UPDATE_PICKS_MUTATION} from "../graphqlQueries";
+import "./WeeklyGamesGrid.css"
 
 function blankCells(size) {
     let blankArray = []
@@ -36,53 +37,49 @@ const WeeklyGamesGrid = props => {
 
     return [
         <div key="grid-top-padding">
-            <div className='grid-cell name-cell top-padding-cell'/>
-            <div className='grid-cell name-cell top-padding-cell'/>
-            <LinearCells key="name-cells"
+            <div className='grid__cell grid__cell--name grid__cell--top-padding'/>
+            <div className='grid__cell grid__cell--name grid__cell--top-padding'/>
+            <LinearCells key="grid__cell--names"
                          items={blankCells(userNames.length)} name="top-padding"
             />
-            <div className='grid-cell name-cell top-padding-cell'/>
+            <div className='grid__cell grid__cell--name grid__cell--top-padding'/>
         </div>,
         <div key="grid-names">
-            <div className='grid-cell name-cell border-bottom'/>
-            <div className='grid-cell name-cell border-bottom'>Spread</div>
-            <LinearCells key="name-cells"
+            <div className='grid__cell grid__cell--name grid__cell--border-bottom'/>
+            <div className='grid__cell grid__cell--name grid__cell--border-bottom'>Spread</div>
+            <LinearCells key="grid__cell--names"
                          items={userNames} name="name"
             />
-            <div className='grid-cell name-cell border-cell'>Result</div>
+            <div className='grid__cell grid__cell--name grid__cell--border'>Result</div>
         </div>,
         <LinearCells key="game-cells"
                      id="game-cells"
-                     className='grid-column'
                      items={gameNames} name="game"
         />,
         <LinearCells key="spread-cells"
-                     className='grid-column'
+                     className='grid__column'
                      items={gameSpreads} name="spread"
         />,
         <UserPicksGrid id="user-picks-grid"
                        key="user-picks-grid"
-                       className='grid-column'
                        users={props.users}
                        games={props.games}
                        userPicks={props.userPicks}
                        sendData={composeSendDataForWeek(props.currentWeek, sendData)}
         />,
         <LinearCells key="result-cells"
-                     className='grid-column'
                      items={gameResults} name="result"
         />,
         <LinearCells key="right-padding-cells"
-                     className='grid-column'
                      items={blankCells(gameResults.length)} name="right-padding"
         />,
         <div key="grid-totals">
-            <div className='grid-cell name-cell'/>
-            <div className='grid-cell name-cell'/>
+            <div className='grid__cell grid__cell--total'/>
+            <div className='grid__cell grid__cell--total'/>
             <LinearCells key="total-cells"
                          items={totalValues} name="total"
             />
-            <div className='grid-cell border-left total-cell'/>
+            <div className='grid__cell grid__cell--total grid__cell--border-left'/>
         </div>
     ]
 }

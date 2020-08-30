@@ -7,13 +7,13 @@ describe('LeaderboardRow', () => {
     it('renders name', () => {
         const name = "Gandalf";
         const row = create(<LeaderboardRow name={name} weeks={0} picks={0}/>).root;
-        expect(findByClassName(row, "leader-name")[0].children[0]).toBe(name)
+        expect(findByClassName(row, "leader-element-name")[0].children[0]).toBe(name)
     });
 
     it('renders different name', () => {
         const name = "Ogo";
         const row = create(<LeaderboardRow name={name} weeks={0} picks={0}/>).root;
-        expect(findByClassName(row, "leader-name")[0].children[0]).toBe(name)
+        expect(findByClassName(row, "leader-element-name")[0].children[0]).toBe(name)
     });
 
     it('renders weeks of 0', () => {

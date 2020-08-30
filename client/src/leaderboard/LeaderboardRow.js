@@ -1,11 +1,11 @@
 import React from "react";
-import "./LeaderboardRow.css"
 
 export function LeaderboardRow(props) {
+    const baseCssClasses = "grid__cell grid__cell--border grid__cell--leader"
     return <div>
-        <div className="leader-name grid-cell border-cell leader-cell leader-element-name">{props.name}</div>
-        <div className="leader-correct-weeks grid-cell border-cell leader-cell leader-numerical">{props.weeks}</div>
-        <div className="leader-correct-picks grid-cell border-cell leader-cell leader-numerical">{props.picks}</div>
-        <div className="leader-cell grid-cell border-cell right-padding-cell"/>
+        <div className={`${baseCssClasses} leaderboard__row leaderboard__row--name leader-element-name`}>{props.name}</div>
+        <div className={`${baseCssClasses} leaderboard__row leaderboard__row--numerical leader-correct-weeks`}>{props.weeks}</div>
+        <div className={`${baseCssClasses} leaderboard__row leaderboard__row--numerical leader-correct-picks`}>{props.picks}</div>
+        <div className={`${baseCssClasses} grid__cell--right-padding`}/>
     </div>
 }

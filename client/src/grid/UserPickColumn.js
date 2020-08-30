@@ -9,17 +9,18 @@ const UserPickColumn = props => {
             props.sendData(props.user.name, game.name, updatedPick)
         };
         return <PickCell
-            className="pick-cell grid-cell"
+            className="pick-cell grid__cell"
             id={`${props.user.name}-${game.name}`}
             key={`${props.user.name}-${game.name}`}
             game={game.name}
             pick={thisPick}
             user={props.user.name}
+            correct={!!thisPick && thisPick?.toLowerCase() === game.result?.toLowerCase()}
             sendData={sendDataCallback}
         />
     });
 
-    return <div className="grid-column">{cells}</div>
+    return <div className="grid__column">{cells}</div>
 }
 
 export default UserPickColumn

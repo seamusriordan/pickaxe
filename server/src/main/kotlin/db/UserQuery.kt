@@ -14,7 +14,7 @@ class UserQuery(private val connection: Connection) : DataFetcher<List<UserDTO>>
     fun getActiveUsers(): List<UserDTO> {
         val statement = connection.createStatement()
 
-        val resultSet = statement.executeQuery("SELECT name FROM users WHERE active = TRUE")
+        val resultSet = statement.executeQuery("SELECT name FROM users WHERE active = TRUE ORDER BY id")
 
         val results = ArrayList<UserDTO>(0)
 

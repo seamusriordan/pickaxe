@@ -1,16 +1,15 @@
 import React, {useEffect, useState} from "react";
 import './WeeklyViewApp.css'
 import {useQuery} from "@apollo/react-hooks";
-import {buildWebsocketUri} from "../helpers";
-import {PICKS_QUERY} from "../graphqlQueries";
-import ChangeWeek from "../ChangeWeek";
-import {Leaderboard} from "../leaderboard/Leaderboard";
-import WeeklyGamesGrid from "./WeeklyGamesGrid";
+import {buildWebsocketUri} from "./helpers";
+import {PICKS_QUERY} from "./graphqlQueries";
+import ChangeWeek from "./ChangeWeek";
+import {Leaderboard} from "./leaderboard/Leaderboard";
+import WeeklyGamesGrid from "./grid/WeeklyGamesGrid";
 
 function indexIsPastEndOfData(index, data) {
     return index >= data.weeks.length - 1;
 }
-
 
 
 function generateAdvanceWeekCallback(data, currentWeek, updateWeek, refetch) {
@@ -95,13 +94,13 @@ const WeeklyViewApp = props => {
         {error ? "Error" : !data ? "Waiting for data..." :
             [
                 <Leaderboard key="leaderboard" data={data.leaders}/>,
-                <div className="change-week" key="grid-change-week">
-                    <ChangeWeek key="change-week" id="change-week"
-                                week={currentWeek} forward={advanceWeek}
-                                back={rewindWeek}/>
-                </div>,
+                <ChangeWeek key="change-week"
+                            id="change-week"
+                            week={currentWeek} forward={advanceWeek}
+                            back={rewindWeek}/>,
                 <WeeklyGamesGrid
                     key="weekly-games-grid"
+                    data-testid="weekly-games-grid"
                     currentWeek={currentWeek}
                     users={data?.users}
                     games={data?.games}
