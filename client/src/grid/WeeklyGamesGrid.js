@@ -51,34 +51,31 @@ const WeeklyGamesGrid = props => {
             />
             <div className='grid-cell name-cell border-cell'>Result</div>
         </div>,
-        <div className='grid-column' key="grid-games">
-            <LinearCells key="game-cells" id="game-cells"
-                         items={gameNames} name="game"
-            />
-        </div>,
-        <div className='grid-column' key="grid-spreads">
-            <LinearCells key="spread-cells"
-                         items={gameSpreads} name="spread"
-            />
-        </div>,
-        <div className='grid-column' key="grid-picks">
-            <UserPicksGrid id="user-picks-grid" key="user-picks-grid"
-                           users={props.users}
-                           games={props.games}
-                           userPicks={props.userPicks}
-                           sendData={composeSendDataForWeek(props.currentWeek, sendData)}
-            />
-        </div>,
-        <div className='grid-column' key="grid-results">
-            <LinearCells key="result-cells"
-                         items={gameResults} name="result"
-            />
-        </div>,
-        <div className='grid-column' key="grid-right-padding">
-            <LinearCells key="right-padding-cells"
-                         items={blankCells(gameResults.length)} name="right-padding"
-            />
-        </div>,
+        <LinearCells key="game-cells"
+                     id="game-cells"
+                     className='grid-column'
+                     items={gameNames} name="game"
+        />,
+        <LinearCells key="spread-cells"
+                     className='grid-column'
+                     items={gameSpreads} name="spread"
+        />,
+        <UserPicksGrid id="user-picks-grid"
+                       key="user-picks-grid"
+                       className='grid-column'
+                       users={props.users}
+                       games={props.games}
+                       userPicks={props.userPicks}
+                       sendData={composeSendDataForWeek(props.currentWeek, sendData)}
+        />,
+        <LinearCells key="result-cells"
+                     className='grid-column'
+                     items={gameResults} name="result"
+        />,
+        <LinearCells key="right-padding-cells"
+                     className='grid-column'
+                     items={blankCells(gameResults.length)} name="right-padding"
+        />,
         <div key="grid-totals">
             <div className='grid-cell name-cell'/>
             <div className='grid-cell name-cell'/>
