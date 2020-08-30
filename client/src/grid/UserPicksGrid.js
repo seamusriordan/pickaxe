@@ -1,11 +1,11 @@
 import PickCell from "./PickCell";
 import React from "react";
 
-const PickCells = props => {
+const UserPicksGrid = props => {
     const {data, sendData, currentWeek} = props;
     return (!data.users || !data.games) ? undefined :
-        data.users.map((user, index1) => {
-            const column = data.games.map((game, index2) => {
+        data.users.map((user, userIndex) => {
+            const column = data.games.map((game, gameIndex) => {
                 let pickSet = getPicksForUser(data.userPicks, user.name);
                 let thisPick = getPickByGame(pickSet, game.name);
 
@@ -22,18 +22,18 @@ const PickCells = props => {
                 return <PickCell
                     className="pick-cell grid-cell"
                     id={`${user.name}-${game.name}`}
-                    key={`${index1}-${index2}`}
+                    key={`${userIndex}-${gameIndex}`}
                     game={game.name}
                     pick={thisPick}
                     user={user.name}
                     sendData={sendDataCallback}
                 />
             });
-            return <div className='grid-column' key={`grid-column-${index1}`}>{column}</div>;
+            return <div className='grid-column' key={`grid-column-${userIndex}`}>{column}</div>;
         });
 }
 
-export default PickCells
+export default UserPicksGrid
 
 export function getPickByGame(passedPicks, gameName) {
     if (!passedPicks || passedPicks.size === 0) return null;

@@ -1,6 +1,6 @@
 import {act, create} from "react-test-renderer";
 import React from "react";
-import PickCells from "./PickCells";
+import UserPicksGrid from "./UserPicksGrid";
 import {mockQueryData} from "../testUtilities/MockQueryData";
 import {fireEvent, render} from "@testing-library/react";
 
@@ -14,7 +14,7 @@ describe('PickCells', () => {
         let grid = null;
 
         act(() => {
-            grid = create(<PickCells data={mockQueryData} sendData={sendDataSpy} currentWeek="0"/>)
+            grid = create(<UserPicksGrid data={mockQueryData} sendData={sendDataSpy} currentWeek="0"/>)
         });
         let cell = grid.root.find(el => el.props.id === "Vegas-HAR@NOR");
 
@@ -36,7 +36,7 @@ describe('PickCells', () => {
         let grid = null;
 
         act(() => {
-            grid = create(<PickCells data={mockQueryData} sendData={sendDataSpy} currentWeek="1"/>)
+            grid = create(<UserPicksGrid data={mockQueryData} sendData={sendDataSpy} currentWeek="1"/>)
         });
         let cell = grid.root.find(el => el.props.id === "Vegas-HAR@NOR");
 
@@ -58,7 +58,7 @@ describe('PickCells', () => {
         let grid = null;
 
         act(() => {
-            grid = create(<PickCells data={mockQueryData} sendData={sendDataSpy} currentWeek="0"/>)
+            grid = create(<UserPicksGrid data={mockQueryData} sendData={sendDataSpy} currentWeek="0"/>)
         });
         let cell = grid.root.find(el => el.props.id === "Davebob-CHI@GB");
 
@@ -79,7 +79,7 @@ describe('PickCells', () => {
     describe('on fired blur event', () => {
         let container;
         beforeEach(() => {
-            const renderResult = render(<PickCells data={mockQueryData} sendData={sendDataSpy} currentWeek="0"/>);
+            const renderResult = render(<UserPicksGrid data={mockQueryData} sendData={sendDataSpy} currentWeek="0"/>);
             container = renderResult.container;
         })
 
@@ -96,7 +96,7 @@ describe('PickCells', () => {
 
         it(' do not send data when no change', () => {
 
-            let {container} = render(<PickCells data={mockQueryData} sendData={sendDataSpy} currentWeek="0"/>);
+            let {container} = render(<UserPicksGrid data={mockQueryData} sendData={sendDataSpy} currentWeek="0"/>);
             let cell = container.querySelector('#Vegas-CHI\\@GB');
 
             act(() => {

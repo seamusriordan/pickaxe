@@ -3,7 +3,7 @@ import './PicksGrid.css'
 import {useMutation, useQuery} from "@apollo/react-hooks";
 import {buildWebsocketUri} from "../helpers";
 import {PICKS_QUERY, UPDATE_PICKS_MUTATION} from "../graphqlQueries";
-import PickCells from "./PickCells";
+import UserPicksGrid from "./UserPicksGrid";
 import LinearCells from "./LinearCells"
 import ChangeWeek from "../ChangeWeek";
 import {Leaderboard} from "../leaderboard/Leaderboard";
@@ -160,10 +160,10 @@ const WeeklyGamesGrid = props => {
                     />
                 </div>,
                 <div className='grid-column' key="grid-picks">
-                    <PickCells id="pick-cells" key="pick-cells"
-                               data={data}
-                               sendData={sendData}
-                               currentWeek={currentWeek}
+                    <UserPicksGrid id="pick-cells" key="pick-cells"
+                                   data={data}
+                                   sendData={sendData}
+                                   currentWeek={currentWeek}
                     />
                 </div>,
                 <div className='grid-column' key="grid-results">
