@@ -8,7 +8,7 @@ import {mockQueryData} from "../testUtilities/MockQueryData";
 import gql from 'graphql-tag';
 import {assertAllUserPicksMatchCellText, findByClassName} from "../testUtilities/Helpers";
 import PickCell from "./PickCell";
-import {getPickByGame} from "./UserPicksGrid";
+import {getPickByGame} from "./UserPickColumn";
 import {Leaderboard} from "../leaderboard/Leaderboard";
 import {LeaderboardRow} from "../leaderboard/LeaderboardRow";
 

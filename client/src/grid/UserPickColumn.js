@@ -1,6 +1,5 @@
 import PickCell from "./PickCell";
 import React from "react";
-import {getPickByGame} from "./UserPicksGrid";
 
 const UserPickColumn = props => {
     return props.games.map(game => {
@@ -12,7 +11,7 @@ const UserPickColumn = props => {
         return <PickCell
             className="pick-cell grid-cell"
             id={`${props.user.name}-${game.name}`}
-            key={`${props.userIndex}-${game.name}`}
+            key={`${props.user.name}-${game.name}`}
             game={game.name}
             pick={thisPick}
             user={props.user.name}
@@ -22,3 +21,10 @@ const UserPickColumn = props => {
 }
 
 export default UserPickColumn
+
+export function getPickByGame(passedPicks, gameName) {
+    if (!passedPicks || passedPicks.size === 0) return null;
+    const firstMatchingPick = passedPicks.filter(pick => pick["game"] === gameName)[0];
+
+    return firstMatchingPick ? firstMatchingPick["pick"] : null
+}
