@@ -1,10 +1,10 @@
 import {act, create} from "react-test-renderer";
 import React from "react";
-import PickCells from "./PickCells";
+import UserPicksGrid from "./UserPicksGrid";
 import {mockQueryData} from "../testUtilities/MockQueryData";
 import {fireEvent, render} from "@testing-library/react";
 
-describe('PickCells', () => {
+describe('UserPicksGrid', () => {
     let sendDataSpy;
     beforeEach(() => {
         sendDataSpy = jest.fn();
@@ -14,7 +14,12 @@ describe('PickCells', () => {
         let grid = null;
 
         act(() => {
-            grid = create(<PickCells data={mockQueryData} sendData={sendDataSpy} currentWeek="0"/>)
+            grid = create(<UserPicksGrid
+                users={mockQueryData.users}
+                games={mockQueryData.games}
+                userPicks={mockQueryData.userPicks}
+                sendData={sendDataSpy}
+            />)
         });
         let cell = grid.root.find(el => el.props.id === "Vegas-HAR@NOR");
 
@@ -22,43 +27,21 @@ describe('PickCells', () => {
             cell.children[0].props.onBlur({type: "onblur", target: {textContent: "THHH"}});
         });
 
-        expect(sendDataSpy.mock.calls[0][0]).toEqual({
-            variables: {
-                name: "Vegas",
-                week: "0",
-                game: "HAR@NOR",
-                pick: "THHH"
-            }
-        })
+        expect(sendDataSpy.mock.calls[0][0]).toEqual("Vegas")
+        expect(sendDataSpy.mock.calls[0][1]).toEqual("HAR@NOR")
+        expect(sendDataSpy.mock.calls[0][2]).toEqual("THHH")
     });
 
-    it('PickCell sendData callback executes send with update on onBlur with week 1', () => {
-        let grid = null;
-
-        act(() => {
-            grid = create(<PickCells data={mockQueryData} sendData={sendDataSpy} currentWeek="1"/>)
-        });
-        let cell = grid.root.find(el => el.props.id === "Vegas-HAR@NOR");
-
-        act(() => {
-            cell.children[0].props.onBlur({type: "onblur", target: {textContent: "THHH"}});
-        });
-
-        expect(sendDataSpy.mock.calls[0][0]).toEqual({
-            variables: {
-                name: "Vegas",
-                week: "1",
-                game: "HAR@NOR",
-                pick: "THHH"
-            }
-        })
-    });
 
     it('PickCell send on pressing enter', () => {
         let grid = null;
 
         act(() => {
-            grid = create(<PickCells data={mockQueryData} sendData={sendDataSpy} currentWeek="0"/>)
+            grid = create(<UserPicksGrid
+                users={mockQueryData.users}
+                games={mockQueryData.games}
+                userPicks={mockQueryData.userPicks}
+                sendData={sendDataSpy}/>)
         });
         let cell = grid.root.find(el => el.props.id === "Davebob-CHI@GB");
 
@@ -66,20 +49,19 @@ describe('PickCells', () => {
             cell.children[0].props.onBlur({type: "onkeypress", "keyCode": 13, target: {textContent: "GUB"}});
         });
 
-        expect(sendDataSpy.mock.calls[0][0]).toEqual({
-            variables: {
-                name: "Davebob",
-                week: "0",
-                game: "CHI@GB",
-                pick: "GUB"
-            }
-        })
+        expect(sendDataSpy.mock.calls[0][0]).toEqual("Davebob")
+        expect(sendDataSpy.mock.calls[0][1]).toEqual("CHI@GB")
+        expect(sendDataSpy.mock.calls[0][2]).toEqual("GUB")
     });
 
     describe('on fired blur event', () => {
         let container;
         beforeEach(() => {
-            const renderResult = render(<PickCells data={mockQueryData} sendData={sendDataSpy} currentWeek="0"/>);
+            const renderResult = render(<UserPicksGrid
+                users={mockQueryData.users}
+                games={mockQueryData.games}
+                userPicks={mockQueryData.userPicks}
+                sendData={sendDataSpy}/>);
             container = renderResult.container;
         })
 
@@ -91,12 +73,16 @@ describe('PickCells', () => {
                 fireEvent.blur(cell, {target: {textContent: "CHI"}});
             });
 
-            expect(sendDataSpy.mock.calls[0][0].variables.pick).toBe("CHI")
+            expect(sendDataSpy.mock.calls[0][2]).toBe("CHI")
         });
 
         it(' do not send data when no change', () => {
 
-            let {container} = render(<PickCells data={mockQueryData} sendData={sendDataSpy} currentWeek="0"/>);
+            let {container} = render(<UserPicksGrid
+                users={mockQueryData.users}
+                games={mockQueryData.games}
+                userPicks={mockQueryData.userPicks}
+                sendData={sendDataSpy}/>);
             let cell = container.querySelector('#Vegas-CHI\\@GB');
 
             act(() => {
@@ -113,7 +99,7 @@ describe('PickCells', () => {
                 fireEvent.blur(cell, {target: {textContent: "CHI\nall this other data"}});
             });
 
-            expect(sendDataSpy.mock.calls[0][0].variables.pick).toBe("CHI")
+            expect(sendDataSpy.mock.calls[0][2]).toBe("CHI")
         });
 
         it('innerHTML from textContent with newlines only have up to first newline', () => {

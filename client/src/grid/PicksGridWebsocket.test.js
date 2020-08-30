@@ -1,5 +1,5 @@
 import WS from "jest-websocket-mock";
-import PicksGrid from "./PicksGrid";
+import WeeklyViewApp from "./WeeklyViewApp";
 
 import {create, act} from "react-test-renderer";
 import React from "react";
@@ -32,7 +32,7 @@ describe('Websocket behavior', () => {
 
             act(() => {
                 // eslint-disable-next-line no-unused-vars
-                grid = create(<PicksGrid/>);
+                grid = create(<WeeklyViewApp/>);
             });
         });
 

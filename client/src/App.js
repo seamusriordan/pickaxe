@@ -5,7 +5,7 @@ import ApolloClient from "apollo-client";
 import {InMemoryCache} from 'apollo-cache-inmemory';
 import {HttpLink} from 'apollo-link-http';
 import {buildGraphqlUri} from "./helpers";
-import PicksLoader from "./PicksLoader";
+import AppLoader from "./AppLoader";
 
 
 export const apolloClient = new ApolloClient({
@@ -20,13 +20,9 @@ function App() {
     return (
         <div className="App">
             <header className="App-header">
-                <a className="App-link"
-                    href="https://www.possum.best"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >UMass Memorial Football Picks League</a>
+                UMass Memorial Football Picks League
             </header>
-            <ApolloProvider client={apolloClient}><PicksLoader/></ApolloProvider>
+            <ApolloProvider client={apolloClient}><AppLoader/></ApolloProvider>
         </div>
     );
 }

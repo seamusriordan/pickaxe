@@ -3,7 +3,7 @@ import {create, act} from "react-test-renderer";
 import App from './App';
 import {MockedProvider} from "@apollo/react-testing";
 import {buildGraphqlUri, getGraphqlPort, getGraphqlProtocol, getGraphqlServer} from "./helpers";
-import PicksLoader from "./PicksLoader";
+import AppLoader from "./AppLoader";
 
 
 describe('App', () => {
@@ -28,7 +28,7 @@ describe('App', () => {
         act(() => {
             app = create(<MockedProvider><App/></MockedProvider>);
         });
-        expect(app.root.findAll(el => el.type === PicksLoader).length).toEqual(1);
+        expect(app.root.findAll(el => el.type === AppLoader).length).toEqual(1);
     });
 
     it('graphqlServer returns localhost when environment variable is not set', () => {

@@ -11,6 +11,13 @@ export function assertAllUserPicksMatchCellText(queryResult, pickCells) {
     );
 }
 
+export function getPickByGame(passedPicks, gameName) {
+    if (!passedPicks || passedPicks.size === 0) return null;
+    const firstMatchingPick = passedPicks.filter(pick => pick["game"] === gameName)[0];
+
+    return firstMatchingPick ? firstMatchingPick["pick"] : null
+}
+
 function assertUserPicksMatchCells(userPicks, user, games, pickCells) {
     games.map(
         game => assertUserPickForGameMatchesCellText(userPicks, user, game, pickCells)
