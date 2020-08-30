@@ -1,4 +1,4 @@
-import PicksGrid from "./PicksGrid";
+import WeeklyGamesGrid from "./WeeklyGamesGrid";
 
 import {create, act} from "react-test-renderer";
 import React from "react";
@@ -16,7 +16,7 @@ import {LeaderboardRow} from "../leaderboard/LeaderboardRow";
 jest.mock('@apollo/react-hooks');
 
 
-describe('PicksGrid', () => {
+describe('WeeklyGamesGrid', () => {
     let grid;
     let refetchSpy;
 
@@ -31,7 +31,7 @@ describe('PicksGrid', () => {
         useMutation.mockReturnValue([() => {
         }]);
         // eslint-disable-next-line no-unused-vars,no-unused-expressions
-        grid = create(<PicksGrid defaultWeek="0"/>).root;
+        grid = create(<WeeklyGamesGrid defaultWeek="0"/>).root;
     });
 
     it('calls useQuery with some poll interval', () => {
@@ -50,7 +50,7 @@ describe('PicksGrid', () => {
         }]);
 
         // eslint-disable-next-line no-unused-expressions
-        create(<PicksGrid defaultWeek={defaultWeek}/>).root;
+        create(<WeeklyGamesGrid defaultWeek={defaultWeek}/>).root;
         expect(useQuery.mock.calls[0][1].variables.week).toEqual(defaultWeek)
     });
 
@@ -63,7 +63,7 @@ describe('PicksGrid', () => {
             loading: false, error: true, data: undefined, refetch: () => {
             }
         });
-        const grid = create(<PicksGrid/>).root;
+        const grid = create(<WeeklyGamesGrid/>).root;
 
         expect(grid.findAll(el => el.props.children === 'Error').length).toEqual(1);
     });
@@ -73,7 +73,7 @@ describe('PicksGrid', () => {
             loading: false, error: undefined, data: undefined, refetch: () => {
             }
         });
-        const grid = create(<PicksGrid/>).root;
+        const grid = create(<WeeklyGamesGrid/>).root;
 
         expect(grid.findAll(el => el.props.children === 'Waiting for data...').length).toEqual(1);
     });
@@ -139,7 +139,7 @@ describe('PicksGrid', () => {
         });
 
         it('on week 1 refetches with week 2', () => {
-            const week1Grid = create(<PicksGrid defaultWeek="1"/>).root;
+            const week1Grid = create(<WeeklyGamesGrid defaultWeek="1"/>).root;
             const changeWeek = week1Grid.findByProps({id: "change-week"})
 
             act(() => {
@@ -152,7 +152,7 @@ describe('PicksGrid', () => {
         });
 
         it('on final week does nothing', () => {
-            const week2Grid = create(<PicksGrid defaultWeek="2"/>).root;
+            const week2Grid = create(<WeeklyGamesGrid defaultWeek="2"/>).root;
             const changeWeek = week2Grid.findByProps({id: "change-week"})
 
             act(() => {
@@ -168,7 +168,7 @@ describe('PicksGrid', () => {
         let week2Change;
 
         beforeEach(() => {
-            week2Grid = create(<PicksGrid defaultWeek="2"/>).root;
+            week2Grid = create(<WeeklyGamesGrid defaultWeek="2"/>).root;
             week2Change = week2Grid.findByProps({id: "change-week"});
         })
 
@@ -206,7 +206,7 @@ describe('PicksGrid', () => {
         });
 
         it('on week 1 refetches with week 0', () => {
-            const week1Grid = create(<PicksGrid defaultWeek="1"/>).root;
+            const week1Grid = create(<WeeklyGamesGrid defaultWeek="1"/>).root;
             const changeWeek = week1Grid.findByProps({id: "change-week"})
 
             act(() => {
@@ -236,7 +236,7 @@ describe('PicksGrid', () => {
             useQuery.mockReturnValue({loading: false, error: null, data: mockQueryData});
             useMutation.mockReturnValue([() => {}]);
 
-            renderer = create(<PicksGrid defaultWeek="0"/>);
+            renderer = create(<WeeklyGamesGrid defaultWeek="0"/>);
             grid = renderer.root;
         });
 
@@ -246,7 +246,7 @@ describe('PicksGrid', () => {
             };
             useMutation.mockReturnValue([callback]);
             act(() => {
-                grid = create(<PicksGrid defaultWeek="0"/>)
+                grid = create(<WeeklyGamesGrid defaultWeek="0"/>)
             });
 
             const cell = grid.root.find(el => el.props.id === "pick-cells");
@@ -313,7 +313,7 @@ describe('PicksGrid', () => {
             };
             useQuery.mockReturnValue({loading: false, error: null, data: twoMockUserData});
 
-            const grid = create(<PicksGrid/>).root;
+            const grid = create(<WeeklyGamesGrid/>).root;
             const nameCells = findByClassName(grid, 'name-linear-cell');
 
             expect(nameCells.length).toBe(twoMockUserData.users.length);
@@ -346,7 +346,7 @@ describe('PicksGrid', () => {
             };
             useQuery.mockReturnValue({loading: false, error: null, data: twoMockUserData});
 
-            const grid = create(<PicksGrid/>).root;
+            const grid = create(<WeeklyGamesGrid/>).root;
             const totalCells = findByClassName(grid, 'total-linear-cell');
 
             expect(totalCells.length).toBe(twoMockUserData.users.length);
@@ -375,7 +375,7 @@ describe('PicksGrid', () => {
             };
             useQuery.mockReturnValue({loading: false, error: null, data: oneMockGameData});
 
-            const grid = create(<PicksGrid/>).root;
+            const grid = create(<WeeklyGamesGrid/>).root;
             const gameCells = findByClassName(grid, 'game-cell');
 
             expect(gameCells.length).toBe(oneMockGameData.games.length);
@@ -405,7 +405,7 @@ describe('PicksGrid', () => {
             };
             useQuery.mockReturnValue({loading: false, error: null, data: oneMockGameData});
 
-            const grid = create(<PicksGrid/>).root;
+            const grid = create(<WeeklyGamesGrid/>).root;
             const spreadCells = findByClassName(grid, 'spread-cell');
 
             expect(spreadCells.length).toBe(oneMockGameData.games.length);
@@ -434,7 +434,7 @@ describe('PicksGrid', () => {
             };
             useQuery.mockReturnValue({loading: false, error: null, data: oneMockGameData});
 
-            const grid = create(<PicksGrid/>).root;
+            const grid = create(<WeeklyGamesGrid/>).root;
             const resultCells = findByClassName(grid, 'result-cell');
 
             expect(resultCells.length).toBe(oneMockGameData.games.length);

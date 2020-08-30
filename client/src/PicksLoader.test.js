@@ -1,4 +1,4 @@
-import PicksGrid from "./grid/PicksGrid";
+import WeeklyGamesGrid from "./grid/WeeklyGamesGrid";
 import {create} from "react-test-renderer";
 import PicksLoader from "./PicksLoader";
 import React from "react";
@@ -24,14 +24,14 @@ describe('PicksLoader', () => {
         }]);
     });
 
-    it('has a PicksGrid element', () => {
+    it('has a WeeklyGamesGrid element', () => {
         const loader = create(<PicksLoader/>).root;
 
-        const grid = loader.findAllByType(PicksGrid);
+        const grid = loader.findAllByType(WeeklyGamesGrid);
         expect(grid.length).toEqual(1);
     });
 
-    it('passes current week of 0 to PicksGrid', () => {
+    it('passes current week of 0 to WeeklyGamesGrid', () => {
         const loader = create(<PicksLoader/>).root;
 
         const grid = loader.findByProps({id: "picks-grid"});
@@ -46,7 +46,7 @@ describe('PicksLoader', () => {
         expect(useQuery.mock.calls[0][0]).toEqual(WEEKS_QUERY);
     });
 
-    it('passes current week of 1 to PicksGrid', () => {
+    it('passes current week of 1 to WeeklyGamesGrid', () => {
         useQuery.mockReset();
         useQuery
             .mockReturnValueOnce({

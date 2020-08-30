@@ -96,7 +96,7 @@ function blankCells(size) {
     return blankArray
 }
 
-const PicksGrid = props => {
+const WeeklyGamesGrid = props => {
     const {defaultWeek} = props;
     const [currentWeek, updateWeek] = useState(defaultWeek);
     const {error, data, refetch} = useQuery(PICKS_QUERY, {
@@ -190,4 +190,4 @@ const PicksGrid = props => {
 
 };
 
-export default PicksGrid
+export default WeeklyGamesGrid
