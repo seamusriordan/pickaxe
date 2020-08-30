@@ -12,25 +12,27 @@ function blankCells(size) {
     return blankArray
 }
 
+const composeSendDataForWeek = (week, sendData) => {
+    return (userName, gameName, updatedPick) => sendData({
+        variables: {
+            name: userName,
+            week: week,
+            game: gameName,
+            pick: updatedPick,
+        }
+    });
+}
+
 const WeeklyGamesGrid = props => {
     const [sendData] = useMutation(UPDATE_PICKS_MUTATION);
 
     const userNames = props.users?.map(user => user.name);
+
     const gameNames = props.games?.map(game => game.name);
     const gameSpreads = props.games?.map(game => game.spread);
     const gameResults = props.games?.map(game => game.result);
 
     const totalValues = props.totals?.map(totalData => totalData.total);
-
-    const sendDataForWeek = (userName, gameName, updatedPick) => sendData({
-        variables: {
-            name: userName,
-            week: props.currentWeek,
-            game: gameName,
-            pick: updatedPick,
-        }
-    });
-
 
     return [
         <div key="grid-top-padding">
@@ -64,7 +66,7 @@ const WeeklyGamesGrid = props => {
                            users={props.users}
                            games={props.games}
                            userPicks={props.userPicks}
-                           sendData={sendDataForWeek}
+                           sendData={composeSendDataForWeek(props.currentWeek, sendData)}
             />
         </div>,
         <div className='grid-column' key="grid-results">
