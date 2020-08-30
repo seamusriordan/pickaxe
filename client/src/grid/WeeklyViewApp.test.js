@@ -1,4 +1,4 @@
-import WeeklyGamesGrid from "./WeeklyGamesGrid";
+import WeeklyViewApp from "./WeeklyViewApp";
 
 import {create, act} from "react-test-renderer";
 import React from "react";
@@ -16,7 +16,7 @@ import {LeaderboardRow} from "../leaderboard/LeaderboardRow";
 jest.mock('@apollo/react-hooks');
 
 
-describe('WeeklyGamesGrid', () => {
+describe('WeeklyViewApp', () => {
     let grid;
     let refetchSpy;
 
@@ -31,7 +31,7 @@ describe('WeeklyGamesGrid', () => {
         useMutation.mockReturnValue([() => {
         }]);
         // eslint-disable-next-line no-unused-vars,no-unused-expressions
-        grid = create(<WeeklyGamesGrid defaultWeek="0"/>).root;
+        grid = create(<WeeklyViewApp defaultWeek="0"/>).root;
     });
 
     it('calls useQuery with some poll interval', () => {
@@ -50,7 +50,7 @@ describe('WeeklyGamesGrid', () => {
         }]);
 
         // eslint-disable-next-line no-unused-expressions
-        create(<WeeklyGamesGrid defaultWeek={defaultWeek}/>).root;
+        create(<WeeklyViewApp defaultWeek={defaultWeek}/>).root;
         expect(useQuery.mock.calls[0][1].variables.week).toEqual(defaultWeek)
     });
 
@@ -63,7 +63,7 @@ describe('WeeklyGamesGrid', () => {
             loading: false, error: true, data: undefined, refetch: () => {
             }
         });
-        const grid = create(<WeeklyGamesGrid/>).root;
+        const grid = create(<WeeklyViewApp/>).root;
 
         expect(grid.findAll(el => el.props.children === 'Error').length).toEqual(1);
     });
@@ -73,7 +73,7 @@ describe('WeeklyGamesGrid', () => {
             loading: false, error: undefined, data: undefined, refetch: () => {
             }
         });
-        const grid = create(<WeeklyGamesGrid/>).root;
+        const grid = create(<WeeklyViewApp/>).root;
 
         expect(grid.findAll(el => el.props.children === 'Waiting for data...').length).toEqual(1);
     });
@@ -131,7 +131,7 @@ describe('WeeklyGamesGrid', () => {
         });
 
         it('on week 1 refetches with week 2', () => {
-            const week1Grid = create(<WeeklyGamesGrid defaultWeek="1"/>).root;
+            const week1Grid = create(<WeeklyViewApp defaultWeek="1"/>).root;
             const changeWeek = week1Grid.findByProps({id: "change-week"})
 
             act(() => {
@@ -144,7 +144,7 @@ describe('WeeklyGamesGrid', () => {
         });
 
         it('on final week does nothing', () => {
-            const week2Grid = create(<WeeklyGamesGrid defaultWeek="2"/>).root;
+            const week2Grid = create(<WeeklyViewApp defaultWeek="2"/>).root;
             const changeWeek = week2Grid.findByProps({id: "change-week"})
 
             act(() => {
@@ -160,7 +160,7 @@ describe('WeeklyGamesGrid', () => {
         let week2Change;
 
         beforeEach(() => {
-            week2Grid = create(<WeeklyGamesGrid defaultWeek="2"/>).root;
+            week2Grid = create(<WeeklyViewApp defaultWeek="2"/>).root;
             week2Change = week2Grid.findByProps({id: "change-week"});
         })
 
@@ -198,7 +198,7 @@ describe('WeeklyGamesGrid', () => {
         });
 
         it('on week 1 refetches with week 0', () => {
-            const week1Grid = create(<WeeklyGamesGrid defaultWeek="1"/>).root;
+            const week1Grid = create(<WeeklyViewApp defaultWeek="1"/>).root;
             const changeWeek = week1Grid.findByProps({id: "change-week"})
 
             act(() => {
@@ -228,7 +228,7 @@ describe('WeeklyGamesGrid', () => {
             useQuery.mockReturnValue({loading: false, error: null, data: mockQueryData});
             useMutation.mockReturnValue([() => {}]);
 
-            renderer = create(<WeeklyGamesGrid defaultWeek="0"/>);
+            renderer = create(<WeeklyViewApp defaultWeek="0"/>);
             grid = renderer.root;
         });
 
@@ -240,7 +240,7 @@ describe('WeeklyGamesGrid', () => {
             };
             useMutation.mockReturnValue([callback]);
             act(() => {
-                grid = create(<WeeklyGamesGrid defaultWeek="0"/>)
+                grid = create(<WeeklyViewApp defaultWeek="0"/>)
             });
             const cell = grid.root.find(el => el.props.id === "user-picks-grid");
 
@@ -305,7 +305,7 @@ describe('WeeklyGamesGrid', () => {
             };
             useQuery.mockReturnValue({loading: false, error: null, data: twoMockUserData});
 
-            const grid = create(<WeeklyGamesGrid/>).root;
+            const grid = create(<WeeklyViewApp/>).root;
             const nameCells = findByClassName(grid, 'name-linear-cell');
 
             expect(nameCells.length).toBe(twoMockUserData.users.length);
@@ -338,7 +338,7 @@ describe('WeeklyGamesGrid', () => {
             };
             useQuery.mockReturnValue({loading: false, error: null, data: twoMockUserData});
 
-            const grid = create(<WeeklyGamesGrid/>).root;
+            const grid = create(<WeeklyViewApp/>).root;
             const totalCells = findByClassName(grid, 'total-linear-cell');
 
             expect(totalCells.length).toBe(twoMockUserData.users.length);
@@ -367,7 +367,7 @@ describe('WeeklyGamesGrid', () => {
             };
             useQuery.mockReturnValue({loading: false, error: null, data: oneMockGameData});
 
-            const grid = create(<WeeklyGamesGrid/>).root;
+            const grid = create(<WeeklyViewApp/>).root;
             const gameCells = findByClassName(grid, 'game-cell');
 
             expect(gameCells.length).toBe(oneMockGameData.games.length);
@@ -397,7 +397,7 @@ describe('WeeklyGamesGrid', () => {
             };
             useQuery.mockReturnValue({loading: false, error: null, data: oneMockGameData});
 
-            const grid = create(<WeeklyGamesGrid/>).root;
+            const grid = create(<WeeklyViewApp/>).root;
             const spreadCells = findByClassName(grid, 'spread-cell');
 
             expect(spreadCells.length).toBe(oneMockGameData.games.length);
@@ -426,7 +426,7 @@ describe('WeeklyGamesGrid', () => {
             };
             useQuery.mockReturnValue({loading: false, error: null, data: oneMockGameData});
 
-            const grid = create(<WeeklyGamesGrid/>).root;
+            const grid = create(<WeeklyViewApp/>).root;
             const resultCells = findByClassName(grid, 'result-cell');
 
             expect(resultCells.length).toBe(oneMockGameData.games.length);

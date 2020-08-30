@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import './PicksGrid.css'
+import './WeeklyViewApp.css'
 import {useMutation, useQuery} from "@apollo/react-hooks";
 import {buildWebsocketUri} from "../helpers";
 import {PICKS_QUERY, UPDATE_PICKS_MUTATION} from "../graphqlQueries";
@@ -96,7 +96,7 @@ function blankCells(size) {
     return blankArray
 }
 
-const WeeklyGamesGrid = props => {
+const WeeklyViewApp = props => {
     const {defaultWeek} = props;
     const [currentWeek, updateWeek] = useState(defaultWeek);
     const {error, data, refetch} = useQuery(PICKS_QUERY, {
@@ -192,4 +192,4 @@ const WeeklyGamesGrid = props => {
 
 };
 
-export default WeeklyGamesGrid
+export default WeeklyViewApp
