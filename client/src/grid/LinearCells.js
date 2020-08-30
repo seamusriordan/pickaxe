@@ -12,7 +12,7 @@ const LinearCells = props => {
             {item}
         </div>
     });
-    return !items ? undefined : cells;
+    return !items ? undefined : <div className="grid-column">{cells}</div>;
 }
 
 export default LinearCells

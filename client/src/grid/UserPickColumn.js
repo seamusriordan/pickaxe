@@ -2,7 +2,7 @@ import PickCell from "./PickCell";
 import React from "react";
 
 const UserPickColumn = props => {
-    return props.games.map(game => {
+    const cells = props.games.map(game => {
         let thisPick = getPickByGame(props.pickSet, game.name);
 
         const sendDataCallback = (event, updatedPick) => {
@@ -18,6 +18,8 @@ const UserPickColumn = props => {
             sendData={sendDataCallback}
         />
     });
+
+    return <div className="grid-column">{cells}</div>
 }
 
 export default UserPickColumn

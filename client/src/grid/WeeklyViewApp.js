@@ -91,7 +91,7 @@ const WeeklyViewApp = props => {
     const rewindWeek = generateRewindWeekCallback(data, currentWeek, updateWeek, refetch);
 
 
-    return <div>
+    return <div className="weekly-view-app">
         {error ? "Error" : !data ? "Waiting for data..." :
             [
                 <Leaderboard key="leaderboard" data={data.leaders}/>,
