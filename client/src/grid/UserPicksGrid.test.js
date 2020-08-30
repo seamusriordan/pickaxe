@@ -14,7 +14,12 @@ describe('UserPicksGrid', () => {
         let grid = null;
 
         act(() => {
-            grid = create(<UserPicksGrid data={mockQueryData} sendData={sendDataSpy}/>)
+            grid = create(<UserPicksGrid
+                users={mockQueryData.users}
+                games={mockQueryData.games}
+                userPicks={mockQueryData.userPicks}
+                sendData={sendDataSpy}
+            />)
         });
         let cell = grid.root.find(el => el.props.id === "Vegas-HAR@NOR");
 
@@ -32,7 +37,11 @@ describe('UserPicksGrid', () => {
         let grid = null;
 
         act(() => {
-            grid = create(<UserPicksGrid data={mockQueryData} sendData={sendDataSpy}/>)
+            grid = create(<UserPicksGrid
+                users={mockQueryData.users}
+                games={mockQueryData.games}
+                userPicks={mockQueryData.userPicks}
+                sendData={sendDataSpy}/>)
         });
         let cell = grid.root.find(el => el.props.id === "Davebob-CHI@GB");
 
@@ -48,7 +57,11 @@ describe('UserPicksGrid', () => {
     describe('on fired blur event', () => {
         let container;
         beforeEach(() => {
-            const renderResult = render(<UserPicksGrid data={mockQueryData} sendData={sendDataSpy}/>);
+            const renderResult = render(<UserPicksGrid
+                users={mockQueryData.users}
+                games={mockQueryData.games}
+                userPicks={mockQueryData.userPicks}
+                sendData={sendDataSpy}/>);
             container = renderResult.container;
         })
 
@@ -65,7 +78,11 @@ describe('UserPicksGrid', () => {
 
         it(' do not send data when no change', () => {
 
-            let {container} = render(<UserPicksGrid data={mockQueryData} sendData={sendDataSpy}/>);
+            let {container} = render(<UserPicksGrid
+                users={mockQueryData.users}
+                games={mockQueryData.games}
+                userPicks={mockQueryData.userPicks}
+                sendData={sendDataSpy}/>);
             let cell = container.querySelector('#Vegas-CHI\\@GB');
 
             act(() => {

@@ -1,36 +1,17 @@
 import React, {useEffect, useState} from "react";
 import './WeeklyViewApp.css'
-import {useMutation, useQuery} from "@apollo/react-hooks";
+import {useQuery} from "@apollo/react-hooks";
 import {buildWebsocketUri} from "../helpers";
-import {PICKS_QUERY, UPDATE_PICKS_MUTATION} from "../graphqlQueries";
-import UserPicksGrid from "./UserPicksGrid";
-import LinearCells from "./LinearCells"
+import {PICKS_QUERY} from "../graphqlQueries";
 import ChangeWeek from "../ChangeWeek";
 import {Leaderboard} from "../leaderboard/Leaderboard";
-
-function destructureUserData(users) {
-    return {
-        names: users?.map(user => user.name),
-    };
-}
-
-function destructureTotalData(totals) {
-    return {
-        total: totals?.map(total => total.total),
-    };
-}
-
-function destructureGameData(games) {
-    return {
-        names: games?.map(game => game.name),
-        spreads: games?.map(game => game.spread),
-        results: games?.map(game => game.result)
-    };
-}
+import WeeklyGamesGrid from "./WeeklyGamesGrid";
 
 function indexIsPastEndOfData(index, data) {
     return index >= data.weeks.length - 1;
 }
+
+
 
 function generateAdvanceWeekCallback(data, currentWeek, updateWeek, refetch) {
     return () => {
@@ -88,13 +69,6 @@ function generateUseEffectCleanupCallback(webSocket) {
     };
 }
 
-function blankCells(size) {
-    let blankArray = []
-    for (let i = 0; i < size; i++) {
-        blankArray.push("")
-    }
-    return blankArray
-}
 
 const WeeklyViewApp = props => {
     const {defaultWeek} = props;
@@ -103,7 +77,7 @@ const WeeklyViewApp = props => {
         variables: {week: defaultWeek},
         pollInterval: 150000
     });
-    const [sendData] = useMutation(UPDATE_PICKS_MUTATION);
+
 
     useEffect(() => {
         let webSocket = new WebSocket(buildWebsocketUri());
@@ -112,22 +86,12 @@ const WeeklyViewApp = props => {
         return generateUseEffectCleanupCallback(webSocket)
     });
 
-    const users = destructureUserData(data?.users);
-    const games = destructureGameData(data?.games);
-    const totals = destructureTotalData(data?.userTotals);
 
     const advanceWeek = generateAdvanceWeekCallback(data, currentWeek, updateWeek, refetch);
     const rewindWeek = generateRewindWeekCallback(data, currentWeek, updateWeek, refetch);
 
-    const sendDataForWeek = (userName, gameName, updatedPick) => sendData({
-        variables: {
-            name: userName,
-            week: currentWeek,
-            game: gameName,
-            pick: updatedPick,
-        }
-    });
-    return <div className='weekly-games-grid'>
+
+    return <div>
         {error ? "Error" : !data ? "Waiting for data..." :
             [
                 <Leaderboard key="leaderboard" data={data.leaders}/>,
@@ -136,56 +100,14 @@ const WeeklyViewApp = props => {
                                 week={currentWeek} forward={advanceWeek}
                                 back={rewindWeek}/>
                 </div>,
-                <div key="grid-top-padding">
-                    <div className='grid-cell name-cell top-padding-cell'/>
-                    <div className='grid-cell name-cell top-padding-cell'/>
-                    <LinearCells key="name-cells"
-                                 items={blankCells(users.names.length)} name="top-padding"
-                    />
-                    <div className='grid-cell name-cell top-padding-cell'/>
-                </div>,
-                <div key="grid-names">
-                    <div className='grid-cell name-cell border-bottom'/>
-                    <div className='grid-cell name-cell border-bottom'>Spread</div>
-                    <LinearCells key="name-cells"
-                                 items={users.names} name="name"
-                    />
-                    <div className='grid-cell name-cell border-cell'>Result</div>
-                </div>,
-                <div className='grid-column' key="grid-games">
-                    <LinearCells key="game-cells" id="game-cells"
-                                 items={games.names} name="game"
-                    />
-                </div>,
-                <div className='grid-column' key="grid-spreads">
-                    <LinearCells key="spread-cells"
-                                 items={games.spreads} name="spread"
-                    />
-                </div>,
-                <div className='grid-column' key="grid-picks">
-                    <UserPicksGrid id="user-picks-grid" key="user-picks-grid"
-                                   data={data}
-                                   sendData={sendDataForWeek}
-                    />
-                </div>,
-                <div className='grid-column' key="grid-results">
-                    <LinearCells key="result-cells"
-                                 items={games.results} name="result"
-                    />
-                </div>,
-                <div className='grid-column' key="grid-right-padding">
-                    <LinearCells key="right-padding-cells"
-                                 items={blankCells(games.results.length)} name="right-padding"
-                    />
-                </div>,
-                <div key="grid-totals">
-                    <div className='grid-cell name-cell'/>
-                    <div className='grid-cell name-cell'/>
-                    <LinearCells key="total-cells"
-                                 items={totals.total} name="total"
-                    />
-                    <div className='grid-cell border-left total-cell'/>
-                </div>
+                <WeeklyGamesGrid
+                    key="weekly-games-grid"
+                    currentWeek={currentWeek}
+                    users={data?.users}
+                    games={data?.games}
+                    totals={data?.userTotals}
+                    userPicks={data.userPicks}
+                />
             ]
         }
     </div>
