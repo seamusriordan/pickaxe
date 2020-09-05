@@ -80,6 +80,6 @@ describe('PicksLoader', () => {
 
         const loader = create(<AppLoader/>).root;
 
-        expect(loader.findByType('div').props.children).toEqual("Something has gone wrong")
+        expect(loader.findByType('div').props.children).toEqual("graphQL query failed")
     });
 });

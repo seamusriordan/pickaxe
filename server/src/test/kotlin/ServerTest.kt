@@ -47,6 +47,24 @@ internal class ServerTest {
     }
 
     @Test
+    fun handlesCallback() {
+        addCallbackHandler(serverSpy, mockk())
+        verify { serverSpy.get("/pickaxe/callback", any(), any()) }
+        verify(exactly = 1) { callbackHandler(any()) }
+
+        unmockkAll()
+    }
+
+    @Test
+    fun handlesAuth() {
+        addAuthorizeHandler(serverSpy, mockk())
+        verify { serverSpy.get("/pickaxe/authorize", any(), any()) }
+        verify(exactly = 1) { authorizeHandler(any()) }
+
+        unmockkAll()
+    }
+
+    @Test
     fun makeGraphQLEngineFromTypeDefinitionRegistryAndRuntimeWiring() {
         val registry = sampleTypeDefinitionRegistry()
         val wiring = sampleRuntimeWiring()

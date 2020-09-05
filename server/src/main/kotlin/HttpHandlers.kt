@@ -1,3 +1,5 @@
+import com.auth0.IdentityVerificationException
+import com.auth0.Tokens
 import com.fasterxml.jackson.databind.type.MapType
 import com.fasterxml.jackson.databind.type.TypeFactory
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -7,6 +9,8 @@ import graphql.execution.ExecutionId
 import io.javalin.http.Context
 import io.javalin.plugin.json.JavalinJson
 import io.javalin.websocket.WsContext
+import org.apache.commons.codec.digest.DigestUtils
+import javax.servlet.http.Cookie
 
 fun postHandler(graphQL: GraphQL, wsContexts: ArrayList<WsContext?>): (Context) -> Unit {
     return { ctx ->
@@ -40,6 +44,25 @@ fun optionsHandler(): (Context) -> Unit {
         ctx.header("Access-Control-Allow-Methods", "OPTIONS, POST, GET")
         ctx.header("Access-Control-Allow-Headers", "*")
         ctx.header("Access-Control-Max-Age", "86400")
+    }
+}
+
+fun callbackHandler(accessManager: PickaxeAccessManager): (Context) -> Unit {
+    return {
+        try {
+            val tokens: Tokens = accessManager.authController.handle(it.req, it.res)
+            accessManager.authHashes.add(DigestUtils.md5Hex(tokens.accessToken))
+            it.cookie(Cookie("pickaxe_auth", DigestUtils.md5Hex(tokens.accessToken)))
+            it.redirect("${accessManager.serverBaseUri}$redirectPath")
+        } catch (e: IdentityVerificationException) {
+            it.redirect("${accessManager.serverBaseUri}$failPath")
+        }
+    }
+}
+
+fun authorizeHandler(accessManager: PickaxeAccessManager): (Context) -> Unit {
+    return {
+        it.redirect(accessManager.getAuthorizeUrl(it))
     }
 }
 

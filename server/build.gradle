@@ -25,6 +25,8 @@ dependencies {
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
     testImplementation "io.mockk:mockk:1.9.3"
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.5.2'
+    implementation 'com.auth0:mvc-auth-commons:1.+'
+    implementation 'commons-codec:commons-codec:1.15'
 }
 
 compileKotlin {

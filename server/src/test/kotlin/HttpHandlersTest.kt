@@ -1,15 +1,21 @@
+import com.auth0.AuthenticationController
+import com.auth0.Tokens
 import graphql.GraphQL
 import graphql.schema.idl.SchemaGenerator
 import io.javalin.http.Context
+import io.javalin.http.RedirectResponse
 import io.javalin.websocket.WsContext
-import io.mockk.every
-import io.mockk.mockkClass
-import io.mockk.slot
-import io.mockk.verify
-import org.eclipse.jetty.websocket.api.Session
+import io.mockk.*
+import org.apache.commons.codec.digest.DigestUtils
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import java.util.concurrent.Future
+import javax.servlet.http.Cookie
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
+import javax.servlet.http.HttpSession
 
 class HttpHandlersTest {
     private val idQueryBody = "{\"operationName\":\"Query\",\"variables\":{},\"query\":\"query Query {\\n  id\\n}\\n\"}"
@@ -195,6 +201,101 @@ class HttpHandlersTest {
         verify(exactly = 0) { openWsContext2.send(any<String>()) }
     }
 
+    @Test
+    fun `callback adds known hash for token`() {
+        val mockContext = mockkClass(Context::class)
+        every {mockContext.cookie(any<Cookie>())} returns mockContext
+        every {mockContext.redirect(any())} returns Unit
+
+        val mockAuthController = mockk<AuthenticationController>()
+        val accessManager = PickaxeAccessManager(mockAuthController)
+        val mockTokens = mockk<Tokens>()
+        every {mockAuthController.handle(any(), any())} returns mockTokens
+        val accessTokenString = "fakeaccesstoken"
+        every {mockTokens.accessToken} returns accessTokenString
+        every {mockTokens.idToken} returns "fakeidtoken"
+
+        callbackHandler(accessManager)(mockContext)
+
+        assertEquals(1, accessManager.authHashes.size)
+        assertEquals(DigestUtils.md5Hex(accessTokenString), accessManager.authHashes.first())
+    }
+
+    @Test
+    fun `callback added hash varies with token`() {
+        val mockContext = mockkClass(Context::class)
+        every {mockContext.cookie(any<Cookie>())} returns mockContext
+        every {mockContext.redirect(any())} returns Unit
+
+        val mockAuthController = mockk<AuthenticationController>()
+        val accessManager = PickaxeAccessManager(mockAuthController)
+        val mockTokens = mockk<Tokens>()
+        every {mockAuthController.handle(any(), any())} returns mockTokens
+        val accessTokenString = "different access token"
+        every {mockTokens.accessToken} returns accessTokenString
+        every {mockTokens.idToken} returns "fakeidtoken"
+
+        callbackHandler(accessManager)(mockContext)
+
+        assertEquals(1, accessManager.authHashes.size)
+        assertEquals(DigestUtils.md5Hex(accessTokenString), accessManager.authHashes.first())
+    }
+
+    @Test
+    fun `callback success adds cookie and redirects to main page`() {
+        val cookieSlot = slot<Cookie>()
+        val redirectSlot = slot<String>()
+
+        val mockContext = mockkClass(Context::class)
+        every {mockContext.cookie(capture(cookieSlot))} returns mockContext
+        every {mockContext.redirect(capture(redirectSlot))} returns Unit
+
+        val mockAuthController = mockk<AuthenticationController>()
+        val accessManager = PickaxeAccessManager(mockAuthController)
+        val mockTokens = mockk<Tokens>()
+        every {mockAuthController.handle(any(), any())} returns mockTokens
+        val accessTokenString = "different access token"
+        every {mockTokens.accessToken} returns accessTokenString
+        every {mockTokens.idToken} returns "fakeidtoken"
+
+        callbackHandler(accessManager)(mockContext)
+
+        val cookie = cookieSlot.captured
+        assertEquals("pickaxe_auth", cookie.name)
+        assertTrue(accessManager.authHashes.contains(cookie.value))
+        assertEquals("http://localhost:8080/pickaxe", redirectSlot.captured)
+    }
+
+    @Test
+    fun `auth redirects`() {
+        val auth0Domain = "fake-domain.fakeauth.com"
+        val clientId = "fakeClientId"
+        val redirectUri = "http://localhost:8080/pickaxe/callback"
+        val authUrl =
+            "https://$auth0Domain/authorize\\?redirect_uri=$redirectUri&client_id=$clientId&scope=openid&response_type=code&state="
+        val authUriRegex = "^$authUrl".toRegex()
+        val authController = AuthenticationController.newBuilder(
+            auth0Domain, clientId, "fakeSecreet").build()
+
+        val redirectSlot = slot<String>()
+        val req = mockk<HttpServletRequest>()
+        val res = mockk<HttpServletResponse>()
+        every { res.addHeader(any(), any()) } returns Unit
+        every { res.setHeader("Location", capture(redirectSlot)) } returns Unit
+        every { res.status = 302 } returns Unit
+        val mockSession = mockk<HttpSession>()
+        every {mockSession.setAttribute(any(), any())} returns Unit
+        every { req.getSession(true) } returns mockSession
+        val context = Context(req, res)
+        val accessManager = PickaxeAccessManager(authController)
+
+        assertThrows<RedirectResponse> {
+            authorizeHandler(accessManager)(context)
+        }
+
+        assertTrue(redirectSlot.captured.contains(authUriRegex))
+        verify { res.status = 302 }
+    }
 
     interface FutureVoid : Future<Void>
 
