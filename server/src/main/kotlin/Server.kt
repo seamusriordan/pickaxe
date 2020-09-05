@@ -48,6 +48,7 @@ fun main(args: Array<String>) {
     addStaticFileServing(server)
     addGraphQLPostServe(server, graphQL, wsContexts)
     addCallbackHandler(server, accessManager)
+    addAuthorizeHandler(server, accessManager)
     addGraphQLOptionServe(server)
     addNotificationWebSocket(server, wsContexts)
 
