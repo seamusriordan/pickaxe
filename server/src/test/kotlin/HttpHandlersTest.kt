@@ -199,6 +199,8 @@ class HttpHandlersTest {
     @Test
     fun `callback adds known hash for token`() {
         val mockContext = mockkClass(Context::class)
+        every {mockContext.cookie(any<Cookie>())} returns mockContext
+        every {mockContext.redirect(any())} returns Unit
 
         val mockAuthController = mockk<AuthenticationController>()
         val accessManager = PickaxeAccessManager(mockAuthController)
@@ -217,6 +219,8 @@ class HttpHandlersTest {
     @Test
     fun `callback added hash varies with token`() {
         val mockContext = mockkClass(Context::class)
+        every {mockContext.cookie(any<Cookie>())} returns mockContext
+        every {mockContext.redirect(any())} returns Unit
 
         val mockAuthController = mockk<AuthenticationController>()
         val accessManager = PickaxeAccessManager(mockAuthController)
