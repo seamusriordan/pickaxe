@@ -263,14 +263,14 @@ class HttpHandlersTest {
         val cookie = cookieSlot.captured
         assertEquals("pickaxe_auth", cookie.name)
         assertTrue(accessManager.authHashes.contains(cookie.value))
-        assertEquals("https://localhost:8080/pickaxe", redirectSlot.captured)
+        assertEquals("http://localhost:8080/pickaxe", redirectSlot.captured)
     }
 
     @Test
     fun `auth redirects`() {
         val auth0Domain = "fake-domain.fakeauth.com"
         val clientId = "fakeClientId"
-        val redirectUri = "https://localhost:8080/pickaxe/callback"
+        val redirectUri = "http://localhost:8080/pickaxe/callback"
         val authUrl =
             "https://$auth0Domain/authorize\\?redirect_uri=$redirectUri&client_id=$clientId&scope=openid&response_type=code&state="
         val authUriRegex = "^$authUrl".toRegex()
