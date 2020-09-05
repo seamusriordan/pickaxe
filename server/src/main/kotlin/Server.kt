@@ -29,7 +29,7 @@ val wsContexts = ArrayList<WsContext?>(0)
 val logger: Logger = LoggerFactory.getLogger("dev.revived.pickaxe-server.Server")
 
 internal enum class MyRole : Role {
-    ANYONE, ROLE_ONE, ROLE_TWO, ROLE_THREE
+    ANYONE
 }
 
 fun main(args: Array<String>) {
