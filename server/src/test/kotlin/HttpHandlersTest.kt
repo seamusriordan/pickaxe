@@ -1,11 +1,11 @@
+import com.auth0.AuthenticationController
+import com.auth0.Tokens
 import graphql.GraphQL
 import graphql.schema.idl.SchemaGenerator
 import io.javalin.http.Context
 import io.javalin.websocket.WsContext
-import io.mockk.every
-import io.mockk.mockkClass
-import io.mockk.slot
-import io.mockk.verify
+import io.mockk.*
+import org.apache.commons.codec.digest.DigestUtils
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.util.concurrent.Future
@@ -192,6 +192,24 @@ class HttpHandlersTest {
 
         verify(exactly = 0) { openWsContext1.send(any<String>()) }
         verify(exactly = 0) { openWsContext2.send(any<String>()) }
+    }
+
+    @Test
+    fun `callback exchanges code for token`() {
+        val mockContext = mockkClass(Context::class)
+
+        val mockAuthController = mockk<AuthenticationController>()
+        val accessManager = PickaxeAccessManager(mockAuthController)
+        val mockTokens = mockk<Tokens>()
+        every {mockAuthController.handle(any(), any())} returns mockTokens
+        val accessTokenString = "fakeaccesstoken"
+        every {mockTokens.accessToken} returns accessTokenString
+        every {mockTokens.idToken} returns "fakeidtoken"
+
+        callbackHandler(accessManager)(mockContext)
+
+        assertEquals(1, accessManager.authHashes.size)
+        assertEquals(DigestUtils.md5Hex(accessTokenString), accessManager.authHashes.first())
     }
 
     interface FutureVoid : Future<Void>

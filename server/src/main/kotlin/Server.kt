@@ -1,3 +1,5 @@
+import com.auth0.AuthenticationController
+import com.auth0.jwk.JwkProviderBuilder
 import graphql.GraphQL
 import graphql.schema.idl.RuntimeWiring
 import graphql.schema.idl.SchemaGenerator
@@ -12,6 +14,7 @@ import services.ServiceRunner
 import java.io.File
 
 const val graphqlURI = "/pickaxe/graphql/"
+const val callbackPath = "/pickaxe/callback"
 const val staticFilesPath = "html"
 const val schemaPath = "src/main/resources/schema.graphql"
 
@@ -28,7 +31,9 @@ fun main(args: Array<String>) {
 
     val graphQL = generateGraphQLFromRegistryAndWiring(typeDefinitionRegistry, wiring)
 
-    val server = Javalin.create()
+    val server = Javalin.create {
+        it.accessManager(PickaxeAccessManager(generateAuthController()))
+    }
     addStaticFileServing(server)
     addGraphQLPostServe(server, graphQL, wsContexts)
     addGraphQLOptionServe(server)
@@ -84,4 +89,18 @@ fun pickaxeTypeDefinitionRegistry(schemaFilePath: String): TypeDefinitionRegistr
     val schemaParser = SchemaParser()
     val schemaFile = File(schemaFilePath)
     return schemaParser.parse(schemaFile)
+}
+
+fun generateAuthController(): AuthenticationController {
+    val auth0Domain = getEnvOrDefault("AUTH0_DOMAIN","fake-domain.fakeauth.com")
+    val clientId =  getEnvOrDefault("AUTH0_CLIENTID","fakeClientId")
+    val clientSecret =  getEnvOrDefault("AUTH0_CLIENTSECRET","fakeClientSecret")
+
+    val jwkProvider = JwkProviderBuilder(auth0Domain).build()
+
+    return AuthenticationController.newBuilder(
+        auth0Domain,
+        clientId,
+        clientSecret
+    ).withJwkProvider(jwkProvider).build()
 }

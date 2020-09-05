@@ -1,3 +1,4 @@
+import com.auth0.AuthenticationController
 import io.javalin.core.security.AccessManager
 import io.javalin.http.Context
 import io.javalin.http.Handler
@@ -17,11 +18,13 @@ import javax.servlet.http.HttpSession
 
 
 class PickaxeAccessManagerTest {
-    private val auth0Domain = "fake-domain.auth0.com"
+    private val auth0Domain = "fake-domain.fakeauth.com"
     private val clientId = "fakeClientId"
-    private val redirectUri = "https://fake-domain.com/callback"
+    private val redirectUri = "https://fake-domain.com/pickaxe/callback"
     private var authUrl = ""
     private var authUriRegex = Regex("")
+
+    private lateinit var authController: AuthenticationController
 
     @BeforeEach
     fun setUp() {
@@ -29,6 +32,8 @@ class PickaxeAccessManagerTest {
             "https://$auth0Domain/authorize\\?redirect_uri=$redirectUri&client_id=$clientId&scope=openid&response_type=code&state="
         authUriRegex = "^$authUrl".toRegex()
 
+        authController = AuthenticationController.newBuilder(
+            auth0Domain, clientId, "fakeSecreet").build()
     }
 
     @AfterEach
@@ -38,7 +43,7 @@ class PickaxeAccessManagerTest {
 
     @Test
     fun `is an AccessManager`() {
-        val accessManager = PickaxeAccessManager()
+        val accessManager = PickaxeAccessManager(authController)
 
         @Suppress("USELESS_IS_CHECK")
         assertTrue(accessManager is AccessManager)
@@ -47,7 +52,7 @@ class PickaxeAccessManagerTest {
     @Test
     fun `when production no auth cookie redirects to auth`() {
         System.setProperty("PRODUCTION", "true")
-        val accessManager = PickaxeAccessManager()
+        val accessManager = PickaxeAccessManager(authController)
         val request = mockk<HttpServletRequest>()
         val response = mockk<HttpServletResponse>()
         val locationSlot = slot<String>()
@@ -73,7 +78,7 @@ class PickaxeAccessManagerTest {
     @Test
     fun `when not production no auth cookie handles context`() {
         System.clearProperty("PRODUCTION")
-        val accessManager = PickaxeAccessManager()
+        val accessManager = PickaxeAccessManager(authController)
         val request = mockk<HttpServletRequest>()
         val response = mockk<HttpServletResponse>()
         val locationSlot = slot<String>()
@@ -106,7 +111,7 @@ class PickaxeAccessManagerTest {
     fun `when production with known auth cookie executes context`() {
         System.setProperty("PRODUCTION", "true")
         val knownAuthHash = "authhash"
-        val accessManager = PickaxeAccessManager().apply {
+        val accessManager = PickaxeAccessManager(authController).apply {
             authHashes.add(knownAuthHash)
         }
         val request = mockk<HttpServletRequest>()
@@ -140,7 +145,7 @@ class PickaxeAccessManagerTest {
     fun `when production with unknown auth cookie redirects auth`() {
         System.setProperty("PRODUCTION", "true")
         val unknownAuthHash = "authhash"
-        val accessManager = PickaxeAccessManager()
+        val accessManager = PickaxeAccessManager(authController)
         val request = mockk<HttpServletRequest>()
         val response = mockk<HttpServletResponse>()
         val locationSlot = slot<String>()

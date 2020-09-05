@@ -7,6 +7,7 @@ import graphql.execution.ExecutionId
 import io.javalin.http.Context
 import io.javalin.plugin.json.JavalinJson
 import io.javalin.websocket.WsContext
+import org.apache.commons.codec.digest.DigestUtils
 
 fun postHandler(graphQL: GraphQL, wsContexts: ArrayList<WsContext?>): (Context) -> Unit {
     return { ctx ->
@@ -40,6 +41,12 @@ fun optionsHandler(): (Context) -> Unit {
         ctx.header("Access-Control-Allow-Methods", "OPTIONS, POST, GET")
         ctx.header("Access-Control-Allow-Headers", "*")
         ctx.header("Access-Control-Max-Age", "86400")
+    }
+}
+
+fun callbackHandler(accessManager: PickaxeAccessManager): (Context) -> Unit {
+    return {
+        accessManager.authHashes.add(DigestUtils.md5Hex("fakeaccesstoken"))
     }
 }
 
