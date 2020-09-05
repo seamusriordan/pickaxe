@@ -6,7 +6,6 @@ import io.mockk.every
 import io.mockk.mockkClass
 import io.mockk.slot
 import io.mockk.verify
-import org.eclipse.jetty.websocket.api.Session
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.util.concurrent.Future
@@ -194,7 +193,6 @@ class HttpHandlersTest {
         verify(exactly = 0) { openWsContext1.send(any<String>()) }
         verify(exactly = 0) { openWsContext2.send(any<String>()) }
     }
-
 
     interface FutureVoid : Future<Void>
 
