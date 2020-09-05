@@ -7,8 +7,9 @@ import io.javalin.http.Handler
 
 class PickaxeAccessManager : AccessManager {
     private var authController: AuthenticationController
-
     var redirectUri: String
+
+    var authHashes = mutableSetOf<String>()
 
     init {
         val auth0Domain = getEnvOrDefault("AUTH0_DOMAIN","fake-domain.auth0.com")
@@ -28,6 +29,10 @@ class PickaxeAccessManager : AccessManager {
     }
 
     override fun manage(handler: Handler, ctx: Context, permittedRoles: MutableSet<Role>) {
+        if(ctx.cookie("pickaxe_auth") != null){
+            handler.handle(ctx)
+        }
+
         val authorizeUrl = authController.buildAuthorizeUrl(ctx.req, ctx.res, redirectUri).build()
         ctx.res.sendRedirect(authorizeUrl)
     }

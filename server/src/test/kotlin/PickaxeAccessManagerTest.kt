@@ -1,10 +1,13 @@
 import io.javalin.core.security.AccessManager
 import io.javalin.http.Context
+import io.javalin.http.Handler
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import javax.servlet.http.Cookie
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 import javax.servlet.http.HttpSession
@@ -31,6 +34,7 @@ class PickaxeAccessManagerTest {
         val mockSession = mockk<HttpSession>()
         every {mockSession.setAttribute(any(), any())} returns  Unit
         every { request.getSession(true) } returns mockSession
+        every {request.cookies} returns arrayOf<Cookie>()
         val context = Context(request, response)
 
         accessManager.manage(
@@ -48,4 +52,38 @@ class PickaxeAccessManagerTest {
             "^$authUrl".toRegex()
         assertTrue(locationSlot.captured.contains(authUriRegex))
     }
+
+    @Test
+    fun `when production with known auth cookie executes context`() {
+        val knownAuthHash = "authhash"
+        val accessManager = PickaxeAccessManager().apply {
+            authHashes.add(knownAuthHash)
+        }
+        val request = mockk<HttpServletRequest>()
+        val response = mockk<HttpServletResponse>()
+
+        every {response.setHeader(any(), any())} returns Unit
+        every {response.addHeader(any(), any())} returns Unit
+        val mockSession = mockk<HttpSession>()
+        every {mockSession.setAttribute(any(), any())} returns  Unit
+        every { request.getSession(true) } returns mockSession
+        every {response.sendRedirect(any())} returns Unit
+        val context = Context(request, response)
+        every {request.cookies} returns arrayOf(Cookie("pickaxe_auth", knownAuthHash))
+
+        var handledContext: Context? = null
+        val handlerSpy = Handler {
+            handledContext = it
+        }
+
+        accessManager.manage(
+            handlerSpy,
+            context,
+            mutableSetOf()
+        )
+
+        assertEquals(handledContext, context)
+    }
+
+
 }
