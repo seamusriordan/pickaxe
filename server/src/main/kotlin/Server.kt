@@ -57,12 +57,6 @@ fun main(args: Array<String>) {
         port = "8080"
     }
 
-
-
-    server.routes {
-        get("/pickaxe/authorize/") { ctx -> ctx.redirect("/pickaxe") }
-    }
-
     server.start(port.toInt())
 }
 
