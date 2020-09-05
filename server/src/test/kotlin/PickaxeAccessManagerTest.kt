@@ -4,8 +4,10 @@ import io.javalin.http.Handler
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
+import io.mockk.verify
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import javax.servlet.http.Cookie
 import javax.servlet.http.HttpServletRequest
@@ -14,6 +16,20 @@ import javax.servlet.http.HttpSession
 
 
 class PickaxeAccessManagerTest {
+    private val auth0Domain = "fake-domain.auth0.com"
+    private val clientId = "fakeClientId"
+    private val redirectUri = "https://fake-domain.com/callback"
+    private var authUrl = ""
+    private var authUriRegex = Regex("")
+
+    @BeforeEach
+    fun setUp() {
+        authUrl =
+            "https://$auth0Domain/authorize\\?redirect_uri=$redirectUri&client_id=$clientId&scope=openid&response_type=code&state="
+        authUriRegex = "^$authUrl".toRegex()
+
+    }
+
     @Test
     fun `is an AccessManager`() {
         val accessManager = PickaxeAccessManager()
@@ -43,13 +59,7 @@ class PickaxeAccessManagerTest {
             mutableSetOf()
         )
 
-        val auth0Domain = "fake-domain.auth0.com"
-        val clientId = "fakeClientId"
-        val redirectUri = "https://fake-domain.com/callback"
-        val authUrl =
-            "https://$auth0Domain/authorize\\?redirect_uri=$redirectUri&client_id=$clientId&scope=openid&response_type=code&state="
-        val authUriRegex =
-            "^$authUrl".toRegex()
+
         assertTrue(locationSlot.captured.contains(authUriRegex))
     }
 
@@ -83,6 +93,33 @@ class PickaxeAccessManagerTest {
         )
 
         assertEquals(handledContext, context)
+        verify(exactly = 0) { response.sendRedirect(any()) }
+    }
+
+    @Test
+    fun `when production with unknown auth cookie redirects auth`() {
+        val unknownAuthHash = "authhash"
+        val accessManager = PickaxeAccessManager()
+        val request = mockk<HttpServletRequest>()
+        val response = mockk<HttpServletResponse>()
+        val locationSlot = slot<String>()
+
+        every {response.setHeader(any(), any())} returns Unit
+        every {response.addHeader(any(), any())} returns Unit
+        val mockSession = mockk<HttpSession>()
+        every {mockSession.setAttribute(any(), any())} returns  Unit
+        every { request.getSession(true) } returns mockSession
+        every {response.sendRedirect(capture(locationSlot))} returns Unit
+        val context = Context(request, response)
+        every {request.cookies} returns arrayOf(Cookie("pickaxe_auth", unknownAuthHash))
+
+        accessManager.manage(
+            {},
+            context,
+            mutableSetOf()
+        )
+
+        assertTrue(locationSlot.captured.contains(authUriRegex))
     }
 
 

@@ -29,11 +29,11 @@ class PickaxeAccessManager : AccessManager {
     }
 
     override fun manage(handler: Handler, ctx: Context, permittedRoles: MutableSet<Role>) {
-        if(ctx.cookie("pickaxe_auth") != null){
+        if(authHashes.contains(ctx.cookie("pickaxe_auth"))){
             handler.handle(ctx)
+        } else {
+            val authorizeUrl = authController.buildAuthorizeUrl(ctx.req, ctx.res, redirectUri).build()
+            ctx.res.sendRedirect(authorizeUrl)
         }
-
-        val authorizeUrl = authController.buildAuthorizeUrl(ctx.req, ctx.res, redirectUri).build()
-        ctx.res.sendRedirect(authorizeUrl)
     }
 }
