@@ -53,9 +53,9 @@ fun callbackHandler(accessManager: PickaxeAccessManager): (Context) -> Unit {
             val tokens: Tokens = accessManager.authController.handle(it.req, it.res)
             accessManager.authHashes.add(DigestUtils.md5Hex(tokens.accessToken))
             it.cookie(Cookie("pickaxe_auth", DigestUtils.md5Hex(tokens.accessToken)))
-            it.redirect("https://${accessManager.serverHostName}$redirectPath")
+            it.redirect("${accessManager.serverBaseUri}$redirectPath")
         } catch (e: IdentityVerificationException) {
-            it.redirect("https://${accessManager.serverHostName}$failPath")
+            it.redirect("${accessManager.serverBaseUri}$failPath")
         }
     }
 }

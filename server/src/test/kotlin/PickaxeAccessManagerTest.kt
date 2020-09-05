@@ -20,7 +20,7 @@ import javax.servlet.http.HttpSession
 class PickaxeAccessManagerTest {
     private val auth0Domain = "fake-domain.fakeauth.com"
     private val clientId = "fakeClientId"
-    private val redirectUri = "https://fake-domain.com/pickaxe/callback"
+    private val redirectUri = "http://localhost:8080/pickaxe/callback"
     private var authUrl = ""
     private var authUriRegex = Regex("")
 

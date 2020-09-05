@@ -10,10 +10,18 @@ class PickaxeAccessManager(val authController: AuthenticationController) : Acces
     var authHashes = mutableSetOf<String>()
     private val isProduction: Boolean =
         System.getProperty("PRODUCTION") != null || System.getenv("PRODUCTION") != null
-    val serverHostName: String = getEnvOrDefault("SERVER_HOSTNAME","fake-domain.com")
+    private val serverHostName: String = getEnvOrDefault("SERVER_HOSTNAME","localhost")
+    private val serverPort: String = getEnvOrDefault("SERVER_PORT","8080")
+    val serverBaseUri: String
 
     init {
-        redirectUri = "https://$serverHostName$callbackPath"
+        if(serverPort != "443") {
+            serverBaseUri = "http://$serverHostName:$serverPort"
+        } else {
+            serverBaseUri = "https://$serverHostName"
+        }
+        redirectUri = "$serverBaseUri$callbackPath"
+
     }
 
     override fun manage(handler: Handler, ctx: Context, permittedRoles: MutableSet<Role>) {

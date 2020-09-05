@@ -32,12 +32,14 @@ fun main(args: Array<String>) {
     val wiring = pickaxeRuntimeWiring()
 
     val graphQL = generateGraphQLFromRegistryAndWiring(typeDefinitionRegistry, wiring)
+    val accessManager = PickaxeAccessManager(generateAuthController())
 
     val server = Javalin.create {
-        it.accessManager(PickaxeAccessManager(generateAuthController()))
+        it.accessManager(accessManager)
     }
     addStaticFileServing(server)
     addGraphQLPostServe(server, graphQL, wsContexts)
+    addCallbackHandler(server, accessManager)
     addGraphQLOptionServe(server)
     addNotificationWebSocket(server, wsContexts)
 
@@ -68,6 +70,10 @@ fun addGraphQLPostServe(server: Javalin, graphQL: GraphQL, wsContexts: ArrayList
 fun addGraphQLOptionServe(server: Javalin) {
     server.options(graphqlURI, optionsHandler())
     return
+}
+
+fun addCallbackHandler(server: Javalin, accessManager: PickaxeAccessManager){
+    server.get(callbackPath, callbackHandler(accessManager))
 }
 
 fun addNotificationWebSocket(server: Javalin, wsContexts: ArrayList<WsContext?>) {
