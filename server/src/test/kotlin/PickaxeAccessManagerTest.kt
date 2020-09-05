@@ -50,15 +50,15 @@ class PickaxeAccessManagerTest {
     }
 
     @Test
-    fun `when production no auth cookie redirects to auth`() {
+    fun `when production no auth cookie 401s`() {
         System.setProperty("PRODUCTION", "true")
         val accessManager = PickaxeAccessManager(authController)
         val request = mockk<HttpServletRequest>()
         val response = mockk<HttpServletResponse>()
-        val locationSlot = slot<String>()
         every { response.addCookie(any()) } returns Unit
         every { response.addHeader("Set-Cookie", any()) } returns Unit
-        every {response.sendRedirect(capture(locationSlot))} returns Unit
+        every { response.status = 401 } returns Unit
+
         val mockSession = mockk<HttpSession>()
         every {mockSession.setAttribute(any(), any())} returns  Unit
         every { request.getSession(true) } returns mockSession
@@ -71,7 +71,7 @@ class PickaxeAccessManagerTest {
             mutableSetOf()
         )
 
-        assertTrue(locationSlot.captured.contains(authUriRegex))
+        verify { response.status = 401  }
     }
 
 
@@ -100,6 +100,36 @@ class PickaxeAccessManagerTest {
             handlerSpy,
             context,
             mutableSetOf()
+        )
+
+        assertEquals(handledContext, context)
+        verify(exactly = 0) { response.sendRedirect(any()) }
+    }
+
+    @Test
+    fun `when role is anyone handles context`() {
+        val accessManager = PickaxeAccessManager(authController)
+        val request = mockk<HttpServletRequest>()
+        val response = mockk<HttpServletResponse>()
+        val locationSlot = slot<String>()
+        every { response.addCookie(any()) } returns Unit
+        every { response.addHeader("Set-Cookie", any()) } returns Unit
+        every {response.sendRedirect(capture(locationSlot))} returns Unit
+        val mockSession = mockk<HttpSession>()
+        every {mockSession.setAttribute(any(), any())} returns  Unit
+        every { request.getSession(true) } returns mockSession
+        every {request.cookies} returns arrayOf<Cookie>()
+        val context = Context(request, response)
+
+        var handledContext: Context? = null
+        val handlerSpy = Handler {
+            handledContext = it
+        }
+
+        accessManager.manage(
+            handlerSpy,
+            context,
+            mutableSetOf(MyRole.ANYONE)
         )
 
         assertEquals(handledContext, context)
@@ -142,20 +172,19 @@ class PickaxeAccessManagerTest {
     }
 
     @Test
-    fun `when production with unknown auth cookie redirects auth`() {
+    fun `when production with unknown auth cookie 401s`() {
         System.setProperty("PRODUCTION", "true")
         val unknownAuthHash = "authhash"
         val accessManager = PickaxeAccessManager(authController)
         val request = mockk<HttpServletRequest>()
         val response = mockk<HttpServletResponse>()
-        val locationSlot = slot<String>()
 
         every {response.setHeader(any(), any())} returns Unit
         every {response.addHeader(any(), any())} returns Unit
         val mockSession = mockk<HttpSession>()
         every {mockSession.setAttribute(any(), any())} returns  Unit
         every { request.getSession(true) } returns mockSession
-        every {response.sendRedirect(capture(locationSlot))} returns Unit
+        every {response.status = 401 } returns Unit
         val context = Context(request, response)
         every {request.cookies} returns arrayOf(Cookie("pickaxe_auth", unknownAuthHash))
 
@@ -165,7 +194,7 @@ class PickaxeAccessManagerTest {
             mutableSetOf()
         )
 
-        assertTrue(locationSlot.captured.contains(authUriRegex))
+        verify {response.status = 401 }
     }
 
 

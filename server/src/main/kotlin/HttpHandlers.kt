@@ -60,6 +60,12 @@ fun callbackHandler(accessManager: PickaxeAccessManager): (Context) -> Unit {
     }
 }
 
+fun authorizeHandler(accessManager: PickaxeAccessManager): (Context) -> Unit {
+    return {
+        it.redirect(accessManager.getAuthorizeUrl(it))
+    }
+}
+
 fun extractExecutionInputFromContext(ctx: Context): ExecutionInput {
     val mapTypeReference: MapType =
         TypeFactory.defaultInstance()

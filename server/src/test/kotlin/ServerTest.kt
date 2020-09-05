@@ -49,7 +49,7 @@ internal class ServerTest {
     @Test
     fun handlesCallback() {
         addCallbackHandler(serverSpy, mockk())
-        verify { serverSpy.get("/pickaxe/callback", any()) }
+        verify { serverSpy.get("/pickaxe/callback", any(), any()) }
         verify(exactly = 1) { callbackHandler(any()) }
 
         unmockkAll()

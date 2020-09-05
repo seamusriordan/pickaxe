@@ -15,21 +15,24 @@ class PickaxeAccessManager(val authController: AuthenticationController) : Acces
     val serverBaseUri: String
 
     init {
-        if(serverPort != "443") {
-            serverBaseUri = "http://$serverHostName:$serverPort"
+        serverBaseUri = if (serverPort == "443") {
+            "https://$serverHostName"
         } else {
-            serverBaseUri = "https://$serverHostName"
+            "http://$serverHostName:$serverPort"
         }
         redirectUri = "$serverBaseUri$callbackPath"
 
     }
 
+    fun getAuthorizeUrl(ctx: Context): String {
+        return authController.buildAuthorizeUrl(ctx.req, ctx.res, redirectUri).build()
+    }
+
     override fun manage(handler: Handler, ctx: Context, permittedRoles: MutableSet<Role>) {
-        if(authHashes.contains(ctx.cookie("pickaxe_auth")) or !isProduction){
+        if(authHashes.contains(ctx.cookie("pickaxe_auth")) or !isProduction or permittedRoles.contains(MyRole.ANYONE)){
             handler.handle(ctx)
         } else {
-            val authorizeUrl = authController.buildAuthorizeUrl(ctx.req, ctx.res, redirectUri).build()
-            ctx.res.sendRedirect(authorizeUrl)
+            ctx.res.status = 401
         }
     }
 }

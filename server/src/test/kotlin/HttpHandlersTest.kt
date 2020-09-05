@@ -3,14 +3,19 @@ import com.auth0.Tokens
 import graphql.GraphQL
 import graphql.schema.idl.SchemaGenerator
 import io.javalin.http.Context
+import io.javalin.http.RedirectResponse
 import io.javalin.websocket.WsContext
 import io.mockk.*
 import org.apache.commons.codec.digest.DigestUtils
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import java.util.concurrent.Future
 import javax.servlet.http.Cookie
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
+import javax.servlet.http.HttpSession
 
 class HttpHandlersTest {
     private val idQueryBody = "{\"operationName\":\"Query\",\"variables\":{},\"query\":\"query Query {\\n  id\\n}\\n\"}"
@@ -258,7 +263,38 @@ class HttpHandlersTest {
         val cookie = cookieSlot.captured
         assertEquals("pickaxe_auth", cookie.name)
         assertTrue(accessManager.authHashes.contains(cookie.value))
-        assertEquals("https://fake-domain.com/pickaxe", redirectSlot.captured)
+        assertEquals("https://localhost:8080/pickaxe", redirectSlot.captured)
+    }
+
+    @Test
+    fun `auth redirects`() {
+        val auth0Domain = "fake-domain.fakeauth.com"
+        val clientId = "fakeClientId"
+        val redirectUri = "https://localhost:8080/pickaxe/callback"
+        val authUrl =
+            "https://$auth0Domain/authorize\\?redirect_uri=$redirectUri&client_id=$clientId&scope=openid&response_type=code&state="
+        val authUriRegex = "^$authUrl".toRegex()
+        val authController = AuthenticationController.newBuilder(
+            auth0Domain, clientId, "fakeSecreet").build()
+
+        val redirectSlot = slot<String>()
+        val req = mockk<HttpServletRequest>()
+        val res = mockk<HttpServletResponse>()
+        every { res.addHeader(any(), any()) } returns Unit
+        every { res.setHeader("Location", capture(redirectSlot)) } returns Unit
+        every { res.status = 302 } returns Unit
+        val mockSession = mockk<HttpSession>()
+        every {mockSession.setAttribute(any(), any())} returns Unit
+        every { req.getSession(true) } returns mockSession
+        val context = Context(req, res)
+        val accessManager = PickaxeAccessManager(authController)
+
+        assertThrows<RedirectResponse> {
+            authorizeHandler(accessManager)(context)
+        }
+
+        assertTrue(redirectSlot.captured.contains(authUriRegex))
+        verify { res.status = 302 }
     }
 
     interface FutureVoid : Future<Void>

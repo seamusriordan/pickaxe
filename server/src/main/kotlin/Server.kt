@@ -6,8 +6,11 @@ import graphql.schema.idl.SchemaGenerator
 import graphql.schema.idl.SchemaParser
 import graphql.schema.idl.TypeDefinitionRegistry
 import io.javalin.Javalin
+import io.javalin.apibuilder.ApiBuilder.get
 import io.javalin.http.staticfiles.Location
 import io.javalin.websocket.WsContext
+import io.javalin.core.security.Role
+import io.javalin.core.security.SecurityUtil.roles
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import services.ServiceRunner
@@ -15,6 +18,7 @@ import java.io.File
 
 const val graphqlURI = "/pickaxe/graphql/"
 const val callbackPath = "/pickaxe/callback"
+const val authorizePath = "/pickaxe/authorize"
 const val redirectPath = "/pickaxe"
 const val failPath = "/"
 const val staticFilesPath = "html"
@@ -23,6 +27,10 @@ const val schemaPath = "src/main/resources/schema.graphql"
 val wsContexts = ArrayList<WsContext?>(0)
 
 val logger: Logger = LoggerFactory.getLogger("dev.revived.pickaxe-server.Server")
+
+internal enum class MyRole : Role {
+    ANYONE, ROLE_ONE, ROLE_TWO, ROLE_THREE
+}
 
 fun main(args: Array<String>) {
 
@@ -47,6 +55,13 @@ fun main(args: Array<String>) {
     if (port == null) {
         port = "8080"
     }
+
+
+
+    server.routes {
+        get("/pickaxe/authorize/") { ctx -> ctx.redirect("/pickaxe") }
+    }
+
     server.start(port.toInt())
 }
 
@@ -73,7 +88,11 @@ fun addGraphQLOptionServe(server: Javalin) {
 }
 
 fun addCallbackHandler(server: Javalin, accessManager: PickaxeAccessManager){
-    server.get(callbackPath, callbackHandler(accessManager))
+    server.get(callbackPath, callbackHandler(accessManager), roles(MyRole.ANYONE))
+}
+
+fun addAuthorizeHandler(server: Javalin, accessManager: PickaxeAccessManager){
+    server.get(authorizePath, authorizeHandler(accessManager), roles(MyRole.ANYONE))
 }
 
 fun addNotificationWebSocket(server: Javalin, wsContexts: ArrayList<WsContext?>) {
@@ -100,9 +119,9 @@ fun pickaxeTypeDefinitionRegistry(schemaFilePath: String): TypeDefinitionRegistr
 }
 
 fun generateAuthController(): AuthenticationController {
-    val auth0Domain = getEnvOrDefault("AUTH0_DOMAIN","fake-domain.fakeauth.com")
-    val clientId =  getEnvOrDefault("AUTH0_CLIENTID","fakeClientId")
-    val clientSecret =  getEnvOrDefault("AUTH0_CLIENTSECRET","fakeClientSecret")
+    val auth0Domain = getEnvOrDefault("AUTH0_DOMAIN", "fake-domain.fakeauth.com")
+    val clientId =  getEnvOrDefault("AUTH0_CLIENTID", "fakeClientId")
+    val clientSecret =  getEnvOrDefault("AUTH0_CLIENTSECRET", "fakeClientSecret")
 
     val jwkProvider = JwkProviderBuilder(auth0Domain).build()
 
