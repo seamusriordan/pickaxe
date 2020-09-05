@@ -4,7 +4,7 @@ import io.javalin.core.security.Role
 import io.javalin.http.Context
 import io.javalin.http.Handler
 
-class PickaxeAccessManager(private val authController: AuthenticationController) : AccessManager {
+class PickaxeAccessManager(val authController: AuthenticationController) : AccessManager {
     private val redirectUri: String
 
     var authHashes = mutableSetOf<String>()

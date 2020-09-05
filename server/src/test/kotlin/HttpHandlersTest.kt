@@ -7,8 +7,10 @@ import io.javalin.websocket.WsContext
 import io.mockk.*
 import org.apache.commons.codec.digest.DigestUtils
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.util.concurrent.Future
+import javax.servlet.http.Cookie
 
 class HttpHandlersTest {
     private val idQueryBody = "{\"operationName\":\"Query\",\"variables\":{},\"query\":\"query Query {\\n  id\\n}\\n\"}"
@@ -195,7 +197,7 @@ class HttpHandlersTest {
     }
 
     @Test
-    fun `callback exchanges code for token`() {
+    fun `callback adds known hash for token`() {
         val mockContext = mockkClass(Context::class)
 
         val mockAuthController = mockk<AuthenticationController>()
@@ -210,6 +212,46 @@ class HttpHandlersTest {
 
         assertEquals(1, accessManager.authHashes.size)
         assertEquals(DigestUtils.md5Hex(accessTokenString), accessManager.authHashes.first())
+    }
+
+    @Test
+    fun `callback added hash varies with token`() {
+        val mockContext = mockkClass(Context::class)
+
+        val mockAuthController = mockk<AuthenticationController>()
+        val accessManager = PickaxeAccessManager(mockAuthController)
+        val mockTokens = mockk<Tokens>()
+        every {mockAuthController.handle(any(), any())} returns mockTokens
+        val accessTokenString = "different access token"
+        every {mockTokens.accessToken} returns accessTokenString
+        every {mockTokens.idToken} returns "fakeidtoken"
+
+        callbackHandler(accessManager)(mockContext)
+
+        assertEquals(1, accessManager.authHashes.size)
+        assertEquals(DigestUtils.md5Hex(accessTokenString), accessManager.authHashes.first())
+    }
+
+    @Test
+    fun `callback success adds cookie`() {
+        val cookieSlot = slot<Cookie>()
+
+        val mockContext = mockkClass(Context::class)
+        every {mockContext.cookie(capture(cookieSlot))} returns mockContext
+
+        val mockAuthController = mockk<AuthenticationController>()
+        val accessManager = PickaxeAccessManager(mockAuthController)
+        val mockTokens = mockk<Tokens>()
+        every {mockAuthController.handle(any(), any())} returns mockTokens
+        val accessTokenString = "different access token"
+        every {mockTokens.accessToken} returns accessTokenString
+        every {mockTokens.idToken} returns "fakeidtoken"
+
+        callbackHandler(accessManager)(mockContext)
+
+        val cookie = cookieSlot.captured
+        assertEquals("pickaxe_auth", cookie.name)
+        assertTrue(accessManager.authHashes.contains(cookie.value))
     }
 
     interface FutureVoid : Future<Void>

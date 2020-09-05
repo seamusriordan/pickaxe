@@ -1,3 +1,4 @@
+import com.auth0.Tokens
 import com.fasterxml.jackson.databind.type.MapType
 import com.fasterxml.jackson.databind.type.TypeFactory
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -8,6 +9,7 @@ import io.javalin.http.Context
 import io.javalin.plugin.json.JavalinJson
 import io.javalin.websocket.WsContext
 import org.apache.commons.codec.digest.DigestUtils
+import javax.servlet.http.Cookie
 
 fun postHandler(graphQL: GraphQL, wsContexts: ArrayList<WsContext?>): (Context) -> Unit {
     return { ctx ->
@@ -46,7 +48,9 @@ fun optionsHandler(): (Context) -> Unit {
 
 fun callbackHandler(accessManager: PickaxeAccessManager): (Context) -> Unit {
     return {
-        accessManager.authHashes.add(DigestUtils.md5Hex("fakeaccesstoken"))
+        val tokens: Tokens = accessManager.authController.handle(it.req, it.res)
+        accessManager.authHashes.add(DigestUtils.md5Hex(tokens.accessToken))
+        it.cookie(Cookie("pickaxe_auth", DigestUtils.md5Hex(tokens.accessToken)))
     }
 }
 
