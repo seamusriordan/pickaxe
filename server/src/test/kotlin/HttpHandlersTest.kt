@@ -266,6 +266,29 @@ class HttpHandlersTest {
         assertEquals("http://localhost:8080/pickaxe", redirectSlot.captured)
     }
 
+
+    @Test
+    fun `callback ignore requestUrl from request in requestUrl in auth handler`() {
+        val requestSlot = slot<HttpServletRequest>()
+
+        val mockContext = mockkClass(Context::class)
+        every {mockContext.cookie(any<Cookie>())} returns mockContext
+        every {mockContext.redirect(any())} returns Unit
+
+
+        val mockAuthController = mockk<AuthenticationController>()
+        val accessManager = PickaxeAccessManager(mockAuthController)
+        val mockTokens = mockk<Tokens>()
+        every {mockAuthController.handle(capture(requestSlot), any())} returns mockTokens
+        val accessTokenString = "different access token"
+        every {mockTokens.accessToken} returns accessTokenString
+        every {mockTokens.idToken} returns "fakeidtoken"
+
+        callbackHandler(accessManager)(mockContext)
+
+        assertEquals("http://localhost:8080/pickaxe/callback", requestSlot.captured.requestURL.toString())
+    }
+
     @Test
     fun `auth redirects`() {
         val auth0Domain = "fake-domain.fakeauth.com"

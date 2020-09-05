@@ -6,11 +6,9 @@ import graphql.schema.idl.SchemaGenerator
 import graphql.schema.idl.SchemaParser
 import graphql.schema.idl.TypeDefinitionRegistry
 import io.javalin.Javalin
-import io.javalin.apibuilder.ApiBuilder.get
+import io.javalin.core.security.SecurityUtil.roles
 import io.javalin.http.staticfiles.Location
 import io.javalin.websocket.WsContext
-import io.javalin.core.security.Role
-import io.javalin.core.security.SecurityUtil.roles
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import services.ServiceRunner
@@ -27,10 +25,6 @@ const val schemaPath = "src/main/resources/schema.graphql"
 val wsContexts = ArrayList<WsContext?>(0)
 
 val logger: Logger = LoggerFactory.getLogger("dev.revived.pickaxe-server.Server")
-
-internal enum class MyRole : Role {
-    ANYONE
-}
 
 fun main(args: Array<String>) {
 
@@ -83,11 +77,11 @@ fun addGraphQLOptionServe(server: Javalin) {
 }
 
 fun addCallbackHandler(server: Javalin, accessManager: PickaxeAccessManager){
-    server.get(callbackPath, callbackHandler(accessManager), roles(MyRole.ANYONE))
+    server.get(callbackPath, callbackHandler(accessManager), roles(PickaxeRoles.ANYONE))
 }
 
 fun addAuthorizeHandler(server: Javalin, accessManager: PickaxeAccessManager){
-    server.get(authorizePath, authorizeHandler(accessManager), roles(MyRole.ANYONE))
+    server.get(authorizePath, authorizeHandler(accessManager), roles(PickaxeRoles.ANYONE))
 }
 
 fun addNotificationWebSocket(server: Javalin, wsContexts: ArrayList<WsContext?>) {

@@ -29,7 +29,7 @@ class PickaxeAccessManager(val authController: AuthenticationController) : Acces
     }
 
     override fun manage(handler: Handler, ctx: Context, permittedRoles: MutableSet<Role>) {
-        if(authHashes.contains(ctx.cookie("pickaxe_auth")) or !isProduction or permittedRoles.contains(MyRole.ANYONE)){
+        if(authHashes.contains(ctx.cookie("pickaxe_auth")) or !isProduction or permittedRoles.contains(PickaxeRoles.ANYONE)){
             handler.handle(ctx)
         } else {
             ctx.res.status = 401

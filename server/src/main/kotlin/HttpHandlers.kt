@@ -11,6 +11,7 @@ import io.javalin.plugin.json.JavalinJson
 import io.javalin.websocket.WsContext
 import org.apache.commons.codec.digest.DigestUtils
 import javax.servlet.http.Cookie
+import javax.servlet.http.HttpServletRequest
 
 fun postHandler(graphQL: GraphQL, wsContexts: ArrayList<WsContext?>): (Context) -> Unit {
     return { ctx ->
@@ -50,8 +51,13 @@ fun optionsHandler(): (Context) -> Unit {
 fun callbackHandler(accessManager: PickaxeAccessManager): (Context) -> Unit {
     return {
         try {
+            @Suppress("UNNECESSARY_SAFE_CALL")
             logger.info("[callbackHandler] Request URL ${it.req?.requestURL}")
-            val tokens: Tokens = accessManager.authController.handle(it.req, it.res)
+
+            val correctRequest =
+                RewrittenServletRequest(it.req, "${accessManager.serverBaseUri}$callbackPath") as HttpServletRequest
+
+            val tokens: Tokens = accessManager.authController.handle(correctRequest, it.res)
             accessManager.authHashes.add(DigestUtils.md5Hex(tokens.accessToken))
             it.cookie(Cookie("pickaxe_auth", DigestUtils.md5Hex(tokens.accessToken)))
             it.redirect("${accessManager.serverBaseUri}$redirectPath")

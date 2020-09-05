@@ -129,7 +129,7 @@ class PickaxeAccessManagerTest {
         accessManager.manage(
             handlerSpy,
             context,
-            mutableSetOf(MyRole.ANYONE)
+            mutableSetOf(PickaxeRoles.ANYONE)
         )
 
         assertEquals(handledContext, context)
