@@ -50,7 +50,7 @@ fun optionsHandler(): (Context) -> Unit {
 fun callbackHandler(accessManager: PickaxeAccessManager): (Context) -> Unit {
     return {
         try {
-            logger.info("[callbackHandler] Request URL ${it.req.requestURL}")
+            logger.info("[callbackHandler] Request URL ${it.req?.requestURL}")
             val tokens: Tokens = accessManager.authController.handle(it.req, it.res)
             accessManager.authHashes.add(DigestUtils.md5Hex(tokens.accessToken))
             it.cookie(Cookie("pickaxe_auth", DigestUtils.md5Hex(tokens.accessToken)))
