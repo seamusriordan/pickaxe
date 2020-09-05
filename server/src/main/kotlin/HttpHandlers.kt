@@ -1,3 +1,4 @@
+import com.auth0.IdentityVerificationException
 import com.auth0.Tokens
 import com.fasterxml.jackson.databind.type.MapType
 import com.fasterxml.jackson.databind.type.TypeFactory
@@ -48,9 +49,14 @@ fun optionsHandler(): (Context) -> Unit {
 
 fun callbackHandler(accessManager: PickaxeAccessManager): (Context) -> Unit {
     return {
-        val tokens: Tokens = accessManager.authController.handle(it.req, it.res)
-        accessManager.authHashes.add(DigestUtils.md5Hex(tokens.accessToken))
-        it.cookie(Cookie("pickaxe_auth", DigestUtils.md5Hex(tokens.accessToken)))
+        try {
+            val tokens: Tokens = accessManager.authController.handle(it.req, it.res)
+            accessManager.authHashes.add(DigestUtils.md5Hex(tokens.accessToken))
+            it.cookie(Cookie("pickaxe_auth", DigestUtils.md5Hex(tokens.accessToken)))
+            it.redirect("https://${accessManager.serverHostName}$redirectPath")
+        } catch (e: IdentityVerificationException) {
+            it.redirect("https://${accessManager.serverHostName}$failPath")
+        }
     }
 }
 

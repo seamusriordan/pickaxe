@@ -8,11 +8,11 @@ class PickaxeAccessManager(val authController: AuthenticationController) : Acces
     private val redirectUri: String
 
     var authHashes = mutableSetOf<String>()
-    private val isProduction: Boolean
+    private val isProduction: Boolean =
+        System.getProperty("PRODUCTION") != null || System.getenv("PRODUCTION") != null
+    val serverHostName: String = getEnvOrDefault("SERVER_HOSTNAME","fake-domain.com")
 
     init {
-        val serverHostName =  getEnvOrDefault("SERVER_HOSTNAME","fake-domain.com")
-        isProduction =  System.getProperty("PRODUCTION") != null || System.getenv("PRODUCTION") != null
         redirectUri = "https://$serverHostName$callbackPath"
     }
 

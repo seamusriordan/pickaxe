@@ -15,6 +15,8 @@ import java.io.File
 
 const val graphqlURI = "/pickaxe/graphql/"
 const val callbackPath = "/pickaxe/callback"
+const val redirectPath = "/pickaxe"
+const val failPath = "/"
 const val staticFilesPath = "html"
 const val schemaPath = "src/main/resources/schema.graphql"
 

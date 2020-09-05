@@ -233,11 +233,13 @@ class HttpHandlersTest {
     }
 
     @Test
-    fun `callback success adds cookie`() {
+    fun `callback success adds cookie and redirects to main page`() {
         val cookieSlot = slot<Cookie>()
+        val redirectSlot = slot<String>()
 
         val mockContext = mockkClass(Context::class)
         every {mockContext.cookie(capture(cookieSlot))} returns mockContext
+        every {mockContext.redirect(capture(redirectSlot))} returns Unit
 
         val mockAuthController = mockk<AuthenticationController>()
         val accessManager = PickaxeAccessManager(mockAuthController)
@@ -252,6 +254,7 @@ class HttpHandlersTest {
         val cookie = cookieSlot.captured
         assertEquals("pickaxe_auth", cookie.name)
         assertTrue(accessManager.authHashes.contains(cookie.value))
+        assertEquals("https://fake-domain.com/pickaxe", redirectSlot.captured)
     }
 
     interface FutureVoid : Future<Void>
