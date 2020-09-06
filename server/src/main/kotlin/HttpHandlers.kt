@@ -53,6 +53,7 @@ fun callbackHandler(accessManager: PickaxeAccessManager): (Context) -> Unit {
         try {
             @Suppress("UNNECESSARY_SAFE_CALL")
             logger.info("[callbackHandler] Request URL ${it.req?.requestURL}")
+            logger.info("[callbackHandler] Base URL ${accessManager.serverBaseUri}$callbackPath")
 
             val correctRequest =
                 RewrittenServletRequest(it.req, "${accessManager.serverBaseUri}$callbackPath") as HttpServletRequest
