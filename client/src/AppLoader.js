@@ -13,7 +13,7 @@ const AppLoader = () => {
     return <div>{
             loading ? "Loading App" :
             error ? "graphQL query failed" :
-            <WeeklyViewApp id="weekly-view-app" defaultWeek={data.currentWeek.name}/>
+            <WeeklyViewApp data-testid="weekly-view-app" id="weekly-view-app" defaultWeek={data.currentWeek.name}/>
     }</div>;
 }
 
