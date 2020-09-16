@@ -80,6 +80,8 @@ class VegasPicksApi(private val url: URL) {
             logger.warn("[addPickToData] Found parsed teams $teams with odds field \"$oddsString\": $e")
         } catch (e: IndexOutOfBoundsException) {
             logger.warn("[addPickToData] Found parsed teams $teams with odds field \"$oddsString\": $e")
+        } catch (e: NumberFormatException) {
+            logger.warn("[addPickToData] Found parsed teams $teams with odds field \"$oddsString\": $e")
         }
     }
 

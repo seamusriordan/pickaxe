@@ -257,7 +257,7 @@ class VegasPicksApiTest {
 
 
     @Test
-    fun cellWithUnknownTeamNotYieldPick() {
+    fun `cell with one unknown team does not yield pick`() {
         every { mockPicksConnection.inputStream } returns buildSampleRow(
             VegasData(
                 "Huston",
@@ -273,7 +273,7 @@ class VegasPicksApiTest {
 
 
     @Test
-    fun cellWithOneTeamNotYieldPick() {
+    fun `cell with one team does not yield pick`() {
         every { mockPicksConnection.inputStream } returns wrapWithTable(
             "<tr>\n" +
                     "    <td class=\"viCellBg1 cellTextNorm cellBorderL1 gameCell\">\n" +
@@ -288,6 +288,34 @@ class VegasPicksApiTest {
                     "    <td class=\"viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell\">\n" +
                     "        <a class=\"cellTextNorm\">\n" +
                     "            <br>56&frac12;u-10<br>-10&nbsp;-10\"\n" +
+                    "        </a>\n" +
+                    "    </td>\n" +
+                    "</tr>\n"
+        ).byteInputStream()
+
+        val picks = VegasPicksApi(picksUrl).getVegasPicks()
+
+        assertEquals(0, picks.size)
+    }
+
+
+    @Test
+    fun `cell with non-double string does not create pick`() {
+        every { mockPicksConnection.inputStream } returns wrapWithTable(
+            "<tr>\n" +
+                    "    <td class=\"viCellBg1 cellTextNorm cellBorderL1 gameCell\">\n" +
+                    "        <span class=\"cellTextHot\">08/06  8:00 PM</span><br>\n" +
+                    "        <a class=\"tabletext\">Chicago</a>\n" +
+                    "        <a class=\"tabletext\">Detroit</a>\n" +
+                    "    </td>\n" +
+                    "    <td class=\"viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell\">\n" +
+                    "        <a class=\"cellTextNorm\">\n" +
+                    "            &nbsp;<br>-3&nbsp;-10<br>40u-10\n" +
+                    "        </a>\n" +
+                    "    </td>\n" +
+                    "    <td class=\"viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell\">\n" +
+                    "        <a class=\"cellTextNorm\">\n" +
+                    "            <br>56&frac12;u-10<br>-f&nbsp;-10\"\n" +
                     "        </a>\n" +
                     "    </td>\n" +
                     "</tr>\n"
