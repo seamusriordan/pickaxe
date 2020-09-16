@@ -4,12 +4,16 @@ import dto.PickWithSpreadDTO
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
+import org.slf4j.LoggerFactory
 import java.io.IOException
 import java.io.InputStreamReader
 import java.net.URL
+import java.util.NoSuchElementException
 import java.util.stream.IntStream.range
 
 class VegasPicksApi(private val url: URL) {
+    private val logger: org.slf4j.Logger = LoggerFactory.getLogger(VegasPicksApi::class.toString())
+
     fun getVegasPicks(): List<PickWithSpreadDTO> {
         val response: String
         try {
@@ -53,11 +57,12 @@ class VegasPicksApi(private val url: URL) {
         gameCell: Element,
         oddsCell: Element
     ) {
-        val teams = gameCell.select(".tabletext").map { cell -> translateToTeamAbbrev(cell.text()) }
-        val oddsString = oddsCell.text()
-
-        if (oddsString.contains(Regex("[ou]"))) {
+        try {
+            val teams = gameCell.select(".tabletext").map { cell -> translateToTeamAbbrev(cell.text()) }
+            val oddsString = oddsCell.text()
             addPickToData(vegasData, teams, oddsString)
+        } catch (e: NoSuchElementException) {
+            logger.warn("[addValidPickToData] $e")
         }
     }
 
@@ -66,10 +71,16 @@ class VegasPicksApi(private val url: URL) {
         teams: List<String>,
         oddsString: String
     ) {
-        val game = "${teams[0]}@${teams[1]}"
-        val spread = parseSpread(oddsString)
-        val chosenPick = choosePick(spread, teams)
-        vegasData.add(PickWithSpreadDTO(game, chosenPick, spread))
+        try {
+            val game = "${teams[0]}@${teams[1]}"
+            val spread = parseSpread(oddsString)
+            val chosenPick = choosePick(spread, teams)
+            vegasData.add(PickWithSpreadDTO(game, chosenPick, spread))
+        } catch (e: IllegalStateException) {
+            logger.warn("[addPickToData] Found parsed teams $teams with odds field \"$oddsString\": $e")
+        } catch (e: IndexOutOfBoundsException) {
+            logger.warn("[addPickToData] Found parsed teams $teams with odds field \"$oddsString\": $e")
+        }
     }
 
     private fun choosePick(spread: Double, teams: List<String>): String {
@@ -87,6 +98,9 @@ class VegasPicksApi(private val url: URL) {
         if (oddsString.contains("PK")) return 0.0
 
         val tokens = oddsString.split(Regex("\\s"))
+        if(tokens.size != 3) {
+            throw IllegalStateException("Parsed ${tokens.size} token(s) from $oddsString - expected 3")
+        }
         val uPosition = tokens.indexOfFirst { it.contains(Regex("[ou]")) }
         if (uPosition == 0) {
             val spreadToken = tokens[1]
@@ -142,6 +156,6 @@ class VegasPicksApi(private val url: URL) {
             "Washington" to "WAS"
         )
 
-        return translationMap[longTeamName] ?: longTeamName
+        return translationMap[longTeamName] ?: throw NoSuchElementException("Could not find $longTeamName in team abbreviation map")
     }
 }
