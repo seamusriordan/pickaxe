@@ -21,7 +21,7 @@ describe('Mutation response update', () => {
             .contains("SEA")
     });
 
-    it('does not overwrite text in updated cells while typing', () => {
+    xit('does not overwrite text in updated cells while typing', () => {
         cy.get('#Sereres-SEA\\@PHI')
             .click()
             .type("{backspace}{backspace}{backspace}thing");

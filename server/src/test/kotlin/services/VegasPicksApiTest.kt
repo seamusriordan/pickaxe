@@ -77,22 +77,6 @@ class VegasPicksApiTest {
     }
 
     @Test
-    fun teamWithBadNameTranslatesIdentically() {
-        every { mockPicksConnection.inputStream } returns buildSampleRow(
-            VegasData(
-                "Pittsburgh",
-                "Dertroid",
-                "<br>56&frac12;u-10<br>-10&nbsp;-10"
-            )
-        ).byteInputStream()
-
-        val picks = VegasPicksApi(picksUrl).getVegasPicks()
-
-        assertEquals("PIT@Dertroid", picks.first().game)
-    }
-
-
-    @Test
     fun twoPicksInDataWillReturnTwoPicks() {
         every { mockPicksConnection.inputStream } returns buildSampleRows(
             listOf(
@@ -256,6 +240,91 @@ class VegasPicksApiTest {
         assertEquals(0, picks.size)
     }
 
+    @Test
+    fun cellWithSingleTokenDoesNotYieldPick() {
+        every { mockPicksConnection.inputStream } returns buildSampleRow(
+            VegasData(
+                "Houston",
+                "Kansas City",
+                "o"
+            )
+        ).byteInputStream()
+
+        val picks = VegasPicksApi(picksUrl).getVegasPicks()
+
+        assertEquals(0, picks.size)
+    }
+
+
+    @Test
+    fun `cell with one unknown team does not yield pick`() {
+        every { mockPicksConnection.inputStream } returns buildSampleRow(
+            VegasData(
+                "Huston",
+                "Kansas City",
+                "<br>56&frac12;u-10<br>-10&nbsp;-10"
+            )
+        ).byteInputStream()
+
+        val picks = VegasPicksApi(picksUrl).getVegasPicks()
+
+        assertEquals(0, picks.size)
+    }
+
+
+    @Test
+    fun `cell with one team does not yield pick`() {
+        every { mockPicksConnection.inputStream } returns wrapWithTable(
+            "<tr>\n" +
+                    "    <td class=\"viCellBg1 cellTextNorm cellBorderL1 gameCell\">\n" +
+                    "        <span class=\"cellTextHot\">08/06  8:00 PM</span><br>\n" +
+                    "        <a class=\"tabletext\">Chicago</a>\n" +
+                    "    </td>\n" +
+                    "    <td class=\"viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell\">\n" +
+                    "        <a class=\"cellTextNorm\">\n" +
+                    "            &nbsp;<br>-3&nbsp;-10<br>40u-10\n" +
+                    "        </a>\n" +
+                    "    </td>\n" +
+                    "    <td class=\"viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell\">\n" +
+                    "        <a class=\"cellTextNorm\">\n" +
+                    "            <br>56&frac12;u-10<br>-10&nbsp;-10\"\n" +
+                    "        </a>\n" +
+                    "    </td>\n" +
+                    "</tr>\n"
+        ).byteInputStream()
+
+        val picks = VegasPicksApi(picksUrl).getVegasPicks()
+
+        assertEquals(0, picks.size)
+    }
+
+
+    @Test
+    fun `cell with non-double string does not create pick`() {
+        every { mockPicksConnection.inputStream } returns wrapWithTable(
+            "<tr>\n" +
+                    "    <td class=\"viCellBg1 cellTextNorm cellBorderL1 gameCell\">\n" +
+                    "        <span class=\"cellTextHot\">08/06  8:00 PM</span><br>\n" +
+                    "        <a class=\"tabletext\">Chicago</a>\n" +
+                    "        <a class=\"tabletext\">Detroit</a>\n" +
+                    "    </td>\n" +
+                    "    <td class=\"viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell\">\n" +
+                    "        <a class=\"cellTextNorm\">\n" +
+                    "            &nbsp;<br>-3&nbsp;-10<br>40u-10\n" +
+                    "        </a>\n" +
+                    "    </td>\n" +
+                    "    <td class=\"viCellBg1 cellTextNorm cellBorderL1 center_text nowrap oddsCell\">\n" +
+                    "        <a class=\"cellTextNorm\">\n" +
+                    "            <br>56&frac12;u-10<br>-f&nbsp;-10\"\n" +
+                    "        </a>\n" +
+                    "    </td>\n" +
+                    "</tr>\n"
+        ).byteInputStream()
+
+        val picks = VegasPicksApi(picksUrl).getVegasPicks()
+
+        assertEquals(0, picks.size)
+    }
 
     private inner class VegasData(val awayTeam: String, val homeTeam: String, val spread: String)
 
