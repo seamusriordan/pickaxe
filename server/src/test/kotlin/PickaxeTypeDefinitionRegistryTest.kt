@@ -7,7 +7,7 @@ import java.io.File
 class PickaxeTypeDefinitionRegistryTest {
     @Test
     fun generateTypeDefinitionFromRegistryForSimpleSchema() {
-        val typeDefReg = pickaxeTypeDefinitionRegistry("src/test/resources/simple.graphql")
+        val typeDefReg = pickaxeTypeDefinitionRegistry("simple.graphql")
 
         Assertions.assertEquals("Query", typeDefReg.types()["Query"]?.name)
         Assertions.assertEquals(
@@ -19,7 +19,7 @@ class PickaxeTypeDefinitionRegistryTest {
 
     @Test
     fun generateTypeDefinitionFromRegistryForTwoTypeSchema() {
-        val typeDefReg = pickaxeTypeDefinitionRegistry("src/test/resources/sample.graphql")
+        val typeDefReg = pickaxeTypeDefinitionRegistry("sample.graphql")
 
         Assertions.assertEquals("Query", typeDefReg.types()["Query"]?.name)
         Assertions.assertEquals(
@@ -32,6 +32,6 @@ class PickaxeTypeDefinitionRegistryTest {
 
 fun sampleTypeDefinitionRegistry(): TypeDefinitionRegistry {
     val schemaParser = SchemaParser()
-    val schemaFile = File("src/test/resources/sample.graphql")
+    val schemaFile = object {}.javaClass.getResourceAsStream("sample.graphql").bufferedReader()
     return schemaParser.parse(schemaFile)
 }

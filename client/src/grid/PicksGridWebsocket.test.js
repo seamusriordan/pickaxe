@@ -5,19 +5,23 @@ import {create, act} from "react-test-renderer";
 import React from "react";
 import {useQuery, useMutation} from '@apollo/react-hooks';
 import {mockQueryData} from "../testUtilities/MockQueryData";
-import {buildWebsocketUri, getWebsocketHostname, getWebsocketPort, getWebsocketProtocol} from "../helpers";
+import {buildWebsocketUri} from "../helpers";
 
 jest.mock('@apollo/react-hooks');
 
 describe('Websocket behavior', () => {
-    const defaultEnv = process.env;
-
     describe('connection behavior', () => {
         let server;
         let refetched;
         let grid;
 
         beforeEach(() => {
+            delete window.location;
+            window.location = {
+                protocol: 'http:',
+                host: 'localhost:8080'
+            };
+
             server = new WS("ws://localhost:8080/pickaxe/updateNotification");
 
             refetched = false;
@@ -84,38 +88,43 @@ describe('Websocket behavior', () => {
     });
 
     describe('uri from environment variables', () => {
-        beforeEach(() => {
-            process.env = {...defaultEnv};
-        });
+        it('websocketServer returns ws and localhost from window.location http://localhost:8080', () => {
+            delete window.location;
+            window.location = {
+                protocol: 'http:',
+                host: 'localhost:8080'
+            };
 
-        it('websocketServer returns localhost when environment variable is not set', () => {
-            expect(getWebsocketHostname()).toEqual('localhost');
             expect(buildWebsocketUri()).toEqual('ws://localhost:8080/pickaxe/updateNotification')
         });
 
-        it('websocketServer returns host from environment variable', () => {
-            process.env.REACT_APP_GRAPHQL_SERVER = 'someservername';
-            expect(getWebsocketHostname()).toEqual('someservername');
+        it('websocketServer returns ws and someservername from window.location http://someservername:8080', () => {
+            delete window.location;
+            window.location = {
+                protocol: 'http:',
+                host: 'someservername:8080'
+            };
+
             expect(buildWebsocketUri()).toEqual('ws://someservername:8080/pickaxe/updateNotification')
         });
 
-        it('websocketPort returns 8080 when environment variable is not set', () => {
-            expect(getWebsocketPort()).toEqual("8080")
-        });
+        it('websocketServer returns ws and localhost from window.location http://localhost:7979', () => {
+            delete window.location;
+            window.location = {
+                protocol: 'http:',
+                host: 'localhost:7979'
+            };
 
-        it('websocketPort returns port from environment variable', () => {
-            process.env.REACT_APP_GRAPHQL_PORT = "7979";
-            expect(getWebsocketPort()).toEqual("7979");
             expect(buildWebsocketUri()).toEqual('ws://localhost:7979/pickaxe/updateNotification');
         });
 
-        it('websocketProtocol returns ws when environment variable is not set', () => {
-            expect(getWebsocketProtocol()).toEqual("ws")
-        });
+        it('websocketServer returns wss and localhost from window.location https://localhost:8080', () => {
+            delete window.location;
+            window.location = {
+                protocol: 'https:',
+                host: 'localhost:8080'
+            };
 
-        it('websocketProtocol returns wss from environment variable', () => {
-            process.env.REACT_APP_GRAPHQL_HTTPS = "1";
-            expect(getWebsocketProtocol()).toEqual("wss");
             expect(buildWebsocketUri()).toEqual('wss://localhost:8080/pickaxe/updateNotification')
         });
     });

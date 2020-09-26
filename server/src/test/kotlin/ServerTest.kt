@@ -29,11 +29,11 @@ internal class ServerTest {
     fun addsStaticFilesWithPathHtml() {
         val configMock = mockkClass(JavalinConfig::class)
         serverSpy.config = configMock
-        every { configMock.addStaticFiles(any(), any()) } returns configMock
+        every { configMock.addStaticFiles(any(), any(), any()) } returns configMock
 
         addStaticFileServing(serverSpy)
 
-        verify { configMock.addStaticFiles("html", Location.EXTERNAL) }
+        verify { configMock.addStaticFiles("/pickaxe", "/html", Location.CLASSPATH) }
     }
 
     @Test
