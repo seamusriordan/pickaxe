@@ -12,15 +12,14 @@ import io.javalin.websocket.WsContext
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import services.ServiceRunner
-import java.io.File
 
 const val graphqlURI = "/pickaxe/graphql/"
 const val callbackPath = "/pickaxe/callback"
 const val authorizePath = "/pickaxe/authorize"
 const val redirectPath = "/pickaxe"
 const val failPath = "/"
-const val staticFilesPath = "html"
-const val schemaPath = "src/main/resources/schema.graphql"
+const val staticFilesPath = "/html"
+const val schemaPath = "schema.graphql"
 
 val wsContexts = ArrayList<WsContext?>(0)
 
@@ -62,7 +61,7 @@ fun generateGraphQLFromRegistryAndWiring(registry: TypeDefinitionRegistry, wirin
 }
 
 fun addStaticFileServing(server: Javalin) {
-    server.config.addStaticFiles(staticFilesPath, Location.EXTERNAL)
+    server.config.addStaticFiles(redirectPath,staticFilesPath, Location.CLASSPATH)
     return
 }
 
@@ -103,7 +102,7 @@ fun addNotificationWebSocket(server: Javalin, wsContexts: ArrayList<WsContext?>)
 
 fun pickaxeTypeDefinitionRegistry(schemaFilePath: String): TypeDefinitionRegistry {
     val schemaParser = SchemaParser()
-    val schemaFile = File(schemaFilePath)
+    val schemaFile = object{}.javaClass.getResourceAsStream(schemaFilePath).bufferedReader()
     return schemaParser.parse(schemaFile)
 }
 

@@ -9,6 +9,7 @@ import io.mockk.*
 import org.apache.commons.codec.digest.DigestUtils
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.util.concurrent.Future
@@ -27,14 +28,19 @@ class HttpHandlersTest {
     private val mutationQueryBody7 =
         "{\"operationName\":\"Mutation\",\"variables\":{ \"id\": 7 },\"query\":\"mutation Mutation(\$id: Int){\\n  mutate(id: \$id) }\\n\"}"
 
+    lateinit var sampleEngine: GraphQL
+    @BeforeEach
+    fun setup() {
+        sampleEngine = sampleGraphQL()
+    }
+
     @Test
     fun extractExecutionInputFromPostBodyForIdQuery() {
         val mockContext = mockkClass(Context::class)
         every { mockContext.body() } returns idQueryBody
-        val engine: GraphQL = sampleGraphQL()
 
         val input = extractExecutionInputFromContext(mockContext)
-        val result = engine.execute(input)
+        val result = sampleEngine.execute(input)
 
         val expectedResult = 44
         assertEquals(expectedResult, result.getData<Map<String, Int>>()["id"])
@@ -44,10 +50,9 @@ class HttpHandlersTest {
     fun extractExecutionInputFromPostBodyForUserWithNameQuery() {
         val mockContext = mockkClass(Context::class)
         every { mockContext.body() } returns userQueryBody
-        val engine: GraphQL = sampleGraphQL()
 
         val input = extractExecutionInputFromContext(mockContext)
-        val result = engine.execute(input)
+        val result = sampleEngine.execute(input)
 
         val expectedResult = "JImm"
         assertEquals(expectedResult, result.getData<Map<String, Map<String, String>>>()["user"]?.get("name"))
@@ -57,7 +62,6 @@ class HttpHandlersTest {
     fun extractExecutionInputVariablesFromMutationBodyForId7() {
         val mockContext = mockkClass(Context::class)
         every { mockContext.body() } returns mutationQueryBody7
-        sampleGraphQL()
 
         val input = extractExecutionInputFromContext(mockContext)
 
@@ -68,7 +72,6 @@ class HttpHandlersTest {
     fun extractExecutionInputVariablesFromMutationBodyForId0() {
         val mockContext = mockkClass(Context::class)
         every { mockContext.body() } returns mutationQueryBody0
-        sampleGraphQL()
 
         val input = extractExecutionInputFromContext(mockContext)
 
@@ -79,7 +82,6 @@ class HttpHandlersTest {
     fun extractExecutionInputOperationFromMutationQuery() {
         val mockContext = mockkClass(Context::class)
         every { mockContext.body() } returns mutationQueryBody7
-        sampleGraphQL()
 
         val input = extractExecutionInputFromContext(mockContext)
 
@@ -124,7 +126,7 @@ class HttpHandlersTest {
     }
 
     @Test
-    fun nullOperationNameDoesntCrashServer() {
+    fun `null Operation Name Doesnt Crash Server`() {
         val mockContext = createMockNullOpContext()
 
         postHandler(sampleGraphQL(), ArrayList(0))(mockContext)
@@ -179,7 +181,7 @@ class HttpHandlersTest {
         wsContexts.add(openWsContext1)
         wsContexts.add(openWsContext2)
 
-        postHandler(sampleGraphQL(), wsContexts)(mockContext)
+        postHandler(sampleEngine, wsContexts)(mockContext)
 
         verify { openWsContext1.send(any<String>()) }
         verify { openWsContext2.send(any<String>()) }
@@ -195,7 +197,7 @@ class HttpHandlersTest {
         wsContexts.add(openWsContext1)
         wsContexts.add(openWsContext2)
 
-        postHandler(sampleGraphQL(), wsContexts)(mockContext)
+        postHandler(sampleEngine, wsContexts)(mockContext)
 
         verify(exactly = 0) { openWsContext1.send(any<String>()) }
         verify(exactly = 0) { openWsContext2.send(any<String>()) }
