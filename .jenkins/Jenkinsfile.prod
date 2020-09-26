@@ -31,13 +31,6 @@ pipeline {
                 }
             }
         }
-        stage('Build client for deploy') {
-            steps {
-                dir('client') {
-                    sh 'gradle build'
-                }
-            }
-        }
         stage('Build deploy docker image') {
             steps {
                 sh 'docker build . -t pickaxe:prod'
