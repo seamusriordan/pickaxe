@@ -31,7 +31,7 @@ describe('App', () => {
     it('buildGraphqlUri returns http and localhost:8080 from window.location', () => {
         delete window.location;
         window.location = {
-            protocol: 'http',
+            protocol: 'http:',
             host: 'localhost:8080'
         };
 
@@ -41,7 +41,7 @@ describe('App', () => {
     it('buildGraphqlUri returns http and someservername:8080 from window.location', () => {
         delete window.location;
         window.location = {
-            protocol: 'http',
+            protocol: 'http:',
             host: 'someservername:8080'
         };
 
@@ -51,7 +51,7 @@ describe('App', () => {
     it('buildGraphqlUri returns http and localhost:7979 from window.location', () => {
         delete window.location;
         window.location = {
-            protocol: 'http',
+            protocol: 'http:',
             host: 'localhost:7979'
         };
 
@@ -61,7 +61,7 @@ describe('App', () => {
     it('buildGraphqlUri returns https and localhost:7979 from window.location', () => {
         delete window.location;
         window.location = {
-            protocol: 'https',
+            protocol: 'https:',
             host: 'localhost:8080'
         };
         expect(buildGraphqlUri()).toEqual('https://localhost:8080/pickaxe/graphql')

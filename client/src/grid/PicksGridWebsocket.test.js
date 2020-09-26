@@ -18,7 +18,7 @@ describe('Websocket behavior', () => {
         beforeEach(() => {
             delete window.location;
             window.location = {
-                protocol: 'http',
+                protocol: 'http:',
                 host: 'localhost:8080'
             };
 
@@ -91,7 +91,7 @@ describe('Websocket behavior', () => {
         it('websocketServer returns ws and localhost from window.location http://localhost:8080', () => {
             delete window.location;
             window.location = {
-                protocol: 'http',
+                protocol: 'http:',
                 host: 'localhost:8080'
             };
 
@@ -101,7 +101,7 @@ describe('Websocket behavior', () => {
         it('websocketServer returns ws and someservername from window.location http://someservername:8080', () => {
             delete window.location;
             window.location = {
-                protocol: 'http',
+                protocol: 'http:',
                 host: 'someservername:8080'
             };
 
@@ -111,17 +111,17 @@ describe('Websocket behavior', () => {
         it('websocketServer returns ws and localhost from window.location http://localhost:7979', () => {
             delete window.location;
             window.location = {
-                protocol: 'http',
+                protocol: 'http:',
                 host: 'localhost:7979'
             };
 
             expect(buildWebsocketUri()).toEqual('ws://localhost:7979/pickaxe/updateNotification');
         });
 
-        it('websocketServer returns wss and localhost from window.location http://localhost:7979', () => {
+        it('websocketServer returns wss and localhost from window.location https://localhost:8080', () => {
             delete window.location;
             window.location = {
-                protocol: 'https',
+                protocol: 'https:',
                 host: 'localhost:8080'
             };
 
