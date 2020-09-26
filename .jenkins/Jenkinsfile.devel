@@ -14,6 +14,7 @@ pipeline {
             steps {
                 lock('pickaxe-pipeline') {
                     dir('server') {
+                        sh 'gradle copy_client_build'
                         sh 'gradle build'
                         sh 'gradle copy_dependencies'
                     }
