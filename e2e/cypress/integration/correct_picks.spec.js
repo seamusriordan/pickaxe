@@ -20,7 +20,7 @@ describe('correct picks', () => {
             .invoke('blur')
     });
 
-    xit('changing to different type case will count correctly', () => {
+    it('changing to different type case will count correctly', () => {
         cy.get("#Seamus-GB\\@CHI")
             .click()
             .type('{backspace}{backspace}hi')
