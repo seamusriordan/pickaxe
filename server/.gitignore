@@ -3,3 +3,5 @@
 /gradle/
 /META-INF/
 /src/main/resources/html/
+/.idea/
+/server/.idea/
