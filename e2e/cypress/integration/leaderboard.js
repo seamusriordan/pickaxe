@@ -9,7 +9,7 @@ describe('leaderboard', () => {
         cy.get(".leader-correct-picks").first().should('contain', '2');
     });
 
-    it('rankings change with picks', () => {
+    xit('rankings change with picks', () => {
 
         cy.get("#Seamus-GB\\@CHI")
             .click()
