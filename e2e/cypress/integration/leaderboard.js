@@ -9,7 +9,6 @@ describe('leaderboard', () => {
         cy.get(".leader-correct-picks").first().should('contain', '2');
     });
 
-    //TODO  Flaky test
     it('rankings change with picks', () => {
 
         cy.get("#Seamus-GB\\@CHI")

@@ -23,7 +23,6 @@ describe('Mutation response update', () => {
             .contains("SEA", {timeout: 20000})
     });
 
-    //TODO  Flaky test
     it('does not overwrite text in updated cells while typing', () => {
         cy.get('#Sereres-SEA\\@PHI')
             .click()
