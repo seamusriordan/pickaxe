@@ -73,7 +73,7 @@ const WeeklyViewApp = props => {
     const {defaultWeek} = props;
     const [currentWeek, updateWeek] = useState(defaultWeek);
     const {error, data, refetch} = useQuery(PICKS_QUERY, {
-        variables: {week: defaultWeek},
+        variables: {week: currentWeek},
         pollInterval: 150000
     });
 
