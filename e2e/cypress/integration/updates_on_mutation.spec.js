@@ -12,32 +12,37 @@ describe('Mutation response update', () => {
         cy.get('#Seamus-SEA\\@PHI')
             .contains("SEA")
             .request('POST', 'localhost:8080/pickaxe/graphql', graphqlMutateBody)
-        cy.get('#Seamus-SEA\\@PHI')
-            .contains("DERP", {timeout: 10000})
+
+            .get('#Seamus-SEA\\@PHI')
+            .contains("DERP", {timeout: 20000})
             .request('POST', 'localhost:8080/pickaxe/graphql', graphqlRevertBody)
-        cy.visit('localhost:8080/pickaxe')
+
+            .visit('localhost:8080/pickaxe')
             .get('#change-week--back').click().click()
             .get('#Seamus-SEA\\@PHI')
-            .contains("SEA")
+            .contains("SEA", {timeout: 20000})
     });
 
-    xit('does not overwrite text in updated cells while typing', () => {
+    //TODO  Flaky test
+    it('does not overwrite text in updated cells while typing', () => {
         cy.get('#Sereres-SEA\\@PHI')
             .click()
-            .type("{backspace}{backspace}{backspace}thing");
+            .type("{backspace}{backspace}{backspace}thing")
 
-        cy.request('POST', 'localhost:8080/pickaxe/graphql', graphqlMutateBody)
+            .request('POST', 'localhost:8080/pickaxe/graphql', graphqlMutateBody)
             .get('#Seamus-SEA\\@PHI')
-            .contains("SEA", {timeout: 10000})
+            .contains("SEA", {timeout: 20000})
             .get('#Sereres-SEA\\@PHI').contains("thing")
-        cy.get('#Sereres-SEA\\@PHI')
+
+            .get('#Sereres-SEA\\@PHI')
             .click()
             .type("{backspace}{backspace}{backspace}{backspace}{backspace}PHI")
             .invoke('blur')
-        cy.request('POST', 'localhost:8080/pickaxe/graphql', graphqlRevertBody)
-        cy.visit('localhost:8080/pickaxe')
+
+            .request('POST', 'localhost:8080/pickaxe/graphql', graphqlRevertBody)
+            .visit('localhost:8080/pickaxe')
             .get('#change-week--back').click().click()
             .get('#Seamus-SEA\\@PHI')
-            .contains("SEA")
+            .contains("SEA", {timeout: 20000})
     });
 });
