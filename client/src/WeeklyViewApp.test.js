@@ -50,6 +50,16 @@ describe('WeeklyViewApp', () => {
         expect(useQuery.mock.calls[0][1].variables.week).toEqual(defaultWeek)
     });
 
+    it('calls useQuery with with current week', () => {
+        let weekChanger = app.findByProps({id: "change-week"});
+
+        act(() => {
+            weekChanger.props.forward();
+        })
+
+        expect(useQuery.mock.calls[1][1].variables.week).toEqual(mockQueryData.weeks[1].name)
+    });
+
     it('Renders error when error from query is truthy', () => {
         useQuery.mockReturnValue({
             loading: false, error: true, data: undefined, refetch: () => {
