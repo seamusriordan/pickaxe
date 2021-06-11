@@ -1,8 +1,8 @@
 import WeeklyViewApp from "./WeeklyViewApp";
 
-import {create, act} from "react-test-renderer";
+import {act, create} from "react-test-renderer";
 import React from "react";
-import {useQuery, useMutation} from '@apollo/react-hooks';
+import {useMutation, useQuery} from '@apollo/react-hooks';
 import {mockQueryData} from "./testUtilities/MockQueryData";
 
 import {Leaderboard} from "./leaderboard/Leaderboard";
@@ -27,7 +27,12 @@ describe('WeeklyViewApp', () => {
         useMutation.mockReturnValue([() => {
         }]);
         // eslint-disable-next-line no-unused-vars,no-unused-expressions
-        app = create(<WeeklyViewApp defaultWeek="0"/>).root;
+        let weeklyViewApp = null;
+        act(() => {
+            weeklyViewApp = create(<WeeklyViewApp defaultWeek="0"/>);
+        })
+
+        app = weeklyViewApp.root;
     });
 
     it('calls useQuery with some poll interval', () => {
@@ -84,7 +89,6 @@ describe('WeeklyViewApp', () => {
         let gamesGrid;
         beforeEach(() => {
             gamesGrid = app.findByProps({"data-testid": "weekly-games-grid"})
-
         })
 
         it('passes default week by default', () => {
@@ -150,10 +154,12 @@ describe('WeeklyViewApp', () => {
         });
 
         it('on week 1 refetches with week 2', () => {
-            const week1Grid = create(<WeeklyViewApp defaultWeek="1"/>).root;
-            const changeWeek = week1Grid.findByProps({id: "change-week"})
-
+            let week1Grid = null;
             act(() => {
+                week1Grid = create(<WeeklyViewApp defaultWeek="1"/>);
+            });
+            act(() => {
+                const changeWeek = week1Grid.root.findByProps({id: "change-week"})
                 changeWeek.props.forward();
             })
 
@@ -163,8 +169,12 @@ describe('WeeklyViewApp', () => {
         });
 
         it('on final week does nothing', () => {
-            const week2Grid = create(<WeeklyViewApp defaultWeek="2"/>).root;
-            const changeWeek = week2Grid.findByProps({id: "change-week"})
+            let week2Grid = null;
+            act(() => {
+                week2Grid = create(<WeeklyViewApp defaultWeek="2"/>);
+            });
+
+            const changeWeek = week2Grid.root.findByProps({id: "change-week"})
 
             act(() => {
                 changeWeek.props.forward();
@@ -175,12 +185,16 @@ describe('WeeklyViewApp', () => {
     });
 
     describe('rewind week', () => {
-        let week2Grid;
+        let week2GridRoot;
         let week2Change;
 
         beforeEach(() => {
-            week2Grid = create(<WeeklyViewApp defaultWeek="2"/>).root;
-            week2Change = week2Grid.findByProps({id: "change-week"});
+            let week2Grid = null;
+            act(() => {
+                week2Grid = create(<WeeklyViewApp defaultWeek="2"/>);
+            })
+            week2GridRoot = week2Grid.root;
+            week2Change = week2GridRoot.findByProps({id: "change-week"});
         })
 
         it('on week 2 refetches with week 1', () => {
@@ -217,8 +231,12 @@ describe('WeeklyViewApp', () => {
         });
 
         it('on week 1 refetches with week 0', () => {
-            const week1Grid = create(<WeeklyViewApp defaultWeek="1"/>).root;
-            const changeWeek = week1Grid.findByProps({id: "change-week"})
+
+            let week1Grid = null;
+            act(() => {
+                week1Grid = create(<WeeklyViewApp defaultWeek="1"/>);
+            })
+            const changeWeek = week1Grid.root.findByProps({id: "change-week"})
 
             act(() => {
                 changeWeek.props.back();
@@ -239,6 +257,39 @@ describe('WeeklyViewApp', () => {
             expect(refetchSpy).not.toHaveBeenCalled();
         });
     })
+
+
+    it('advancing week does not discard current data', () => {
+        jest.resetAllMocks();
+        refetchSpy = jest.fn();
+        refetchSpy.mockReturnValue(Promise.resolve())
+
+        useQuery
+            .mockReturnValueOnce({
+                loading: false, error: null, data: mockQueryData, refetch: refetchSpy
+            })
+            .mockReturnValue({
+                loading: true, error: null, data: null, refetch: refetchSpy
+            })
+        ;
+        useMutation.mockReturnValue([() => {
+        }]);
+
+        let weeklyViewApp = null;
+        act(() => {
+            weeklyViewApp = create(<WeeklyViewApp defaultWeek="0"/>);
+        })
+
+        let week0Change = weeklyViewApp.root.findByProps({id: "change-week"});
+
+        act(() => {
+            week0Change.props.forward();
+        })
+
+        week0Change = weeklyViewApp.root.findAllByProps({id: "change-week"});
+
+        expect(week0Change.length).toBe(1);
+    });
 
     describe('leaderboard', () => {
         it('has leaderboard', () => {

@@ -1,5 +1,5 @@
 import WeeklyViewApp from "./WeeklyViewApp";
-import {create} from "react-test-renderer";
+import {act, create} from "react-test-renderer";
 import AppLoader from "./AppLoader";
 import React from "react";
 import {useMutation, useQuery} from "@apollo/react-hooks";
@@ -14,35 +14,37 @@ describe('PicksLoader', () => {
         }
     };
 
+    let loaderRoot = null;
+
     beforeEach(() => {
         jest.resetAllMocks();
         useQuery
             .mockReturnValueOnce({
-                loading: false, error: null, data: {currentWeek: {name: "0"}, weeks: [{name: "0"}, {name: "1"}]}})
-            .mockReturnValueOnce(picksQueryResult);
+                loading: false, error: null, data: {currentWeek: {name: "0"}, weeks: [{name: "0"}, {name: "1"}]}
+            })
+            .mockReturnValue(picksQueryResult);
         useMutation.mockReturnValue([() => {
         }]);
+
+        let loader = null;
+        act(() => {
+            loader = create(<AppLoader/>);
+        })
+        loaderRoot = loader.root;
     });
 
     it('has a WeeklyGamesGrid element', () => {
-        const loader = create(<AppLoader/>).root;
-
-        const grid = loader.findAllByType(WeeklyViewApp);
+        const grid = loaderRoot.findAllByType(WeeklyViewApp);
         expect(grid.length).toEqual(1);
     });
 
     it('passes current week of 0 to WeeklyGamesGrid', () => {
-        const loader = create(<AppLoader/>).root;
-
-        const grid = loader.findByProps({id: "weekly-view-app"});
+        const grid = loaderRoot.findByProps({id: "weekly-view-app"});
 
         expect(grid.props.defaultWeek).toEqual("0")
     });
 
     it('calls query for weeks', () => {
-        // eslint-disable-next-line no-unused-expressions
-        create(<AppLoader/>).root;
-
         expect(useQuery.mock.calls[0][0]).toEqual(WEEKS_QUERY);
     });
 
@@ -50,13 +52,16 @@ describe('PicksLoader', () => {
         useQuery.mockReset();
         useQuery
             .mockReturnValueOnce({
-                loading: false, error: null, data: {currentWeek: {name: "1"}, weeks: ["0", "1"]}})
-            .mockReturnValueOnce(picksQueryResult);
+                loading: false, error: null, data: {currentWeek: {name: "1"}, weeks: ["0", "1"]}
+            })
+            .mockReturnValue(picksQueryResult);
 
+        let loader = null;
+        act(() => {
+            loader = create(<AppLoader/>);
+        })
 
-        const loader = create(<AppLoader/>).root;
-
-        const grid = loader.findByProps({id: "weekly-view-app"});
+        const grid = loader.root.findByProps({id: "weekly-view-app"});
 
         expect(grid.props.defaultWeek).toEqual("1")
     });
@@ -67,9 +72,12 @@ describe('PicksLoader', () => {
         useQuery
             .mockReturnValueOnce({loading: true, error: null, data: undefined});
 
-        const loader = create(<AppLoader/>).root;
+        let loader = null;
+        act(() => {
+            loader = create(<AppLoader/>);
+        })
 
-        expect(loader.findByType('div').props.children).toEqual("Loading App")
+        expect(loader.root.findByType('div').props.children).toEqual("Loading App")
     });
 
     it('when query errors shows error message', () => {
@@ -78,8 +86,11 @@ describe('PicksLoader', () => {
         useQuery
             .mockReturnValueOnce({loading: false, error: true, data: undefined});
 
-        const loader = create(<AppLoader/>).root;
+        let loader = null;
+        act(() => {
+            loader = create(<AppLoader/>);
+        })
 
-        expect(loader.findByType('div').props.children).toEqual("graphQL query failed")
+        expect(loader.root.findByType('div').props.children).toEqual("graphQL query failed")
     });
 });
