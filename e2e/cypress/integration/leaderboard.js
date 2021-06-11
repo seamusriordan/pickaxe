@@ -1,6 +1,8 @@
 describe('leaderboard', () => {
     beforeEach(() => {
-        cy.visit('localhost:8080/pickaxe').get('#change-week--back').click().click()
+        cy.visit('localhost:8080/pickaxe')
+            .get('#change-week--back').click()
+            .get('#change-week--back').click()
     })
 
     it('has starting picks', () => {

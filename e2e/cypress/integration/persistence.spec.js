@@ -1,13 +1,16 @@
 describe('entered data persists on refresh', () => {
     it('has data that persists on refresh', () => {
         cy.visit('localhost:8080/pickaxe')
-            .get('#change-week--back').click().click()
+            .get('#change-week--back').click()
+            .get('#change-week--back').click();
+
         let gameCellId = '#Sereres-SEA\\@PHI';
         cy.get(gameCellId)
             .click()
             .type("{backspace}{backspace}{backspace}thing")
             .invoke('blur');
-        cy.reload().get('#change-week--back').click().click();
+        cy.reload().get('#change-week--back').click()
+            .get('#change-week--back').click();
 
         cy.get(gameCellId).contains("thing");
 

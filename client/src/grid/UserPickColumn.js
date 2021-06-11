@@ -5,7 +5,7 @@ const UserPickColumn = props => {
     const cells = props.games.map(game => {
         let thisPick = getPickByGame(props.pickSet, game.name);
 
-        const sendDataCallback = (event, updatedPick) => {
+        const sendDataCallback = (updatedPick) => {
             props.sendData(props.user.name, game.name, updatedPick)
         };
         return <PickCell
