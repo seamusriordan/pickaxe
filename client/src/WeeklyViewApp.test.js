@@ -1,8 +1,8 @@
 import WeeklyViewApp from "./WeeklyViewApp";
 
-import {create, act} from "react-test-renderer";
+import {act, create} from "react-test-renderer";
 import React from "react";
-import {useQuery, useMutation} from '@apollo/react-hooks';
+import {useMutation, useQuery} from '@apollo/react-hooks';
 import {mockQueryData} from "./testUtilities/MockQueryData";
 
 import {Leaderboard} from "./leaderboard/Leaderboard";
@@ -158,7 +158,7 @@ describe('WeeklyViewApp', () => {
             act(() => {
                 week1Grid = create(<WeeklyViewApp defaultWeek="1"/>);
             });
-            act( () => {
+            act(() => {
                 const changeWeek = week1Grid.root.findByProps({id: "change-week"})
                 changeWeek.props.forward();
             })
@@ -257,6 +257,39 @@ describe('WeeklyViewApp', () => {
             expect(refetchSpy).not.toHaveBeenCalled();
         });
     })
+
+
+    it('advancing week does not discard current data', () => {
+        jest.resetAllMocks();
+        refetchSpy = jest.fn();
+        refetchSpy.mockReturnValue(Promise.resolve())
+
+        useQuery
+            .mockReturnValueOnce({
+                loading: false, error: null, data: mockQueryData, refetch: refetchSpy
+            })
+            .mockReturnValue({
+                loading: true, error: null, data: null, refetch: refetchSpy
+            })
+        ;
+        useMutation.mockReturnValue([() => {
+        }]);
+
+        let weeklyViewApp = null;
+        act(() => {
+            weeklyViewApp = create(<WeeklyViewApp defaultWeek="0"/>);
+        })
+
+        let week0Change = weeklyViewApp.root.findByProps({id: "change-week"});
+
+        act(() => {
+            week0Change.props.forward();
+        })
+
+        week0Change = weeklyViewApp.root.findAllByProps({id: "change-week"});
+
+        expect(week0Change.length).toBe(1);
+    });
 
     describe('leaderboard', () => {
         it('has leaderboard', () => {

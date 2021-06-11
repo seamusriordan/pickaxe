@@ -56,7 +56,7 @@ function generatedWebsocketOnMessageCallback(refetch) {
     };
 }
 
-function generateUseEffectCleanupCallback(webSocket) {
+function generateWebsocketCleanup(webSocket) {
     return () => {
         if (webSocket.readyState === WebSocket.OPEN) {
             webSocket.close()
@@ -71,41 +71,50 @@ function generateUseEffectCleanupCallback(webSocket) {
 
 const WeeklyViewApp = props => {
     const {defaultWeek} = props;
-    const [currentWeek, updateWeek] = useState(defaultWeek);
+    const [selectedWeek, updateWeek] = useState(defaultWeek);
+    const [loadedData, updateLoadedData] = useState(null);
+
     const {error, data, refetch} = useQuery(PICKS_QUERY, {
-        variables: {week: currentWeek},
+        variables: {week: selectedWeek},
         pollInterval: 150000
     });
+
+
+    useEffect(() => {
+        if(!!data) {
+            updateLoadedData(data);
+        }
+    }, [data]);
 
 
     useEffect(() => {
         let webSocket = new WebSocket(buildWebsocketUri());
         webSocket.onopen = generateWebsocketOnOpenCallback(refetch);
         webSocket.onmessage = generatedWebsocketOnMessageCallback(refetch);
-        return generateUseEffectCleanupCallback(webSocket)
+        return generateWebsocketCleanup(webSocket)
     });
 
 
-    const advanceWeek = generateAdvanceWeekCallback(data, currentWeek, updateWeek, refetch);
-    const rewindWeek = generateRewindWeekCallback(data, currentWeek, updateWeek, refetch);
+    const advanceWeek = generateAdvanceWeekCallback(loadedData, selectedWeek, updateWeek, refetch);
+    const rewindWeek = generateRewindWeekCallback(loadedData, selectedWeek, updateWeek, refetch);
 
 
     return <div className="weekly-view-app">
-        {error ? "Error" : !data ? "Waiting for data..." :
+        {error ? "Error" : !loadedData ? "Waiting for data..." :
             [
-                <Leaderboard key="leaderboard" data={data.leaders}/>,
+                <Leaderboard key="leaderboard" data={loadedData.leaders}/>,
                 <ChangeWeek key="change-week"
                             id="change-week"
-                            week={currentWeek} forward={advanceWeek}
+                            week={selectedWeek} forward={advanceWeek}
                             back={rewindWeek}/>,
                 <WeeklyGamesGrid
                     key="weekly-games-grid"
                     data-testid="weekly-games-grid"
-                    currentWeek={currentWeek}
-                    users={data?.users}
-                    games={data?.games}
-                    totals={data?.userTotals}
-                    userPicks={data.userPicks}
+                    currentWeek={selectedWeek}
+                    users={loadedData?.users}
+                    games={loadedData?.games}
+                    totals={loadedData?.userTotals}
+                    userPicks={loadedData.userPicks}
                 />
             ]
         }

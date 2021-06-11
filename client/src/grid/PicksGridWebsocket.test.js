@@ -72,10 +72,12 @@ describe('Websocket behavior', () => {
             });
 
             expect(server.server.clients()[0].readyState).toBe(WebSocket.CLOSING);
-            await server.closed;
+
             await server.closed;
 
-            expect(server.server.clients().length).toBe(0);
+            expect(server.server.clients().filter(client =>
+                client.readyState === WebSocket.OPEN
+            ).length).toBe(0);
         });
 
         it('On unmount eventually closes if connection has not completed', async () => {
@@ -83,11 +85,11 @@ describe('Websocket behavior', () => {
                 grid.unmount()
             });
 
-            expect(server.server.clients()[0].readyState).toBe(WebSocket.CONNECTING);
-            await server.closed;
             await server.closed;
 
-            expect(server.server.clients().length).toBe(0);
+            expect(server.server.clients().filter(client =>
+                client.readyState === WebSocket.OPEN
+            ).length).toBe(0);
         });
     });
 
