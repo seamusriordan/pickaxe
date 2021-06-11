@@ -22,7 +22,7 @@ describe('AppLoader', () => {
                     }
                 }
             }
-        ).mockReturnValueOnce(
+        ).mockReturnValue(
             {
                 loading: false,
                 error: null,

@@ -73,6 +73,8 @@ describe('Websocket behavior', () => {
 
             expect(server.server.clients()[0].readyState).toBe(WebSocket.CLOSING);
             await server.closed;
+            await server.closed;
+
             expect(server.server.clients().length).toBe(0);
         });
 
@@ -83,6 +85,8 @@ describe('Websocket behavior', () => {
 
             expect(server.server.clients()[0].readyState).toBe(WebSocket.CONNECTING);
             await server.closed;
+            await server.closed;
+
             expect(server.server.clients().length).toBe(0);
         });
     });

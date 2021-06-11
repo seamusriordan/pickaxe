@@ -27,7 +27,12 @@ describe('WeeklyViewApp', () => {
         useMutation.mockReturnValue([() => {
         }]);
         // eslint-disable-next-line no-unused-vars,no-unused-expressions
-        app = create(<WeeklyViewApp defaultWeek="0"/>).root;
+        let weeklyViewApp = null;
+        act(() => {
+            weeklyViewApp = create(<WeeklyViewApp defaultWeek="0"/>);
+        })
+
+        app = weeklyViewApp.root;
     });
 
     it('calls useQuery with some poll interval', () => {
@@ -84,7 +89,6 @@ describe('WeeklyViewApp', () => {
         let gamesGrid;
         beforeEach(() => {
             gamesGrid = app.findByProps({"data-testid": "weekly-games-grid"})
-
         })
 
         it('passes default week by default', () => {
@@ -150,10 +154,12 @@ describe('WeeklyViewApp', () => {
         });
 
         it('on week 1 refetches with week 2', () => {
-            const week1Grid = create(<WeeklyViewApp defaultWeek="1"/>).root;
-            const changeWeek = week1Grid.findByProps({id: "change-week"})
-
+            let week1Grid = null;
             act(() => {
+                week1Grid = create(<WeeklyViewApp defaultWeek="1"/>);
+            });
+            act( () => {
+                const changeWeek = week1Grid.root.findByProps({id: "change-week"})
                 changeWeek.props.forward();
             })
 
@@ -163,8 +169,12 @@ describe('WeeklyViewApp', () => {
         });
 
         it('on final week does nothing', () => {
-            const week2Grid = create(<WeeklyViewApp defaultWeek="2"/>).root;
-            const changeWeek = week2Grid.findByProps({id: "change-week"})
+            let week2Grid = null;
+            act(() => {
+                week2Grid = create(<WeeklyViewApp defaultWeek="2"/>);
+            });
+
+            const changeWeek = week2Grid.root.findByProps({id: "change-week"})
 
             act(() => {
                 changeWeek.props.forward();
@@ -175,12 +185,16 @@ describe('WeeklyViewApp', () => {
     });
 
     describe('rewind week', () => {
-        let week2Grid;
+        let week2GridRoot;
         let week2Change;
 
         beforeEach(() => {
-            week2Grid = create(<WeeklyViewApp defaultWeek="2"/>).root;
-            week2Change = week2Grid.findByProps({id: "change-week"});
+            let week2Grid = null;
+            act(() => {
+                week2Grid = create(<WeeklyViewApp defaultWeek="2"/>);
+            })
+            week2GridRoot = week2Grid.root;
+            week2Change = week2GridRoot.findByProps({id: "change-week"});
         })
 
         it('on week 2 refetches with week 1', () => {
@@ -217,8 +231,12 @@ describe('WeeklyViewApp', () => {
         });
 
         it('on week 1 refetches with week 0', () => {
-            const week1Grid = create(<WeeklyViewApp defaultWeek="1"/>).root;
-            const changeWeek = week1Grid.findByProps({id: "change-week"})
+
+            let week1Grid = null;
+            act(() => {
+                week1Grid = create(<WeeklyViewApp defaultWeek="1"/>);
+            })
+            const changeWeek = week1Grid.root.findByProps({id: "change-week"})
 
             act(() => {
                 changeWeek.props.back();
