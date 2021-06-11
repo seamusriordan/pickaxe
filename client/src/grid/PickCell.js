@@ -6,21 +6,21 @@ function stripAfterNewline(text) {
 }
 
 export default function PickCell(props) {
-    const [innerText, setInnerText] = useState(props.pick);
+    const [pickText, setPickText] = useState(props.pick);
 
     useEffect(() => {
-        setInnerText(props.pick)
+        setPickText(props.pick)
     }, [props.pick]);
 
     const callbackWrapper = (event) => {
-        if (event.target.textContent === innerText) {
+        if (event.target.textContent === pickText) {
             return;
         }
 
         const updatedPick = stripAfterNewline(event.target.textContent);
-        event.target.textContent = updatedPick;
-        props.sendData(event, updatedPick);
-        setInnerText(updatedPick)
+        props.sendData(updatedPick);
+        setPickText(updatedPick);
+
     };
 
     let cssClass = 'grid__cell grid__cell--border'.concat( props.correct ? ' grid__cell--correct' : '')
@@ -31,5 +31,5 @@ export default function PickCell(props) {
                 suppressContentEditableWarning="true"
                 id={props.id}
                 className={cssClass}
-    >{innerText}</div>
+    >{pickText}</div>
 }

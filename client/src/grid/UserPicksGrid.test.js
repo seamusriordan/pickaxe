@@ -1,10 +1,11 @@
-import {act, create} from "react-test-renderer";
+import {create, act} from "react-test-renderer";
 import React from "react";
 import UserPicksGrid from "./UserPicksGrid";
 import {mockQueryData} from "../testUtilities/MockQueryData";
-import {fireEvent, render} from "@testing-library/react";
+import {fireEvent, render, act as testingLibraryAct} from "@testing-library/react";
 
 describe('UserPicksGrid', () => {
+
     let sendDataSpy;
     beforeEach(() => {
         sendDataSpy = jest.fn();
@@ -69,7 +70,7 @@ describe('UserPicksGrid', () => {
         it('sends data with cell InnerHTML', () => {
             let cell = container.querySelector('#Vegas-CHI\\@GB');
 
-            act(() => {
+            testingLibraryAct(() => {
                 fireEvent.blur(cell, {target: {textContent: "CHI"}});
             });
 
@@ -85,7 +86,7 @@ describe('UserPicksGrid', () => {
                 sendData={sendDataSpy}/>);
             let cell = container.querySelector('#Vegas-CHI\\@GB');
 
-            act(() => {
+            testingLibraryAct(() => {
                 fireEvent.blur(cell, {target: {textContent: "B"}});
             });
 
@@ -95,7 +96,7 @@ describe('UserPicksGrid', () => {
         it('textContent with newlines only sends up to first newline', () => {
             let cell = container.querySelector('#Vegas-CHI\\@GB');
 
-            act(() => {
+            testingLibraryAct(() => {
                 fireEvent.blur(cell, {target: {textContent: "CHI\nall this other data"}});
             });
 
@@ -105,7 +106,7 @@ describe('UserPicksGrid', () => {
         it('innerHTML from textContent with newlines only have up to first newline', () => {
             let cell = container.querySelector('#Vegas-CHI\\@GB');
 
-            act(() => {
+            testingLibraryAct(() => {
                 fireEvent.blur(cell, {target: {textContent: "CHI\nall this other data"}});
             });
 
